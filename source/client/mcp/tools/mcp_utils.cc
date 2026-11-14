@@ -23,6 +23,7 @@
 #include "client/mcp/mcp_controller.h"
 #include "client/router/router_controller.h"
 #include "client/storage/database.h"
+#include "client/storage/user_settings.h"
 
 namespace {
 
@@ -84,7 +85,7 @@ QString sessionTypeName(proto::peer::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 QString sessionTypeError(proto::peer::SessionType session_type)
 {
-    if (Database::instance().mcpSessionTypes() & session_type)
+    if (UserSettings().mcpSessionTypes() & session_type)
         return QString();
 
     return QString("The user does not allow MCP to work with %1 sessions. The types of sessions are chosen in the "
@@ -94,7 +95,7 @@ QString sessionTypeError(proto::peer::SessionType session_type)
 //--------------------------------------------------------------------------------------------------
 QString signInError()
 {
-    if (Database::instance().isMcpSignInEnabled())
+    if (UserSettings().isMcpSignInEnabled())
         return QString();
 
     return "The user does not allow MCP to sign in with the saved credentials. It is changed in the MCP settings of "

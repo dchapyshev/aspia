@@ -147,9 +147,6 @@ public:
     QString displayName() const;
     bool setDisplayName(const QString& name);
 
-    bool isConfirmCloseEnabled() const;
-    bool setConfirmCloseEnabled(bool enable);
-
     bool isBackupOnStartupEnabled() const;
     bool setBackupOnStartupEnabled(bool enable);
 
@@ -166,18 +163,6 @@ public:
     // way and answers INCOMPLETE.
     ReadResult proxyConfig(ProxyConfig* proxy) const;
     bool setProxyConfig(const ProxyConfig& proxy);
-
-    bool isMcpEnabled() const;
-    bool setMcpEnabled(bool enable);
-
-    bool isMcpAutoConfirmEnabled() const;
-    bool setMcpAutoConfirmEnabled(bool enable);
-
-    bool isMcpSignInEnabled() const;
-    bool setMcpSignInEnabled(bool enable);
-
-    quint32 mcpSessionTypes() const;
-    bool setMcpSessionTypes(quint32 session_types);
 
     // Master password.
     bool isMasterPasswordSet() const;

@@ -37,6 +37,7 @@
 #include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
 #include "client/storage/user_settings.h"
+#include "proto/peer.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -440,23 +441,34 @@ TEST_F(DatabaseMigrationTest, DatabaseOfTheFirstRouterIsTheLastOpened)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseMigrationTest, UpdateSettingsAreMovedToTheUser)
+TEST_F(DatabaseMigrationTest, SettingsOfTheUserAreMovedToTheUser)
 {
     createOldBook(Schema::V3_3_4);
     addOldRouter(1, "first", kFirstGuid);
+    addOldSetting("confirm_close", "1");
     addOldSetting("check_updates", "0");
     addOldSetting("update_channel", "beta");
+    addOldSetting("mcp_enabled", "1");
+    addOldSetting("mcp_auto_confirm", "1");
+    addOldSetting("mcp_sign_in", "0");
+    addOldSetting("mcp_session_types", QString::number(proto::peer::SESSION_TYPE_CHAT));
     closeOldBook();
 
     ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
 
     UserSettings settings;
+    EXPECT_TRUE(settings.isConfirmCloseEnabled());
     EXPECT_FALSE(settings.isCheckUpdatesEnabled());
     EXPECT_EQ(settings.updateChannel(), QString("beta"));
+    EXPECT_TRUE(settings.isMcpEnabled());
+    EXPECT_TRUE(settings.isMcpAutoConfirmEnabled());
+    EXPECT_FALSE(settings.isMcpSignInEnabled());
+    EXPECT_EQ(settings.mcpSessionTypes(), static_cast<quint32>(proto::peer::SESSION_TYPE_CHAT));
 
     SqlDatabase db;
     ASSERT_TRUE(db.open(firstPath(), SqlDatabase::OpenMode::READ_ONLY));
-    SqlQuery query(db, "SELECT name FROM settings WHERE name IN ('check_updates', 'update_channel')");
+    SqlQuery query(db, "SELECT name FROM settings WHERE name LIKE 'mcp_%' OR name IN ('confirm_close', "
+                       "'check_updates', 'update_channel')");
     EXPECT_EQ(query.next(), SqlQuery::StepResult::DONE);
 }
 

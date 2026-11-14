@@ -37,11 +37,26 @@ public:
     QString lastDatabase() const;
     void setLastDatabase(const QString& id);
 
+    bool isConfirmCloseEnabled() const;
+    void setConfirmCloseEnabled(bool enable);
+
     bool isCheckUpdatesEnabled() const;
     void setCheckUpdatesEnabled(bool enable);
 
     QString updateChannel() const;
     void setUpdateChannel(const QString& channel);
+
+    bool isMcpEnabled() const;
+    void setMcpEnabled(bool enable);
+
+    bool isMcpAutoConfirmEnabled() const;
+    void setMcpAutoConfirmEnabled(bool enable);
+
+    bool isMcpSignInEnabled() const;
+    void setMcpSignInEnabled(bool enable);
+
+    quint32 mcpSessionTypes() const;
+    void setMcpSessionTypes(quint32 session_types);
 
 private:
     QSettings settings_;

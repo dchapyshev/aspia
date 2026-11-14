@@ -83,6 +83,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/credential_file_unittest.cc
     storage/database_migration_unittest.cc
     storage/database_unittest.cc
+    storage/user_settings_unittest.cc
     tests_main.cc
     workers/video_worker_unittest.cc)
 

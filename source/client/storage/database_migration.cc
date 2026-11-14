@@ -48,6 +48,10 @@ const char kOldFileName[] = "client.db3";
 const char kSettingRouterId[] = "migration_router_id";
 const char kSettingName[] = "database_name";
 
+// The rows of the old file that go to UserSettings instead of the databases.
+const char kUserSettings[] = "'confirm_close', 'check_updates', 'update_channel', 'mcp_enabled', 'mcp_auto_confirm', "
+                             "'mcp_sign_in', 'mcp_session_types'";
+
 // How long a start waits for another one that migrates the same files.
 const int kLockTimeout = 30000;
 
@@ -234,31 +238,62 @@ bool readRouters(SqlDatabase& db, QList<OldRouter>* routers)
 }
 
 //--------------------------------------------------------------------------------------------------
-void copyUpdateSettings(SqlDatabase& db)
+void copyUserSettings(SqlDatabase& db)
 {
-    SqlQuery query(db, "SELECT name, value FROM settings WHERE name IN ('check_updates', 'update_channel')");
+    SqlQuery query(db, std::string("SELECT name, value FROM settings WHERE name IN (") + kUserSettings + ")");
     UserSettings settings;
 
     SqlQuery::StepResult step;
     while ((step = query.next()) == SqlQuery::StepResult::ROW)
     {
-        if (query.columnTextView(0) == "check_updates")
-            settings.setCheckUpdatesEnabled(query.columnTextView(1).empty() || query.columnTextView(1) == "1");
-        else
+        const std::string_view name = query.columnTextView(0);
+        const std::string_view value = query.columnTextView(1);
+
+        if (name == "confirm_close")
+        {
+            settings.setConfirmCloseEnabled(value == "1");
+        }
+        else if (name == "check_updates")
+        {
+            settings.setCheckUpdatesEnabled(value.empty() || value == "1");
+        }
+        else if (name == "update_channel")
+        {
             settings.setUpdateChannel(query.columnText(1));
+        }
+        else if (name == "mcp_enabled")
+        {
+            settings.setMcpEnabled(value == "1");
+        }
+        else if (name == "mcp_auto_confirm")
+        {
+            settings.setMcpAutoConfirmEnabled(value == "1");
+        }
+        else if (name == "mcp_sign_in")
+        {
+            settings.setMcpSignInEnabled(value != "0");
+        }
+        else
+        {
+            bool ok = false;
+            const quint32 session_types = query.columnText(1).toUInt(&ok);
+            if (ok)
+                settings.setMcpSessionTypes(session_types);
+        }
     }
 
     if (step == SqlQuery::StepResult::FAILED)
-        LOG(ERROR) << "Unable to read the update settings:" << db.lastError();
+        LOG(ERROR) << "Unable to read the settings of the user:" << db.lastError();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Everything of the old file that opens with any row, except the hosts of other routers.
 bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
 {
-    // The row naming the router is of the new file alone, the update rows are of the user.
-    if (!copyRows(from, to, "settings", { { "name", Kind::TEXT }, { "value", Kind::TEXT } },
-                  "\"name\" NOT IN ('router', 'migration_router_id', 'check_updates', 'update_channel')"))
+    // The row naming the router is of the new file alone.
+    const std::string condition =
+        std::string("\"name\" NOT IN ('router', 'migration_router_id', ") + kUserSettings + ")";
+    if (!copyRows(from, to, "settings", { { "name", Kind::TEXT }, { "value", Kind::TEXT } }, condition.c_str()))
     {
         return false;
     }
@@ -548,7 +583,7 @@ bool DatabaseMigration::build(const QString& old_file_path, const QString& dir_p
     if (!readRouters(old_db, &routers))
         return false;
 
-    copyUpdateSettings(old_db);
+    copyUserSettings(old_db);
 
     if (routers.isEmpty())
     {

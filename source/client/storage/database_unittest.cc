@@ -37,7 +37,6 @@
 #include "client/router/router_test_fixture.h"
 #include "client/storage/master_password.h"
 #include "proto/desktop_control.h"
-#include "proto/peer.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -1433,19 +1432,6 @@ TEST_F(DatabaseTest, BatchReplacesTheDefaultProfile)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The application closes without a question until the user turns it on.
-TEST_F(DatabaseTest, CloseConfirmationIsOffUntilChosen)
-{
-    EXPECT_FALSE(db_.isConfirmCloseEnabled());
-
-    ASSERT_TRUE(db_.setConfirmCloseEnabled(true));
-    EXPECT_TRUE(db_.isConfirmCloseEnabled());
-
-    ASSERT_TRUE(db_.setConfirmCloseEnabled(false));
-    EXPECT_FALSE(db_.isConfirmCloseEnabled());
-}
-
-//--------------------------------------------------------------------------------------------------
 // Until the user chooses one, no proxy is used; a choice is kept with all its fields.
 TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
 {
@@ -1472,59 +1458,6 @@ TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
     EXPECT_EQ(reread.settings().port, 1080);
     EXPECT_EQ(reread.settings().user, QString("user"));
     EXPECT_EQ(reread.settings().password.toString(), QString("secret"));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The MCP connector is not available until the user allows it.
-TEST_F(DatabaseTest, McpIsOffUntilChosen)
-{
-    EXPECT_FALSE(db_.isMcpEnabled());
-
-    ASSERT_TRUE(db_.setMcpEnabled(true));
-    EXPECT_TRUE(db_.isMcpEnabled());
-
-    ASSERT_TRUE(db_.setMcpEnabled(false));
-    EXPECT_FALSE(db_.isMcpEnabled());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The user confirms the actions of the MCP connector until automatic confirmation is turned on.
-TEST_F(DatabaseTest, McpAutoConfirmIsOffUntilChosen)
-{
-    EXPECT_FALSE(db_.isMcpAutoConfirmEnabled());
-
-    ASSERT_TRUE(db_.setMcpAutoConfirmEnabled(true));
-    EXPECT_TRUE(db_.isMcpAutoConfirmEnabled());
-
-    ASSERT_TRUE(db_.setMcpAutoConfirmEnabled(false));
-    EXPECT_FALSE(db_.isMcpAutoConfirmEnabled());
-}
-
-//--------------------------------------------------------------------------------------------------
-// MCP signs in with the saved credentials until the user turns it off.
-TEST_F(DatabaseTest, McpSignInIsOnUntilChosen)
-{
-    EXPECT_TRUE(db_.isMcpSignInEnabled());
-
-    ASSERT_TRUE(db_.setMcpSignInEnabled(false));
-    EXPECT_FALSE(db_.isMcpSignInEnabled());
-
-    ASSERT_TRUE(db_.setMcpSignInEnabled(true));
-    EXPECT_TRUE(db_.isMcpSignInEnabled());
-}
-
-//--------------------------------------------------------------------------------------------------
-// MCP works with every type of session until the user chooses the types. No type is a choice too.
-TEST_F(DatabaseTest, McpSessionTypesAreAllUntilChosen)
-{
-    EXPECT_EQ(db_.mcpSessionTypes(), static_cast<quint32>(proto::peer::SESSION_TYPE_ALL));
-
-    ASSERT_TRUE(db_.setMcpSessionTypes(proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_TERMINAL));
-    EXPECT_EQ(db_.mcpSessionTypes(),
-              static_cast<quint32>(proto::peer::SESSION_TYPE_DESKTOP | proto::peer::SESSION_TYPE_TERMINAL));
-
-    ASSERT_TRUE(db_.setMcpSessionTypes(0));
-    EXPECT_EQ(db_.mcpSessionTypes(), 0u);
 }
 
 //--------------------------------------------------------------------------------------------------

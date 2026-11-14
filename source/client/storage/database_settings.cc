@@ -26,22 +26,16 @@
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
-#include "proto/peer.h"
 
 namespace {
 
 constexpr auto kSettingName          = "database_name";
 constexpr auto kSettingDisplayName   = "display_name";
-constexpr auto kSettingConfirmClose  = "confirm_close";
 constexpr auto kSettingBackupEnabled = "backup_on_startup";
 constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
 constexpr auto kSettingLockTimeout   = "lock_timeout";
 constexpr auto kSettingProxy         = "proxy";
-constexpr auto kSettingMcpEnabled    = "mcp_enabled";
-constexpr auto kSettingMcpConfirm    = "mcp_auto_confirm";
-constexpr auto kSettingMcpSessions   = "mcp_session_types";
-constexpr auto kSettingMcpSignIn     = "mcp_sign_in";
 constexpr auto kSettingSalt          = "master_password_salt";
 constexpr auto kSettingVerifier      = "master_password_verifier";
 constexpr auto kSettingVersion       = "master_password_version";
@@ -134,18 +128,6 @@ bool Database::setDisplayName(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::isConfirmCloseEnabled() const
-{
-    return readSetting(kSettingConfirmClose) == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setConfirmCloseEnabled(bool enable)
-{
-    return writeSetting(kSettingConfirmClose, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Database::isBackupOnStartupEnabled() const
 {
     return readSetting(kSettingBackupEnabled) == "1";
@@ -229,59 +211,6 @@ bool Database::setProxyConfig(const ProxyConfig& proxy)
         return false;
 
     return writeSetting(kSettingProxy, QString::fromLatin1(encrypted_data->toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isMcpEnabled() const
-{
-    return readSetting(kSettingMcpEnabled) == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setMcpEnabled(bool enable)
-{
-    return writeSetting(kSettingMcpEnabled, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isMcpAutoConfirmEnabled() const
-{
-    return readSetting(kSettingMcpConfirm) == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setMcpAutoConfirmEnabled(bool enable)
-{
-    return writeSetting(kSettingMcpConfirm, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isMcpSignInEnabled() const
-{
-    return readSetting(kSettingMcpSignIn) != "0";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setMcpSignInEnabled(bool enable)
-{
-    return writeSetting(kSettingMcpSignIn, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 Database::mcpSessionTypes() const
-{
-    bool ok = false;
-    const quint32 value = readSetting(kSettingMcpSessions).toUInt(&ok);
-    if (!ok)
-        return proto::peer::SESSION_TYPE_ALL;
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setMcpSessionTypes(quint32 session_types)
-{
-    return writeSetting(kSettingMcpSessions, QString::number(session_types));
 }
 
 //--------------------------------------------------------------------------------------------------

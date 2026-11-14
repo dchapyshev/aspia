@@ -28,7 +28,7 @@
 #include "base/time_types.h"
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
-#include "client/storage/database.h"
+#include "client/storage/user_settings.h"
 
 namespace {
 
@@ -326,7 +326,7 @@ void FileTransferClientTool::call(const QJsonObject& arguments, Reply reply)
         return;
     }
 
-    const bool auto_confirm = Database::instance().isMcpAutoConfirmEnabled();
+    const bool auto_confirm = UserSettings().isMcpAutoConfirmEnabled();
 
     if (action == "close_dialog")
     {

@@ -127,7 +127,7 @@ void Application::loadSettings()
     InstanceSettings::select(db.guid());
 
 #if !defined(Q_OS_ANDROID)
-    if (db.isMcpEnabled())
+    if (UserSettings().isMcpEnabled())
         addWorker(std::make_unique<McpWorker>());
 #endif // !defined(Q_OS_ANDROID)
 }

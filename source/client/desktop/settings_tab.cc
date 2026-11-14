@@ -195,7 +195,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     }
 
     ui->edit_display_name->setText(db.displayName());
-    ui->checkbox_confirm_close->setChecked(db.isConfirmCloseEnabled());
+    ui->checkbox_confirm_close->setChecked(settings.isConfirmCloseEnabled());
 
     ui->checkbox_backup_on_startup->setChecked(db.isBackupOnStartupEnabled());
     ui->edit_backup_dir->setText(db.backupPath());
@@ -272,14 +272,14 @@ SettingsTab::SettingsTab(QWidget* parent)
     reloadProfiles(0);
 
     // MCP page.
-    ui->checkbox_mcp_enabled->setChecked(db.isMcpEnabled());
-    ui->checkbox_mcp_auto_confirm->setChecked(db.isMcpAutoConfirmEnabled());
-    ui->checkbox_mcp_sign_in->setChecked(db.isMcpSignInEnabled());
+    ui->checkbox_mcp_enabled->setChecked(settings.isMcpEnabled());
+    ui->checkbox_mcp_auto_confirm->setChecked(settings.isMcpAutoConfirmEnabled());
+    ui->checkbox_mcp_sign_in->setChecked(settings.isMcpSignInEnabled());
 
     mcp_session_types_ = new QButtonGroup(this);
     mcp_session_types_->setExclusive(false);
 
-    const quint32 mcp_session_types = db.mcpSessionTypes();
+    const quint32 mcp_session_types = settings.mcpSessionTypes();
     for (proto::peer::SessionType session_type : { proto::peer::SESSION_TYPE_DESKTOP,
                                                    proto::peer::SESSION_TYPE_FILE_TRANSFER,
                                                    proto::peer::SESSION_TYPE_SYSTEM_INFO,
@@ -531,8 +531,9 @@ void SettingsTab::onSaveGeneral()
         GuiApplication::instance()->setTheme(theme);
     }
 
+    settings.setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
+
     bool written = db.setDisplayName(ui->edit_display_name->text());
-    written &= db.setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
     written &= db.setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
 
     // An empty field names no directory, so the stored one stays.
@@ -726,7 +727,7 @@ void SettingsTab::onMcpEnabledChanged()
     const bool enable = ui->checkbox_mcp_enabled->isChecked();
     LOG(INFO) << "[ACTION] MCP enabled changed:" << enable;
 
-    Database::instance().setMcpEnabled(enable);
+    UserSettings().setMcpEnabled(enable);
     ui->label_mcp_command->setEnabled(enable);
     ui->edit_mcp_command->setEnabled(enable);
     ui->button_copy_mcp_command->setEnabled(enable);
@@ -741,14 +742,14 @@ void SettingsTab::onMcpEnabledChanged()
 void SettingsTab::onMcpAutoConfirmChanged()
 {
     LOG(INFO) << "[ACTION] MCP auto confirm changed";
-    Database::instance().setMcpAutoConfirmEnabled(ui->checkbox_mcp_auto_confirm->isChecked());
+    UserSettings().setMcpAutoConfirmEnabled(ui->checkbox_mcp_auto_confirm->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::onMcpSignInChanged()
 {
     LOG(INFO) << "[ACTION] MCP sign in changed";
-    Database::instance().setMcpSignInEnabled(ui->checkbox_mcp_sign_in->isChecked());
+    UserSettings().setMcpSignInEnabled(ui->checkbox_mcp_sign_in->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -765,7 +766,7 @@ void SettingsTab::onMcpSessionTypesChanged()
             session_types |= static_cast<quint32>(mcp_session_types_->id(button));
     }
 
-    Database::instance().setMcpSessionTypes(session_types);
+    UserSettings().setMcpSessionTypes(session_types);
 }
 
 //--------------------------------------------------------------------------------------------------

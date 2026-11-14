@@ -282,7 +282,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event detected";
 
-    if (!session_ending_ && Database::instance().isConfirmCloseEnabled() &&
+    if (!session_ending_ && UserSettings().isConfirmCloseEnabled() &&
         MsgBox::question(this, tr("Are you sure you want to close the application?")) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Closing the application rejected";
