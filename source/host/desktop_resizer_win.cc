@@ -229,6 +229,13 @@ void DesktopResizerWin::Screen::updateBestModeForResolution(
             //             << ": mode matching current frequency already found.";
             return;
         }
+
+        bool best_mode_matches_current_fixed_output =
+            best_mode.dmDisplayFixedOutput == current_mode.dmDisplayFixedOutput;
+        bool candidate_mode_matches_current_fixed_output =
+            candidate_mode.dmDisplayFixedOutput == current_mode.dmDisplayFixedOutput;
+        if (best_mode_matches_current_fixed_output && !candidate_mode_matches_current_fixed_output)
+            return;
     }
 
     // If we haven't seen this resolution before, or if it's a better match than one we enumerated
