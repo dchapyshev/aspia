@@ -37,6 +37,12 @@ public:
     QString lastDatabase() const;
     void setLastDatabase(const QString& id);
 
+    bool isCheckUpdatesEnabled() const;
+    void setCheckUpdatesEnabled(bool enable);
+
+    QString updateChannel() const;
+    void setUpdateChannel(const QString& channel);
+
 private:
     QSettings settings_;
     Q_DISABLE_COPY_MOVE(UserSettings)

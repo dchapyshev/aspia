@@ -150,12 +150,6 @@ public:
     bool isConfirmCloseEnabled() const;
     bool setConfirmCloseEnabled(bool enable);
 
-    bool isCheckUpdatesEnabled() const;
-    bool setCheckUpdatesEnabled(bool enable);
-
-    QString updateChannel() const;
-    bool setUpdateChannel(const QString& channel);
-
     bool isBackupOnStartupEnabled() const;
     bool setBackupOnStartupEnabled(bool enable);
 

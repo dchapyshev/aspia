@@ -38,6 +38,7 @@
 #include "client/storage/database.h"
 #include "client/storage/master_password.h"
 #include "client/storage/system_settings.h"
+#include "client/storage/user_settings.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -186,8 +187,7 @@ void SettingsWidget::onShowUpdate()
         widget->clearFocus();
 
     SystemSettings settings;
-    update_page_->check(settings.updateServer(), settings.updatePublicKey(),
-                        Database::instance().updateChannel());
+    update_page_->check(settings.updateServer(), settings.updatePublicKey(), UserSettings().updateChannel());
 
     stack_->setCurrentWidget(update_page_);
     emit sig_titleChanged(tr("Update"), true);
@@ -475,12 +475,10 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
 {
     addSectionHeader(layout, tr("Updates"));
 
-    Database& db = Database::instance();
-
-    addBoolSetting(layout, tr("Check for updates on startup"), db.isCheckUpdatesEnabled(),
+    addBoolSetting(layout, tr("Check for updates on startup"), UserSettings().isCheckUpdatesEnabled(),
                    [](bool checked)
     {
-        Database::instance().setCheckUpdatesEnabled(checked);
+        UserSettings().setCheckUpdatesEnabled(checked);
     });
 
     ComboBox* channel = new ComboBox();
@@ -488,10 +486,10 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
     channel->addItem(tr("Stable"), kStableUpdateChannel);
     channel->addItem(tr("Beta"), kBetaUpdateChannel);
     channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
-    channel->setCurrentIndex(qMax(0, channel->findData(db.updateChannel())));
+    channel->setCurrentIndex(qMax(0, channel->findData(UserSettings().updateChannel())));
     connect(channel, &QComboBox::currentIndexChanged, this, [channel](int /* index */)
     {
-        Database::instance().setUpdateChannel(channel->currentData().toString());
+        UserSettings().setUpdateChannel(channel->currentData().toString());
     });
     layout->addWidget(channel);
 

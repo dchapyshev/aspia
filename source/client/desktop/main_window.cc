@@ -56,6 +56,7 @@
 #include "client/storage/database.h"
 #include "client/storage/instance_settings.h"
 #include "client/storage/system_settings.h"
+#include "client/storage/user_settings.h"
 #include "client/workers/update_worker.h"
 #include "common/desktop/about_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -203,7 +204,7 @@ MainWindow::MainWindow(QWidget* parent)
 
         SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
-            settings.updateServer(), settings.updatePublicKey(), db.updateChannel(), "client",
+            settings.updateServer(), settings.updatePublicKey(), UserSettings().updateChannel(), "client",
             proxy.settings(), UpdateDialog::Action::ASK, this));
         dialog->exec();
     }, Qt::QueuedConnection);

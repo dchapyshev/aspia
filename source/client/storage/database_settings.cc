@@ -23,7 +23,6 @@
 #include <QStandardPaths>
 #include <QUuid>
 
-#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
@@ -34,8 +33,6 @@ namespace {
 constexpr auto kSettingName          = "database_name";
 constexpr auto kSettingDisplayName   = "display_name";
 constexpr auto kSettingConfirmClose  = "confirm_close";
-constexpr auto kSettingCheckUpdates  = "check_updates";
-constexpr auto kSettingUpdateChannel = "update_channel";
 constexpr auto kSettingBackupEnabled = "backup_on_startup";
 constexpr auto kSettingBackupPath    = "backup_path";
 constexpr auto kSettingBackupKeep    = "backup_retention";
@@ -146,36 +143,6 @@ bool Database::isConfirmCloseEnabled() const
 bool Database::setConfirmCloseEnabled(bool enable)
 {
     return writeSetting(kSettingConfirmClose, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isCheckUpdatesEnabled() const
-{
-    QString value = readSetting(kSettingCheckUpdates);
-    if (value.isEmpty())
-        return true;
-    return value == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setCheckUpdatesEnabled(bool enable)
-{
-    return writeSetting(kSettingCheckUpdates, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Database::updateChannel() const
-{
-    QString value = readSetting(kSettingUpdateChannel);
-    if (value.isEmpty())
-        value = kStableUpdateChannel;
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setUpdateChannel(const QString& channel)
-{
-    return writeSetting(kSettingUpdateChannel, channel);
 }
 
 //--------------------------------------------------------------------------------------------------

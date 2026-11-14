@@ -20,11 +20,15 @@
 
 #include <QLocale>
 
+#include "base/build_config.h"
+
 namespace {
 
 const QString kLocaleParam = "locale";
 const QString kThemeParam = "theme";
 const QString kLastDatabaseParam = "last_database";
+const QString kCheckUpdatesParam = "check_updates";
+const QString kUpdateChannelParam = "update_channel";
 
 } // namespace
 
@@ -72,4 +76,31 @@ QString UserSettings::lastDatabase() const
 void UserSettings::setLastDatabase(const QString& id)
 {
     settings_.setValue(kLastDatabaseParam, id);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserSettings::isCheckUpdatesEnabled() const
+{
+    return settings_.value(kCheckUpdatesParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setCheckUpdatesEnabled(bool enable)
+{
+    settings_.setValue(kCheckUpdatesParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserSettings::updateChannel() const
+{
+    QString channel = settings_.value(kUpdateChannelParam).toString();
+    if (channel.isEmpty())
+        channel = kStableUpdateChannel;
+    return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setUpdateChannel(const QString& channel)
+{
+    settings_.setValue(kUpdateChannelParam, channel);
 }

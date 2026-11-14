@@ -234,12 +234,31 @@ bool readRouters(SqlDatabase& db, QList<OldRouter>* routers)
 }
 
 //--------------------------------------------------------------------------------------------------
+void copyUpdateSettings(SqlDatabase& db)
+{
+    SqlQuery query(db, "SELECT name, value FROM settings WHERE name IN ('check_updates', 'update_channel')");
+    UserSettings settings;
+
+    SqlQuery::StepResult step;
+    while ((step = query.next()) == SqlQuery::StepResult::ROW)
+    {
+        if (query.columnTextView(0) == "check_updates")
+            settings.setCheckUpdatesEnabled(query.columnTextView(1).empty() || query.columnTextView(1) == "1");
+        else
+            settings.setUpdateChannel(query.columnText(1));
+    }
+
+    if (step == SqlQuery::StepResult::FAILED)
+        LOG(ERROR) << "Unable to read the update settings:" << db.lastError();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Everything of the old file that opens with any row, except the hosts of other routers.
 bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
 {
-    // The row naming the router is of the new file alone.
+    // The row naming the router is of the new file alone, the update rows are of the user.
     if (!copyRows(from, to, "settings", { { "name", Kind::TEXT }, { "value", Kind::TEXT } },
-                  "\"name\" NOT IN ('router', 'migration_router_id')"))
+                  "\"name\" NOT IN ('router', 'migration_router_id', 'check_updates', 'update_channel')"))
     {
         return false;
     }
@@ -528,6 +547,8 @@ bool DatabaseMigration::build(const QString& old_file_path, const QString& dir_p
     QList<OldRouter> routers;
     if (!readRouters(old_db, &routers))
         return false;
+
+    copyUpdateSettings(old_db);
 
     if (routers.isEmpty())
     {

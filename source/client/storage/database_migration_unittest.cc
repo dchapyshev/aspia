@@ -440,6 +440,27 @@ TEST_F(DatabaseMigrationTest, DatabaseOfTheFirstRouterIsTheLastOpened)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST_F(DatabaseMigrationTest, UpdateSettingsAreMovedToTheUser)
+{
+    createOldBook(Schema::V3_3_4);
+    addOldRouter(1, "first", kFirstGuid);
+    addOldSetting("check_updates", "0");
+    addOldSetting("update_channel", "beta");
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    UserSettings settings;
+    EXPECT_FALSE(settings.isCheckUpdatesEnabled());
+    EXPECT_EQ(settings.updateChannel(), QString("beta"));
+
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(firstPath(), SqlDatabase::OpenMode::READ_ONLY));
+    SqlQuery query(db, "SELECT name FROM settings WHERE name IN ('check_updates', 'update_channel')");
+    EXPECT_EQ(query.next(), SqlQuery::StepResult::DONE);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The router is written once. A database that got it no longer waits, and a start after that leaves
 // whatever the user changed alone.
 TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)

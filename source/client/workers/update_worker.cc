@@ -23,6 +23,7 @@
 #include "base/update/update_checker.h"
 #include "client/storage/database.h"
 #include "client/storage/system_settings.h"
+#include "client/storage/user_settings.h"
 
 //--------------------------------------------------------------------------------------------------
 UpdateWorker::UpdateWorker()
@@ -41,8 +42,9 @@ UpdateWorker::~UpdateWorker()
 void UpdateWorker::onPrepare()
 {
     Database& db = Database::instance();
+    UserSettings user_settings;
 
-    if (!db.isCheckUpdatesEnabled())
+    if (!user_settings.isCheckUpdatesEnabled())
     {
         LOG(INFO) << "Update check is disabled";
         return;
@@ -58,7 +60,7 @@ void UpdateWorker::onPrepare()
     SystemSettings settings;
     QByteArray public_key = settings.updatePublicKey();
 
-    update_checker_ = new UpdateChecker(db.updateChannel(), kClientUpdatePackage, this);
+    update_checker_ = new UpdateChecker(user_settings.updateChannel(), kClientUpdatePackage, this);
     update_checker_->setServer(settings.updateServer());
     update_checker_->setProxy(proxy.settings());
     if (!public_key.isEmpty())

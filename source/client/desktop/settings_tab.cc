@@ -302,13 +302,13 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->groupbox_mcp_actions->setEnabled(ui->checkbox_mcp_enabled->isChecked());
 
     // Update page.
-    ui->checkbox_check_updates->setChecked(db.isCheckUpdatesEnabled());
+    ui->checkbox_check_updates->setChecked(settings.isCheckUpdatesEnabled());
 
     ui->combobox_update_channel->addItem(tr("Stable"), kStableUpdateChannel);
     ui->combobox_update_channel->addItem(tr("Beta"), kBetaUpdateChannel);
     ui->combobox_update_channel->addItem(tr("Alpha"), kAlphaUpdateChannel);
 
-    int channel_index = ui->combobox_update_channel->findData(db.updateChannel());
+    int channel_index = ui->combobox_update_channel->findData(settings.updateChannel());
     ui->combobox_update_channel->setCurrentIndex(channel_index >= 0 ? channel_index : 0);
 
     loadUpdateServer();
@@ -836,7 +836,7 @@ void SettingsTab::onChangeMasterPassword()
 void SettingsTab::onCheckUpdatesChanged()
 {
     LOG(INFO) << "[ACTION] Check updates changed";
-    Database::instance().setCheckUpdatesEnabled(ui->checkbox_check_updates->isChecked());
+    UserSettings().setCheckUpdatesEnabled(ui->checkbox_check_updates->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -844,7 +844,7 @@ void SettingsTab::onUpdateChannelChanged()
 {
     QString channel = ui->combobox_update_channel->currentData().toString();
     LOG(INFO) << "[ACTION] Update channel changed:" << channel;
-    Database::instance().setUpdateChannel(channel);
+    UserSettings().setUpdateChannel(channel);
 }
 
 //--------------------------------------------------------------------------------------------------
