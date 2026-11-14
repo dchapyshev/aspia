@@ -42,7 +42,7 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 
     ui->setupUi(this);
 
-    ui->combo_type->addItem(QIcon(":/img/key-aspia.svg"), tr("Aspia Credentials"),
+    ui->combo_type->addItem(QIcon(":/img/keys.svg"), tr("Aspia Credentials"),
                             static_cast<int>(CredentialConfig::Type::ASPIA));
     ui->combo_type->addItem(QIcon(":/img/key-os.svg"), tr("OS Credentials"),
                             static_cast<int>(CredentialConfig::Type::OS));

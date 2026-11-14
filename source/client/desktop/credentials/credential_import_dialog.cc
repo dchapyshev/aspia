@@ -143,7 +143,7 @@ void CredentialImportDialog::onOpenButtonPressed()
         return group;
     };
 
-    QTreeWidgetItem* aspia_group = add_group(":/img/key-aspia.svg", tr("Aspia Credentials"));
+    QTreeWidgetItem* aspia_group = add_group(":/img/keys.svg", tr("Aspia Credentials"));
     QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
 
     Database& db = Database::instance();

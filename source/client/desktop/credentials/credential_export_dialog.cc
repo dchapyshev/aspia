@@ -180,7 +180,7 @@ void CredentialExportDialog::onLoadData()
         return group;
     };
 
-    QTreeWidgetItem* aspia_group = add_group(":/img/key-aspia.svg", tr("Aspia Credentials"));
+    QTreeWidgetItem* aspia_group = add_group(":/img/keys.svg", tr("Aspia Credentials"));
     QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
 
     for (int i = 0; i < credentials_.size(); ++i)

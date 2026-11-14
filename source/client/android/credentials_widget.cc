@@ -121,7 +121,7 @@ void CredentialsWidget::reload()
     if (!DataCryptor::instance().isValid())
         return;
 
-    const QIcon aspia_icon = GuiApplication::svgIcon(":/img/key-aspia.svg");
+    const QIcon aspia_icon = GuiApplication::svgIcon(":/img/keys.svg");
     const QIcon os_icon = GuiApplication::svgIcon(":/img/key-os.svg");
     const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
 

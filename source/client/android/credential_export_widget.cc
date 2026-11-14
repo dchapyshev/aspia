@@ -129,7 +129,7 @@ void CredentialExportWidget::prepare()
         else if (credential.type() == CredentialConfig::Type::OS)
             item.icon = ":/img/key-os.svg";
         else
-            item.icon = ":/img/key-aspia.svg";
+            item.icon = ":/img/keys.svg";
         item.details = item.enabled ? credential.username() : tr("Damaged");
         items.append(item);
     }

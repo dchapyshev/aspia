@@ -179,7 +179,7 @@ void CredentialImportWidget::onOpenClicked()
 
         CredentialSelectionList::Item item;
         item.icon = credential.type() == CredentialConfig::Type::OS
-            ? ":/img/key-os.svg" : ":/img/key-aspia.svg";
+            ? ":/img/key-os.svg" : ":/img/keys.svg";
         item.name = credential.displayName();
         item.details = credential.username();
         item.status = exists ? tr("Exists") : tr("New");

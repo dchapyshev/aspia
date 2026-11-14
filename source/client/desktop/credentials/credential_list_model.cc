@@ -105,7 +105,7 @@ QVariant CredentialListModel::data(const QModelIndex& index, int role) const
         if (!credential->isValid())
             return QIcon(":/img/key-corrupted.svg");
 
-        return QIcon(credential->type() == CredentialConfig::Type::OS ? ":/img/key-os.svg" : ":/img/key-aspia.svg");
+        return QIcon(credential->type() == CredentialConfig::Type::OS ? ":/img/key-os.svg" : ":/img/keys.svg");
     }
 
     if (role != Qt::DisplayRole)

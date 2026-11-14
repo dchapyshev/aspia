@@ -52,7 +52,7 @@ CredentialEditor::CredentialEditor(QWidget* parent)
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     combo_type_->setLabel(tr("Type"));
-    combo_type_->addItem(GuiApplication::svgIcon(":/img/key-aspia.svg"), tr("Aspia Credentials"),
+    combo_type_->addItem(GuiApplication::svgIcon(":/img/keys.svg"), tr("Aspia Credentials"),
                          static_cast<int>(CredentialConfig::Type::ASPIA));
     combo_type_->addItem(GuiApplication::svgIcon(":/img/key-os.svg"), tr("OS Credentials"),
                          static_cast<int>(CredentialConfig::Type::OS));
