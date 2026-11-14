@@ -19,6 +19,7 @@
 #include "client/desktop/quick_connect_dialog.h"
 
 #include <QDataStream>
+#include <QIODevice>
 #include <QLayout>
 #include <QPushButton>
 #include <QTimer>
