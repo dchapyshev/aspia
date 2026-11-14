@@ -53,6 +53,7 @@ UnlockDialog::UnlockDialog(Mode mode, QWidget* parent)
     ui->edit_confirm->setShowPasswordButtonVisible(true);
     ui->combo_database->setEnabled(mode_ == Mode::STARTUP);
 
+    connect(ui->combo_database, &QComboBox::currentIndexChanged, ui->edit_password, &QLineEdit::clear);
     connect(ui->combo_database, &QComboBox::currentIndexChanged, this, &UnlockDialog::onDatabaseChanged);
     connect(ui->button_create, &QPushButton::clicked, this, &UnlockDialog::onCreate);
     connect(ui->button_rename, &QPushButton::clicked, this, &UnlockDialog::onRename);
