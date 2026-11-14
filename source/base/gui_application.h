@@ -65,6 +65,9 @@ public:
 
     bool isRunning();
 
+    void setInstanceKey(const QString& key);
+    bool hasInstance(const QString& key) const;
+
     using Locale = std::pair<QString, QString>;
     using LocaleList = QList<Locale>;
 
@@ -103,6 +106,8 @@ private:
     QStyle* createBaseStyle(bool is_dark);
     static QPalette createDarkPalette();
 
+    QString instance_name_;
+    QString lock_dir_path_;
     QString server_name_;
 
     std::unique_ptr<QLockFile> lock_file_;

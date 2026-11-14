@@ -246,8 +246,9 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     QByteArray app_path = QApplication::applicationFilePath().toLower().toUtf8();
     QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
 
-    server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
-    lock_file_ = std::make_unique<QLockFile>(temp_path + '/' + server_name_ + ".lock");
+    instance_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
+    lock_dir_path_ = temp_path;
+    setInstanceKey(QString());
 
     const QStringList qm_file_list =
         QDir(kTranslationsDir).entryList(QStringList("*.qm"), QDir::Files);
@@ -402,6 +403,24 @@ bool GuiApplication::isRunning()
         connect(server_, &QLocalServer::newConnection, this, &GuiApplication::onNewConnection);
     }
 
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void GuiApplication::setInstanceKey(const QString& key)
+{
+    server_name_ = instance_name_ + key;
+    lock_file_ = std::make_unique<QLockFile>(lock_dir_path_ + '/' + server_name_ + ".lock");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool GuiApplication::hasInstance(const QString& key) const
+{
+    QLockFile lock_file(lock_dir_path_ + '/' + instance_name_ + key + ".lock");
+    if (!lock_file.tryLock())
+        return true;
+
+    lock_file.unlock();
     return false;
 }
 
