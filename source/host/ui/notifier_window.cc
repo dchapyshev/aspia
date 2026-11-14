@@ -462,10 +462,9 @@ void NotifierWindow::onUpdateWindowPosition()
         window_layout->activate();
     updateTreeColumns();
 
-    // A display scale change keeps the window's physical size, collapsing its logical size to whatever
-    // the layout minimum is. Logical sizes are scale-independent, so re-assert the intended one (the
-    // window is expanded by the onShowNotifier() call above) to restore the designed proportions at
-    // any DPI.
+    // A display scale change keeps the physical size of the native window and the widget does not
+    // see the difference, so the native window is resized as well. A translucent window is shown as
+    // a picture of the size it had at the last paint, so it is repainted too.
     setFixedSize(expanded_size_);
     if (QWindow* handle = windowHandle())
     {
