@@ -553,12 +553,13 @@ bool Database::addLocalGroup(LocalGroupConfig& group)
     if (group.guid().isEmpty())
         group.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO local_groups (id, parent_id, name, comment, guid) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?)");
+    SqlQuery query(db_, "INSERT INTO local_groups (id, parent_id, name, comment, guid, modify_time) "
+                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?)");
     query.addInt64(group.parentId());
     query.addText(group.name());
     query.addText(group.comment());
     query.addText(group.guid());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
 
     if (!query.exec())
     {
@@ -591,10 +592,11 @@ bool Database::modifyLocalGroup(const LocalGroupConfig& group)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), name=?, comment=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), name=?, comment=?, modify_time=? WHERE id=?");
     query.addInt64(group.parentId());
     query.addText(group.name());
     query.addText(group.comment());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(group.id());
 
     if (!query.exec())
@@ -621,8 +623,9 @@ bool Database::moveLocalGroup(qint64 group_id, qint64 new_parent_id)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0) WHERE id=?");
+    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), modify_time=? WHERE id=?");
     query.addInt64(new_parent_id);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(group_id);
 
     if (!query.exec())

@@ -163,6 +163,43 @@ protected:
         return query.exec();
     }
 
+    // The moment the row |id| of |table| was last edited, which the public API hands out for the
+    // local hosts only.
+    qint64 modifyTime(const QString& table, const QString& key, qint64 id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return -1;
+
+        const std::string sql =
+            QString("SELECT modify_time FROM %1 WHERE %2=?").arg(table, key).toStdString();
+
+        SqlQuery query(raw, sql);
+        query.addInt64(id);
+
+        if (query.next() != SqlQuery::StepResult::ROW)
+            return -1;
+
+        return query.columnInt64(0);
+    }
+
+    // Writes a moment the public API cannot produce, since it always stamps the current one.
+    bool setModifyTime(const QString& table, const QString& key, qint64 id, qint64 modify_time)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        const std::string sql =
+            QString("UPDATE %1 SET modify_time=? WHERE %2=?").arg(table, key).toStdString();
+
+        SqlQuery query(raw, sql);
+        query.addInt64(modify_time);
+        query.addInt64(id);
+
+        return query.exec();
+    }
+
     // Spoils the sealed text of a record the way a damaged database or one of another installation
     // has it: the row is in place, its data does not open.
     bool corruptRecordData(const QString& table, qint64 id)
@@ -602,6 +639,129 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
                                  ProxyConfig(), "salt", "verifier", 1));
 
     EXPECT_EQ(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every write of a credential stamps the moment it was edited, the first one included.
+TEST_F(DatabaseTest, EditMarksTheMomentACredentialChanged)
+{
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+
+    const qint64 credential_id = addCredential("name", "user", "secret");
+    EXPECT_GE(modifyTime("credentials", "id", credential_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("credentials", "id", credential_id, 1));
+
+    CredentialConfig edited = credential("renamed", "user", "secret");
+    edited.setId(credential_id);
+    ASSERT_TRUE(db_.modifyCredential(edited));
+
+    EXPECT_GE(modifyTime("credentials", "id", credential_id), start_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for a profile. The default profile comes with the database and nobody edited it yet.
+TEST_F(DatabaseTest, EditMarksTheMomentAProfileChanged)
+{
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+
+    ProfileConfig default_profile = db_.defaultProfile();
+    EXPECT_EQ(modifyTime("profiles", "id", default_profile.id()), 0);
+
+    ASSERT_TRUE(db_.modifyProfile(default_profile));
+    EXPECT_GE(modifyTime("profiles", "id", default_profile.id()), start_time);
+
+    const qint64 profile_id = addProfile("fast");
+    EXPECT_GE(modifyTime("profiles", "id", profile_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("profiles", "id", profile_id, 1));
+
+    ProfileConfig edited;
+    ASSERT_EQ(db_.findProfile(profile_id, &edited), Database::FindResult::FOUND);
+    edited.setName("slow");
+    ASSERT_TRUE(db_.modifyProfile(edited));
+
+    EXPECT_GE(modifyTime("profiles", "id", profile_id), start_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for a group, and a move counts as an edit the way it does for a host.
+TEST_F(DatabaseTest, EditMarksTheMomentAGroupChanged)
+{
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+
+    const qint64 parent = addGroup("parent", 0);
+    const qint64 group_id = addGroup("group", 0);
+    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("local_groups", "id", group_id, 1));
+
+    LocalGroupConfig edited = *findLocalGroup(db_, group_id);
+    edited.setName("renamed");
+    ASSERT_TRUE(db_.modifyLocalGroup(edited));
+
+    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("local_groups", "id", group_id, 1));
+    ASSERT_TRUE(db_.moveLocalGroup(group_id, parent));
+
+    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for what is kept for a host of the router, whichever of its parts is written.
+TEST_F(DatabaseTest, EditMarksTheMomentARouterHostChanged)
+{
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+
+    const HostId host_id = 100500;
+    const qint64 credential_id = addCredential("name", "user", "secret");
+    const qint64 profile_id = addProfile("fast");
+
+    addRouterHost(host_id, "user", "secret");
+    EXPECT_GE(modifyTime("router_hosts", "host_id", host_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", host_id, 1));
+    ASSERT_TRUE(db_.modifyRouterHost(routerHost(host_id, "user", "other-secret")));
+    EXPECT_GE(modifyTime("router_hosts", "host_id", host_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", host_id, 1));
+    ASSERT_TRUE(db_.setRouterHostOsCredentialId(host_id, credential_id));
+    EXPECT_GE(modifyTime("router_hosts", "host_id", host_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", host_id, 1));
+    ASSERT_TRUE(db_.setRouterHostProfileId(host_id, profile_id));
+    EXPECT_GE(modifyTime("router_hosts", "host_id", host_id), start_time);
+
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", host_id, 1));
+    ASSERT_TRUE(db_.setRouterHostProfileId(host_id, 0));
+    EXPECT_GE(modifyTime("router_hosts", "host_id", host_id), start_time);
+
+    ASSERT_TRUE(db_.setRouterHostProfileId(100600, profile_id));
+    EXPECT_GE(modifyTime("router_hosts", "host_id", 100600), start_time);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A check against the router and a change of the master password write a record without editing it.
+TEST_F(DatabaseTest, RewriteThatIsNotAnEditKeepsTheMomentOfTheLastOne)
+{
+    const HostId host_id = 100500;
+    const qint64 credential_id = addCredential("name", "user", "secret");
+    addRouterHost(host_id, "host-user", "host-secret");
+
+    ASSERT_TRUE(setModifyTime("credentials", "id", credential_id, 1));
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", host_id, 1));
+
+    ASSERT_TRUE(db_.updateRouterHostCheckTime(host_id));
+    ASSERT_TRUE(db_.reencryptAll(allLocalHosts(), findRouter(db_), allRouterHosts(), credentialList(),
+                                 ProxyConfig(), "salt", "verifier", 1));
+
+    EXPECT_EQ(modifyTime("credentials", "id", credential_id), 1);
+    EXPECT_EQ(modifyTime("router_hosts", "host_id", host_id), 1);
+
+    const std::optional<RouterHostConfig> host = findRouterHost(db_, host_id);
+    ASSERT_TRUE(host.has_value());
+    EXPECT_EQ(host->password().toString(), QString("host-secret"));
 }
 
 //--------------------------------------------------------------------------------------------------

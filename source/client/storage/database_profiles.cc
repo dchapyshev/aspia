@@ -18,6 +18,7 @@
 
 #include "client/storage/database.h"
 
+#include <QDateTime>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -101,10 +102,11 @@ bool Database::addProfile(ProfileConfig& profile)
     if (profile.guid().isEmpty())
         profile.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO profiles (id, name, data, guid) VALUES (NULL, ?, ?, ?)");
+    SqlQuery query(db_, "INSERT INTO profiles (id, name, data, guid, modify_time) VALUES (NULL, ?, ?, ?, ?)");
     query.addText(profile.name());
     query.addBlob(profile.serializedData());
     query.addText(profile.guid());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
 
     if (!query.exec())
     {
@@ -131,9 +133,10 @@ bool Database::modifyProfile(const ProfileConfig& profile)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE profiles SET name=?, data=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE profiles SET name=?, data=?, modify_time=? WHERE id=?");
     query.addText(profile.name());
     query.addBlob(profile.serializedData());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(profile.id());
 
     if (!query.exec())
@@ -304,6 +307,15 @@ bool Database::ensureDefaultProfile()
 
     if (!addProfile(profile))
         return false;
+
+    SqlQuery query(db_, "UPDATE profiles SET modify_time=0 WHERE id=?");
+    query.addInt64(profile.id());
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
 
     LOG(INFO) << "Default profile created";
     return true;

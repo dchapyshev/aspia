@@ -501,6 +501,39 @@ TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The old file does not tell when its records were edited, and moving them is not an edit.
+TEST_F(DatabaseMigrationTest, MovedRecordsHaveNoMomentOfAnEdit)
+{
+    createOldBook(Schema::V3_3_4);
+    addOldRouter(1, "office", kFirstGuid);
+    addOldGroup(1, "group");
+    addOldCredential(3, "shared-user", "shared-secret");
+    addOldRouterHost(1, 100500, "user", "secret", 3);
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    Database db;
+    ASSERT_TRUE(db.open(firstPath()));
+    ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(firstPath()));
+
+    SqlQuery query(raw,
+        "SELECT (SELECT COUNT(*) FROM router_hosts WHERE modify_time=0), "
+        "(SELECT COUNT(*) FROM credentials WHERE modify_time=0), "
+        "(SELECT COUNT(*) FROM local_groups WHERE modify_time=0), "
+        "(SELECT COUNT(*) FROM profiles WHERE modify_time=0)");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+
+    EXPECT_EQ(query.columnInt64(0), 1);
+    EXPECT_EQ(query.columnInt64(1), 1);
+    EXPECT_EQ(query.columnInt64(2), 1);
+    EXPECT_EQ(query.columnInt64(3), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Without the old file there is nothing to take the router from, so the database waits for it.
 TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
 {

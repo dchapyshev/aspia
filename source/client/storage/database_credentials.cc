@@ -18,6 +18,7 @@
 
 #include "client/storage/database.h"
 
+#include <QDateTime>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -112,12 +113,13 @@ bool Database::addCredential(CredentialConfig& credential)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO credentials (id, type, name, data, guid) "
-                        "VALUES (NULL, ?, ?, ?, ?)");
+    SqlQuery query(db_, "INSERT INTO credentials (id, type, name, data, guid, modify_time) "
+                        "VALUES (NULL, ?, ?, ?, ?, ?)");
     query.addInt64(static_cast<int>(credential.type()));
     query.addText(credential.displayName());
     query.addBlob(*encrypted_data);
     query.addText(credential.guid());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
 
     if (!query.exec())
     {
@@ -171,10 +173,11 @@ bool Database::modifyCredential(const CredentialConfig& credential)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "UPDATE credentials SET type=?, name=?, data=? WHERE id=?");
+    SqlQuery query(db_, "UPDATE credentials SET type=?, name=?, data=?, modify_time=? WHERE id=?");
     query.addInt64(static_cast<int>(credential.type()));
     query.addText(credential.displayName());
     query.addBlob(*encrypted_data);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(credential.id());
 
     if (!query.exec())

@@ -186,13 +186,15 @@ bool Database::addRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id) "
-                        "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0))");
+    SqlQuery query(db_,
+        "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id, modify_time) "
+        "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0), ?)");
     query.addUInt64(host.hostId());
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
     query.addInt64(host.osCredentialId());
     query.addInt64(host.profileId());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
 
     if (!query.exec())
     {
@@ -222,9 +224,10 @@ bool Database::modifyRouterHost(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0) WHERE host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), modify_time=? WHERE host_id=?");
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host.hostId());
 
     if (!query.exec())
@@ -390,8 +393,9 @@ bool Database::setRouterHostOsCredentialId(HostId host_id, qint64 credential_id)
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0) WHERE host_id=?");
+    SqlQuery query(db_, "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=? WHERE host_id=?");
     query.addInt64(credential_id);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -414,7 +418,8 @@ bool Database::setRouterHostProfileId(HostId host_id, qint64 profile_id)
 
     if (profile_id <= 0)
     {
-        SqlQuery query(db_, "UPDATE router_hosts SET profile_id=NULL WHERE host_id=?");
+        SqlQuery query(db_, "UPDATE router_hosts SET profile_id=NULL, modify_time=? WHERE host_id=?");
+        query.addInt64(QDateTime::currentSecsSinceEpoch());
         query.addUInt64(host_id);
 
         if (!query.exec())
@@ -432,10 +437,12 @@ bool Database::setRouterHostProfileId(HostId host_id, qint64 profile_id)
         return false;
     }
 
-    SqlQuery query(db_, "INSERT INTO router_hosts (host_id, profile_id) VALUES (?, ?) "
-                        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id");
+    SqlQuery query(db_,
+        "INSERT INTO router_hosts (host_id, profile_id, modify_time) VALUES (?, ?, ?) "
+        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id, modify_time=excluded.modify_time");
     query.addUInt64(host_id);
     query.addInt64(profile_id);
+    query.addInt64(QDateTime::currentSecsSinceEpoch());
 
     if (!query.exec())
     {

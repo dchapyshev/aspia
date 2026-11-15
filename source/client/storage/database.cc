@@ -345,9 +345,18 @@ bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
 
     for (const RouterHostConfig& router_host : router_hosts)
     {
-        if (!modifyRouterHost(router_host))
+        std::optional<QByteArray> encrypted_data = router_host.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE router_hosts SET data=? WHERE host_id=?");
+        query.addBlob(*encrypted_data);
+        query.addUInt64(router_host.hostId());
+
+        if (!query.exec())
         {
-            LOG(ERROR) << "Unable to re-encrypt credentials of router host:" << router_host.hostId();
+            LOG(ERROR) << "Unable to re-encrypt credentials of router host" << router_host.hostId() << ":"
+                       << db_.lastError();
             return false;
         }
     }
@@ -400,6 +409,9 @@ bool Database::createTables(SqlDatabase& db)
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"comment\" TEXT NOT NULL DEFAULT '',"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_groups table:" << db.lastError();
@@ -419,6 +431,8 @@ bool Database::createTables(SqlDatabase& db)
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
+                 "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
@@ -431,7 +445,10 @@ bool Database::createTables(SqlDatabase& db)
                  "\"data\" BLOB DEFAULT X'',"
                  "\"credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
                  "\"os_credential_id\" INTEGER REFERENCES \"credentials\"(\"id\") ON DELETE SET NULL,"
-                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL)"))
+                 "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0)"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
         return false;
@@ -443,6 +460,9 @@ bool Database::createTables(SqlDatabase& db)
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"data\" BLOB DEFAULT X'',"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
@@ -454,6 +474,9 @@ bool Database::createTables(SqlDatabase& db)
                  "\"name\" TEXT NOT NULL DEFAULT '',"
                  "\"data\" BLOB DEFAULT X'',"
                  "\"guid\" TEXT NOT NULL UNIQUE,"
+                 "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create profiles table:" << db.lastError();

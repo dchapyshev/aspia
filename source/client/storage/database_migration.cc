@@ -545,9 +545,18 @@ bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
     for (const RouterHostConfig& host : std::as_const(hosts))
     {
         RouterHostConfig stored_host;
-        if (db.findRouterHost(host.hostId(), &stored_host) == Database::FindResult::NOT_FOUND &&
-            !db.addRouterHost(host))
+        if (db.findRouterHost(host.hostId(), &stored_host) != Database::FindResult::NOT_FOUND)
+            continue;
+
+        if (!db.addRouterHost(host))
+            return false;
+
+        SqlQuery reset(db.db_, "UPDATE router_hosts SET modify_time=0 WHERE host_id=?");
+        reset.addUInt64(host.hostId());
+
+        if (!reset.exec())
         {
+            LOG(ERROR) << "Unable to execute query:" << db.db_.lastError();
             return false;
         }
     }
