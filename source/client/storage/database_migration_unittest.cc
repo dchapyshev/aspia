@@ -43,10 +43,6 @@
 
 namespace {
 
-// The shapes of the address book the migration meets: the oldest release it takes, the last release
-// with several routers, and the builds after it with connection profiles.
-enum class Schema { V3_0_15, V3_3_4, DEV };
-
 const char kFirstGuid[] = "11111111-1111-4111-8111-111111111111";
 const char kSecondGuid[] = "22222222-2222-4222-8222-222222222222";
 
@@ -110,38 +106,29 @@ protected:
 
     QString firstPath() const { return dir_path_ + '/' + kFirstGuid + ".db3"; }
 
-    // The tables of the address book the way a release created them.
-    void createOldBook(Schema schema)
+    // The tables of the address book the way the last release with several routers created them.
+    void createOldBook()
     {
         ASSERT_TRUE(old_.open(old_path_));
 
-        const QString os = (schema != Schema::V3_0_15) ? ", os_credential_id INTEGER" : "";
-        const QString profile = (schema == Schema::DEV) ? ", profile_id INTEGER" : "";
-
         exec("CREATE TABLE local_groups (id INTEGER UNIQUE, parent_id INTEGER, name TEXT NOT NULL DEFAULT '', "
              "comment TEXT NOT NULL DEFAULT '', guid TEXT NOT NULL UNIQUE, PRIMARY KEY(id AUTOINCREMENT))");
-        exec(QString("CREATE TABLE local_hosts (id INTEGER UNIQUE, group_id INTEGER, "
-                     "router_id INTEGER NOT NULL DEFAULT 0, name TEXT NOT NULL DEFAULT '', "
-                     "comment TEXT NOT NULL DEFAULT '', data BLOB DEFAULT X'', "
-                     "create_time INTEGER NOT NULL DEFAULT 0, modify_time INTEGER NOT NULL DEFAULT 0, "
-                     "connect_time INTEGER NOT NULL DEFAULT 0, guid TEXT NOT NULL UNIQUE, "
-                     "credential_id INTEGER%1%2, PRIMARY KEY(id AUTOINCREMENT))").arg(os, profile));
+        exec("CREATE TABLE local_hosts (id INTEGER UNIQUE, group_id INTEGER, "
+             "router_id INTEGER NOT NULL DEFAULT 0, name TEXT NOT NULL DEFAULT '', "
+             "comment TEXT NOT NULL DEFAULT '', data BLOB DEFAULT X'', "
+             "create_time INTEGER NOT NULL DEFAULT 0, modify_time INTEGER NOT NULL DEFAULT 0, "
+             "connect_time INTEGER NOT NULL DEFAULT 0, guid TEXT NOT NULL UNIQUE, "
+             "credential_id INTEGER, os_credential_id INTEGER, PRIMARY KEY(id AUTOINCREMENT))");
         exec("CREATE TABLE routers (id INTEGER UNIQUE, name TEXT NOT NULL DEFAULT '', "
              "session_type INTEGER NOT NULL DEFAULT 0, data BLOB DEFAULT X'', guid TEXT NOT NULL UNIQUE, "
              "PRIMARY KEY(id AUTOINCREMENT))");
-        exec(QString("CREATE TABLE router_hosts (router_id INTEGER NOT NULL, host_id INTEGER NOT NULL, "
-                     "check_time INTEGER NOT NULL DEFAULT 0, data BLOB DEFAULT X'', credential_id INTEGER%1%2, "
-                     "PRIMARY KEY(router_id, host_id))").arg(os, profile));
+        exec("CREATE TABLE router_hosts (router_id INTEGER NOT NULL, host_id INTEGER NOT NULL, "
+             "check_time INTEGER NOT NULL DEFAULT 0, data BLOB DEFAULT X'', credential_id INTEGER, "
+             "os_credential_id INTEGER, PRIMARY KEY(router_id, host_id))");
         exec("CREATE TABLE credentials (id INTEGER UNIQUE, type INTEGER NOT NULL DEFAULT 0, "
              "name TEXT NOT NULL DEFAULT '', data BLOB DEFAULT X'', guid TEXT NOT NULL UNIQUE, "
              "PRIMARY KEY(id AUTOINCREMENT))");
         exec("CREATE TABLE settings (name TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)");
-
-        if (schema == Schema::DEV)
-        {
-            exec("CREATE TABLE profiles (id INTEGER UNIQUE, name TEXT NOT NULL DEFAULT '', data BLOB DEFAULT X'', "
-                 "guid TEXT NOT NULL UNIQUE, PRIMARY KEY(id AUTOINCREMENT))");
-        }
     }
 
     void exec(const QString& sql)
@@ -246,11 +233,11 @@ protected:
 
     void closeOldBook() { old_.close(); }
 
-    // An address book of |schema| with two routers and a host of each kind, moved whole: the
-    // database of the first router is written at the start and its router once it is unlocked.
-    void migrateBookOf(Schema schema)
+    // An address book with two routers and a host of each kind, moved whole: the database of the first
+    // router is written at the start and its router once it is unlocked.
+    void migrateBook()
     {
-        createOldBook(schema);
+        createOldBook();
         addOldRouter(1, "office", kFirstGuid, proto::router::SESSION_TYPE_ADMIN);
         addOldRouter(2, "branch", kSecondGuid);
         addOldGroup(1, "group");
@@ -260,16 +247,7 @@ protected:
         addOldRouterHost(1, 100500, "user", "secret", 3);
         addOldRouterHost(2, 100600, "other-user", "other-secret");
 
-        if (schema != Schema::V3_0_15)
-            exec("UPDATE router_hosts SET os_credential_id=3 WHERE host_id=100500");
-
-        if (schema == Schema::DEV)
-        {
-            exec("INSERT INTO profiles (id, name, guid) VALUES (5, 'fast', '33333333-3333-4333-8333-333333333333')");
-            exec("UPDATE local_hosts SET profile_id=5 WHERE id=1");
-            exec("UPDATE router_hosts SET profile_id=5 WHERE host_id=100500");
-        }
-
+        exec("UPDATE router_hosts SET os_credential_id=3 WHERE host_id=100500");
         closeOldBook();
 
         ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
@@ -285,7 +263,6 @@ protected:
         ASSERT_TRUE(direct.has_value());
         EXPECT_EQ(direct->address(), QString("192.168.0.1"));
         EXPECT_EQ(direct->credentialId(), 3);
-        EXPECT_EQ(direct->profileId(), schema == Schema::DEV ? 5 : 0);
 
         QList<LocalGroupConfig> groups;
         ASSERT_TRUE(db.allLocalGroups(&groups));
@@ -309,8 +286,7 @@ protected:
         EXPECT_EQ(router_host.username(), QString("user"));
         EXPECT_EQ(router_host.password().toString(), QString("secret"));
         EXPECT_EQ(router_host.credentialId(), 3);
-        EXPECT_EQ(router_host.osCredentialId(), schema != Schema::V3_0_15 ? 3 : 0);
-        EXPECT_EQ(router_host.profileId(), schema == Schema::DEV ? 5 : 0);
+        EXPECT_EQ(router_host.osCredentialId(), 3);
 
         // The credentials of a host of the other router are of its own database.
         EXPECT_EQ(db.findRouterHost(100600, &router_host), Database::FindResult::NOT_FOUND);
@@ -335,7 +311,7 @@ TEST_F(DatabaseMigrationTest, NothingIsDoneWithoutTheOldFile)
 // The databases are already there, whatever the old file holds.
 TEST_F(DatabaseMigrationTest, ExistingDirectoryIsLeftAlone)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     closeOldBook();
 
@@ -346,21 +322,9 @@ TEST_F(DatabaseMigrationTest, ExistingDirectoryIsLeftAlone)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseMigrationTest, BookOfTheOldestReleaseIsMigrated)
-{
-    migrateBookOf(Schema::V3_0_15);
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST_F(DatabaseMigrationTest, BookOfTheLastReleaseWithSeveralRoutersIsMigrated)
 {
-    migrateBookOf(Schema::V3_3_4);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseMigrationTest, BookWithProfilesIsMigrated)
-{
-    migrateBookOf(Schema::DEV);
+    migrateBook();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -368,7 +332,7 @@ TEST_F(DatabaseMigrationTest, BookWithProfilesIsMigrated)
 // router in the database of its router only, and a host of a router that is gone in none.
 TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(2, "second", kSecondGuid, proto::router::SESSION_TYPE_ADMIN);
     addOldRouter(1, "first", kFirstGuid);
     addOldGroup(1, "group");
@@ -410,7 +374,7 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
 //--------------------------------------------------------------------------------------------------
 TEST_F(DatabaseMigrationTest, DatabasesAreNumberedInTheOrderOfTheirRouters)
 {
-    createOldBook(Schema::V3_3_4);
+    createOldBook();
     addOldRouter(2, "second", kSecondGuid);
     addOldRouter(1, "first", kFirstGuid);
     closeOldBook();
@@ -430,7 +394,7 @@ TEST_F(DatabaseMigrationTest, DatabasesAreNumberedInTheOrderOfTheirRouters)
 // The database of the first router is the one a start without a choice opens.
 TEST_F(DatabaseMigrationTest, DatabaseOfTheFirstRouterIsTheLastOpened)
 {
-    createOldBook(Schema::V3_3_4);
+    createOldBook();
     addOldRouter(2, "second", kFirstGuid);
     addOldRouter(1, "first", kSecondGuid);
     closeOldBook();
@@ -443,7 +407,7 @@ TEST_F(DatabaseMigrationTest, DatabaseOfTheFirstRouterIsTheLastOpened)
 //--------------------------------------------------------------------------------------------------
 TEST_F(DatabaseMigrationTest, SettingsOfTheUserAreMovedToTheUser)
 {
-    createOldBook(Schema::V3_3_4);
+    createOldBook();
     addOldRouter(1, "first", kFirstGuid);
     addOldSetting("confirm_close", "1");
     addOldSetting("check_updates", "0");
@@ -477,7 +441,7 @@ TEST_F(DatabaseMigrationTest, SettingsOfTheUserAreMovedToTheUser)
 // whatever the user changed alone.
 TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     closeOldBook();
 
@@ -504,7 +468,7 @@ TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
 // The old file does not tell when its records were edited, and moving them is not an edit.
 TEST_F(DatabaseMigrationTest, MovedRecordsHaveNoMomentOfAnEdit)
 {
-    createOldBook(Schema::V3_3_4);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     addOldGroup(1, "group");
     addOldCredential(3, "shared-user", "shared-secret");
@@ -537,7 +501,7 @@ TEST_F(DatabaseMigrationTest, MovedRecordsHaveNoMomentOfAnEdit)
 // Without the old file there is nothing to take the router from, so the database waits for it.
 TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     addOldRouterHost(1, 100500, "user", "secret");
     closeOldBook();
@@ -569,7 +533,7 @@ TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
 // open all the same, and the database does not wait for the router any longer.
 TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     addOldRouterHost(1, 100500, "user", "secret");
     exec("UPDATE routers SET data=X'00' WHERE id=1");
@@ -601,7 +565,7 @@ TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
 // Without routers there is one database, and the hosts of routers that are gone have nowhere to go.
 TEST_F(DatabaseMigrationTest, BookWithoutRoutersGivesOneDatabase)
 {
-    createOldBook(Schema::V3_3_4);
+    createOldBook();
     addOldHost(1, 0, "direct", "192.168.0.1");
     addOldHost(2, 4, "orphan", "100500");
     closeOldBook();
@@ -625,7 +589,7 @@ TEST_F(DatabaseMigrationTest, BookWithoutRoutersGivesOneDatabase)
 //--------------------------------------------------------------------------------------------------
 TEST_F(DatabaseMigrationTest, OldFileIsOnlyRead)
 {
-    createOldBook(Schema::DEV);
+    createOldBook();
     addOldRouter(1, "office", kFirstGuid);
     addOldRouter(2, "branch", kSecondGuid);
     addOldHost(1, 1, "office-host", "100500");

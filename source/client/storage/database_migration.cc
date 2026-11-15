@@ -305,13 +305,6 @@ bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
         return false;
     }
 
-    if (!copyRows(from, to, "profiles",
-                  { { "id", Kind::INTEGER }, { "name", Kind::TEXT }, { "data", Kind::BLOB },
-                    { "guid", Kind::TEXT } }))
-    {
-        return false;
-    }
-
     if (!copyRows(from, to, "local_groups",
                   { { "id", Kind::INTEGER }, { "parent_id", Kind::INTEGER }, { "name", Kind::TEXT },
                     { "comment", Kind::TEXT }, { "guid", Kind::TEXT } }))
@@ -326,7 +319,7 @@ bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
                       { "comment", Kind::TEXT }, { "data", Kind::BLOB }, { "create_time", Kind::INTEGER },
                       { "modify_time", Kind::INTEGER }, { "connect_time", Kind::INTEGER },
                       { "guid", Kind::TEXT }, { "credential_id", Kind::INTEGER },
-                      { "os_credential_id", Kind::INTEGER }, { "profile_id", Kind::INTEGER } },
+                      { "os_credential_id", Kind::INTEGER } },
                     "\"router_id\" = 0 OR \"router_id\" = ?", router_id);
 }
 
@@ -382,14 +375,8 @@ bool readRouterHosts(SqlDatabase& db, qint64 router_id, QList<RouterHostConfig>*
     if (columns.isEmpty())
         return true;
 
-    const char* os_credential = columns.contains("os_credential_id") ? "os_credential_id" : "0";
-    const char* profile = columns.contains("profile_id") ? "profile_id" : "0";
-
-    const std::string sql = QString("SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(%1, 0), "
-                                    "IFNULL(%2, 0) FROM router_hosts WHERE router_id=?")
-                                .arg(os_credential, profile).toStdString();
-
-    SqlQuery query(db, sql);
+    SqlQuery query(db, "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0) "
+                       "FROM router_hosts WHERE router_id=?");
     query.addInt64(router_id);
 
     DataCryptor& cryptor = DataCryptor::instance();
@@ -409,7 +396,6 @@ bool readRouterHosts(SqlDatabase& db, qint64 router_id, QList<RouterHostConfig>*
         host.setHostId(query.columnUInt64(0));
         host.setCredentialId(query.columnInt64(2));
         host.setOsCredentialId(query.columnInt64(3));
-        host.setProfileId(query.columnInt64(4));
 
         // The row was sealed for the router it belonged to as well.
         const QByteArray blob = query.columnBlob(1);
