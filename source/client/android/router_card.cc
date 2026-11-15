@@ -18,13 +18,12 @@
 
 #include "client/android/router_card.h"
 
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
 #include <QPixmap>
 #include <QSizePolicy>
 #include <QVBoxLayout>
-
-#include <functional>
 
 #include "base/gui_application.h"
 #include "client/router/router_controller.h"
@@ -35,13 +34,14 @@
 
 namespace {
 
+constexpr int kHeaderHeight = 56;
+constexpr int kHeaderSpacing = 12;
 constexpr int kStatusIconSize = 24;
 constexpr int kContentHMargin = 13;
 constexpr int kEventIconSize = 20;
 constexpr int kEventIconSpacing = 12;
 constexpr int kEventRowSpacing = 12;
 constexpr int kEventRowHintWidth = 600;
-constexpr int kMaxEvents = 7;
 
 //--------------------------------------------------------------------------------------------------
 QString statusIconPath(RouterStatus status)
@@ -85,8 +85,8 @@ QString iconForSeverity(RouterEvent::Severity severity)
 
 // A single event line: a severity icon and word-wrapped text. The row measures its own height from
 // its current width with QFontMetrics, which stays correct at any display density where a wrapped
-// QLabel's height-for-width is not reliable, then pins that height and reports the change so the
-// owner can grow the panel to fit. The row is painted directly to avoid a nested layout.
+// QLabel's height-for-width is not reliable, then pins that height. The row is painted directly to
+// avoid a nested layout.
 class EventRow final : public QWidget
 {
 public:
@@ -97,12 +97,6 @@ public:
     {
         setFont(Controls::scaledFont(font(), Controls::kFontScale));
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    }
-
-    // Invoked after the row pins a new height so the owner can resize the panel around it.
-    void setHeightChangedCallback(std::function<void()> callback)
-    {
-        height_changed_ = std::move(callback);
     }
 
     QSize sizeHint() const final
@@ -126,8 +120,6 @@ protected:
 
         height_ = height;
         setFixedHeight(height);
-        if (height_changed_)
-            height_changed_();
     }
 
     void paintEvent(QPaintEvent* /* event */) final
@@ -152,7 +144,6 @@ private:
 
     QPixmap icon_;
     QString text_;
-    std::function<void()> height_changed_;
     int height_ = 0;
 };
 
@@ -160,38 +151,43 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 RouterCard::RouterCard(const QString& name, QWidget* parent)
-    : ExpandablePanel(parent)
+    : QWidget(parent)
 {
-    // Header: status icon and name.
+    QWidget* header = new QWidget(this);
+    header->setFixedHeight(kHeaderHeight);
+
+    QHBoxLayout* header_layout = new QHBoxLayout(header);
+    header_layout->setContentsMargins(0, 0, 0, 0);
+    header_layout->setSpacing(kHeaderSpacing);
+
     label_status_icon_ = new QLabel();
     label_status_icon_->setFixedSize(kStatusIconSize, kStatusIconSize);
-    headerLayout()->addWidget(label_status_icon_);
+    header_layout->addWidget(label_status_icon_);
 
     label_name_ = new Label(name, Label::Role::BODY);
-    headerLayout()->addWidget(label_name_, 1);
+    header_layout->addWidget(label_name_, 1);
 
-    // Panel: the connection event log on a lifted surface.
-    contentLayout()->setContentsMargins(kContentHMargin, 0, kContentHMargin, kContentHMargin);
-
-    // The way to answer the two-factor stage: shown only while the session stands at it, so the
-    // panel of a working router is the event log alone.
+    // The way to answer the two-factor stage: shown only while the session stands at it.
     button_two_factor_ = new Button(tr("Enter Code"), Button::Role::FILLED);
     button_two_factor_->setVisible(false);
     connect(button_two_factor_, &Button::clicked, this, &RouterCard::sig_twoFactorClicked);
-    contentLayout()->addWidget(button_two_factor_);
 
-    Card* card = new Card(Card::Role::FILLED);
+    // The connection event log on a lifted surface.
+    events_card_ = new Card(Card::Role::FILLED);
+    events_card_->setVisible(false);
 
-    QWidget* events_container = new QWidget(card);
+    QWidget* events_container = new QWidget(events_card_);
     events_layout_ = new QVBoxLayout(events_container);
     events_layout_->setContentsMargins(0, 0, 0, 0);
     events_layout_->setSpacing(kEventRowSpacing);
-    card->contentLayout()->addWidget(events_container);
+    events_card_->contentLayout()->addWidget(events_container);
 
-    contentLayout()->addWidget(card);
-
-    connect(this, &ExpandablePanel::sig_headerClicked, this, &RouterCard::sig_expandRequested);
-    connect(this, &ExpandablePanel::sig_headerLongPressed, this, &RouterCard::sig_editRequested);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(kContentHMargin, 0, kContentHMargin, kContentHMargin);
+    layout->setSpacing(0);
+    layout->addWidget(header);
+    layout->addWidget(button_two_factor_);
+    layout->addWidget(events_card_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,8 +222,6 @@ void RouterCard::updateTwoFactorButton()
         else
             button_two_factor_->setText(prompt->otpauthUri().isEmpty() ? tr("Enter Code") : tr("Set Up"));
     }
-
-    contentChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,12 +229,8 @@ void RouterCard::setEvents(const QList<RouterEvent>& events)
 {
     clearEvents();
 
-    qsizetype first = events.size() - kMaxEvents;
-    if (first < 0)
-        first = 0;
-
-    for (qsizetype i = first; i < events.size(); ++i)
-        appendEvent(events[i]);
+    for (const RouterEvent& event : events)
+        appendEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -250,28 +240,18 @@ void RouterCard::appendEvent(const RouterEvent& event)
                                                   QSize(kEventIconSize, kEventIconSize));
     const QString text = QString("%1  %2").arg(event.time.toString("HH:mm:ss"), event.text);
 
-    EventRow* row = new EventRow(icon, text);
-    row->setHeightChangedCallback([this]()
-    {
-        // The row pins its height from inside its own resizeEvent, which runs during the layout
-        // pass; re-pinning the panel inline would read stale cached sizes. Defer it so the panel
-        // grows once the pass has settled.
-        QMetaObject::invokeMethod(this, [this]() { contentChanged(); }, Qt::QueuedConnection);
-    });
     // Newest events are shown first, so each new row goes to the top.
-    events_layout_->insertWidget(0, row);
+    events_layout_->insertWidget(0, new EventRow(icon, text));
+    events_card_->setVisible(true);
 
-    // Keep only the most recent events on screen, dropping the oldest rows beyond the limit.
-    while (events_layout_->count() > kMaxEvents)
+    // The journal keeps a limited number of events, and so does the screen.
+    while (events_layout_->count() > RouterController::kMaxStoredEvents)
     {
         QLayoutItem* oldest = events_layout_->takeAt(events_layout_->count() - 1);
         if (QWidget* widget = oldest->widget())
             widget->deleteLater();
         delete oldest;
     }
-
-    // Grow the open card to fit the new event.
-    contentChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,6 +265,5 @@ void RouterCard::clearEvents()
         delete item;
     }
 
-    // Shrink the card back if its panel is open.
-    contentChanged();
+    events_card_->setVisible(false);
 }

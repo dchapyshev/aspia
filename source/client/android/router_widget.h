@@ -53,7 +53,7 @@ signals:
     // Requests the host bar to show |title| with a back button (editor) or the default state.
     void sig_titleChanged(const QString& title, bool back_visible);
 
-    // Emitted when the set returned by appBarActions() changes (the editor hides the actions).
+    // Emitted when the set returned by appBarActions() changes.
     void sig_appBarActionsChanged();
 
     // The button of the card asks the two-factor question again.
@@ -61,7 +61,7 @@ signals:
 
 private slots:
     void onAddRouter();
-    void onCardExpandRequested();
+    void onClearEvents();
     void onEditRouter();
     void onRouterEvent(const RouterEvent& event);
     void returnFromEditor();
@@ -78,6 +78,8 @@ private:
     RouterEmptyView* placeholder_ = nullptr;
     RouterEditor* editor_ = nullptr;
     IconButton* button_add_ = nullptr;
+    IconButton* button_clear_ = nullptr;
+    IconButton* button_edit_ = nullptr;
     RouterCard* card_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)

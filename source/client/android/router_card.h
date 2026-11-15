@@ -20,16 +20,17 @@
 #define CLIENT_ANDROID_ROUTER_CARD_H
 
 #include <QList>
+#include <QWidget>
 
 #include "client/router/router_types.h"
-#include "common/android/expandable_panel.h"
 
 class Button;
+class Card;
 class Label;
 class QLabel;
 class QVBoxLayout;
 
-class RouterCard final : public ExpandablePanel
+class RouterCard final : public QWidget
 {
     Q_OBJECT
 
@@ -44,8 +45,6 @@ public:
     void appendEvent(const RouterEvent& event);
 
 signals:
-    void sig_expandRequested();
-    void sig_editRequested();
     void sig_twoFactorClicked();
 
 private:
@@ -54,6 +53,7 @@ private:
     QLabel* label_status_icon_ = nullptr;
     Label* label_name_ = nullptr;
     Button* button_two_factor_ = nullptr;
+    Card* events_card_ = nullptr;
     QVBoxLayout* events_layout_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterCard)

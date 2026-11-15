@@ -83,7 +83,9 @@ RouterWidget::RouterWidget(QWidget* parent)
       cards_layout_(new QVBoxLayout(container_)),
       placeholder_(new RouterEmptyView(this)),
       editor_(new RouterEditor(this)),
-      button_add_(new IconButton(":/img/material/add_2.svg", this))
+      button_add_(new IconButton(":/img/material/add_2.svg", this)),
+      button_clear_(new IconButton(":/img/material/mop.svg", this)),
+      button_edit_(new IconButton(":/img/material/edit.svg", this))
 {
     cards_layout_->setContentsMargins(0, 0, 0, 0);
     cards_layout_->setSpacing(0);
@@ -91,9 +93,11 @@ RouterWidget::RouterWidget(QWidget* parent)
 
     scroll_->setWidget(container_);
 
-    // The add action lives in the app bar; AppBar::setActions() reparents and shows it. Hidden by
-    // default so it does not linger in this widget.
+    // The actions live in the app bar; AppBar::setActions() reparents and shows them. Hidden by
+    // default so they do not linger in this widget.
     button_add_->hide();
+    button_clear_->hide();
+    button_edit_->hide();
 
     // List page: the scrollable cards with the empty-state hint overlaid on top.
     QWidget* list_page = new QWidget(stack_);
@@ -113,6 +117,8 @@ RouterWidget::RouterWidget(QWidget* parent)
     layout->addWidget(stack_);
 
     connect(button_add_, &IconButton::clicked, this, &RouterWidget::onAddRouter);
+    connect(button_clear_, &IconButton::clicked, this, &RouterWidget::onClearEvents);
+    connect(button_edit_, &IconButton::clicked, this, &RouterWidget::onEditRouter);
     connect(editor_, &RouterEditor::sig_accepted, this, &RouterWidget::returnFromEditor);
 
     RouterController& controller = RouterController::instance();
@@ -135,10 +141,13 @@ RouterWidget::~RouterWidget() = default;
 QList<QWidget*> RouterWidget::appBarActions() const
 {
     // The editor screen has its own form; no list actions there.
-    if (isEditorPage() || card_)
+    if (isEditorPage())
         return {};
 
-    return { button_add_ };
+    if (!card_)
+        return { button_add_ };
+
+    return { button_clear_, button_edit_ };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,12 +176,10 @@ void RouterWidget::reload()
     {
         const QString label = config.address().isEmpty() ? tr("Router") : config.address();
 
-        // The event log is filled lazily when the panel is opened, so the card starts empty.
         card_ = new RouterCard(config.isEnabled() ? label : tr("%1 (disabled)").arg(label), container_);
         card_->setStatus(RouterController::status());
+        card_->setEvents(RouterController::instance().events());
 
-        connect(card_, &RouterCard::sig_expandRequested, this, &RouterWidget::onCardExpandRequested);
-        connect(card_, &RouterCard::sig_editRequested, this, &RouterWidget::onEditRouter);
         connect(card_, &RouterCard::sig_twoFactorClicked, this, &RouterWidget::sig_twoFactorClicked);
 
         cards_layout_->addWidget(card_);
@@ -207,21 +214,14 @@ void RouterWidget::onAddRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onCardExpandRequested()
+void RouterWidget::onClearEvents()
 {
     if (!card_)
         return;
 
-    // Tapping the open card closes its panel.
-    if (card_->isExpanded())
-    {
-        card_->setExpanded(false);
-        return;
-    }
-
-    // Fill the log from the stored history only now that the panel is being shown.
-    card_->setEvents(RouterController::instance().events());
-    card_->setExpanded(true);
+    RouterController& controller = RouterController::instance();
+    controller.clearEvents();
+    card_->setEvents(controller.events());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,12 +242,6 @@ void RouterWidget::onRouterEvent(const RouterEvent& event)
         return;
 
     card_->updateTwoFactorButton();
-
-    // Only the open panel shows the log live; a closed one is refilled from the journal when
-    // expanded.
-    if (!card_->isExpanded())
-        return;
-
     card_->appendEvent(event);
 }
 
