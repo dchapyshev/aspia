@@ -49,6 +49,21 @@ public:
     virtual QString messageText() const = 0;
     virtual QString messageTime() const = 0;
 
+protected:
+    static QColor bubbleColor(const QPalette& palette, int text_percent)
+    {
+        const QColor& base = palette.color(QPalette::Base);
+        const QColor& text = palette.color(QPalette::Text);
+
+        auto mix = [text_percent](int from, int to)
+        {
+            return from + (to - from) * text_percent / 100;
+        };
+
+        return QColor(mix(base.red(), text.red()), mix(base.green(), text.green()),
+                      mix(base.blue(), text.blue()));
+    }
+
 private:
     const Direction direction_;
     time_t timestamp_ = 0;

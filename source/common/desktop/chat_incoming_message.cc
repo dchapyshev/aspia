@@ -74,7 +74,7 @@ QString ChatIncomingMessage::messageTime() const
 //--------------------------------------------------------------------------------------------------
 void ChatIncomingMessage::applyStyles(const QPalette& palette)
 {
-    const QColor& bubble = palette.color(QPalette::AlternateBase);
+    const QColor bubble = bubbleColor(palette, 5);
     const QColor& text = palette.color(QPalette::Text);
 
     ui->widget_message->setStyleSheet(QString(

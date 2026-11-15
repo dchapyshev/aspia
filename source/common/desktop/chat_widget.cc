@@ -750,6 +750,14 @@ void ChatWidget::refreshStyles()
     const QString button_text = plt.color(QPalette::ButtonText).name(QColor::HexArgb);
     const QString dark = plt.color(QPalette::Dark).name(QColor::HexArgb);
     const QString shadow = plt.color(QPalette::Shadow).name(QColor::HexArgb);
+    const QString base = plt.color(QPalette::Base).name(QColor::HexArgb);
+
+    ui->list_messages->setStyleSheet(QString(
+        "#list_messages { border: 0; outline: 0; background: %1; } "
+        "#list_messages::item:hover { background: transparent; } "
+        "#list_messages::item:selected { background: transparent; } "
+        "#list_messages::item:focus { background: transparent; outline: 0; }")
+        .arg(base));
 
     ui->edit_message->setStyleSheet(QString(
         "#edit_message { border: 1px solid %1; border-radius: 3px; background: %2; "

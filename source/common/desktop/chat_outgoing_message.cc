@@ -61,7 +61,7 @@ QString ChatOutgoingMessage::messageTime() const
 //--------------------------------------------------------------------------------------------------
 void ChatOutgoingMessage::applyStyles(const QPalette& palette)
 {
-    const QColor& bubble = palette.color(QPalette::Midlight);
+    const QColor bubble = bubbleColor(palette, 10);
     const QColor& text = palette.color(QPalette::Text);
 
     ui->label_message->setStyleSheet(QString(
