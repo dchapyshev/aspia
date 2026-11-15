@@ -253,7 +253,11 @@ public:
         if (!(bezel.state & (QStyle::State_Sunken | QStyle::State_On)))
             bezel.state |= QStyle::State_Raised;
 
-        drawRoundedBezel(bezel, roundedBezelHeight(tool_button->iconSize), painter);
+        const QStyle::State raised = QStyle::State_Sunken | QStyle::State_On |
+            ((bezel.state & QStyle::State_Enabled) ? QStyle::State_MouseOver : QStyle::State_None);
+
+        if (!(bezel.state & QStyle::State_AutoRaise) || (tool_button->state & raised))
+            drawRoundedBezel(bezel, roundedBezelHeight(tool_button->iconSize), painter);
 
         QStyleOptionToolButton contents(*tool_button);
         contents.subControls &= ~QStyle::SubControls(QStyle::SC_ToolButton);
@@ -273,7 +277,8 @@ public:
             rect.setTop(option->rect.top() + inset);
             rect.setBottom(option->rect.bottom() - inset);
         }
-        else if (element == QStyle::SE_LineEditContents)
+        else if (element == QStyle::SE_LineEditContents &&
+                 !(widget && qobject_cast<const QAbstractSpinBox*>(widget->parentWidget())))
         {
             rect.adjust(kLineEditTextPadding, 0, -kLineEditTextPadding, 0);
         }
@@ -356,7 +361,7 @@ private:
 
     static bool hasRoundedBezel(const QStyleOption* option, const QWidget* widget)
     {
-        if (!option || (option->state & QStyle::State_AutoRaise))
+        if (!option)
             return false;
 
         for (const QWidget* parent = widget; parent; parent = parent->parentWidget())

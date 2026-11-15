@@ -88,10 +88,28 @@ FilePanel::FilePanel(QWidget* parent)
         emit sig_receiveItems(this, target_folder, items);
     });
 
-    send_button_ = new IconTextButton(this);
-    send_button_->setDefaultAction(ui->action_send);
-    send_button_->setIconSize(ui->toolbar->iconSize());
-    send_button_->setAutoRaise(true);
+    auto create_button = [this](QAction* action)
+    {
+        IconTextButton* button = new IconTextButton(this);
+        button->setDefaultAction(action);
+        button->setIconSize(QSize(24, 24));
+        button->setAutoRaise(true);
+        return button;
+    };
+
+    QHBoxLayout* actions_layout = new QHBoxLayout();
+    actions_layout->setSpacing(0);
+
+    for (QAction* action : { ui->action_up, ui->action_refresh, ui->action_add_folder, ui->action_delete })
+    {
+        IconTextButton* button = create_button(action);
+        button->setFocusPolicy(Qt::NoFocus);
+        actions_layout->addWidget(button);
+    }
+
+    ui->horizontalLayout->insertLayout(0, actions_layout);
+
+    send_button_ = create_button(ui->action_send);
     ui->horizontalLayout->addWidget(send_button_);
 
     ui->list->setFocus();
