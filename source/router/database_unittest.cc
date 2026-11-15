@@ -745,26 +745,6 @@ TEST_F(RouterDatabaseTest, EmailIsStoredAndKeptWhenNotSent)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The users table of 3.2.0 has no email column, and opening such a database adds it.
-TEST_F(RouterDatabaseTest, UsersTableOf320GainsTheEmailColumn)
-{
-    ASSERT_TRUE(execRaw("ALTER TABLE users DROP COLUMN email"));
-
-    Database reopened;
-    ASSERT_TRUE(reopened.open(file_path_));
-
-    RouterUser request;
-    request.entry_id = admin_.entry_id;
-    request.flags = User::ENABLED;
-    request.email = "admin@example.com";
-    ASSERT_EQ(reopened.modifyUser(request), proto::router::kErrorOk);
-
-    RouterUser admin;
-    ASSERT_EQ(reopened.findUser(admin_.entry_id, &admin), proto::router::kErrorOk);
-    EXPECT_EQ(admin.email, "admin@example.com");
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, BuiltInUserCannotBeDisabledDemotedOrRemoved)
 {
     RouterUser request;

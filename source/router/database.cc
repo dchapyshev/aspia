@@ -185,29 +185,6 @@ QString databaseDirectory()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool hasColumn(SqlDatabase& db, std::string_view table, std::string_view column)
-{
-    SqlQuery query(db, "SELECT 1 FROM pragma_table_info(?) WHERE name=?");
-    query.addText(table);
-    query.addText(column);
-
-    if (!query.isValid())
-    {
-        LOG(ERROR) << "Unable to query table info:" << db.lastError();
-        return true; // Pessimistic: pretend it exists, do not attempt ALTER.
-    }
-
-    const SqlQuery::StepResult step = query.next();
-    if (step == SqlQuery::StepResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to query table info:" << db.lastError();
-        return true; // Same pessimism as above: a failed check must not trigger an ALTER.
-    }
-
-    return step == SqlQuery::StepResult::ROW;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Reads a RouterUser row. Column order must match the SELECT projections used by userList()
 // and findUser().
 RouterUser readUser(const SqlQuery& query)
@@ -263,13 +240,6 @@ bool ensureSchema(SqlDatabase& db)
              "\"otp_counter\" INTEGER NOT NULL DEFAULT 0,"
              "\"email\" TEXT NOT NULL DEFAULT '',"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-    {
-        return false;
-    }
-
-    // Migration from 3.2.0.
-    if (!hasColumn(db, "users", "email") &&
-        !run("ALTER TABLE \"users\" ADD COLUMN \"email\" TEXT NOT NULL DEFAULT ''"))
     {
         return false;
     }

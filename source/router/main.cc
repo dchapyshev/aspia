@@ -112,22 +112,6 @@ int installService(QTextStream& out)
         return 0;
     }
 
-    // This entry point runs elevated on every upgrade, while the service account has no write
-    // access to the configuration file - so values missing from older configurations are
-    // generated here.
-    if (settings.seedKey().isEmpty())
-    {
-        out << "Seed key is missing, generating a new one." << Qt::endl;
-        settings.setSeedKey(Random::byteArray(64));
-    }
-
-    if (!settings.sync())
-    {
-        out << "Failed to write the configuration (check permissions on the config directory)."
-            << Qt::endl;
-        return 1;
-    }
-
     std::unique_ptr<ServiceController> controller = ServiceController::install(
         Service::kName, Service::kDisplayName, QCoreApplication::applicationFilePath());
     if (!controller)
