@@ -384,7 +384,7 @@
                   <widget class="QLineEdit" name="edit_backup_dir"/>
                  </item>
                  <item row="1" column="2">
-                  <widget class="QPushButton" name="button_select_backup_dir">
+                  <widget class="IconTextButton" name="button_select_backup_dir">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                      <horstretch>0</horstretch>
@@ -587,7 +587,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="button_add_profile">
+              <widget class="IconTextButton" name="button_add_profile">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -600,7 +600,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="button_rename_profile">
+              <widget class="IconTextButton" name="button_rename_profile">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -613,7 +613,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="button_delete_profile">
+              <widget class="IconTextButton" name="button_delete_profile">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -806,7 +806,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="button_select_record_dir">
+                 <widget class="IconTextButton" name="button_select_record_dir">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -959,7 +959,7 @@
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QPushButton" name="button_copy_mcp_command">
+               <widget class="IconTextButton" name="button_copy_mcp_command">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -1195,6 +1195,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>IconTextButton</class>
+   <extends>QToolButton</extends>
+   <header>common/desktop/icon_text_button.h</header>
+  </customwidget>
   <customwidget>
    <class>PasswordEdit</class>
    <extends>QLineEdit</extends>

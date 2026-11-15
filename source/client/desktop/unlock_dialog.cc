@@ -45,6 +45,13 @@ UnlockDialog::UnlockDialog(Mode mode, QWidget* parent)
     LOG(TRACE) << "Ctor";
     ui->setupUi(this);
 
+#if !defined(Q_OS_MACOS)
+    const QSize icon_size(24, 24);
+    ui->button_create->setIconSize(icon_size);
+    ui->button_rename->setIconSize(icon_size);
+    ui->button_delete->setIconSize(icon_size);
+#endif // !defined(Q_OS_MACOS)
+
     if (mode_ == Mode::STARTUP)
         setWindowTitle(tr("Open Database"));
 
@@ -55,9 +62,9 @@ UnlockDialog::UnlockDialog(Mode mode, QWidget* parent)
 
     connect(ui->combo_database, &QComboBox::currentIndexChanged, ui->edit_password, &QLineEdit::clear);
     connect(ui->combo_database, &QComboBox::currentIndexChanged, this, &UnlockDialog::onDatabaseChanged);
-    connect(ui->button_create, &QPushButton::clicked, this, &UnlockDialog::onCreate);
-    connect(ui->button_rename, &QPushButton::clicked, this, &UnlockDialog::onRename);
-    connect(ui->button_delete, &QPushButton::clicked, this, &UnlockDialog::onDelete);
+    connect(ui->button_create, &QToolButton::clicked, this, &UnlockDialog::onCreate);
+    connect(ui->button_rename, &QToolButton::clicked, this, &UnlockDialog::onRename);
+    connect(ui->button_delete, &QToolButton::clicked, this, &UnlockDialog::onDelete);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {
         if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)

@@ -186,6 +186,7 @@ void CredentialExportDialog::onLoadData()
     for (int i = 0; i < credentials_.size(); ++i)
     {
         const CredentialConfig& credential = credentials_[i];
+        const bool is_os = credential.type() == CredentialConfig::Type::OS;
 
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setText(COLUMN_NAME, credential.displayName());
@@ -195,7 +196,7 @@ void CredentialExportDialog::onLoadData()
         // A record whose data could not be read has nothing to export.
         if (credential.isValid())
         {
-            item->setIcon(COLUMN_NAME, QIcon(":/img/keys.svg"));
+            item->setIcon(COLUMN_NAME, QIcon(is_os ? ":/img/key-os.svg" : ":/img/keys.svg"));
             item->setCheckState(COLUMN_NAME, Qt::Unchecked);
         }
         else
@@ -204,7 +205,7 @@ void CredentialExportDialog::onLoadData()
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
 
-        QTreeWidgetItem* group = credential.type() == CredentialConfig::Type::OS ? os_group : aspia_group;
+        QTreeWidgetItem* group = is_os ? os_group : aspia_group;
         group->addChild(item);
     }
 

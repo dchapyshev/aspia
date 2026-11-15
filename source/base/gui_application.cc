@@ -34,6 +34,7 @@
 #include <QStyleHints>
 #include <QStyleOption>
 #include <QSvgRenderer>
+#include <QToolBar>
 #include <QTranslator>
 
 #include "base/build_config.h"
@@ -62,8 +63,10 @@ const MilliSeconds kDisconnectTimeout{ 1000 };
 const MilliSeconds kReconnectInterval{ 500 };
 
 #if defined(Q_OS_MACOS)
-// The style lets the text of a line edit start at the bezel.
 const int kLineEditTextPadding = 4;
+const int kPushButtonBezelHeight = 32;
+const int kPushButtonBezelVisibleHeight = 24;
+const int kPushButtonIconMargin = 4;
 #endif // defined(Q_OS_MACOS)
 
 const int kReconnectTryCount = 3;
@@ -137,6 +140,10 @@ public:
 
         if (type == QStyle::CT_LineEdit)
             result.rwidth() += 2 * kLineEditTextPadding;
+        else if (type == QStyle::CT_ToolButton && hasRoundedBezel(option, widget))
+            result.setHeight(qMax(result.height(), kPushButtonBezelVisibleHeight));
+        else if (type == QStyle::CT_PushButton && isIconOnlyButton(option))
+            result.setWidth(roundedBezelHeight(static_cast<const QStyleOptionButton*>(option)->iconSize));
 
         return result;
 #else
@@ -174,15 +181,8 @@ public:
             result.setHeight(qMax(result.height(), combo_size.height()));
         }
 
-        if (type == QStyle::CT_PushButton)
-        {
-            const QStyleOptionButton* button = qstyleoption_cast<const QStyleOptionButton*>(option);
-            if (button && button->text.isEmpty() && !button->icon.isNull() &&
-                !(button->features & QStyleOptionButton::HasMenu))
-            {
-                result.setWidth(result.height());
-            }
-        }
+        if (type == QStyle::CT_PushButton && isIconOnlyButton(option))
+            result.setWidth(result.height());
 
         return result;
 #endif // defined(Q_OS_MACOS)
@@ -192,6 +192,19 @@ public:
     void drawControl(ControlElement element, const QStyleOption* option, QPainter* painter,
                      const QWidget* widget) const final
     {
+        if (element == QStyle::CE_PushButtonBevel)
+        {
+            const QStyleOptionButton* button = qstyleoption_cast<const QStyleOptionButton*>(option);
+            if (button && button->rect.height() != kPushButtonBezelHeight &&
+                !(button->features & (QStyleOptionButton::Flat | QStyleOptionButton::CommandLinkButton)))
+            {
+                const QSize icon_size = button->icon.isNull() ? QSize() : button->iconSize;
+
+                drawRoundedBezel(*button, roundedBezelHeight(icon_size), painter);
+                return;
+            }
+        }
+
         const QStyleOptionMenuItem* menu_item = qstyleoption_cast<const QStyleOptionMenuItem*>(option);
         int margin = 0;
 
@@ -219,6 +232,33 @@ public:
         centered.rect.adjust(0, margin, 0, -margin);
 
         QProxyStyle::drawControl(element, &centered, painter, widget);
+    }
+
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter,
+                            const QWidget* widget) const final
+    {
+        const QStyleOptionToolButton* tool_button =
+            qstyleoption_cast<const QStyleOptionToolButton*>(option);
+
+        if (control != QStyle::CC_ToolButton || !tool_button ||
+            !(tool_button->subControls & QStyle::SC_ToolButton) || !hasRoundedBezel(option, widget))
+        {
+            QProxyStyle::drawComplexControl(control, option, painter, widget);
+            return;
+        }
+
+        QStyleOptionButton bezel;
+        bezel.QStyleOption::operator=(*tool_button);
+
+        if (!(bezel.state & (QStyle::State_Sunken | QStyle::State_On)))
+            bezel.state |= QStyle::State_Raised;
+
+        drawRoundedBezel(bezel, roundedBezelHeight(tool_button->iconSize), painter);
+
+        QStyleOptionToolButton contents(*tool_button);
+        contents.subControls &= ~QStyle::SubControls(QStyle::SC_ToolButton);
+
+        QProxyStyle::drawComplexControl(control, &contents, painter, widget);
     }
 
     QRect subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const final
@@ -261,6 +301,82 @@ public:
 #endif // defined(Q_OS_MACOS)
 
 private:
+#if defined(Q_OS_MACOS)
+    static int roundedBezelHeight(const QSize& icon_size)
+    {
+        return qMax(kPushButtonBezelVisibleHeight, icon_size.height() + 2 * kPushButtonIconMargin);
+    }
+
+    void drawRoundedBezel(const QStyleOptionButton& option, int height, QPainter* painter) const
+    {
+        const qreal ratio = painter->device()->devicePixelRatioF();
+        const QSize size(option.rect.width(), kPushButtonBezelHeight);
+
+        QImage image(size * ratio, QImage::Format_ARGB32_Premultiplied);
+        image.setDevicePixelRatio(ratio);
+        image.fill(Qt::transparent);
+
+        QStyleOptionButton bezel(option);
+        bezel.rect = QRect(QPoint(0, 0), size);
+
+        QPainter image_painter(&image);
+        QProxyStyle::drawControl(QStyle::CE_PushButtonBevel, &bezel, &image_painter, nullptr);
+        image_painter.end();
+
+        const int column = image.width() / 2;
+        int top = 0;
+        int bottom = image.height();
+
+        while (top < bottom && qAlpha(image.pixel(column, top)) == 0)
+            ++top;
+        while (bottom > top && qAlpha(image.pixel(column, bottom - 1)) == 0)
+            --bottom;
+
+        if (top == bottom)
+            return;
+
+        const int cap = (bottom - top) / 2 - 1;
+        const qreal cap_height = cap / ratio;
+        const qreal natural_height = (bottom - top) / ratio;
+        const qreal bezel_height = qMax(natural_height, qreal(qMin(height, option.rect.height())));
+        const qreal bezel_top =
+            qRound((option.rect.top() + (option.rect.height() - bezel_height) / 2) * ratio) / ratio;
+
+        auto drawRows = [&](qreal target_top, qreal target_height, int source_top, int source_height)
+        {
+            painter->drawImage(
+                QRectF(option.rect.left(), target_top, option.rect.width(), target_height), image,
+                QRectF(0, source_top, image.width(), source_height));
+        };
+
+        drawRows(bezel_top, cap_height, top, cap);
+        drawRows(bezel_top + cap_height, bezel_height - 2 * cap_height, top + cap, bottom - top - 2 * cap);
+        drawRows(bezel_top + bezel_height - cap_height, cap_height, bottom - cap, cap);
+    }
+
+    static bool hasRoundedBezel(const QStyleOption* option, const QWidget* widget)
+    {
+        if (!option || (option->state & QStyle::State_AutoRaise))
+            return false;
+
+        for (const QWidget* parent = widget; parent; parent = parent->parentWidget())
+        {
+            if (qobject_cast<const QToolBar*>(parent))
+                return false;
+        }
+
+        return true;
+    }
+#endif // defined(Q_OS_MACOS)
+
+    static bool isIconOnlyButton(const QStyleOption* option)
+    {
+        const QStyleOptionButton* button = qstyleoption_cast<const QStyleOptionButton*>(option);
+
+        return button && button->text.isEmpty() && !button->icon.isNull() &&
+            !(button->features & QStyleOptionButton::HasMenu);
+    }
+
     const int small_icon_size_;
 };
 

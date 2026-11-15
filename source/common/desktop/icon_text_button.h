@@ -41,6 +41,7 @@ public:
 protected:
     // QToolButton implementation.
     void paintEvent(QPaintEvent* event) final;
+    void resizeEvent(QResizeEvent* event) final;
 
 private:
     bool icon_on_right_ = false;

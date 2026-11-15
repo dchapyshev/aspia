@@ -23,6 +23,9 @@
    <string>Unlock</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
@@ -82,9 +85,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="button_create">
+          <widget class="IconTextButton" name="button_create">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -99,21 +102,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
            </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="button_rename">
+          <widget class="IconTextButton" name="button_rename">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -128,21 +122,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/pencil-drawing.svg</normaloff>:/img/pencil-drawing.svg</iconset>
            </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="button_delete">
+          <widget class="IconTextButton" name="button_delete">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -156,15 +141,6 @@
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/cancel.svg</normaloff>:/img/cancel.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -210,6 +186,11 @@
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
    <header>common/desktop/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>IconTextButton</class>
+   <extends>QToolButton</extends>
+   <header>common/desktop/icon_text_button.h</header>
   </customwidget>
   <customwidget>
    <class>PasswordEdit</class>

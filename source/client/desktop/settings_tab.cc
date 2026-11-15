@@ -349,7 +349,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->combo_proxy_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onProxyTypeChanged);
     connect(ui->checkbox_auto_unlock, &QCheckBox::toggled, this, &SettingsTab::onAutoUnlockToggled);
-    connect(ui->button_select_backup_dir, &QPushButton::clicked, this, &SettingsTab::onSelectBackupPath);
+    connect(ui->button_select_backup_dir, &QToolButton::clicked, this, &SettingsTab::onSelectBackupPath);
     connect(ui->button_save_general, &QPushButton::clicked, this, &SettingsTab::onSaveGeneral);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
@@ -358,9 +358,9 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     connect(ui->combo_profile, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onProfileChanged);
-    connect(ui->button_add_profile, &QPushButton::clicked, this, &SettingsTab::onAddProfile);
-    connect(ui->button_rename_profile, &QPushButton::clicked, this, &SettingsTab::onRenameProfile);
-    connect(ui->button_delete_profile, &QPushButton::clicked, this, &SettingsTab::onDeleteProfile);
+    connect(ui->button_add_profile, &QToolButton::clicked, this, &SettingsTab::onAddProfile);
+    connect(ui->button_rename_profile, &QToolButton::clicked, this, &SettingsTab::onRenameProfile);
+    connect(ui->button_delete_profile, &QToolButton::clicked, this, &SettingsTab::onDeleteProfile);
 
     connect(ui->checkbox_audio, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_clipboard, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
@@ -379,7 +379,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     connect(ui->checkbox_record_autostart, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->edit_record_dir, &QLineEdit::editingFinished, this, &SettingsTab::onDesktopFeatureChanged);
-    connect(ui->button_select_record_dir, &QPushButton::clicked, this, &SettingsTab::onSelectRecordingPath);
+    connect(ui->button_select_record_dir, &QToolButton::clicked, this, &SettingsTab::onSelectRecordingPath);
 
     connect(ui->checkbox_udp_direct, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
     connect(ui->checkbox_udp_hole_punching, &QCheckBox::toggled, this, &SettingsTab::onDesktopFeatureChanged);
@@ -391,7 +391,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->checkbox_mcp_auto_confirm, &QCheckBox::toggled, this, &SettingsTab::onMcpAutoConfirmChanged);
     connect(ui->checkbox_mcp_sign_in, &QCheckBox::toggled, this, &SettingsTab::onMcpSignInChanged);
     connect(mcp_session_types_, &QButtonGroup::idToggled, this, &SettingsTab::onMcpSessionTypesChanged);
-    connect(ui->button_copy_mcp_command, &QPushButton::clicked, this, &SettingsTab::onCopyMcpCommand);
+    connect(ui->button_copy_mcp_command, &QToolButton::clicked, this, &SettingsTab::onCopyMcpCommand);
 
     connect(ui->checkbox_check_updates, &QCheckBox::toggled, this, &SettingsTab::onCheckUpdatesChanged);
     connect(ui->combobox_update_channel, QOverload<int>::of(&QComboBox::currentIndexChanged),

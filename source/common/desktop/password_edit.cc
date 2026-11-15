@@ -19,6 +19,7 @@
 #include "common/desktop/password_edit.h"
 
 #include <QAction>
+#include <QSignalBlocker>
 #include <QStyle>
 
 #include "base/crypto/secure_string.h"
@@ -48,6 +49,7 @@ PasswordEdit::PasswordEdit(QWidget* parent)
 //--------------------------------------------------------------------------------------------------
 PasswordEdit::~PasswordEdit()
 {
+    QSignalBlocker blocker(this);
     clear();
 }
 

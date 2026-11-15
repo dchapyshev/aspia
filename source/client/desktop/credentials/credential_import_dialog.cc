@@ -20,7 +20,6 @@
 
 #include <QAbstractButton>
 #include <QIcon>
-#include <QPushButton>
 #include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
@@ -56,7 +55,7 @@ CredentialImportDialog::CredentialImportDialog(QWidget* parent)
     import_button_->setAutoDefault(false);
     ui->button_open->setDefault(true);
 
-    connect(ui->button_browse, &QPushButton::clicked,
+    connect(ui->button_browse, &QToolButton::clicked,
             this, &CredentialImportDialog::onBrowseButtonPressed);
     connect(ui->button_open, &QPushButton::clicked,
             this, &CredentialImportDialog::onOpenButtonPressed);

@@ -18,6 +18,7 @@
 
 #include "common/desktop/icon_text_button.h"
 
+#include <QApplication>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
 
@@ -26,13 +27,23 @@ namespace {
 constexpr int kIconTextGap = 4;
 constexpr int kIconTextHPadding = 8;
 
+//--------------------------------------------------------------------------------------------------
+QSize iconAreaSize(const QToolButton* button)
+{
+    return button->icon().isNull() ? QSize(0, 0) : button->iconSize();
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 IconTextButton::IconTextButton(QWidget* parent)
     : QToolButton(parent)
 {
-    // Nothing.
+#if defined(Q_OS_MACOS)
+    // The button has the bezel of a push button there, and the style gives tool buttons a smaller
+    // font than push buttons.
+    setFont(QApplication::font("QPushButton"));
+#endif // defined(Q_OS_MACOS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,12 +65,22 @@ QSize IconTextButton::sizeHint() const
 {
     QFontMetrics fm(font());
     int text_w = fm.horizontalAdvance(text());
-    int icon_w = iconSize().width();
-    int icon_h = iconSize().height();
-    int gap = text().isEmpty() ? 0 : kIconTextGap;
+    const QSize icon_size = iconAreaSize(this);
+    int icon_w = icon_size.width();
+    int icon_h = icon_size.height();
+    int gap = (text().isEmpty() || icon_size.isEmpty()) ? 0 : kIconTextGap;
     int w = text_w + icon_w + gap + kIconTextHPadding * 2;
     int h = qMax(fm.height(), icon_h) + kIconTextHPadding;
     return QSize(w, h);
+}
+
+//--------------------------------------------------------------------------------------------------
+void IconTextButton::resizeEvent(QResizeEvent* event)
+{
+    QToolButton::resizeEvent(event);
+
+    if (minimumWidth() != height())
+        setMinimumWidth(height());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,9 +99,10 @@ void IconTextButton::paintEvent(QPaintEvent* /* event */)
     QFontMetrics fm(font());
     QString btn_text = text();
     int text_w = fm.horizontalAdvance(btn_text);
-    int icon_w = iconSize().width();
-    int icon_h = iconSize().height();
-    int gap = btn_text.isEmpty() ? 0 : kIconTextGap;
+    const QSize icon_size = iconAreaSize(this);
+    int icon_w = icon_size.width();
+    int icon_h = icon_size.height();
+    int gap = (btn_text.isEmpty() || icon_size.isEmpty()) ? 0 : kIconTextGap;
     int total_w = text_w + icon_w + gap;
     int x = (width() - total_w) / 2;
     int y_offset = 0;
