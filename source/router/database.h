@@ -365,6 +365,12 @@ public:
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:
+    // Every list query has to name the page it wants. Whatever comes out of one goes into a single
+    // reply, and a reply the channel cannot carry is not sent at all but ends the session, so the
+    // size of an answer must never follow the size of the database. A request that names no page
+    // has a count of zero and is refused along with one that asks for more than the cap.
+    static bool isPageValid(qint64 offset, qint64 count, int max_count);
+
     bool openDatabase();
 
     // Checks that a new access entry targets a user that still exists. An unknown user means the
