@@ -31,8 +31,8 @@ if (WIN32)
 endif()
 
 set(ASPIA_VERSION_MAJOR 3)
-set(ASPIA_VERSION_MINOR 4)
-set(ASPIA_VERSION_PATCH 3)
+set(ASPIA_VERSION_MINOR 5)
+set(ASPIA_VERSION_PATCH 0)
 
 # On CI installed dir could be outside of vcpkg root
 if ("$ENV{VCPKG_INSTALLED_DIR}" STREQUAL "")
