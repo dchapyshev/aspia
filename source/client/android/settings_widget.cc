@@ -371,6 +371,7 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
 
     LineEdit* display_name = new LineEdit();
     display_name->setLabel(tr("Display name when connected"));
+    display_name->setMaxLength(16);
     display_name->setText(Database::instance().displayName());
     connect(display_name, &QLineEdit::editingFinished, this, [display_name]()
     {

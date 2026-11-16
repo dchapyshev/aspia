@@ -65,6 +65,8 @@ UserDialog::UserDialog(qint64 entry_id, QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    ui->edit_username->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
+
     if (entry_id_ != 0)
         user_ = Database::instance().findUser(entry_id_);
 

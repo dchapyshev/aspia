@@ -22,11 +22,11 @@
 #include <QGuiApplication>
 #include <QInputMethod>
 #include <QPainter>
-#include <QPlainTextEdit>
 #include <QVBoxLayout>
 
 #include "common/android/animation.h"
 #include "common/android/controls.h"
+#include "common/desktop/plain_text_edit.h"
 
 namespace {
 
@@ -44,7 +44,7 @@ constexpr double kMutedLabelOpacity = 0.55;
 //--------------------------------------------------------------------------------------------------
 TextArea::TextArea(QWidget* parent)
     : QWidget(parent),
-      edit_(new QPlainTextEdit(this)),
+      edit_(new PlainTextEdit(this)),
       float_animation_(Controls::createAnimation(this)),
       focus_animation_(Controls::createAnimation(this))
 {
@@ -112,6 +112,12 @@ void TextArea::clear()
 void TextArea::setPlaceholderText(const QString& text)
 {
     edit_->setPlaceholderText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TextArea::setMaxLength(int length)
+{
+    edit_->setMaxLength(length);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,6 +241,8 @@ int TextArea::labelOverflow() const
 {
     return QFontMetrics(Controls::scaledFont(font(), kFloatedLabelScale)).height() / 2;
 }
+
+
 
 //--------------------------------------------------------------------------------------------------
 void TextArea::updateFloatState()

@@ -46,7 +46,7 @@ bool isFilterValid(const proto::router::AccessLogFilter& filter)
 
     for (std::string_view text : texts)
     {
-        if (text.size() > proto::router::kMaxAccessLogQueryLength)
+        if (strLength(text) > proto::router::kMaxAccessLogQueryLength)
             return false;
     }
 

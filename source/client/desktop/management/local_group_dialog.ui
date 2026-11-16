@@ -59,7 +59,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="edit_comment"/>
+      <widget class="PlainTextEdit" name="edit_comment"/>
      </item>
     </layout>
    </item>
@@ -82,6 +82,11 @@
    <class>GroupComboBox</class>
    <extends>QComboBox</extends>
    <header>client/desktop/management/group_combo_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>common/desktop/plain_text_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

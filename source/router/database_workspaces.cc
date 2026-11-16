@@ -240,9 +240,9 @@ std::string_view Database::addWorkspace(std::string_view name, std::string_view 
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > proto::router::kMaxCommentLength)
+    if (strLength(comment) > proto::router::kMaxCommentLength)
     {
-        LOG(ERROR) << "Workspace comment is too long:" << comment.size();
+        LOG(ERROR) << "Workspace comment is too long:" << strLength(comment);
         return proto::router::kErrorInvalidData;
     }
 
@@ -356,9 +356,9 @@ std::string_view Database::modifyWorkspace(qint64 entry_id, qint64 base_revision
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > proto::router::kMaxCommentLength)
+    if (strLength(comment) > proto::router::kMaxCommentLength)
     {
-        LOG(ERROR) << "Workspace comment is too long:" << comment.size();
+        LOG(ERROR) << "Workspace comment is too long:" << strLength(comment);
         return proto::router::kErrorInvalidData;
     }
 

@@ -21,6 +21,7 @@
 #include <set>
 
 #include "base/logging.h"
+#include "base/string_util.h"
 #include "base/peer/host_id.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
@@ -45,8 +46,8 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     const proto::router::Host& host = request.host();
     const HostId host_id = host.host_id();
 
-    if (host.display_name().size() > proto::router::kMaxEntryNameLength ||
-        host.comment().size() > proto::router::kMaxCommentLength)
+    if (strLength(host.display_name()) > proto::router::kMaxEntryNameLength ||
+        strLength(host.comment()) > proto::router::kMaxCommentLength)
     {
         LOG(ERROR) << "Oversized field in host edit request for host" << host_id;
         result.error_code = proto::router::kErrorInvalidData;

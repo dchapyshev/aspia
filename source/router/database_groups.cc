@@ -42,11 +42,6 @@ void Database::groupList(qint64 workspace_id, proto::router::GroupList* out) con
         return;
     }
 
-    // Read every group of this workspace. parent_id is NULL for root groups in storage; we
-    // coalesce it to 0 to match the convention used everywhere in the API. Rows come back in
-    // whatever order SQLite produces them. Display ordering (alphabetic, locale-aware, and so on)
-    // is the client's job. Building a tree from this result does not require any particular order:
-    // index nodes by id, then link children to parents.
     const char kSql[] =
         "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE workspace_id=?";
@@ -105,9 +100,6 @@ std::string_view Database::findGroup(qint64 workspace_id, qint64 entry_id, Group
         return proto::router::kErrorNotFound;
     }
 
-    // Look up a single group by its id within this workspace. Same column projection as
-    // groupList(); IFNULL maps the storage NULL parent_id of a root node to 0. workspace_id is
-    // part of the filter so a stale id from another workspace cannot leak through.
     const char kSql[] =
         "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE id=? AND workspace_id=?";
@@ -160,15 +152,15 @@ std::string_view Database::addGroup(qint64 workspace_id, qint64 parent_id, std::
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty() || strTrimmed(name).size() > proto::router::kMaxEntryNameLength)
+    if (strTrimmed(name).empty() || strLength(strTrimmed(name)) > proto::router::kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > proto::router::kMaxCommentLength)
+    if (strLength(comment) > proto::router::kMaxCommentLength)
     {
-        LOG(ERROR) << "Group comment is too long:" << comment.size();
+        LOG(ERROR) << "Group comment is too long:" << strLength(comment);
         return proto::router::kErrorInvalidData;
     }
 
@@ -243,15 +235,15 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
         return proto::router::kErrorInvalidData;
     }
 
-    if (strTrimmed(name).empty() || strTrimmed(name).size() > proto::router::kMaxEntryNameLength)
+    if (strTrimmed(name).empty() || strLength(strTrimmed(name)) > proto::router::kMaxEntryNameLength)
     {
         LOG(ERROR) << "Invalid group name";
         return proto::router::kErrorInvalidData;
     }
 
-    if (comment.size() > proto::router::kMaxCommentLength)
+    if (strLength(comment) > proto::router::kMaxCommentLength)
     {
-        LOG(ERROR) << "Group comment is too long:" << comment.size();
+        LOG(ERROR) << "Group comment is too long:" << strLength(comment);
         return proto::router::kErrorInvalidData;
     }
 
@@ -278,9 +270,6 @@ std::string_view Database::modifyGroup(qint64 workspace_id, qint64 entry_id, qin
 
     if (select_self.columnInt64(0) != base_revision)
     {
-        // The edit was based on an older state of the group. Applying it would silently
-        // overwrite the concurrent edit (a rename would be undone, a moved subtree would be
-        // moved back), so the client must refetch and retry instead.
         LOG(ERROR) << "Group" << entry_id << "was changed concurrently (stored revision"
                    << select_self.columnInt64(0) << ", request based on" << base_revision << ")";
         return proto::router::kErrorConflict;

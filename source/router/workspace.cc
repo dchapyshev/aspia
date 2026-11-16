@@ -26,7 +26,7 @@
 bool Workspace::isValidName(std::string_view name)
 {
     const std::string_view trimmed = strTrimmed(name);
-    return !trimmed.empty() && trimmed.size() <= proto::router::kMaxEntryNameLength;
+    return !trimmed.empty() && strLength(trimmed) <= proto::router::kMaxEntryNameLength;
 }
 
 //--------------------------------------------------------------------------------------------------

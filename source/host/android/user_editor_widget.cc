@@ -112,6 +112,7 @@ UserEditorWidget::UserEditorWidget(QWidget* parent)
     setWidget(content);
 
     username_->setLabel(tr("User name"));
+    username_->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
     password_->setLabel(tr("Password"));
     password_repeat_->setLabel(tr("Password (repeat)"));
     password_hint_->setText(tr("Leave the password empty to keep the current one."));

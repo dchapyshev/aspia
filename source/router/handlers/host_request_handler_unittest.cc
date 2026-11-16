@@ -142,18 +142,20 @@ TEST_F(HostRequestHandlerTest, OversizedFieldsAreRejected)
 
 //--------------------------------------------------------------------------------------------------
 // The bounds are maximums and not a step below one, so a request that sits exactly on them is
-// stored.
+// stored. The name is counted in characters, so a cyrillic one fits although its bytes do not.
 TEST_F(HostRequestHandlerTest, FieldsAtTheLimitAreAccepted)
 {
+    const std::string display_name = QString(proto::router::kMaxEntryNameLength, QChar(0x0410)).toStdString();
+
     proto::router::HostRequest request = makeRequest(host_id_, 0, "display");
     proto::router::Host* host = request.mutable_host();
-    host->set_display_name(std::string(proto::router::kMaxEntryNameLength, 'n'));
+    host->set_display_name(display_name);
     host->set_comment(std::string(proto::router::kMaxCommentLength, 'c'));
 
     EXPECT_EQ(handle(request).error_code, proto::router::kErrorOk);
 
     const proto::router::Host stored = findHost(host_id_);
-    EXPECT_EQ(stored.display_name().size(), proto::router::kMaxEntryNameLength);
+    EXPECT_EQ(stored.display_name(), display_name);
     EXPECT_EQ(stored.comment().size(), proto::router::kMaxCommentLength);
 }
 
@@ -862,7 +864,8 @@ TEST_F(HostListTest, FilterIsRejectedInFilteredMode)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A full page of hosts whose every field sits on its limit still fits what the channel can carry.
+// A full page of hosts whose every field takes the most bytes its limit allows still fits what the
+// channel can carry.
 // This is what picks the value of kMaxHostPageSize, and it is the assumption that quietly breaks
 // once a field is added to a host record or a field limit is raised.
 TEST_F(HostListTest, FullPageOfLargestHostsFitsTheChannel)
@@ -874,11 +877,11 @@ TEST_F(HostListTest, FullPageOfLargestHostsFitsTheChannel)
         "cpu_arch, version, os_name, address, comment) "
         "WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM seq WHERE n < %1) "
         "SELECT NULL, randomblob(64), 'hwid', %2, 0, "
-        "substr(hex(zeroblob(64)),1,%3), substr(hex(zeroblob(64)),1,64), "
+        "substr(hex(zeroblob(96)),1,%3), substr(hex(zeroblob(64)),1,64), "
         "substr(hex(zeroblob(32)),1,32), '3.0.0.0', substr(hex(zeroblob(64)),1,64), "
         "'255.255.255.255', zeroblob(%4) FROM seq")
         .arg(proto::router::kMaxHostPageSize).arg(workspace_id_)
-        .arg(proto::router::kMaxEntryNameLength).arg(proto::router::kMaxCommentLength);
+        .arg(proto::router::kMaxEntryNameLength * 3).arg(proto::router::kMaxCommentLength * 3);
 
     ASSERT_TRUE(execRaw(sql));
 
@@ -986,10 +989,10 @@ TEST_F(HostListTest, SearchWithATooLongQueryIsRejected)
 {
     ASSERT_NE(addHostTo("hash-1", workspace_id_, 0, "host-a"), kInvalidHostId);
 
-    const QString at_limit(static_cast<qsizetype>(proto::router::kMaxHostQueryLength), QChar('a'));
+    const QString at_limit(static_cast<qsizetype>(proto::router::kMaxHostQueryLength), QChar(0x0410));
     EXPECT_EQ(searchHosts(at_limit).error_code(), proto::router::kErrorOk);
 
-    const proto::router::HostSearchResult result = searchHosts(at_limit + QChar('a'));
+    const proto::router::HostSearchResult result = searchHosts(at_limit + QChar(0x0410));
     EXPECT_EQ(result.error_code(), proto::router::kErrorInvalidRequest);
     EXPECT_EQ(result.host_size(), 0);
     EXPECT_EQ(result.total_count(), 0);

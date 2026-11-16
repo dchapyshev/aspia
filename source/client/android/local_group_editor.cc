@@ -46,7 +46,9 @@ LocalGroupEditor::LocalGroupEditor(QWidget* parent)
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     edit_name_->setLabel(tr("Name"));
+    edit_name_->setMaxLength(LocalGroupConfig::kMaxNameLength);
     edit_comment_->setLabel(tr("Comment"));
+    edit_comment_->setMaxLength(LocalGroupConfig::kMaxCommentLength);
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.

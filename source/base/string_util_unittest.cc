@@ -75,6 +75,16 @@ TEST(StringUtilTest, TrimmedKeepsMultiByteUtf8)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(StringUtilTest, Length)
+{
+    EXPECT_EQ(strLength(""), 0u);
+    EXPECT_EQ(strLength("abc"), 3u);
+    EXPECT_EQ(strLength("\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82"), 6u);
+    EXPECT_EQ(strLength("\xF0\x9F\x98\x80"), 2u);
+    EXPECT_EQ(strLength("\xFF\x80"), 2u);
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(StringUtilTest, Hex)
 {
     EXPECT_EQ(strHex(0, 4), std::string("0000"));

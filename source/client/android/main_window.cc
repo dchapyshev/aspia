@@ -56,6 +56,7 @@
 #include "common/android/menu.h"
 #include "common/android/message_dialog.h"
 #include "proto/peer.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -142,6 +143,8 @@ AndroidMainWindow::AndroidMainWindow(QWidget* parent)
     connect(remote, &RemoteWidget::sig_connectHost, this, &AndroidMainWindow::onConnectRouterHost);
     connect(app_bar_, &AppBar::sig_backClicked, this, &AndroidMainWindow::onBackClicked);
     connect(app_bar_, &AppBar::sig_searchTextChanged, this, &AndroidMainWindow::onSearchTextChanged);
+
+    app_bar_->setSearchMaxLength(static_cast<int>(proto::router::kMaxHostQueryLength));
 
     nav_bar_->addItem(tr("Local"), ":/img/folder.svg");
     nav_bar_->addItem(tr("Remote"), ":/img/workspace.svg");

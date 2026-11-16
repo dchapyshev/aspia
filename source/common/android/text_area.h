@@ -22,8 +22,8 @@
 #include <QString>
 #include <QWidget>
 
-class QPlainTextEdit;
 class Animation;
+class PlainTextEdit;
 
 // Multi-line text input.
 class TextArea final : public QWidget
@@ -42,6 +42,7 @@ public:
     void setText(const QString& text);
     void clear();
     void setPlaceholderText(const QString& text);
+    void setMaxLength(int length);
 
     // QWidget implementation.
     QSize sizeHint() const final;
@@ -60,7 +61,7 @@ private:
     void updateFloatState();
     void animateFocus(bool focused);
 
-    QPlainTextEdit* edit_ = nullptr;
+    PlainTextEdit* edit_ = nullptr;
     Animation* float_animation_ = nullptr;
     Animation* focus_animation_ = nullptr;
     double float_progress_ = 0.0;

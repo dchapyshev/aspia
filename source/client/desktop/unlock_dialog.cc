@@ -36,6 +36,12 @@
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 
+namespace {
+
+constexpr int kMaxNameLength = 64;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 UnlockDialog::UnlockDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
@@ -56,6 +62,7 @@ UnlockDialog::UnlockDialog(Mode mode, QWidget* parent)
         setWindowTitle(tr("Open Database"));
 
     ui->label_icon->setPixmap(GuiApplication::svgPixmap(":/img/lock.svg", QSize(48, 48)));
+    ui->edit_name->setMaxLength(kMaxNameLength);
     ui->edit_password->setShowPasswordButtonVisible(true);
     ui->edit_confirm->setShowPasswordButtonVisible(true);
     ui->combo_database->setEnabled(mode_ == Mode::STARTUP);
@@ -441,8 +448,6 @@ void UnlockDialog::rename()
 //--------------------------------------------------------------------------------------------------
 bool UnlockDialog::isNameAccepted(const QString& name, const QString& own_id)
 {
-    static const int kMaxNameLength = 64;
-
     if (name.isEmpty())
     {
         MsgBox::warning(this, tr("Name cannot be empty."));

@@ -142,10 +142,9 @@ RouterAccessLogWidget::RouterAccessLogWidget(QWidget* parent)
     filter_timer_->setInterval(MilliSeconds(300));
     connect(filter_timer_, &QTimer::timeout, this, &RouterAccessLogWidget::onFilterChanged);
 
-    // A character of the text takes up to three bytes of the limit.
     for (QLineEdit* edit : { ui->edit_filter_user, ui->edit_filter_client, ui->edit_filter_host })
     {
-        edit->setMaxLength(static_cast<int>(proto::router::kMaxAccessLogQueryLength / 3));
+        edit->setMaxLength(static_cast<int>(proto::router::kMaxAccessLogQueryLength));
         connect(edit, &QLineEdit::textChanged, filter_timer_, qOverload<>(&QTimer::start));
     }
 

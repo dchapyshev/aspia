@@ -480,7 +480,7 @@ TEST_F(RouterDatabaseTest, HostsRefusesAnInvalidFilter)
     at_limit.set_os_name(text_at_limit);
     at_limit.set_version(text_at_limit);
     at_limit.set_cpu_arch(text_at_limit);
-    at_limit.set_display_name(text_at_limit);
+    at_limit.set_display_name(QString(proto::router::kMaxHostQueryLength, QChar(0x0410)).toStdString());
     at_limit.set_host_id(std::string(proto::router::kMaxHostIdLength, '9'));
 
     proto::router::HostList accepted;

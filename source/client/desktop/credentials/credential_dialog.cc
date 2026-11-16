@@ -47,6 +47,7 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
     ui->combo_type->addItem(QIcon(":/img/key-os.svg"), tr("OS Credentials"),
                             static_cast<int>(CredentialConfig::Type::OS));
 
+    ui->edit_name->setMaxLength(CredentialConfig::kMaxNameLength);
     ui->edit_password->setShowPasswordButtonVisible(true);
 
     const QString row(

@@ -42,6 +42,9 @@ std::string strJoin(std::span<const std::string> parts, std::string_view separat
 // left untouched, so multi-byte UTF-8 sequences pass through unharmed.
 std::string_view strTrimmed(std::string_view str);
 
+// Returns the length of UTF-8 |str| in characters.
+size_t strLength(std::string_view str);
+
 // Returns |str| re-encoded from Latin-1 to UTF-8, with a single allocation. The two agree below
 // 0x80, so a string of ASCII is copied as it is. Firmware fields declared as ASCII but holding a
 // byte above it are what this is for: what comes out is always valid UTF-8.

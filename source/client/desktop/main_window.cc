@@ -63,6 +63,7 @@
 #include "common/desktop/session_type.h"
 #include "common/desktop/update_dialog.h"
 #include "proto/peer.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -125,6 +126,7 @@ MainWindow::MainWindow(QWidget* parent)
     search_field_ = new QLineEdit(this);
     search_field_->setPlaceholderText(tr("Search..."));
     search_field_->setClearButtonEnabled(true);
+    search_field_->setMaxLength(static_cast<int>(proto::router::kMaxHostQueryLength));
     search_field_->setMaximumWidth(250);
     search_action_ = ui->toolbar->addWidget(search_field_);
 

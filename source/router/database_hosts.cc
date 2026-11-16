@@ -49,7 +49,7 @@ bool isHostFilterValid(const proto::router::HostFilter& filter)
 
     for (std::string_view text : texts)
     {
-        if (text.size() > proto::router::kMaxHostQueryLength)
+        if (strLength(text) > proto::router::kMaxHostQueryLength)
             return false;
     }
 
@@ -809,9 +809,9 @@ void Database::searchHosts(std::string_view query_text, const std::set<qint64>& 
         return;
     }
 
-    if (query_text.size() > proto::router::kMaxHostQueryLength)
+    if (strLength(query_text) > proto::router::kMaxHostQueryLength)
     {
-        LOG(ERROR) << "Host search query is too long:" << query_text.size();
+        LOG(ERROR) << "Host search query is too long:" << strLength(query_text);
         out->set_error_code(proto::router::kErrorInvalidRequest);
         return;
     }

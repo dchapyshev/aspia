@@ -18,6 +18,8 @@
 
 #include "base/string_util.h"
 
+#include <QString>
+
 namespace {
 
 //--------------------------------------------------------------------------------------------------
@@ -87,6 +89,12 @@ std::string_view strTrimmed(std::string_view str)
         --end;
 
     return str.substr(begin, end - begin);
+}
+
+//--------------------------------------------------------------------------------------------------
+size_t strLength(std::string_view str)
+{
+    return static_cast<size_t>(QString::fromUtf8(str.data(), static_cast<qsizetype>(str.size())).size());
 }
 
 //--------------------------------------------------------------------------------------------------

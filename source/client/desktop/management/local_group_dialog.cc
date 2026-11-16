@@ -52,6 +52,9 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
 
     setWindowTitle(group_id_ != -1 ? tr("Edit Group") : tr("Add Group"));
 
+    ui->edit_name->setMaxLength(LocalGroupConfig::kMaxNameLength);
+    ui->edit_comment->setMaxLength(LocalGroupConfig::kMaxCommentLength);
+
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
 

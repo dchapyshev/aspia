@@ -49,7 +49,22 @@ struct Registrator
 static volatile Registrator registrator;
 
 //--------------------------------------------------------------------------------------------------
-// One host record, as both the list and the search reply carry it.
+QString parseComment(const std::string& src)
+{
+    QString comment = QString::fromStdString(src);
+
+    qsizetype length = static_cast<qsizetype>(proto::router::kMaxCommentLength);
+    if (comment.size() <= length)
+        return comment;
+
+    if (comment.at(length - 1).isHighSurrogate())
+        --length;
+
+    comment.truncate(length);
+    return comment;
+}
+
+//--------------------------------------------------------------------------------------------------
 RouterHost parseHost(const proto::router::Host& src)
 {
     RouterHost dst;
@@ -62,7 +77,7 @@ RouterHost parseHost(const proto::router::Host& src)
     dst.version       = QString::fromStdString(src.version());
     dst.os_name       = QString::fromStdString(src.os_name());
     dst.address       = QString::fromStdString(src.address());
-    dst.comment       = QString::fromStdString(src.comment());
+    dst.comment       = parseComment(src.comment());
     dst.last_connect  = src.last_connect();
     dst.last_modify   = src.last_modify();
     dst.online        = src.online();
@@ -71,11 +86,8 @@ RouterHost parseHost(const proto::router::Host& src)
     return dst;
 }
 
-// The serialize* functions fill an outgoing record and check the protocol bounds. An oversized
-// request is not refused by the router, it tears the session down.
-
 //--------------------------------------------------------------------------------------------------
-std::string_view serializeWorkspace(const RouterWorkspace& workspace, proto::router::Workspace* out)
+void serializeWorkspace(const RouterWorkspace& workspace, proto::router::Workspace* out)
 {
     CHECK(out);
 
@@ -88,20 +100,10 @@ std::string_view serializeWorkspace(const RouterWorkspace& workspace, proto::rou
 
     for (qint64 user_id : std::as_const(workspace.user_ids))
         out->add_user_id(user_id);
-
-    // The name is mandatory. Sizes are of the bytes that go out, not of the text the user typed.
-    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
-        out->comment().size() > proto::router::kMaxCommentLength)
-    {
-        LOG(ERROR) << "Invalid field in workspace" << workspace.entry_id;
-        return proto::router::kErrorInvalidData;
-    }
-
-    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view serializeGroup(const RouterGroup& group, proto::router::Group* out)
+void serializeGroup(const RouterGroup& group, proto::router::Group* out)
 {
     CHECK(out);
 
@@ -111,16 +113,6 @@ std::string_view serializeGroup(const RouterGroup& group, proto::router::Group* 
     out->set_name(group.name.trimmed().toStdString());
     out->set_comment(group.comment.toStdString());
     out->set_revision(group.revision);
-
-    // The name is mandatory.
-    if (out->name().empty() || out->name().size() > proto::router::kMaxEntryNameLength ||
-        out->comment().size() > proto::router::kMaxCommentLength)
-    {
-        LOG(ERROR) << "Invalid field in group" << group.entry_id;
-        return proto::router::kErrorInvalidData;
-    }
-
-    return proto::router::kErrorOk;
 }
 
 } // namespace
@@ -152,8 +144,6 @@ bool RouterSession::storeCredentials(const QString& user_name, const SecureStrin
 {
     LOG(INFO) << "Credentials changed";
 
-    // The device token is left as it is. This runs before the router has answered and can be
-    // undone, and a token the rotation revoked is dropped by the login that gets it rejected.
     config_->setUsername(user_name);
     config_->setPassword(password);
     if (!Database::instance().setRouterConfig(*config_))
@@ -422,20 +412,6 @@ void RouterSession::editHost(const RouterHost& host, RouterCallback<proto::route
     serialized.set_comment(host.comment.toStdString());
     serialized.set_revision(host.revision);
 
-    // Every field of a host is optional (an empty display name falls back to the computer name),
-    // so only the sizes are checked. They count the bytes that go out, not the characters typed.
-    if (serialized.display_name().size() > proto::router::kMaxEntryNameLength ||
-        serialized.comment().size() > proto::router::kMaxCommentLength)
-    {
-        // Nothing is sent, so no reply would ever come and the caller would wait forever.
-        LOG(ERROR) << "Oversized field in host" << host.host_id;
-
-        proto::router::HostResult result;
-        result.set_error_code(std::string(proto::router::kErrorInvalidData));
-        callback(result);
-        return;
-    }
-
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_host_request();
     request->set_request_id(rpc_.nextRequestId());
@@ -449,21 +425,11 @@ void RouterSession::editHost(const RouterHost& host, RouterCallback<proto::route
 void RouterSession::addWorkspace(const RouterWorkspace& workspace,
                                  RouterCallback<proto::router::WorkspaceResult> callback)
 {
-    proto::router::Workspace serialized;
-    const std::string_view error_code = serializeWorkspace(workspace, &serialized);
-    if (error_code != proto::router::kErrorOk)
-    {
-        proto::router::WorkspaceResult result;
-        result.set_error_code(std::string(error_code));
-        callback(result);
-        return;
-    }
-
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandWorkspaceAdd);
-    request->mutable_workspace()->Swap(&serialized);
+    serializeWorkspace(workspace, request->mutable_workspace());
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -472,21 +438,11 @@ void RouterSession::addWorkspace(const RouterWorkspace& workspace,
 void RouterSession::modifyWorkspace(const RouterWorkspace& workspace,
                                     RouterCallback<proto::router::WorkspaceResult> callback)
 {
-    proto::router::Workspace serialized;
-    const std::string_view error_code = serializeWorkspace(workspace, &serialized);
-    if (error_code != proto::router::kErrorOk)
-    {
-        proto::router::WorkspaceResult result;
-        result.set_error_code(std::string(error_code));
-        callback(result);
-        return;
-    }
-
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandWorkspaceModify);
-    request->mutable_workspace()->Swap(&serialized);
+    serializeWorkspace(workspace, request->mutable_workspace());
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_ADMIN, message);
 }
@@ -508,22 +464,12 @@ void RouterSession::deleteWorkspace(qint64 entry_id,
 void RouterSession::addGroup(qint64 workspace_id, const RouterGroup& group,
                              RouterCallback<proto::router::GroupResult> callback)
 {
-    proto::router::Group serialized;
-    const std::string_view error_code = serializeGroup(group, &serialized);
-    if (error_code != proto::router::kErrorOk)
-    {
-        proto::router::GroupResult result;
-        result.set_error_code(std::string(error_code));
-        callback(result);
-        return;
-    }
-
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandGroupAdd);
     request->set_workspace_id(workspace_id);
-    request->mutable_group()->Swap(&serialized);
+    serializeGroup(group, request->mutable_group());
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_MANAGER, message);
 }
@@ -532,22 +478,12 @@ void RouterSession::addGroup(qint64 workspace_id, const RouterGroup& group,
 void RouterSession::modifyGroup(qint64 workspace_id, const RouterGroup& group,
                                 RouterCallback<proto::router::GroupResult> callback)
 {
-    proto::router::Group serialized;
-    const std::string_view error_code = serializeGroup(group, &serialized);
-    if (error_code != proto::router::kErrorOk)
-    {
-        proto::router::GroupResult result;
-        result.set_error_code(std::string(error_code));
-        callback(result);
-        return;
-    }
-
     proto::router::ManagerToRouter message;
     auto* request = message.mutable_group_request();
     request->set_request_id(rpc_.nextRequestId());
     request->set_command_name(proto::router::kCommandGroupModify);
     request->set_workspace_id(workspace_id);
-    request->mutable_group()->Swap(&serialized);
+    serializeGroup(group, request->mutable_group());
     rpc_.registerPending(request, std::move(callback));
     send(proto::router::CHANNEL_ID_MANAGER, message);
 }
@@ -618,8 +554,6 @@ void RouterSession::listGroups(CachePolicy policy, qint64 workspace_id,
 void RouterSession::listHosts(CachePolicy policy, proto::router::HostListRequest request,
                               RouterCallback<RouterHostList> callback)
 {
-    // Only filtered (per workspace/group) queries are cached. The page is part of the key: two
-    // pages of the same selection are different answers.
     const bool cacheable = request.mode() == proto::router::HostListRequest::MODE_FILTERED;
     const RouterCache::HostKey key{ request.workspace_id(), request.group_id(),
                                     request.offset(), request.count() };
@@ -746,9 +680,6 @@ void RouterSession::changePassword(const SecureString& new_password,
     request->set_salt(new_user.salt.toStdString());
     request->set_verifier(new_user.verifier.toStdString());
 
-    // An accepted rotation ends this session and the reply announcing it dies with the channel,
-    // so only a refusal is ever seen here. The new password is stored right away and the old one
-    // is put back if the router refuses.
     const SecureString old_password = config_->password();
     storeCredentials(config_->username(), new_password);
 
@@ -757,8 +688,6 @@ void RouterSession::changePassword(const SecureString& new_password,
         [this, old_password, callback = std::move(callback)](
             const proto::router::ChangePasswordResult& result)
     {
-        // The session ends on success, and its death answers this request as a lost connection,
-        // so only a refusal by the router takes the new password back.
         const std::string& error_code = result.error_code();
         if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorLostConnection)
             storeCredentials(config_->username(), old_password);
@@ -915,7 +844,7 @@ RouterWorkspaceList RouterSession::applyWorkspaceList(const proto::router::Works
         RouterWorkspace& dst = result.workspaces.emplaceBack();
         dst.entry_id = src.entry_id();
         dst.name     = QString::fromStdString(src.name());
-        dst.comment  = QString::fromStdString(src.comment());
+        dst.comment  = parseComment(src.comment());
         dst.revision = src.revision();
         dst.user_ids.reserve(src.user_id_size());
 
@@ -944,7 +873,6 @@ RouterHostList RouterSession::applyHostList(const proto::router::HostList& list,
     result.error_code   = QString::fromStdString(list.error_code());
     result.workspace_id = list.workspace_id();
     result.group_id     = list.group_id();
-    // The pagination takes a non-negative count as its contract, so a negative one stops here.
     result.total_count  = qMax<qint64>(0, list.total_count());
     result.hosts.reserve(list.host_size());
 
@@ -976,7 +904,7 @@ RouterGroupList RouterSession::applyGroupList(const proto::router::GroupList& li
         dst.workspace_id = workspace_id;
         dst.parent_id    = src.parent_id();
         dst.name         = QString::fromStdString(src.name());
-        dst.comment      = QString::fromStdString(src.comment());
+        dst.comment      = parseComment(src.comment());
         dst.revision     = src.revision();
     }
 

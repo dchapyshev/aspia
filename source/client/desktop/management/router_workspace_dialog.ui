@@ -49,7 +49,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="edit_comment"/>
+        <widget class="PlainTextEdit" name="edit_comment"/>
        </item>
       </layout>
      </widget>
@@ -425,6 +425,11 @@
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
    <header>common/desktop/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>common/desktop/plain_text_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

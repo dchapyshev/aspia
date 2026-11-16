@@ -51,6 +51,8 @@ collect_sources(SOURCE_COMMON_DESKTOP
     msg_box.h
     password_edit.cc
     password_edit.h
+    plain_text_edit.cc
+    plain_text_edit.h
     router_error.cc
     router_error.h
     session_type.cc

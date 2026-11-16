@@ -60,13 +60,16 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     edit_name_->setLabel(tr("Name"));
+    edit_name_->setMaxLength(LocalHostConfig::kMaxNameLength);
     edit_address_->setLabel(tr("Address / ID"));
     edit_username_->setLabel(tr("User Name"));
+    edit_username_->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
     edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);
     combo_credential_->setLabel(tr("Credentials"));
     combo_profile_->setLabel(tr("Profile"));
     edit_comment_->setLabel(tr("Comment"));
+    edit_comment_->setMaxLength(LocalHostConfig::kMaxCommentLength);
 
     // A fixed hex keeps the error color readable on both light and dark surfaces and survives the
     // palette reset that the caption role applies on theme changes.

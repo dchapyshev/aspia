@@ -24,50 +24,38 @@
 
 namespace proto::router {
 
-// Page bounds of the list replies. A reply carrying a list of unbounded length grows past the
-// message limit, and such a reply ends the session instead of being sent.
+// Page bounds of the list replies.
 [[maybe_unused]] constexpr int kMaxClientPageSize = 100;
 [[maybe_unused]] constexpr int kMaxHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxTempHostPageSize = 100;
 [[maybe_unused]] constexpr int kMaxUserPageSize = 100;
 [[maybe_unused]] constexpr int kMaxAccessLogPageSize = 100;
 
-// Bound on the workspaces of a HostFilter. Every one of them becomes a parameter of the query.
+// Bound on the workspaces of a HostFilter.
 [[maybe_unused]] constexpr int kMaxHostFilterWorkspaces = 100;
 
-// Bounds on the text of a HostFilter and of a host search query, in UTF-8 bytes. The id is a run of
-// decimal digits no longer than the largest id.
-[[maybe_unused]] constexpr size_t kMaxHostQueryLength = 256;
+// Bounds on the text of a HostFilter and of a host search query, in characters.
+[[maybe_unused]] constexpr size_t kMaxHostQueryLength = 100;
 [[maybe_unused]] constexpr size_t kMaxHostIdLength = 20;
 
-// Bound on each text of an AccessLogFilter, in UTF-8 bytes.
-[[maybe_unused]] constexpr size_t kMaxAccessLogQueryLength = 256;
+// Bound on each text of an AccessLogFilter, in characters.
+[[maybe_unused]] constexpr size_t kMaxAccessLogQueryLength = 100;
 
-// Device tokens one user holds at a time. Issuing a token over the cap drops the least recently
-// used ones, so a client that never comes back cannot grow the list without bound.
+// Device tokens one user holds at a time. A token over the cap drops the least recently used one.
 [[maybe_unused]] constexpr int kMaxDeviceTokensPerUser = 50;
 
-// Size of a device token, in bytes. The router issues exactly this many and refuses any other
-// size on presentation, so the client stores nothing else either.
+// Size of a device token, in bytes.
 [[maybe_unused]] constexpr int kDeviceTokenSize = 32;
 
-// Bound on the blocked_seconds of a TwoFactorChallenge. The router sends the remaining part of
-// a block that lasts minutes; the client clamps what it reads to [0, this], so a hostile peer
-// cannot overflow the arithmetic on the value or park a record behind a forever block.
+// Bound on the blocked_seconds of a TwoFactorChallenge.
 [[maybe_unused]] constexpr int64_t kMaxTwoFactorBlockSeconds = 24 * 60 * 60;
 
-// Bound on the otpauth:// URI of an enrollment challenge, in UTF-8 bytes. The client is the side
-// that checks it: it renders the URI into a QR code, and the encoder refuses a payload that does
-// not fit its largest symbol, leaving the enrollment without an image to scan. What the router
-// builds stays far below - the issuer, a user name bounded by User::kMaxUserNameLength and a
-// Base32 secret come to some 700 bytes even when every character of the name is percent-encoded.
+// Bound on the otpauth:// URI of an enrollment challenge, in UTF-8 bytes.
 [[maybe_unused]] constexpr size_t kMaxOtpauthUriLength = 1024;
 
-// Bounds on the manager-editable fields of a host, a group and a workspace, in UTF-8 bytes.
-// Checked on both sides. An unbounded record grows the list reply that carries it past the message
-// limit, and such a reply ends the session instead of being sent, on every reconnect.
+// Bounds on the manager-editable fields of a host, a group and a workspace, in characters.
 [[maybe_unused]] constexpr size_t kMaxEntryNameLength = 64;
-[[maybe_unused]] constexpr size_t kMaxCommentLength = 8 * 1024;
+[[maybe_unused]] constexpr size_t kMaxCommentLength = 2048;
 
 // Version of the JSON the host sends in HostTelemetry.
 [[maybe_unused]] constexpr int kTelemetryVersion = 1;
@@ -108,8 +96,7 @@ extern const char* const kCommandGroupDelete;
 // Command names for PeerRequest.
 extern const char* const kCommandPeerDisconnect;
 
-// Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult/WorkspaceList/
-// WorkspaceResult/HostIdResponse.
+// Error codes of the router results.
 extern const char* const kErrorOk;
 extern const char* const kErrorInvalidRequest;
 extern const char* const kErrorInternalError;

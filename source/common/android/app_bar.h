@@ -54,6 +54,7 @@ public:
     // text is reported through sig_searchTextChanged(). The caller drives the back button and actions.
     void setSearchMode(bool enabled);
     bool isSearchMode() const { return search_mode_; }
+    void setSearchMaxLength(int length);
 
     // QWidget implementation.
     QSize sizeHint() const final;

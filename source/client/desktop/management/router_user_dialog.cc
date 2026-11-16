@@ -76,6 +76,8 @@ RouterUserDialog::RouterUserDialog(qint64 user_id, QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
+    ui->edit_username->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
+    ui->edit_email->setMaxLength(static_cast<int>(RouterUser::kMaxEmailLength));
     ui->checkbox_disable->setChecked(false);
 
     // The higher levels imply the lower ones (an administrator can also act as a manager and a

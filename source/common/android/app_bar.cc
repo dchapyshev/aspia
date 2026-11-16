@@ -144,6 +144,12 @@ void AppBar::setSearchMode(bool enabled)
 }
 
 //--------------------------------------------------------------------------------------------------
+void AppBar::setSearchMaxLength(int length)
+{
+    search_field_->setMaxLength(length);
+}
+
+//--------------------------------------------------------------------------------------------------
 QSize AppBar::sizeHint() const
 {
     return QSize(0, kBarHeight);

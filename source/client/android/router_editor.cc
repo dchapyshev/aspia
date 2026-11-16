@@ -53,6 +53,7 @@ RouterEditor::RouterEditor(QWidget* parent)
 {
     edit_address_->setLabel(tr("Address"));
     edit_username_->setLabel(tr("User Name"));
+    edit_username_->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
     edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);
 

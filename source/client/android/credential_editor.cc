@@ -58,6 +58,7 @@ CredentialEditor::CredentialEditor(QWidget* parent)
                          static_cast<int>(CredentialConfig::Type::OS));
 
     edit_name_->setLabel(tr("Name"));
+    edit_name_->setMaxLength(CredentialConfig::kMaxNameLength);
     edit_username_->setLabel(tr("User Name"));
     edit_password_->setLabel(tr("Password"));
     edit_password_->setEchoMode(QLineEdit::Password);

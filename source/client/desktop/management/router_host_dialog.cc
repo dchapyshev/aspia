@@ -54,7 +54,9 @@ RouterHostDialog::RouterHostDialog(const RouterHost& host, QWidget* parent)
     UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
+    ui->edit_display_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
     ui->edit_display_name->setText(host_.display_name);
+    ui->edit_comment->setMaxLength(static_cast<int>(proto::router::kMaxCommentLength));
     ui->edit_comment->setPlainText(host_.comment);
 
     ui->edit_password->setShowPasswordButtonVisible(true);

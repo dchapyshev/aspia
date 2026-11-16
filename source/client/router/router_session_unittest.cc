@@ -704,80 +704,22 @@ TEST_F(RouterSessionTest, NotificationDropsItsList)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An unsendable record is refused before the wire, in the same terms the router would answer with,
-// so the caller is not left waiting. The bounds count UTF-8 bytes, so a name of 64 non-ASCII
-// characters is over the bound while the input field that accepted it is not; the name of a group
-// or a workspace is also mandatory and judged after trimming, the way the router judges it.
-TEST_F(RouterSessionTest, RefusedRecordIsAnsweredWithoutTouchingTheWire)
+// A comment longer than the bound arrives cut to it, without half of a surrogate pair at the end.
+TEST_F(RouterSessionTest, OversizedCommentIsCutOnArrival)
 {
-    const QString cyrillic_name(proto::router::kMaxEntryNameLength / 2 + 1, QChar(0x0410));
-    const QString long_comment(proto::router::kMaxCommentLength + 1, QChar('c'));
+    const qsizetype max_length = static_cast<qsizetype>(proto::router::kMaxCommentLength);
+    const QString pair = QString::fromUcs4(U"\U0001F600");
+    const QString split_comment = QString(max_length - 1, QChar('c')) + pair + "tail";
 
-    RouterHost host;
-    host.host_id = HostId(1);
-    host.workspace_id = kWorkspaceId;
-    host.display_name = QString(proto::router::kMaxEntryNameLength + 1, QChar('n'));
+    proto::router::HostList list = hostList(kWorkspaceId, { HostId(1), HostId(2) }, 2);
+    list.mutable_host(0)->set_comment(QString(max_length + 100, QChar('c')).toStdString());
+    list.mutable_host(1)->set_comment(split_comment.toStdString());
 
-    proto::router::HostResult host_result;
-    auto store_host = [&host_result](const proto::router::HostResult& reply) { host_result = reply; };
-    router_.editHost(host, { &receiver_, store_host });
-    EXPECT_EQ(host_result.error_code(), proto::router::kErrorInvalidData);
+    const RouterHostList delivered = fetchHosts(list);
 
-    host.display_name = cyrillic_name;
-    host_result.Clear();
-    router_.editHost(host, { &receiver_, store_host });
-    EXPECT_EQ(host_result.error_code(), proto::router::kErrorInvalidData);
-
-    RouterWorkspace workspace;
-    workspace.entry_id = kWorkspaceId;
-    workspace.name = "   ";
-
-    proto::router::WorkspaceResult workspace_result;
-    auto store_workspace = [&workspace_result](const proto::router::WorkspaceResult& reply)
-    {
-        workspace_result = reply;
-    };
-    router_.modifyWorkspace(workspace, { &receiver_, store_workspace });
-    EXPECT_EQ(workspace_result.error_code(), proto::router::kErrorInvalidData);
-
-    workspace.name = "alpha";
-    workspace.comment = long_comment;
-    workspace_result.Clear();
-    router_.modifyWorkspace(workspace, { &receiver_, store_workspace });
-    EXPECT_EQ(workspace_result.error_code(), proto::router::kErrorInvalidData);
-
-    RouterGroup group; // The name is empty.
-
-    proto::router::GroupResult group_result;
-    auto store_group = [&group_result](const proto::router::GroupResult& reply)
-    {
-        group_result = reply;
-    };
-    router_.addGroup(kWorkspaceId, group, { &receiver_, store_group });
-    EXPECT_EQ(group_result.error_code(), proto::router::kErrorInvalidData);
-
-    EXPECT_EQ(RouterSessionTestPeer::rpc(router_).pendingCount(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record sitting exactly on the bounds goes out. The name is measured after trimming, the way
-// the router measures it, so a name padded with blanks up to twice the bound still passes.
-TEST_F(RouterSessionTest, RecordOnTheBoundsIsSent)
-{
-    RouterWorkspace workspace;
-    workspace.entry_id = kWorkspaceId;
-    workspace.name = "  " + QString(proto::router::kMaxEntryNameLength, QChar('n')) + "  ";
-
-    bool answered = false;
-    router_.modifyWorkspace(workspace,
-                            { &receiver_, [&answered](const proto::router::WorkspaceResult&)
-    {
-        answered = true;
-    } });
-    ++next_request_id_;
-
-    EXPECT_FALSE(answered);
-    EXPECT_EQ(RouterSessionTestPeer::rpc(router_).pendingCount(), 1);
+    ASSERT_EQ(delivered.hosts.size(), 2);
+    EXPECT_EQ(delivered.hosts.at(0).comment.size(), max_length);
+    EXPECT_EQ(delivered.hosts.at(1).comment.size(), max_length - 1);
 }
 
 //--------------------------------------------------------------------------------------------------

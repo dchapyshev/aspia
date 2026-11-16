@@ -263,6 +263,10 @@ TEST_F(AccessLogTest, RefusesAnInvalidRequest)
     filter.set_time_to(-1);
     EXPECT_EQ(entries(filter).error_code(), proto::router::kErrorInvalidRequest);
 
+    filter.Clear();
+    filter.set_user_name(QString(proto::router::kMaxAccessLogQueryLength, QChar(0x0410)).toStdString());
+    EXPECT_EQ(entries(filter).error_code(), proto::router::kErrorOk);
+
     const std::string too_long(proto::router::kMaxAccessLogQueryLength + 1, 'a');
 
     filter.Clear();

@@ -60,8 +60,8 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(qint64 workspace_id, QWidget* paren
     UserSettings settings;
     restoreGeometry(settings.dialogGeometry(objectName()));
 
-    // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
     ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
+    ui->edit_comment->setMaxLength(static_cast<int>(proto::router::kMaxCommentLength));
 
     users_page_.setPageSize(kPageSize);
     hosts_in_page_.setPageSize(kPageSize);

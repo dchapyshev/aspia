@@ -47,8 +47,8 @@ RouterGroupDialog::RouterGroupDialog(qint64 workspace_id, const QString& workspa
 
     setWindowTitle(entry_id_ > 0 ? tr("Edit Group") : tr("Add Group"));
 
-    // Counts characters, the bound counts UTF-8 bytes. A non-ASCII name is caught before sending.
     ui->edit_name->setMaxLength(static_cast<int>(proto::router::kMaxEntryNameLength));
+    ui->edit_comment->setMaxLength(static_cast<int>(proto::router::kMaxCommentLength));
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterGroupDialog::onButtonBoxClicked);
 

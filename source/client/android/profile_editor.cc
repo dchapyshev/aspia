@@ -62,6 +62,7 @@ ProfileEditor::ProfileEditor(QWidget* parent)
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     edit_name_->setLabel(tr("Name"));
+    edit_name_->setMaxLength(ProfileConfig::kMaxNameLength);
 
     combo_quality_->setLabel(tr("Quality"));
     combo_quality_->addItem(tr("Automatic"), kAutoQuality);

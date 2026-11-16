@@ -61,7 +61,10 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
 
     setWindowTitle(entry_id_ != -1 ? tr("Edit Host") : tr("Add Host"));
 
+    ui->edit_name->setMaxLength(LocalHostConfig::kMaxNameLength);
+    ui->edit_username->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
     ui->edit_password->setShowPasswordButtonVisible(true);
+    ui->edit_comment->setMaxLength(LocalHostConfig::kMaxCommentLength);
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
     connect(ui->edit_address, &QLineEdit::textEdited, this, [this](const QString& text)
     {

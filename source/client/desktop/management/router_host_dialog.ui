@@ -132,7 +132,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPlainTextEdit" name="edit_comment"/>
+    <widget class="PlainTextEdit" name="edit_comment"/>
    </item>
    <item>
     <widget class="DialogButtonBox" name="button_box">
@@ -158,6 +158,11 @@
    <class>PasswordEdit</class>
    <extends>QLineEdit</extends>
    <header>common/desktop/password_edit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>common/desktop/plain_text_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
