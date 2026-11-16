@@ -39,6 +39,8 @@ QSize iconAreaSize(const QToolButton* button)
 IconTextButton::IconTextButton(QWidget* parent)
     : QToolButton(parent)
 {
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred, QSizePolicy::ToolButton));
+
 #if defined(Q_OS_MACOS)
     // The button has the bezel of a push button there, and the style gives tool buttons a smaller
     // font than push buttons.
