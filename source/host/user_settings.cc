@@ -104,25 +104,25 @@ void UserSettings::setOneTimeSessions(quint32 sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray UserSettings::securityLogDialogState() const
+QVariantMap UserSettings::securityLogDialogState() const
 {
-    return value(kSecurityLogDialogStateParam).toByteArray();
+    return value(kSecurityLogDialogStateParam).toMap();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSettings::setSecurityLogDialogState(const QByteArray& state)
+void UserSettings::setSecurityLogDialogState(const QVariantMap& state)
 {
     setValue(kSecurityLogDialogStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray UserSettings::systemInfoWindowState() const
+QVariantMap UserSettings::systemInfoWindowState() const
 {
-    return value(kSystemInfoWindowStateParam).toByteArray();
+    return value(kSystemInfoWindowStateParam).toMap();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSettings::setSystemInfoWindowState(const QByteArray& state)
+void UserSettings::setSystemInfoWindowState(const QVariantMap& state)
 {
     setValue(kSystemInfoWindowStateParam, state);
 }

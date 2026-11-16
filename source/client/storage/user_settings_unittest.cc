@@ -76,10 +76,12 @@ TEST_F(UserSettingsTest, DialogsArePlacedByTheSystemUntilSaved)
     EXPECT_TRUE(UserSettings().quickConnectState().isEmpty());
     EXPECT_TRUE(UserSettings().dialogGeometry("first").isEmpty());
 
-    UserSettings().setQuickConnectState("quick");
+    const QVariantMap quick_connect_state = { { "geometry", QByteArray("quick") } };
+
+    UserSettings().setQuickConnectState(quick_connect_state);
     UserSettings().setDialogGeometry("first", "geometry");
 
-    EXPECT_EQ(UserSettings().quickConnectState(), QByteArray("quick"));
+    EXPECT_EQ(UserSettings().quickConnectState(), quick_connect_state);
     EXPECT_EQ(UserSettings().dialogGeometry("first"), QByteArray("geometry"));
     EXPECT_TRUE(UserSettings().dialogGeometry("second").isEmpty());
 }

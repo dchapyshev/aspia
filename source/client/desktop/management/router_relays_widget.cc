@@ -21,7 +21,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
-#include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
@@ -44,6 +43,14 @@
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
+
+namespace {
+
+const char kSplitterKey[] = "splitter";
+const char kRelaysColumnsKey[] = "relays_columns";
+const char kPeersColumnsKey[] = "peers_columns";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterRelaysWidget::RouterRelaysWidget(QWidget* parent)
@@ -163,35 +170,21 @@ void RouterRelaysWidget::copyCurrentRelayColumn(int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterRelaysWidget::saveState()
+QVariantMap RouterRelaysWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->splitter->saveState();
-        stream << ui->tree_relays->header()->saveState();
-        stream << ui->tree_peers->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kSplitterKey, ui->splitter->saveState());
+    state.insert(kRelaysColumnsKey, ui->tree_relays->header()->saveState());
+    state.insert(kPeersColumnsKey, ui->tree_peers->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterRelaysWidget::restoreState(const QByteArray& state)
+void RouterRelaysWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray splitter_state;
-    QByteArray relays_columns_state;
-    QByteArray peers_columns_state;
-
-    stream >> splitter_state;
-    stream >> relays_columns_state;
-    stream >> peers_columns_state;
+    const QByteArray splitter_state = state.value(kSplitterKey).toByteArray();
+    const QByteArray relays_columns_state = state.value(kRelaysColumnsKey).toByteArray();
+    const QByteArray peers_columns_state = state.value(kPeersColumnsKey).toByteArray();
 
     if (!splitter_state.isEmpty())
     {

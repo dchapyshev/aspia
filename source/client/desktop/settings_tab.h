@@ -41,8 +41,8 @@ public:
     ~SettingsTab() final;
 
     // Tab implementation.
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
     void activate() final;
     void deactivate() final;
     bool confirmClose() final;

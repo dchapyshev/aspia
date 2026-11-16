@@ -337,13 +337,13 @@ void FilePanel::setMirrored(bool mirrored)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray FilePanel::saveState() const
+QVariantMap FilePanel::saveState() const
 {
     return ui->list->saveState();
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::restoreState(const QByteArray& state)
+void FilePanel::restoreState(const QVariantMap& state)
 {
     ui->list->restoreState(state);
 }

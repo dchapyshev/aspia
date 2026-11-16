@@ -411,13 +411,13 @@ SettingsTab::~SettingsTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SettingsTab::saveState()
+QVariantMap SettingsTab::saveState()
 {
-    return QByteArray();
+    return QVariantMap();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::restoreState(const QByteArray& /* state */)
+void SettingsTab::restoreState(const QVariantMap& /* state */)
 {
     // Nothing
 }

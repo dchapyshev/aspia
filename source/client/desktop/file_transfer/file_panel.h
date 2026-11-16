@@ -68,8 +68,8 @@ public:
     void createFolder(const QString& name);
     void renameItem(const QString& old_name, const QString& new_name);
 
-    QByteArray saveState() const;
-    void restoreState(const QByteArray& state);
+    QVariantMap saveState() const;
+    void restoreState(const QVariantMap& state);
 
 signals:
     void sig_driveList();

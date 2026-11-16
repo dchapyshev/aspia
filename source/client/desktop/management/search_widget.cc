@@ -20,14 +20,12 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
-#include <QDataStream>
 #include <QEvent>
 #include <QFontMetrics>
 #include <QComboBox>
 #include <QHash>
 #include <QHBoxLayout>
 #include <QHeaderView>
-#include <QIODevice>
 #include <QItemSelectionModel>
 #include <QLabel>
 #include <QMenu>
@@ -56,14 +54,12 @@ const int kColumnAddress = 1;
 const int kColumnGroup   = 2;
 const int kColumnComment = 3;
 
-// Matches shown at a time, over every source together. Not larger than the page a router
-// serves at once, because a page that spans a single source is fetched with one request.
 const qint64 kPageSize = proto::router::kMaxHostPageSize;
 
-// Match counts a source can carry while it has not answered yet, or has failed to. Both keep
-// it out of the paging arithmetic; only the first one makes the page wait for it.
 const qint64 kSourceUnanswered = -1;
 const qint64 kSourceFailed     = -2;
+
+const char kColumnsKey[] = "columns";
 
 //--------------------------------------------------------------------------------------------------
 QString buildHighlightedHtml(const QString& text, const QString& query)
@@ -109,9 +105,6 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, LocalGroupConfig>& g
         current = it.value().parentId();
     }
 
-    // Every group of the address book hangs off its root, so the path starts there whatever the
-    // depth. A host that is in no group is in the root itself and shows the root alone. The name
-    // is the one the sidebar puts on it.
     parts.prepend(QCoreApplication::translate("Sidebar", "Local"));
 
     return parts.join(" / ");
@@ -128,8 +121,6 @@ SearchResultModel::Row makeLocalRow(const LocalHostConfig& host, const QString& 
 }
 
 //--------------------------------------------------------------------------------------------------
-// A router host is put into a record of the same shape as one of the address book, so a row of
-// either kind is shown and connected to the same way. The record is never stored, so it has no id.
 SearchResultModel::Row makeRouterRow(const RouterHost& host, const QString& source_label)
 {
     QString name = host.display_name;
@@ -241,9 +232,6 @@ SearchWidget::SearchWidget(QWidget* parent)
     tree_host_->setRootIsDecorated(false);
     tree_host_->setIndentation(0);
     tree_host_->setModel(model_);
-
-    // Turned on after the model is set: the view wires the header up to the sort of whatever model
-    // it has, and without one there is nothing to sort.
     tree_host_->setSortingEnabled(true);
 
     QHeaderView* header = tree_host_->header();
@@ -401,7 +389,6 @@ void SearchWidget::countSources()
     RouterSession* session = RouterController::session();
     if (!session)
     {
-        // Nothing but the local address book to page over.
         fetchCurrentPage();
         return;
     }
@@ -437,8 +424,6 @@ void SearchWidget::onSourceCounted(int slot, qint64 match_count)
 
     sources_[slot].match_count = match_count;
 
-    // The boundaries of a page depend on every count, so a page built from a part of them would be
-    // rebuilt with different rows the moment the rest arrives.
     for (const Source& source : std::as_const(sources_))
     {
         if (source.match_count == kSourceUnanswered)
@@ -453,8 +438,6 @@ void SearchWidget::fetchCurrentPage()
 {
     const qint64 wanted_page = page_model_.currentPage();
 
-    // A source that never answered is left out. Its matches are missing from the result either
-    // way, and a hole of unknown size would shift the pages of every source after it.
     page_model_.clear();
     page_model_.setPageSize(kPageSize);
 
@@ -471,8 +454,6 @@ void SearchWidget::fetchCurrentPage()
     page_model_.setCurrentPage(wanted_page);
     page_slices_.clear();
 
-    // A reply still on its way belongs to the page being left, and the slot it would write
-    // into is about to mean something else.
     ++generation_;
 
     const QList<SearchPageModel::Slice> slices = page_model_.currentSlices();
@@ -529,8 +510,6 @@ void SearchWidget::fetchCurrentPage()
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::showCurrentPage()
 {
-    // The rows of a page are shown together. A source that is still in flight would otherwise put
-    // its rows after the ones of a source that comes later in the order.
     for (const PageSlice& slice : std::as_const(page_slices_))
     {
         if (!slice.ready)
@@ -697,28 +676,17 @@ void SearchWidget::removeItem(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SearchWidget::saveState()
+QVariantMap SearchWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << tree_host_->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, tree_host_->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SearchWidget::restoreState(const QByteArray& state)
+void SearchWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
         tree_host_->header()->restoreState(columns_state);

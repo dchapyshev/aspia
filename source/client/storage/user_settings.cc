@@ -158,13 +158,13 @@ void UserSettings::setWindowState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray UserSettings::quickConnectState() const
+QVariantMap UserSettings::quickConnectState() const
 {
-    return settings_.value(kQuickConnectStateParam).toByteArray();
+    return settings_.value(kQuickConnectStateParam).toMap();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSettings::setQuickConnectState(const QByteArray& state)
+void UserSettings::setQuickConnectState(const QVariantMap& state)
 {
     settings_.setValue(kQuickConnectStateParam, state);
 }

@@ -21,7 +21,6 @@
 #include <QActionGroup>
 #include <QDateTime>
 #include <QEvent>
-#include <QIODevice>
 #include <QMenu>
 #include <QPointer>
 #include <QTimer>
@@ -64,6 +63,20 @@
 #include "proto/router_constants.h"
 
 namespace {
+
+const char kLocalGroupKey[] = "local_group";
+const char kRouterGroupKey[] = "router_group";
+const char kRouterHostsKey[] = "router_hosts";
+const char kRouterTempHostsKey[] = "router_temp_hosts";
+const char kRouterQsHostsKey[] = "router_qs_hosts";
+const char kRouterUsersKey[] = "router_users";
+const char kRouterClientsKey[] = "router_clients";
+const char kRouterRelaysKey[] = "router_relays";
+const char kRouterAccessLogKey[] = "router_access_log";
+const char kRouterStatusKey[] = "router_status";
+const char kSearchKey[] = "search";
+const char kSplitterKey[] = "splitter";
+const char kSidebarKey[] = "sidebar";
 
 //--------------------------------------------------------------------------------------------------
 HostConfig hostForRouterRow(const SearchResultModel::Row& row)
@@ -330,99 +343,45 @@ ManagementTab::~ManagementTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ManagementTab::saveState()
+QVariantMap ManagementTab::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << local_group_widget_->saveState();
-        stream << router_group_widget_->saveState();
-        stream << router_hosts_widget_->saveState();
-        stream << router_temp_hosts_widget_->saveState();
-        stream << router_qs_hosts_widget_->saveState();
-        stream << router_users_widget_->saveState();
-        stream << router_clients_widget_->saveState();
-        stream << router_relays_widget_->saveState();
-        stream << router_access_log_widget_->saveState();
-        stream << router_status_widget_->saveState();
-        stream << search_widget_->saveState();
-        stream << ui->splitter->saveState();
-        stream << ui->sidebar->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kLocalGroupKey, local_group_widget_->saveState());
+    state.insert(kRouterGroupKey, router_group_widget_->saveState());
+    state.insert(kRouterHostsKey, router_hosts_widget_->saveState());
+    state.insert(kRouterTempHostsKey, router_temp_hosts_widget_->saveState());
+    state.insert(kRouterQsHostsKey, router_qs_hosts_widget_->saveState());
+    state.insert(kRouterUsersKey, router_users_widget_->saveState());
+    state.insert(kRouterClientsKey, router_clients_widget_->saveState());
+    state.insert(kRouterRelaysKey, router_relays_widget_->saveState());
+    state.insert(kRouterAccessLogKey, router_access_log_widget_->saveState());
+    state.insert(kRouterStatusKey, router_status_widget_->saveState());
+    state.insert(kSearchKey, search_widget_->saveState());
+    state.insert(kSplitterKey, ui->splitter->saveState());
+    state.insert(kSidebarKey, ui->sidebar->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ManagementTab::restoreState(const QByteArray& state)
+void ManagementTab::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
+    local_group_widget_->restoreState(state.value(kLocalGroupKey).toMap());
+    router_group_widget_->restoreState(state.value(kRouterGroupKey).toMap());
+    router_hosts_widget_->restoreState(state.value(kRouterHostsKey).toMap());
+    router_temp_hosts_widget_->restoreState(state.value(kRouterTempHostsKey).toMap());
+    router_qs_hosts_widget_->restoreState(state.value(kRouterQsHostsKey).toMap());
+    router_users_widget_->restoreState(state.value(kRouterUsersKey).toMap());
+    router_clients_widget_->restoreState(state.value(kRouterClientsKey).toMap());
 
-    QByteArray local_group_state;
-    QByteArray router_group_state;
-    QByteArray router_hosts_state;
-    QByteArray router_temp_hosts_state;
-    QByteArray router_qs_hosts_state;
-    QByteArray router_users_state;
-    QByteArray router_clients_state;
-    QByteArray router_relays_state;
-    QByteArray router_access_log_state;
-    QByteArray router_status_state;
-    QByteArray search_state;
-    QByteArray splitter_state;
-    QByteArray sidebar_state;
-
-    stream >> local_group_state;
-    stream >> router_group_state;
-    stream >> router_hosts_state;
-    stream >> router_temp_hosts_state;
-    stream >> router_qs_hosts_state;
-    stream >> router_users_state;
-    stream >> router_clients_state;
-    stream >> router_relays_state;
-    stream >> router_access_log_state;
-    stream >> router_status_state;
-    stream >> search_state;
-    stream >> splitter_state;
-    stream >> sidebar_state;
-
-    if (!local_group_state.isEmpty())
-        local_group_widget_->restoreState(local_group_state);
-
-    if (!router_group_state.isEmpty())
-        router_group_widget_->restoreState(router_group_state);
-
-    if (!router_hosts_state.isEmpty())
-        router_hosts_widget_->restoreState(router_hosts_state);
-
-    if (!router_temp_hosts_state.isEmpty())
-        router_temp_hosts_widget_->restoreState(router_temp_hosts_state);
-
-    if (!router_qs_hosts_state.isEmpty())
-        router_qs_hosts_widget_->restoreState(router_qs_hosts_state);
-
-    if (!router_users_state.isEmpty())
-        router_users_widget_->restoreState(router_users_state);
-
-    if (!router_clients_state.isEmpty())
-        router_clients_widget_->restoreState(router_clients_state);
-
+    const QVariantMap router_relays_state = state.value(kRouterRelaysKey).toMap();
     if (!router_relays_state.isEmpty())
         router_relays_widget_->restoreState(router_relays_state);
 
-    if (!router_access_log_state.isEmpty())
-        router_access_log_widget_->restoreState(router_access_log_state);
+    router_access_log_widget_->restoreState(state.value(kRouterAccessLogKey).toMap());
+    router_status_widget_->restoreState(state.value(kRouterStatusKey).toMap());
+    search_widget_->restoreState(state.value(kSearchKey).toMap());
 
-    if (!router_status_state.isEmpty())
-        router_status_widget_->restoreState(router_status_state);
-
-    if (!search_state.isEmpty())
-        search_widget_->restoreState(search_state);
-
+    const QByteArray splitter_state = state.value(kSplitterKey).toByteArray();
     if (!splitter_state.isEmpty())
     {
         ui->splitter->restoreState(splitter_state);
@@ -435,8 +394,7 @@ void ManagementTab::restoreState(const QByteArray& state)
         ui->splitter->setSizes(sizes);
     }
 
-    if (!sidebar_state.isEmpty())
-        ui->sidebar->restoreState(sidebar_state);
+    ui->sidebar->restoreState(state.value(kSidebarKey).toMap());
 }
 
 //--------------------------------------------------------------------------------------------------

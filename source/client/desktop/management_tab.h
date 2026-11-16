@@ -59,8 +59,8 @@ public:
     ~ManagementTab() final;
 
     // Tab implementation.
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
     void activate() final;
     void deactivate() final;
     QString searchText() const final;

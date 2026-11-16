@@ -29,6 +29,8 @@
 
 namespace {
 
+const char kWindowKey[] = "window";
+
 QString tabObjectName(ClientWindow* client_window)
 {
     CHECK(client_window);
@@ -130,16 +132,19 @@ QWidget* ClientTab::detachedWindow() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ClientTab::saveState()
+QVariantMap ClientTab::saveState()
 {
-    return client_window_ ? client_window_->saveState() : QByteArray();
+    QVariantMap state;
+    if (client_window_)
+        state.insert(kWindowKey, client_window_->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::restoreState(const QByteArray& state)
+void ClientTab::restoreState(const QVariantMap& state)
 {
     if (client_window_)
-        client_window_->restoreState(state);
+        client_window_->restoreState(state.value(kWindowKey).toMap());
 }
 
 //--------------------------------------------------------------------------------------------------

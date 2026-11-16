@@ -20,11 +20,9 @@
 
 #include <QApplication>
 #include <QComboBox>
-#include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
-#include <QIODevice>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
@@ -46,6 +44,8 @@ namespace {
 
 // Upper sanity bound on the router-reported host count, used only for pagination.
 const qint64 kMaxHostCount = 500000;
+
+const char kColumnsKey[] = "columns";
 
 } // namespace
 
@@ -191,28 +191,17 @@ HostConfig RouterGroupWidget::selectedHostConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterGroupWidget::saveState()
+QVariantMap RouterGroupWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_host->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_host->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::restoreState(const QByteArray& state)
+void RouterGroupWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
         ui->tree_host->header()->restoreState(columns_state);

@@ -70,9 +70,10 @@ InstanceSettings::InstanceSettings()
 
         if (stored < current)
         {
-            LOG(INFO) << "Settings version changed from" << stored.toString()
-                      << "to" << current.toString();
-            settings_.clear();
+            LOG(INFO) << "Settings version changed from" << stored.toString() << "to" << current.toString();
+            settings_.remove(kLocalGroupExpandedParam);
+            settings_.remove(kWorkspaceExpandedParam);
+            settings_.remove(kRouterGroupExpandedParam);
         }
     });
 }
@@ -123,13 +124,13 @@ void InstanceSettings::setFilePathForTesting(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray InstanceSettings::tabState(const QString& name) const
+QVariantMap InstanceSettings::tabState(const QString& name) const
 {
-    return settings_.value(kTabStateParam + "/" + name).toByteArray();
+    return settings_.value(kTabStateParam + "/" + name).toMap();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InstanceSettings::setTabState(const QString& name, const QByteArray& state)
+void InstanceSettings::setTabState(const QString& name, const QVariantMap& state)
 {
     settings_.setValue(kTabStateParam + "/" + name, state);
 }

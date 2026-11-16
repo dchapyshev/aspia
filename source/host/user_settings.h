@@ -43,11 +43,11 @@ public:
     quint32 oneTimeSessions() const;
     void setOneTimeSessions(quint32 sessions);
 
-    QByteArray securityLogDialogState() const;
-    void setSecurityLogDialogState(const QByteArray& state);
+    QVariantMap securityLogDialogState() const;
+    void setSecurityLogDialogState(const QVariantMap& state);
 
-    QByteArray systemInfoWindowState() const;
-    void setSystemInfoWindowState(const QByteArray& state);
+    QVariantMap systemInfoWindowState() const;
+    void setSystemInfoWindowState(const QVariantMap& state);
 
 private:
     QVariant value(const QString& key, const QVariant& default_value = QVariant()) const;

@@ -43,6 +43,8 @@ namespace {
 // Upper sanity bound on the router-reported temporary host count, used only for pagination.
 const qint64 kMaxTempHostCount = 500000;
 
+const char kColumnsKey[] = "columns";
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -189,15 +191,17 @@ HostConfig RouterTempHostsWidget::selectedHostConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterTempHostsWidget::saveState()
+QVariantMap RouterTempHostsWidget::saveState()
 {
-    return tree_->header()->saveState();
+    QVariantMap state;
+    state.insert(kColumnsKey, tree_->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTempHostsWidget::restoreState(const QByteArray& state)
+void RouterTempHostsWidget::restoreState(const QVariantMap& state)
 {
-    tree_->header()->restoreState(state);
+    tree_->header()->restoreState(state.value(kColumnsKey).toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------

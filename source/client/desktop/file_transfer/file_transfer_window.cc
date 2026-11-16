@@ -18,8 +18,6 @@
 
 #include "client/desktop/file_transfer/file_transfer_window.h"
 
-#include <QIODevice>
-
 #include "base/logging.h"
 #include "client/file_error_code.h"
 #include "client/desktop/file_transfer/address_bar_model.h"
@@ -30,6 +28,15 @@
 #include "client/workers/file_worker.h"
 #include "common/desktop/msg_box.h"
 #include "proto/peer.h"
+
+namespace {
+
+const char kGeometryKey[] = "geometry";
+const char kSplitterKey[] = "splitter";
+const char kLocalPanelKey[] = "local_panel";
+const char kRemotePanelKey[] = "remote_panel";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 FileTransferWindow::FileTransferWindow(QWidget* parent)
@@ -60,41 +67,23 @@ FileTransferWindow::~FileTransferWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray FileTransferWindow::saveState() const
+QVariantMap FileTransferWindow::saveState() const
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-        stream << saveGeometry();
-        stream << ui->splitter->saveState();
-        stream << ui->local_panel->saveState();
-        stream << ui->remote_panel->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kGeometryKey, saveGeometry());
+    state.insert(kSplitterKey, ui->splitter->saveState());
+    state.insert(kLocalPanelKey, ui->local_panel->saveState());
+    state.insert(kRemotePanelKey, ui->remote_panel->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileTransferWindow::restoreState(const QByteArray& state)
+void FileTransferWindow::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray value;
-
-    stream >> value;
-    restoreGeometry(value);
-
-    stream >> value;
-    ui->splitter->restoreState(value);
-
-    stream >> value;
-    ui->local_panel->restoreState(value);
-
-    stream >> value;
-    ui->remote_panel->restoreState(value);
+    restoreGeometry(state.value(kGeometryKey).toByteArray());
+    ui->splitter->restoreState(state.value(kSplitterKey).toByteArray());
+    ui->local_panel->restoreState(state.value(kLocalPanelKey).toMap());
+    ui->remote_panel->restoreState(state.value(kRemotePanelKey).toMap());
 }
 
 //--------------------------------------------------------------------------------------------------

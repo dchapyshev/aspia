@@ -59,8 +59,8 @@ public:
 
     void changeRouterPassword();
 
-    QByteArray saveState() const;
-    void restoreState(const QByteArray& state);
+    QVariantMap saveState() const;
+    void restoreState(const QVariantMap& state);
     void cancelPendingItem();
 
 public slots:

@@ -85,8 +85,8 @@ public:
 
     // Persistent toolbar state (scale, autoscroll, pin, wait-for-host) packed for storage as part
     // of the owning Tab's state.
-    QByteArray saveState() const;
-    void restoreState(const QByteArray& state);
+    QVariantMap saveState() const;
+    void restoreState(const QVariantMap& state);
 
     int scale() const { return scale_; }
     bool autoScrolling() const;

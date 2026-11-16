@@ -23,16 +23,17 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QDataStream>
 #include <QDesktopServices>
 #include <QEvent>
 #include <QHeaderView>
-#include <QIODevice>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QUrl>
 
 namespace {
+
+const char kColumnsFittedKey[] = "columns_fitted";
+const char kColumnsKey[] = "columns";
 
 //--------------------------------------------------------------------------------------------------
 void copyTextToClipboard(const QString& text)
@@ -120,25 +121,20 @@ void SysInfoWidget::buildReport(SysInfoReport* report)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SysInfoWidget::saveState() const
+QVariantMap SysInfoWidget::saveState() const
 {
     QTreeWidget* tree = const_cast<SysInfoWidget*>(this)->treeWidget();
     if (!tree)
-        return QByteArray();
+        return QVariantMap();
 
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-        stream << columns_fitted_ << tree->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsFittedKey, columns_fitted_);
+    state.insert(kColumnsKey, tree->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoWidget::restoreState(const QByteArray& state)
+void SysInfoWidget::restoreState(const QVariantMap& state)
 {
     if (state.isEmpty())
         return;
@@ -147,16 +143,10 @@ void SysInfoWidget::restoreState(const QByteArray& state)
     if (!tree)
         return;
 
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    bool fitted = false;
-    QByteArray header_state;
-    stream >> fitted >> header_state;
-
-    if (!tree->header()->restoreState(header_state))
+    if (!tree->header()->restoreState(state.value(kColumnsKey).toByteArray()))
         return;
 
+    const bool fitted = state.value(kColumnsFittedKey, false).toBool();
     columns_fitted_ = fitted;
     widths_restored_ = fitted;
 }

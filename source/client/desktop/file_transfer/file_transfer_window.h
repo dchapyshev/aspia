@@ -47,8 +47,8 @@ public:
     ~FileTransferWindow() final;
 
     // ClientWindow implementation.
-    QByteArray saveState() const final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() const final;
+    void restoreState(const QVariantMap& state) final;
 
     void refresh();
 

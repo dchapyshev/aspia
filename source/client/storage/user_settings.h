@@ -53,8 +53,8 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
-    QByteArray quickConnectState() const;
-    void setQuickConnectState(const QByteArray& state);
+    QVariantMap quickConnectState() const;
+    void setQuickConnectState(const QVariantMap& state);
 
     QByteArray dialogGeometry(const QString& name) const;
     void setDialogGeometry(const QString& name, const QByteArray& geometry);

@@ -19,7 +19,6 @@
 #include "host/ui/security_log_dialog.h"
 
 #include <QApplication>
-#include <QDataStream>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QDir>
@@ -49,6 +48,10 @@ enum Column
     COLUMN_DETAILS = 2,
     COLUMN_COUNT   = 3,
 };
+
+const char kGeometryKey[] = "geometry";
+const char kColumnsKey[] = "columns";
+const char kEventMaskKey[] = "event_mask";
 
 //--------------------------------------------------------------------------------------------------
 SecurityEvent parseEventName(const QString& name)
@@ -135,9 +138,6 @@ private:
 };
 
 //--------------------------------------------------------------------------------------------------
-// Paints item selection as a flat rectangle and skips State_HasFocus, so the platform style does
-// not draw its own selection accent (e.g. the thin vertical bar Windows 11 puts at the left edge
-// of each selected cell). Item foreground color from the model (red for ERROR, etc.) is preserved.
 class FlatSelectionDelegate final : public QStyledItemDelegate
 {
 public:
@@ -162,11 +162,6 @@ public:
         if (selected)
         {
             painter->fillRect(option.rect, option.palette.highlight());
-
-            // The platform style now sees this item as not-selected and would use the regular Text
-            // color on top of our highlight fill. Force HighlightedText so the row stays readable
-            // even when the model assigned a custom foreground (red/yellow) that does not contrast
-            // well with the highlight background.
             opt.palette.setBrush(QPalette::Text, option.palette.highlightedText());
         }
 
@@ -239,27 +234,18 @@ SecurityLogDialog::SecurityLogDialog(QWidget* parent)
     reloadFileList();
     updateStatusBar();
 
-    QByteArray state = UserSettings().securityLogDialogState();
+    const QVariantMap state = UserSettings().securityLogDialogState();
     if (!state.isEmpty())
     {
-        QByteArray geometry;
-        QByteArray header_state;
-        quint32 event_mask = 0;
+        restoreGeometry(state.value(kGeometryKey).toByteArray());
+        ui->table->horizontalHeader()->restoreState(state.value(kColumnsKey).toByteArray());
 
-        QDataStream stream(state);
-        stream >> geometry >> header_state >> event_mask;
-
-        if (stream.status() == QDataStream::Ok)
-        {
-            restoreGeometry(geometry);
-            ui->table->horizontalHeader()->restoreState(header_state);
-
-            ui->check_connect->setChecked(event_mask & (1u << SEC_CONNECT));
-            ui->check_disconnect->setChecked(event_mask & (1u << SEC_DISCONNECT));
-            ui->check_error->setChecked(event_mask & (1u << SEC_ERROR));
-            ui->check_warning->setChecked(event_mask & (1u << SEC_WARNING));
-            ui->check_info->setChecked(event_mask & (1u << SEC_INFO));
-        }
+        const quint32 event_mask = state.value(kEventMaskKey).toUInt();
+        ui->check_connect->setChecked(event_mask & (1u << SEC_CONNECT));
+        ui->check_disconnect->setChecked(event_mask & (1u << SEC_DISCONNECT));
+        ui->check_error->setChecked(event_mask & (1u << SEC_ERROR));
+        ui->check_warning->setChecked(event_mask & (1u << SEC_WARNING));
+        ui->check_info->setChecked(event_mask & (1u << SEC_INFO));
     }
 }
 
@@ -279,9 +265,10 @@ void SecurityLogDialog::closeEvent(QCloseEvent* event)
     if (ui->check_warning->isChecked())    event_mask |= (1u << SEC_WARNING);
     if (ui->check_info->isChecked())       event_mask |= (1u << SEC_INFO);
 
-    QByteArray state;
-    QDataStream stream(&state, QIODevice::WriteOnly);
-    stream << saveGeometry() << ui->table->horizontalHeader()->saveState() << event_mask;
+    QVariantMap state;
+    state.insert(kGeometryKey, saveGeometry());
+    state.insert(kColumnsKey, ui->table->horizontalHeader()->saveState());
+    state.insert(kEventMaskKey, event_mask);
 
     UserSettings().setSecurityLogDialogState(state);
 

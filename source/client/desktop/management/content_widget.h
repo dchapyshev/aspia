@@ -65,8 +65,8 @@ public:
     ~ContentWidget() override;
 
     Type contentType() const;
-    virtual QByteArray saveState()  = 0;
-    virtual void restoreState(const QByteArray& state) = 0;
+    virtual QVariantMap saveState() = 0;
+    virtual void restoreState(const QVariantMap& state) = 0;
     virtual bool canReload() const { return false; }
     virtual void reload() {}
     virtual bool canSave() const { return false; }

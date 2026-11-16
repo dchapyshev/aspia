@@ -40,8 +40,8 @@ public:
     void detachToWindow() final;
     void attachToTab() final;
     QWidget* detachedWindow() const final;
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
     void activate() final;
     void deactivate() final;
     QList<ActionGroupEntry> actionGroups() const final;

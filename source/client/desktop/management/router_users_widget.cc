@@ -18,11 +18,9 @@
 
 #include "client/desktop/management/router_users_widget.h"
 
-#include <QDataStream>
 #include <QEvent>
 #include <QHeaderView>
 #include <QSignalBlocker>
-#include <QIODevice>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
@@ -36,6 +34,12 @@
 #include "common/desktop/router_error.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
+
+namespace {
+
+const char kColumnsKey[] = "columns";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterUsersWidget::RouterUsersWidget(QWidget* parent)
@@ -129,28 +133,17 @@ bool RouterUsersWidget::hasSelectedUser() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterUsersWidget::saveState()
+QVariantMap RouterUsersWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_users->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_users->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterUsersWidget::restoreState(const QByteArray& state)
+void RouterUsersWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
     {

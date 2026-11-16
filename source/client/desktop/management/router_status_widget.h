@@ -39,8 +39,8 @@ public:
     void showRouter(const QList<RouterEvent>& events);
 
     // ContentWidget implementation.
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
 
 signals:
     void sig_twoFactorClicked();

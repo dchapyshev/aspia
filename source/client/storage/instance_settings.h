@@ -22,12 +22,6 @@
 #include <QSettings>
 
 // Stores non-critical UI/preference settings.
-//
-// On application upgrade (when the stored version is older than the current one), all parameters
-// are cleared on first construction in the process. Therefore this class must NOT be used for
-// connection-related, security-related or any other critical data: such values should be stored
-// in the Database (see client/storage/database.h) or another persistent storage that survives
-// upgrades.
 class InstanceSettings
 {
 public:
@@ -40,8 +34,8 @@ public:
     static QString filePath();
     static void setFilePathForTesting(const QString& file_path);
 
-    QByteArray tabState(const QString& name) const;
-    void setTabState(const QString& name, const QByteArray& state);
+    QVariantMap tabState(const QString& name) const;
+    void setTabState(const QString& name, const QVariantMap& state);
 
     bool isLocalGroupExpanded(qint64 group_id) const;
     void setLocalGroupExpanded(qint64 group_id, bool expanded);

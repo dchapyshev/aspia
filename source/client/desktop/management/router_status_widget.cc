@@ -18,7 +18,6 @@
 
 #include "client/desktop/management/router_status_widget.h"
 
-#include <QDataStream>
 #include <QEvent>
 #include <QHeaderView>
 #include <QIcon>
@@ -38,6 +37,8 @@ enum Column
     COLUMN_TIME = 0,
     COLUMN_EVENT
 };
+
+const char kColumnsKey[] = "columns";
 
 } // namespace
 
@@ -76,28 +77,17 @@ void RouterStatusWidget::showRouter(const QList<RouterEvent>& events)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterStatusWidget::saveState()
+QVariantMap RouterStatusWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_events->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_events->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterStatusWidget::restoreState(const QByteArray& state)
+void RouterStatusWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
     {

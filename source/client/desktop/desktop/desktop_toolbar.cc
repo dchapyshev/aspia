@@ -21,9 +21,7 @@
 #include <QActionGroup>
 #include <QBuffer>
 #include <QCheckBox>
-#include <QDataStream>
 #include <QImageReader>
-#include <QIODevice>
 #include <QMenu>
 #include <QTimer>
 #include <QToolButton>
@@ -46,6 +44,11 @@ namespace {
 const int kMaxToolCount = 64;
 const int kMaxToolNameLength = 128;
 const int kMaxIconSize = 256;
+
+const char kScaleKey[] = "scale";
+const char kAutoScrollKey[] = "autoscroll";
+const char kPinnedKey[] = "pinned";
+const char kWaitForHostKey[] = "wait_for_host";
 
 //--------------------------------------------------------------------------------------------------
 QIcon toolIcon(const std::string& data)
@@ -682,40 +685,28 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray DesktopToolBar::saveState() const
+QVariantMap DesktopToolBar::saveState() const
 {
-    QByteArray buffer;
-    QDataStream stream(&buffer, QIODevice::WriteOnly);
-    stream.setVersion(QDataStream::Qt_6_0);
-
-    stream << scale_;
-    stream << ui->action_autoscroll->isChecked();
-    stream << ui->action_pin->isChecked();
-    stream << wait_for_host_;
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kScaleKey, scale_);
+    state.insert(kAutoScrollKey, ui->action_autoscroll->isChecked());
+    state.insert(kPinnedKey, ui->action_pin->isChecked());
+    state.insert(kWaitForHostKey, wait_for_host_);
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::restoreState(const QByteArray& state)
+void DesktopToolBar::restoreState(const QVariantMap& state)
 {
     if (state.isEmpty())
         return;
 
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_0);
-
-    qint64 scale = -1;
-    bool autoscroll = true;
-    bool pinned = false;
-    bool wait_for_host = true;
-
-    stream >> scale >> autoscroll >> pinned >> wait_for_host;
-
+    const qint64 scale = state.value(kScaleKey, -1).toLongLong();
     scale_ = isValidScale(scale) ? scale : -1;
-    ui->action_autoscroll->setChecked(autoscroll);
-    wait_for_host_ = wait_for_host;
+    ui->action_autoscroll->setChecked(state.value(kAutoScrollKey, true).toBool());
+    wait_for_host_ = state.value(kWaitForHostKey, true).toBool();
 
+    const bool pinned = state.value(kPinnedKey, false).toBool();
     ui->action_pin->setChecked(pinned);
     ui->toolbar->setVisible(pinned);
     ui->frame->setVisible(!pinned);

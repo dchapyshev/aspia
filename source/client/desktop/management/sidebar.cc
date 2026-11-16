@@ -60,6 +60,8 @@ namespace {
 
 constexpr Seconds kPendingItemTimeout{ 30 };
 
+const char kCurrentItemKey[] = "current_item";
+
 //--------------------------------------------------------------------------------------------------
 bool isRouterAdmin()
 {
@@ -606,29 +608,31 @@ void Sidebar::changeRouterPassword()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Sidebar::saveState() const
+QVariantMap Sidebar::saveState() const
 {
+    QVariantMap state;
+
     if (!pending_item_.isEmpty())
-        return pending_item_;
+        state.insert(kCurrentItemKey, pending_item_);
+    else if (SidebarItem* item = currentItem())
+        state.insert(kCurrentItemKey, itemKey(item));
 
-    SidebarItem* item = currentItem();
-    if (!item)
-        return QByteArray();
-
-    return itemKey(item);
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::restoreState(const QByteArray& state)
+void Sidebar::restoreState(const QVariantMap& state)
 {
-    QTreeWidgetItem* item = findItem(state);
+    const QByteArray key = state.value(kCurrentItemKey).toByteArray();
+
+    QTreeWidgetItem* item = findItem(key);
     if (item)
     {
         tree_widget_->setCurrentItem(item);
         return;
     }
 
-    QDataStream stream(state);
+    QDataStream stream(key);
     stream.setVersion(QDataStream::Qt_6_10);
 
     qint32 type = 0;
@@ -642,7 +646,7 @@ void Sidebar::restoreState(const QByteArray& state)
     // item. The item is selected if it appears in time and the user has not selected another one.
     // Until the user does, it is also what gets saved.
     tree_widget_->setCurrentItem(router);
-    pending_item_ = state;
+    pending_item_ = key;
     pending_timer_->start();
 }
 

@@ -76,8 +76,8 @@ public:
                      const QVersionNumber& host_version,
                      const QVersionNumber& router_version);
 
-    QByteArray saveState() const;
-    void restoreState(const QByteArray& state);
+    QVariantMap saveState() const;
+    void restoreState(const QVariantMap& state);
 
     // The pages in the order of the category tree. The key of a page does not depend on the language. A page is
     // refreshing from a request until the report it asked for arrives.

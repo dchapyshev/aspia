@@ -29,6 +29,9 @@
 
 namespace {
 
+const char kDriveListKey[] = "drive_list";
+const char kFileListKey[] = "file_list";
+
 class TreeViewProxyStyle final : public QProxyStyle
 {
 public:
@@ -140,13 +143,10 @@ void FileList::createFolder()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileList::restoreState(const QByteArray& state)
+void FileList::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    stream >> drive_list_state_;
-    stream >> file_list_state_;
+    drive_list_state_ = state.value(kDriveListKey).toByteArray();
+    file_list_state_ = state.value(kFileListKey).toByteArray();
 
     if (isDriveListShown())
         header()->restoreState(drive_list_state_);
@@ -155,27 +155,22 @@ void FileList::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray FileList::saveState() const
+QVariantMap FileList::saveState() const
 {
-    QByteArray buffer;
+    QVariantMap state;
 
+    if (isDriveListShown())
     {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        if (isDriveListShown())
-        {
-            stream << header()->saveState();
-            stream << file_list_state_;
-        }
-        else
-        {
-            stream << drive_list_state_;
-            stream << header()->saveState();
-        }
+        state.insert(kDriveListKey, header()->saveState());
+        state.insert(kFileListKey, file_list_state_);
+    }
+    else
+    {
+        state.insert(kDriveListKey, drive_list_state_);
+        state.insert(kFileListKey, header()->saveState());
     }
 
-    return buffer;
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------

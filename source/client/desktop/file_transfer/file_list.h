@@ -45,8 +45,8 @@ public:
     bool isFileListShown() const;
     void createFolder();
 
-    void restoreState(const QByteArray& state);
-    QByteArray saveState() const;
+    void restoreState(const QVariantMap& state);
+    QVariantMap saveState() const;
 
 signals:
     void sig_nameChangeRequest(const QString& old_name, const QString& new_name);

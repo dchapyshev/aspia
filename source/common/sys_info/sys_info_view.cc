@@ -18,11 +18,9 @@
 
 #include "common/sys_info/sys_info_view.h"
 
-#include <QDataStream>
 #include <QDir>
 #include <QFileDialog>
 #include <QHBoxLayout>
-#include <QIODevice>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
@@ -71,6 +69,9 @@ constexpr int kCategoryTreeWidth = 220;
 // Size the view asks its window for when nothing was restored.
 constexpr int kPreferredWidth = 990;
 constexpr int kPreferredHeight = 703;
+
+const char kSplitterKey[] = "splitter";
+const char kPagesKey[] = "pages";
 
 class CategoryItem final : public QTreeWidgetItem
 {
@@ -202,68 +203,37 @@ void SysInfoView::setVersions(const QVersionNumber& client_version,
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SysInfoView::saveState() const
+QVariantMap SysInfoView::saveState() const
 {
-    QByteArray buffer;
+    QVariantMap pages;
 
+    for (QTreeWidgetItemIterator it(ui->tree_category); *it; ++it)
     {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-        stream << ui->splitter->saveState();
-
-        QByteArray widgets_buffer;
-        {
-            QDataStream widgets_stream(&widgets_buffer, QIODevice::WriteOnly);
-            widgets_stream.setVersion(QDataStream::Qt_6_10);
-
-            // The state of a page is stored by its position: more than one page is built from the
-            // same report, so the category names no single page.
-            widgets_stream << quint32(sys_info_widgets_.size());
-            for (int i = 0; i < sys_info_widgets_.size(); ++i)
-                widgets_stream << sys_info_widgets_[i]->saveState();
-        }
-        stream << widgets_buffer;
+        const CategoryItem* item = static_cast<const CategoryItem*>(*it);
+        if (item->type() == CategoryItem::Type::CATEGORY_ITEM)
+            pages.insert(item->key(), item->page()->saveState());
     }
 
-    return buffer;
+    QVariantMap state;
+    state.insert(kSplitterKey, ui->splitter->saveState());
+    state.insert(kPagesKey, pages);
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SysInfoView::restoreState(const QByteArray& state)
+void SysInfoView::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
+    const QByteArray splitter_state = state.value(kSplitterKey).toByteArray();
+    if (!splitter_state.isEmpty())
+        ui->splitter->restoreState(splitter_state);
 
-    QByteArray value;
+    const QVariantMap pages = state.value(kPagesKey).toMap();
 
-    stream >> value;
-    if (!value.isEmpty())
-        ui->splitter->restoreState(value);
-
-    QByteArray widgets_buffer;
-    stream >> widgets_buffer;
-
-    if (widgets_buffer.isEmpty())
-        return;
-
-    QDataStream widgets_stream(widgets_buffer);
-    widgets_stream.setVersion(QDataStream::Qt_6_10);
-
-    quint32 count = 0;
-    widgets_stream >> count;
-
-    count = std::min(count, quint32(sys_info_widgets_.size()));
-
-    for (quint32 i = 0; i < count; ++i)
+    for (QTreeWidgetItemIterator it(ui->tree_category); *it; ++it)
     {
-        QByteArray widget_state;
-        widgets_stream >> widget_state;
-
-        if (widgets_stream.status() != QDataStream::Ok)
-            break;
-
-        if (!widget_state.isEmpty())
-            sys_info_widgets_[i]->restoreState(widget_state);
+        const CategoryItem* item = static_cast<const CategoryItem*>(*it);
+        if (item->type() == CategoryItem::Type::CATEGORY_ITEM)
+            item->page()->restoreState(pages.value(item->key()).toMap());
     }
 }
 

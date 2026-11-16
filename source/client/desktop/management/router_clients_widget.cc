@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
-#include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
@@ -50,6 +49,8 @@ namespace {
 
 // Upper sanity bound on the router-reported client count, used only for pagination.
 const qint64 kMaxClientCount = 500000;
+
+const char kColumnsKey[] = "columns";
 
 } // namespace
 
@@ -179,28 +180,17 @@ void RouterClientsWidget::copyCurrentClientColumn(int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterClientsWidget::saveState()
+QVariantMap RouterClientsWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_clients->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_clients->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterClientsWidget::restoreState(const QByteArray& state)
+void RouterClientsWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
     {

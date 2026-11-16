@@ -46,8 +46,8 @@ public:
     bool hasSelectedUser() const;
 
     // ContentWidget implementation.
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
     bool canReload() const final { return true; }
     void reload() final;
 

@@ -91,8 +91,8 @@ public:
     virtual QTreeWidget* treeWidget() = 0;
     virtual void buildReport(SysInfoReport* report);
 
-    virtual QByteArray saveState() const;
-    virtual void restoreState(const QByteArray& state);
+    virtual QVariantMap saveState() const;
+    virtual void restoreState(const QVariantMap& state);
 
     static void searchInGoogle(const QString& request);
 

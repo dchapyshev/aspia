@@ -55,8 +55,8 @@ public:
     void removeItem(qint64 entry_id);
 
     // ContentWidget implementation.
-    QByteArray saveState() final;
-    void restoreState(const QByteArray& state) final;
+    QVariantMap saveState() final;
+    void restoreState(const QVariantMap& state) final;
 
 signals:
     void sig_activated();

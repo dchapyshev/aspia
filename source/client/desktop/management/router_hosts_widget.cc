@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
-#include <QDataStream>
 #include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
@@ -66,6 +65,8 @@ const qint64 kMaxHostCount = 500000;
 
 // The workspace filter item that narrows nothing. The item of the hosts without a workspace is 0.
 const qint64 kAllWorkspaces = -1;
+
+const char kColumnsKey[] = "columns";
 
 } // namespace
 
@@ -288,28 +289,17 @@ void RouterHostsWidget::copyCurrentHostColumn(int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterHostsWidget::saveState()
+QVariantMap RouterHostsWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_hosts->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_hosts->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterHostsWidget::restoreState(const QByteArray& state)
+void RouterHostsWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray hosts_columns_state;
-    stream >> hosts_columns_state;
+    const QByteArray hosts_columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!hosts_columns_state.isEmpty())
     {

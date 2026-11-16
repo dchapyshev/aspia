@@ -19,8 +19,6 @@
 #include "host/ui/system_info_window.h"
 
 #include <QCloseEvent>
-#include <QDataStream>
-#include <QIODevice>
 #include <QVBoxLayout>
 
 #include "base/gui_application.h"
@@ -31,6 +29,13 @@
 #include "host/user_settings.h"
 #include "host/workers/sys_info_worker.h"
 #include "proto/system_info.h"
+
+namespace {
+
+const char kGeometryKey[] = "geometry";
+const char kViewKey[] = "view";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoWindow::SystemInfoWindow(QWidget* parent)
@@ -58,22 +63,15 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
     connect(sys_info_worker, &SysInfoWorker::sig_systemInfo,
             this, &SystemInfoWindow::onSystemInfo, Qt::QueuedConnection);
 
-    QDataStream stream(UserSettings().systemInfoWindowState());
-    stream.setVersion(QDataStream::Qt_6_10);
+    const QVariantMap state = UserSettings().systemInfoWindowState();
 
-    QByteArray geometry;
-    QByteArray view_state;
+    const QByteArray geometry = state.value(kGeometryKey).toByteArray();
+    if (!geometry.isEmpty())
+        restoreGeometry(geometry);
 
-    stream >> geometry >> view_state;
-
-    if (stream.status() == QDataStream::Ok)
-    {
-        if (!geometry.isEmpty())
-            restoreGeometry(geometry);
-
-        if (!view_state.isEmpty())
-            view_->restoreState(view_state);
-    }
+    const QVariantMap view_state = state.value(kViewKey).toMap();
+    if (!view_state.isEmpty())
+        view_->restoreState(view_state);
 
     // A report that never left the machine has no client and no router to name.
     view_->setVersions(QVersionNumber(), kCurrentVersion, QVersionNumber());
@@ -89,13 +87,9 @@ SystemInfoWindow::~SystemInfoWindow()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoWindow::closeEvent(QCloseEvent* event)
 {
-    QByteArray state;
-
-    {
-        QDataStream stream(&state, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-        stream << saveGeometry() << view_->saveState();
-    }
+    QVariantMap state;
+    state.insert(kGeometryKey, saveGeometry());
+    state.insert(kViewKey, view_->saveState());
 
     UserSettings().setSystemInfoWindowState(state);
 

@@ -20,7 +20,6 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QDataStream>
 #include <QDateTime>
 #include <QHeaderView>
 #include <QIODevice>
@@ -49,6 +48,8 @@ namespace {
 
 // Upper sanity bound on the router-reported entry count, used only for pagination.
 const qint64 kMaxEntryCount = 1000000;
+
+const char kColumnsKey[] = "columns";
 
 } // namespace
 
@@ -232,28 +233,17 @@ void RouterAccessLogWidget::copyCurrentColumn(int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterAccessLogWidget::saveState()
+QVariantMap RouterAccessLogWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_log->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_log->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterAccessLogWidget::restoreState(const QByteArray& state)
+void RouterAccessLogWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
     {

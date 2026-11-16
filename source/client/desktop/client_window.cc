@@ -162,13 +162,13 @@ void ClientWindow::applySettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ClientWindow::saveState() const
+QVariantMap ClientWindow::saveState() const
 {
     return {};
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::restoreState(const QByteArray& /* state */)
+void ClientWindow::restoreState(const QVariantMap& /* state */)
 {
     // Nothing
 }

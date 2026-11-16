@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QEvent>
-#include <QIODevice>
 #include <QKeyEvent>
 #include <QLocale>
 #include <QMenu>
@@ -37,6 +36,12 @@
 #include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
+
+namespace {
+
+const char kColumnsKey[] = "columns";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
@@ -228,28 +233,17 @@ void LocalGroupWidget::removeItem(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray LocalGroupWidget::saveState()
+QVariantMap LocalGroupWidget::saveState()
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << ui->tree_host->header()->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_host->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::restoreState(const QByteArray& state)
+void LocalGroupWidget::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray columns_state;
-    stream >> columns_state;
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
 
     if (!columns_state.isEmpty())
         ui->tree_host->header()->restoreState(columns_state);

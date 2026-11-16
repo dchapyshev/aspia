@@ -18,8 +18,6 @@
 
 #include "client/desktop/quick_connect_dialog.h"
 
-#include <QDataStream>
-#include <QIODevice>
 #include <QLayout>
 #include <QPushButton>
 #include <QTimer>
@@ -36,6 +34,13 @@
 #include "common/desktop/session_type.h"
 #include "proto/peer.h"
 
+namespace {
+
+const char kGeometryKey[] = "geometry";
+const char kSessionTypeKey[] = "session_type";
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 QuickConnectDialog::QuickConnectDialog(QWidget* parent)
     : QDialog(parent),
@@ -45,19 +50,11 @@ QuickConnectDialog::QuickConnectDialog(QWidget* parent)
 
     ui->setupUi(this);
 
-    QDataStream stream(UserSettings().quickConnectState());
-    stream.setVersion(QDataStream::Qt_6_10);
-
-    QByteArray geometry;
-    qint32 session_type = 0;
-    stream >> geometry >> session_type;
+    const QVariantMap state = UserSettings().quickConnectState();
+    restoreGeometry(state.value(kGeometryKey).toByteArray());
 
     // The session type is selected once the list is filled.
-    if (stream.status() == QDataStream::Ok)
-    {
-        restoreGeometry(geometry);
-        session_type_ = session_type;
-    }
+    session_type_ = state.value(kSessionTypeKey, session_type_).toInt();
 
     QPushButton* connect_button = ui->button_box->addButton(tr("Connect"), QDialogButtonBox::AcceptRole);
     connect_button->setDefault(true);
@@ -74,15 +71,9 @@ QuickConnectDialog::~QuickConnectDialog()
 {
     LOG(TRACE) << "Dtor";
 
-    QByteArray state;
-
-    {
-        QDataStream stream(&state, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-
-        stream << saveGeometry();
-        stream << static_cast<qint32>(sessionType());
-    }
+    QVariantMap state;
+    state.insert(kGeometryKey, saveGeometry());
+    state.insert(kSessionTypeKey, static_cast<qint32>(sessionType()));
 
     UserSettings().setQuickConnectState(state);
 }

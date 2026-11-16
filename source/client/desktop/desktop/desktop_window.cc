@@ -71,6 +71,8 @@ const quint32 kWheelMask =
 // from high-polling-rate mice. Button and wheel events bypass coalescing and are sent immediately.
 const MilliSeconds kMouseFlushInterval{ 20 }; // 50Hz
 
+const char kToolBarKey[] = "toolbar";
+
 //--------------------------------------------------------------------------------------------------
 int toFramePosition(int position, int widget_size, int frame_size)
 {
@@ -280,15 +282,17 @@ void DesktopWindow::applySettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray DesktopWindow::saveState() const
+QVariantMap DesktopWindow::saveState() const
 {
-    return toolbar_->saveState();
+    QVariantMap state;
+    state.insert(kToolBarKey, toolbar_->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWindow::restoreState(const QByteArray& state)
+void DesktopWindow::restoreState(const QVariantMap& state)
 {
-    toolbar_->restoreState(state);
+    toolbar_->restoreState(state.value(kToolBarKey).toMap());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,8 +18,6 @@
 
 #include "client/desktop/sys_info/system_info_window.h"
 
-#include <QDataStream>
-#include <QIODevice>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
@@ -29,6 +27,13 @@
 #include "common/sys_info/sys_info_view.h"
 #include "proto/peer.h"
 #include "proto/system_info.h"
+
+namespace {
+
+const char kGeometryKey[] = "geometry";
+const char kViewKey[] = "view";
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoWindow::SystemInfoWindow(QWidget* parent)
@@ -73,35 +78,24 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> SystemInfoWindow::tabActionGroups
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SystemInfoWindow::saveState() const
+QVariantMap SystemInfoWindow::saveState() const
 {
-    QByteArray buffer;
-
-    {
-        QDataStream stream(&buffer, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_6_10);
-        stream << saveGeometry();
-        stream << view_->saveState();
-    }
-
-    return buffer;
+    QVariantMap state;
+    state.insert(kGeometryKey, saveGeometry());
+    state.insert(kViewKey, view_->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoWindow::restoreState(const QByteArray& state)
+void SystemInfoWindow::restoreState(const QVariantMap& state)
 {
-    QDataStream stream(state);
-    stream.setVersion(QDataStream::Qt_6_10);
+    const QByteArray geometry = state.value(kGeometryKey).toByteArray();
+    if (!geometry.isEmpty())
+        restoreGeometry(geometry);
 
-    QByteArray value;
-
-    stream >> value;
-    if (!value.isEmpty())
-        restoreGeometry(value);
-
-    stream >> value;
-    if (!value.isEmpty())
-        view_->restoreState(value);
+    const QVariantMap view_state = state.value(kViewKey).toMap();
+    if (!view_state.isEmpty())
+        view_->restoreState(view_state);
 }
 
 //--------------------------------------------------------------------------------------------------

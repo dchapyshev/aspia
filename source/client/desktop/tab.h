@@ -58,8 +58,8 @@ public:
     virtual void detachToWindow();
     virtual void attachToTab();
     virtual QWidget* detachedWindow() const;
-    virtual QByteArray saveState() = 0;
-    virtual void restoreState(const QByteArray& state) = 0;
+    virtual QVariantMap saveState() = 0;
+    virtual void restoreState(const QVariantMap& state) = 0;
     virtual void activate() = 0;
     virtual void deactivate() = 0;
     virtual bool confirmClose();

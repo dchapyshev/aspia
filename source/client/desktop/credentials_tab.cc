@@ -34,6 +34,12 @@
 #include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
+namespace {
+
+const char kColumnsKey[] = "columns";
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 CredentialsTab::CredentialsTab(QWidget* parent)
     : Tab(Type::CREDENTIALS, "credentials", parent),
@@ -82,18 +88,19 @@ CredentialsTab::~CredentialsTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray CredentialsTab::saveState()
+QVariantMap CredentialsTab::saveState()
 {
-    return ui->tree_credentials->header()->saveState();
+    QVariantMap state;
+    state.insert(kColumnsKey, ui->tree_credentials->header()->saveState());
+    return state;
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsTab::restoreState(const QByteArray& state)
+void CredentialsTab::restoreState(const QVariantMap& state)
 {
-    if (state.isEmpty())
-        return;
-
-    ui->tree_credentials->header()->restoreState(state);
+    const QByteArray columns_state = state.value(kColumnsKey).toByteArray();
+    if (!columns_state.isEmpty())
+        ui->tree_credentials->header()->restoreState(columns_state);
 }
 
 //--------------------------------------------------------------------------------------------------
