@@ -32,6 +32,7 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/os_crypt.h"
 #include "base/crypto/secure_byte_array.h"
+#include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/database.h"
 #include "proto/router_constants.h"
@@ -39,6 +40,8 @@
 namespace {
 
 constexpr qint64 kUserId = 7;
+const char kUserGuid[] = "4f0c1c2e-6a5b-4b0e-9f3a-1d2c3b4a5e6f";
+const char kAnotherUserGuid[] = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
@@ -336,6 +339,116 @@ TEST_F(Router2FATest, TokenOfAnUnexpectedSizeIsNotStored)
     const std::optional<RouterConfig> stored = findRouter(Database::instance());
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->deviceToken().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router names the user by a guid that stays the same when the user is renamed. The record of
+// the router keeps the guid of the last sign-in.
+TEST_F(Router2FATest, LoginResultStoresTheGuidOfTheUser)
+{
+    seedRecord();
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_user_guid(kUserGuid);
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(logged_in_user_, kUserId);
+
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->userGuid(), QString(kUserGuid));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A device attached to the storage of one user signs in as another one. The storage it was
+// attached to is not the storage of that user, so the record drops it together with its key,
+// and the synchronization is turned off until the user turns it on for this account.
+TEST_F(Router2FATest, LoginOfAnotherUserTurnsSyncOff)
+{
+    Database& db = Database::instance();
+
+    RouterController controller;
+
+    int warnings = 0;
+    QObject::connect(&controller, &RouterController::sig_event, &controller, [&warnings](const RouterEvent& event)
+    {
+        if (event.severity == RouterEvent::Severity::WARNING)
+            ++warnings;
+    });
+
+    const SharedPointer<RouterConfig> record = config();
+    record->setSyncEnabled(true);
+    record->setUserGuid(kUserGuid);
+    ASSERT_TRUE(db.setRouterConfig(*record));
+    ASSERT_EQ(db.setSyncStorage(*record, QByteArray("0123456789abcdef"), SecureByteArray(QByteArray(32, 's')), false),
+              Database::SyncResult::DONE);
+
+    Router2FA login(record);
+    Router2FATestPeer::start(login, QVersionNumber(3, 0, 0));
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_user_guid(kAnotherUserGuid);
+    Router2FATestPeer::receive(login, message);
+
+    const std::optional<RouterConfig> stored = findRouter(db);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_FALSE(stored->isSyncEnabled());
+    EXPECT_EQ(stored->userGuid(), QString(kAnotherUserGuid));
+    EXPECT_TRUE(stored->syncStorageId().isEmpty());
+    EXPECT_TRUE(stored->syncStorageKey().isEmpty());
+    EXPECT_EQ(warnings, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Another user that signs in with a code brings a device token along with the guid. Both belong
+// to one login and reach the record in one write, so the token does not turn back on the
+// synchronization that the guid of another user has turned off.
+TEST_F(Router2FATest, LoginOfAnotherUserWithAnIssuedTokenTurnsSyncOff)
+{
+    Database& db = Database::instance();
+
+    RouterController controller;
+
+    int warnings = 0;
+    QObject::connect(&controller, &RouterController::sig_event, &controller, [&warnings](const RouterEvent& event)
+    {
+        if (event.severity == RouterEvent::Severity::WARNING)
+            ++warnings;
+    });
+
+    const SharedPointer<RouterConfig> record = config();
+    record->setSyncEnabled(true);
+    record->setUserGuid(kUserGuid);
+    ASSERT_TRUE(db.setRouterConfig(*record));
+    ASSERT_EQ(db.setSyncStorage(*record, QByteArray("0123456789abcdef"), SecureByteArray(QByteArray(32, 's')), false),
+              Database::SyncResult::DONE);
+
+    Router2FA login(record);
+    Router2FATestPeer::start(login, QVersionNumber(3, 0, 0));
+
+    const std::string token(proto::router::kDeviceTokenSize, 't');
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_user_guid(kAnotherUserGuid);
+    message.mutable_login_result()->set_new_token(token);
+    Router2FATestPeer::receive(login, message);
+
+    const std::optional<RouterConfig> stored = findRouter(db);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_FALSE(stored->isSyncEnabled());
+    EXPECT_EQ(stored->userGuid(), QString(kAnotherUserGuid));
+    EXPECT_TRUE(stored->syncStorageId().isEmpty());
+    EXPECT_TRUE(stored->syncStorageKey().isEmpty());
+    EXPECT_EQ(warnings, 1);
+
+    QByteArray raw;
+    ASSERT_TRUE(OSCrypt::decryptBytes(stored->deviceToken(), &raw));
+    EXPECT_EQ(raw, QByteArray::fromStdString(token));
 }
 
 //--------------------------------------------------------------------------------------------------

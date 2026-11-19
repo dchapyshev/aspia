@@ -25,6 +25,7 @@
 #include "client/router/router_hosts_cleaner.h"
 #include "client/storage/database.h"
 #include "client/workers/router_worker.h"
+#include "common/desktop/router_error.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -53,8 +54,20 @@ RouterController::RouterController(QObject* parent)
             this, &RouterController::onRouterReconnecting, Qt::QueuedConnection);
     connect(router_worker_, &RouterWorker::sig_errorOccurred,
             this, &RouterController::onRouterError, Qt::QueuedConnection);
-    connect(router_worker_, &RouterWorker::sig_messageReceived,
+    connect(router_worker_, &RouterWorker::sig_sessionMessageReceived,
             this, &RouterController::onRouterMessage, Qt::QueuedConnection);
+
+    sync_worker_ = GuiApplication::findWorker<SyncWorker>();
+    if (!sync_worker_)
+    {
+        LOG(ERROR) << "Sync worker not found";
+        return;
+    }
+
+    connect(sync_worker_, &SyncWorker::sig_credentialsChanged,
+            this, &RouterController::sig_credentialsChanged, Qt::QueuedConnection);
+    connect(sync_worker_, &SyncWorker::sig_event,
+            this, &RouterController::onSyncEvent, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,6 +77,8 @@ RouterController::~RouterController()
     {
         if (context_->session)
             context_->session->rpc_.dropPending();
+
+        finishSession();
 
         if (router_worker_)
             QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
@@ -121,6 +136,51 @@ TwoFactorPrompt* RouterController::twoFactorPrompt()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+void RouterController::startSyncRecordExchange()
+{
+    const RouterController& controller = instance();
+    if (!controller.sync_worker_)
+        return;
+
+    QMetaObject::invokeMethod(controller.sync_worker_, &SyncWorker::onStartRecordExchange, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool RouterController::resetSyncStorage()
+{
+    RouterController& controller = instance();
+    if (!controller.context_)
+    {
+        LOG(ERROR) << "No router to reset the synchronization of";
+        return false;
+    }
+
+    const RouterConfig& config = *controller.context_->config;
+
+    if (!Database::instance().setSyncStorageResetPending(config))
+    {
+        LOG(ERROR) << "Unable to set the reset of the storage pending";
+        return false;
+    }
+
+    if (status() != RouterStatus::ONLINE)
+    {
+        LOG(INFO) << "The reset of the storage is put off till the connection";
+        controller.addEvent(RouterEvent::Severity::INFO,
+                            tr("Data synchronization will be reset after connecting to"
+                               " router %1.").arg(config.address()));
+        return true;
+    }
+
+    if (controller.sync_worker_)
+        QMetaObject::invokeMethod(controller.sync_worker_, &SyncWorker::onStorageResetPending, Qt::QueuedConnection);
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterController::reload()
 {
     RouterConfig config;
@@ -138,6 +198,7 @@ void RouterController::reload()
         if (!context_)
             return;
 
+        finishSession();
         context_.reset();
 
         if (router_worker_)
@@ -170,20 +231,24 @@ void RouterController::reload()
             return;
         }
 
-        // A rename keeps what is running. Another account or another session type replaces it
-        // whole: the login and the session belong to the account and the type they were opened
-        // with. A context that runs nothing yet waits for its reconnect barrier and starts with
-        // the config left here.
-        if (context.config->hasSameAccount(config) &&
+        if (context.config->hasSameAccount(config) && context.config->password() == config.password() &&
             context.config->sessionType() == config.sessionType())
         {
+            const bool sync_changed = context.config->isSyncEnabled() != config.isSyncEnabled();
+
             // The instance is shared with whoever runs, so the edit is seen at once.
             *context.config = config;
+
+            if (sync_changed && sync_worker_)
+                QMetaObject::invokeMethod(sync_worker_, &SyncWorker::onSyncEnabledChanged, Qt::QueuedConnection);
+            else if (config.isSyncStorageResetPending() && status() == RouterStatus::ONLINE && sync_worker_)
+                QMetaObject::invokeMethod(sync_worker_, &SyncWorker::onStorageResetPending, Qt::QueuedConnection);
             return;
         }
 
+        finishSession();
+
         context.two_factor.reset();
-        context.session.reset();
         context.config.reset(new RouterConfig(config));
 
         if (router_worker_)
@@ -297,13 +362,20 @@ void RouterController::onTwoFactorFinished(qint64 user_id, const QVersionNumber&
     RouterContext& context = *context_;
     context.two_factor.reset();
 
+    bool user_stored = false;
+
     RouterConfig config;
     if (Database::instance().routerConfig(&config) == Database::FindResult::FOUND && config.isValid())
+    {
+        user_stored = config.userGuid() == context.config->userGuid();
         *context.config = config;
+    }
     else
+    {
         LOG(WARNING) << "Failed to re-read the router: using the in-memory copy";
+    }
 
-    context.session = new RouterSession(context.config, user_id, peer_version, this);
+    startSession(user_id, peer_version, user_stored);
 
     addEvent(RouterEvent::Severity::INFO,
              tr("Connection to router %1 established.").arg(context.config->address()));
@@ -365,7 +437,7 @@ void RouterController::onRouterError(TcpChannel::ErrorCode error_code)
 
     // The death of the session answers everything it still owes. The worker keeps the
     // reconnect cycle running by itself, so the router goes back to logging in.
-    context.session.reset();
+    finishSession();
 
     RouterConfig config;
     const Database::FindResult found = Database::instance().routerConfig(&config);
@@ -470,6 +542,38 @@ void RouterController::onRouterMessage(quint8 channel_id, const QByteArray& buff
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterController::onSyncEvent(SyncWorker::Event event, const QString& error_code)
+{
+    switch (event)
+    {
+        case SyncWorker::Event::STORAGE_ATTACHED:
+            addEvent(RouterEvent::Severity::INFO, tr("Data synchronization is on."));
+            break;
+
+        case SyncWorker::Event::STORAGE_KEY_NOT_OPENED:
+            addEvent(RouterEvent::Severity::WARNING,
+                     tr("The synchronization key cannot be opened with the password of the account. Sign "
+                        "in with the current password on a device that is already synchronized."));
+            break;
+
+        case SyncWorker::Event::ROUTER_ERROR:
+            addEvent(RouterEvent::Severity::WARNING,
+                     tr("Synchronization error: %1").arg(routerErrorText(error_code.toStdString())));
+            break;
+
+        case SyncWorker::Event::INVALID_ROUTER_ANSWER:
+            addEvent(RouterEvent::Severity::WARNING,
+                     tr("The router returned an invalid answer to the synchronization."));
+            break;
+
+        case SyncWorker::Event::DEVICE_ERROR:
+            addEvent(RouterEvent::Severity::WARNING,
+                     tr("Synchronization stopped because of an error on this device."));
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterController::startTwoFactor()
 {
     CHECK(context_ && context_->config);
@@ -479,6 +583,40 @@ void RouterController::startTwoFactor()
 
     connect(two_factor, &Router2FA::sig_twoFactorRequired, this, &RouterController::onTwoFactorRequired);
     connect(two_factor, &Router2FA::sig_twoFactorFinished, this, &RouterController::onTwoFactorFinished);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::startSession(qint64 user_id, const QVersionNumber& peer_version, bool user_stored)
+{
+    CHECK(context_ && context_->config);
+
+    context_->session = new RouterSession(context_->config, user_id, peer_version, this);
+
+    if (!user_stored)
+    {
+        LOG(ERROR) << "The record of the router does not hold the user that has signed in,"
+                   << "the synchronization is not started";
+
+        addEvent(RouterEvent::Severity::WARNING,
+                 tr("Unable to save the user of router %1. Data synchronization does not work"
+                    " in this connection.").arg(context_->config->address()));
+    }
+    else if (sync_worker_)
+    {
+        QMetaObject::invokeMethod(sync_worker_, &SyncWorker::onSessionStarted, Qt::QueuedConnection);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::finishSession()
+{
+    if (!context_ || !context_->session)
+        return;
+
+    if (sync_worker_)
+        QMetaObject::invokeMethod(sync_worker_, &SyncWorker::onSessionFinished, Qt::QueuedConnection);
+
+    context_->session.reset();
 }
 
 //--------------------------------------------------------------------------------------------------

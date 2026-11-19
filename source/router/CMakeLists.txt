@@ -54,6 +54,8 @@ list(APPEND SOURCE_ROUTER_CORE
     shared_hosts.h
     shared_key_pool.cc
     shared_key_pool.h
+    sync_storage.cc
+    sync_storage.h
     workspace.cc
     workspace.h)
 
@@ -73,6 +75,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     router_test_worker.h
     settings_unittest.cc
     shared_state_unittest.cc
+    sync_storage_unittest.cc
     tests_main.cc)
 
 include(handlers/sources.cmake)

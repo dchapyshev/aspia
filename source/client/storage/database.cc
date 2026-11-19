@@ -44,6 +44,53 @@ QString filePathOf(const QString& id)
     return dir_path + '/' + id + ".db3";
 }
 
+//--------------------------------------------------------------------------------------------------
+bool migrateTables(SqlDatabase& db)
+{
+    SqlTransaction transaction(db);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction:" << db.lastError();
+        return false;
+    }
+
+    qint64 version = 0;
+
+    {
+        SqlQuery query(db, "PRAGMA user_version");
+        if (query.next() != SqlQuery::StepResult::ROW)
+        {
+            LOG(ERROR) << "Unable to read the version of the schema:" << db.lastError();
+            return false;
+        }
+
+        version = query.columnInt64(0);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // 3.4.x -> 3.5.0
+    //----------------------------------------------------------------------------------------------
+    if (version < 1)
+    {
+        if (!db.addColumn("credentials", "deleted", "INTEGER NOT NULL DEFAULT 0"))
+            return false;
+
+        if (!db.exec("UPDATE credentials SET sync_dirty=1") || !db.exec("PRAGMA user_version = 1"))
+        {
+            LOG(ERROR) << "Unable to update the schema to version 1:" << db.lastError();
+            return false;
+        }
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -132,7 +179,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_) || !ensureDefaultProfile())
+    if (!createTables(db_) || !migrateTables(db_) || !ensureDefaultProfile())
     {
         db_.close();
         return false;
@@ -181,9 +228,22 @@ bool Database::import(const std::optional<RouterConfig>& router,
         return false;
     }
 
+    RouterConfig stored;
+    if (routerConfig(&stored) == FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        return false;
+    }
+
+    const bool sync_kept = router && stored.isSyncEnabled();
+
+    if (stored.isSyncEnabled())
+        LOG(INFO) << "Import into a database with the synchronization turned on, synchronization kept:" << sync_kept;
+
     if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
-        !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles"))
+        !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
+        !setReceivedCredentialsRevision(0))
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -218,8 +278,23 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (!ensureDefaultProfile())
         return false;
 
-    if (router && !setRouterConfig(*router))
-        return false;
+    if (router)
+    {
+        RouterConfig config = *router;
+        config.setSyncEnabled(sync_kept);
+        config.setSyncStorageId(QByteArray());
+        config.setSyncStorageKey(SecureByteArray());
+        config.setSyncStorageResetPending(sync_kept);
+
+        if (stored.hasSameAccount(config))
+            config.setUserGuid(stored.userGuid());
+
+        if (!writeRouter(config))
+        {
+            LOG(ERROR) << "Unable to write the router";
+            return false;
+        }
+    }
 
     QHash<qint64, qint64> group_ids;
     for (const LocalGroupConfig& group : local_groups)
@@ -292,102 +367,104 @@ bool Database::import(const std::optional<RouterConfig>& router,
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::reencryptAll(const QList<LocalHostConfig>& local_hosts,
-                            const std::optional<RouterConfig>& router,
-                            const QList<RouterHostConfig>& router_hosts,
-                            const QList<CredentialConfig>& credentials,
-                            const ProxyConfig& proxy,
-                            const QByteArray& salt,
-                            const QByteArray& verifier,
-                            quint32 version)
+Database::Reencryption::Reencryption(Database& db)
+    : db_(db)
 {
-    if (!isValid())
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::ReencryptResult Database::Reencryption::begin()
+{
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return false;
+        return ReencryptResult::FAILED;
     }
 
-    SqlTransaction transaction(db_);
-    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    transaction_.emplace(db_.db_);
+
+    if (!transaction_->begin(SqlTransaction::Mode::EXCLUSIVE))
     {
         LOG(ERROR) << "Unable to begin transaction";
-        return false;
+        transaction_.reset();
+        return ReencryptResult::FAILED;
     }
 
-    // On any failure the early return skips commit(), so the transaction destructor rolls back and
-    // the address book stays fully readable with the old master password.
-    //
-    // Only the ciphertext is written. Going through modifyHost() would stamp every host as edited
-    // now, and the moment a host was last edited is a column of the list the user reads. Names and
-    // comments are plain text, so a change of key leaves them alone.
-    for (const LocalHostConfig& local_host : local_hosts)
+    RouterConfig router;
+
+    const ReadResult read_results[] =
     {
-        std::optional<QByteArray> encrypted_data = local_host.encryptedData();
-        if (!encrypted_data.has_value())
-            return false;
+        db_.allLocalHosts(&local_hosts_),
+        db_.allRouterHosts(&router_hosts_),
+        db_.credentialList(&credentials_),
+        db_.proxyConfig(&proxy_)
+    };
 
-        SqlQuery query(db_, "UPDATE local_hosts SET data=? WHERE id=?");
-        query.addBlob(*encrypted_data);
-        query.addInt64(local_host.id());
+    const FindResult router_found = db_.routerConfig(&router);
+    if (router_found == FindResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        transaction_.reset();
+        return ReencryptResult::FAILED;
+    }
 
-        if (!query.exec())
+    bool incomplete = router_found == FindResult::UNREADABLE;
+
+    for (ReadResult read_result : read_results)
+    {
+        if (read_result == ReadResult::FAILED)
         {
-            LOG(ERROR) << "Unable to re-encrypt host" << local_host.id() << ":" << db_.lastError();
-            return false;
+            LOG(ERROR) << "Unable to read the records";
+            transaction_.reset();
+            return ReencryptResult::FAILED;
         }
+
+        if (read_result == ReadResult::INCOMPLETE)
+            incomplete = true;
     }
 
-    if (router && !setRouterConfig(*router))
+    if (incomplete)
     {
-        LOG(ERROR) << "Unable to re-encrypt the router";
+        LOG(ERROR) << "Unable to read the records completely";
+        transaction_.reset();
+        return ReencryptResult::UNREADABLE_RECORD;
+    }
+
+    if (router_found == FindResult::FOUND)
+        router_ = router;
+
+    return ReencryptResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::Reencryption::commit(const QByteArray& salt, const QByteArray& verifier, quint32 version)
+{
+    if (!transaction_.has_value() || !transaction_->isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
         return false;
     }
 
-    for (const RouterHostConfig& router_host : router_hosts)
+    if (!db_.rewriteEncryptedData(local_hosts_, router_, router_hosts_, credentials_, proxy_))
     {
-        std::optional<QByteArray> encrypted_data = router_host.encryptedData();
-        if (!encrypted_data.has_value())
-            return false;
-
-        SqlQuery query(db_, "UPDATE router_hosts SET data=? WHERE host_id=?");
-        query.addBlob(*encrypted_data);
-        query.addUInt64(router_host.hostId());
-
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to re-encrypt credentials of router host" << router_host.hostId() << ":"
-                       << db_.lastError();
-            return false;
-        }
-    }
-
-    for (const CredentialConfig& credential : credentials)
-    {
-        std::optional<QByteArray> encrypted_data = credential.encryptedData();
-        if (!encrypted_data.has_value())
-            return false;
-
-        SqlQuery query(db_, "UPDATE credentials SET data=? WHERE id=?");
-        query.addBlob(*encrypted_data);
-        query.addInt64(credential.id());
-
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to re-encrypt credential" << credential.id() << ":" << db_.lastError();
-            return false;
-        }
-    }
-
-    if (!setProxyConfig(proxy))
-    {
-        LOG(ERROR) << "Unable to re-encrypt proxy";
+        LOG(ERROR) << "Unable to rewrite the encrypted data";
         return false;
     }
 
-    if (!setMasterPassword(salt, verifier, version))
+    if (!db_.setMasterPassword(salt, verifier, version))
+    {
+        LOG(ERROR) << "Unable to write the master password";
         return false;
+    }
 
-    return transaction.commit();
+    if (!transaction_->commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -463,6 +540,7 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"deleted\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
@@ -538,4 +616,83 @@ bool Database::openDatabase()
     }
 
     return open(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::rewriteEncryptedData(const QList<LocalHostConfig>& local_hosts,
+                                    const std::optional<RouterConfig>& router,
+                                    const QList<RouterHostConfig>& router_hosts,
+                                    const QList<CredentialConfig>& credentials,
+                                    const ProxyConfig& proxy)
+{
+    CHECK(db_.isTransactionActive());
+
+    // Only the ciphertext is written. Going through modifyHost() would stamp every host as edited
+    // now, and the moment a host was last edited is a column of the list the user reads. Names and
+    // comments are plain text, so a change of key leaves them alone.
+    for (const LocalHostConfig& local_host : local_hosts)
+    {
+        std::optional<QByteArray> encrypted_data = local_host.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE local_hosts SET data=? WHERE id=?");
+        query.addBlob(*encrypted_data);
+        query.addInt64(local_host.id());
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to re-encrypt host" << local_host.id() << ":" << db_.lastError();
+            return false;
+        }
+    }
+
+    if (router && !writeRouter(*router))
+    {
+        LOG(ERROR) << "Unable to re-encrypt the router";
+        return false;
+    }
+
+    for (const RouterHostConfig& router_host : router_hosts)
+    {
+        std::optional<QByteArray> encrypted_data = router_host.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE router_hosts SET data=? WHERE host_id=?");
+        query.addBlob(*encrypted_data);
+        query.addUInt64(router_host.hostId());
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to re-encrypt credentials of router host" << router_host.hostId() << ":"
+                       << db_.lastError();
+            return false;
+        }
+    }
+
+    for (const CredentialConfig& credential : credentials)
+    {
+        std::optional<QByteArray> encrypted_data = credential.encryptedData();
+        if (!encrypted_data.has_value())
+            return false;
+
+        SqlQuery query(db_, "UPDATE credentials SET data=? WHERE id=?");
+        query.addBlob(*encrypted_data);
+        query.addInt64(credential.id());
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to re-encrypt credential" << credential.id() << ":" << db_.lastError();
+            return false;
+        }
+    }
+
+    if (!setProxyConfig(proxy))
+    {
+        LOG(ERROR) << "Unable to re-encrypt proxy";
+        return false;
+    }
+
+    return true;
 }

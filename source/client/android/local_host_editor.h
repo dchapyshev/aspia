@@ -23,6 +23,7 @@
 
 class Button;
 class ComboBox;
+class CredentialComboBox;
 class Label;
 class LineEdit;
 class Switch;
@@ -62,7 +63,7 @@ private:
     Switch* switch_saved_credentials_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
-    ComboBox* combo_credential_ = nullptr;
+    CredentialComboBox* combo_credential_ = nullptr;
     ComboBox* combo_profile_ = nullptr;
     TextArea* edit_comment_ = nullptr;
     Label* label_error_ = nullptr;

@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/credentials/ui_credential_import_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/credential_file.h"
 #include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
@@ -243,10 +244,13 @@ void CredentialImportDialog::onButtonBoxClicked(QAbstractButton* button)
                    "Credentials added: %2\n"
                    "Credentials replaced: %3")
                     .arg(credential.displayName()).arg(added).arg(replaced));
+            RouterController::startSyncRecordExchange();
             reject();
             return;
         }
     }
+
+    RouterController::startSyncRecordExchange();
 
     MsgBox::information(this,
         tr("Import completed successfully.\n"

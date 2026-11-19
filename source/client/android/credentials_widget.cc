@@ -31,6 +31,7 @@
 #include "client/android/credential_editor.h"
 #include "client/android/credential_export_widget.h"
 #include "client/android/credential_import_widget.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
@@ -85,11 +86,13 @@ CredentialsWidget::CredentialsWidget(QWidget* parent)
     connect(button_overflow_, &IconButton::clicked, this, &CredentialsWidget::onShowMenu);
     connect(tree_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* item, int)
     {
-        onItemClicked(item);
+        editCredential(item);
     });
     connect(editor_, &CredentialEditor::sig_accepted, this, &CredentialsWidget::onReturnFromEditor);
-    connect(export_, &CredentialExportWidget::sig_finished, this, &CredentialsWidget::showList);
+    connect(export_, &CredentialExportWidget::sig_finished, this, &CredentialsWidget::onShowList);
     connect(import_, &CredentialImportWidget::sig_finished, this, &CredentialsWidget::onReturnFromEditor);
+    connect(&RouterController::instance(), &RouterController::sig_credentialsChanged,
+            this, &CredentialsWidget::onReload);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -112,12 +115,22 @@ QList<QWidget*> CredentialsWidget::appBarActions() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsWidget::reload()
+void CredentialsWidget::goBack()
+{
+    onShowList();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialsWidget::isListPage() const
+{
+    return stack_->currentIndex() == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::onReload()
 {
     tree_->clear();
 
-    // The records are decrypted with the master-password-derived key, so there is nothing to show
-    // until the cryptor is unlocked.
     if (!DataCryptor::instance().isValid())
         return;
 
@@ -149,18 +162,6 @@ void CredentialsWidget::reload()
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsWidget::goBack()
-{
-    showList();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool CredentialsWidget::isListPage() const
-{
-    return stack_->currentIndex() == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
 void CredentialsWidget::onAddCredential()
 {
     editor_->prepareForAdd();
@@ -182,18 +183,36 @@ void CredentialsWidget::onShowMenu()
     {
         switch (index)
         {
-            case kImport: onImport(); break;
-            case kExport: onExport(); break;
+            case kImport: importCredentials(); break;
+            case kExport: exportCredentials(); break;
             default: break;
         }
     });
 
-    // Anchor the menu to the button; it drops from the button's near edge per layout direction.
     menu->popup(QRect(button_overflow_->mapToGlobal(QPoint(0, 0)), button_overflow_->size()));
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsWidget::onExport()
+void CredentialsWidget::onReturnFromEditor()
+{
+    // The list changed (added, edited or removed), so it is rebuilt before returning.
+    onReload();
+    onShowList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::onShowList()
+{
+    export_->clear();
+    import_->clear();
+
+    stack_->setCurrentIndex(0);
+    emit sig_titleChanged(tr("Credentials"));
+    emit sig_appBarActionsChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialsWidget::exportCredentials()
 {
     export_->prepare();
     stack_->setCurrentWidget(export_);
@@ -202,7 +221,7 @@ void CredentialsWidget::onExport()
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsWidget::onImport()
+void CredentialsWidget::importCredentials()
 {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Import Credentials"), QString(), tr("Aspia Credentials (*.aspia-credentials)"));
@@ -216,31 +235,12 @@ void CredentialsWidget::onImport()
 }
 
 //--------------------------------------------------------------------------------------------------
-void CredentialsWidget::onItemClicked(QTreeWidgetItem* item)
+void CredentialsWidget::editCredential(QTreeWidgetItem* item)
 {
     if (!item || !editor_->prepareForEdit(item->data(0, kCredentialIdRole).toLongLong()))
         return;
 
     stack_->setCurrentWidget(editor_);
     emit sig_titleChanged(tr("Edit Credentials"));
-    emit sig_appBarActionsChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
-void CredentialsWidget::onReturnFromEditor()
-{
-    // The list changed (added, edited or removed), so it is rebuilt before returning.
-    reload();
-    showList();
-}
-
-//--------------------------------------------------------------------------------------------------
-void CredentialsWidget::showList()
-{
-    export_->clear();
-    import_->clear();
-
-    stack_->setCurrentIndex(0);
-    emit sig_titleChanged(tr("Credentials"));
     emit sig_appBarActionsChanged();
 }

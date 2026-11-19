@@ -30,6 +30,7 @@
 #include "client/storage/instance_settings.h"
 #include "client/storage/user_settings.h"
 #include "client/workers/router_worker.h"
+#include "client/workers/sync_worker.h"
 #include "client/workers/update_worker.h"
 
 #if !defined(Q_OS_ANDROID)
@@ -93,6 +94,7 @@ Application::Application(int& argc, char* argv[])
     }
 
     addWorker(std::make_unique<RouterWorker>());
+    addWorker(std::make_unique<SyncWorker>());
 
 #if !defined(ASPIA_GOOGLE_PLAY)
     addWorker(std::make_unique<UpdateWorker>());

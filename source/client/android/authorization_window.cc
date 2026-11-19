@@ -21,15 +21,16 @@
 #include <QGuiApplication>
 #include <QInputMethod>
 #include <QButtonGroup>
+#include <QSignalBlocker>
 #include <QVBoxLayout>
 
 #include "base/peer/host_id.h"
+#include "client/android/credential_combo_box.h"
 #include "common/android/app_bar.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
-#include "common/android/combo_box.h"
 #include "common/android/radio_button.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
@@ -42,33 +43,14 @@ constexpr int kFormSpacing = 8;
 
 constexpr int kChoiceIndent = 24;
 
-//--------------------------------------------------------------------------------------------------
-// A record that did not open hands over an empty user name and password. Offered, it would
-// connect with nothing and the host would refuse credentials the user never saw.
-QList<CredentialConfig> offeredCredentials(const QList<CredentialConfig>& credentials)
-{
-    QList<CredentialConfig> result;
-    result.reserve(credentials.size());
-
-    for (const CredentialConfig& credential : credentials)
-    {
-        if (credential.isValid())
-            result.append(credential);
-    }
-
-    return result;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::SessionType session_type,
-                                         bool save_credentials_available,
-                                         const QList<CredentialConfig>& credentials, QWidget* parent)
+                                         bool save_credentials_available, QWidget* parent)
     : QWidget(parent),
       host_(host),
       session_type_(session_type),
-      credentials_(offeredCredentials(credentials)),
       app_bar_(new AppBar(this)),
       radio_user_password_(new RadioButton(tr("Enter user name and password"))),
       radio_one_time_password_(new RadioButton(tr("One-time password connection"))),
@@ -79,7 +61,7 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
       edit_one_time_password_(new LineEdit()),
-      combo_credential_(new ComboBox()),
+      combo_credential_(new CredentialComboBox()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
     app_bar_->setTitle(tr("Authorization"));
@@ -100,8 +82,6 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
     edit_one_time_password_->setEchoMode(QLineEdit::Password);
 
     combo_credential_->setLabel(tr("Credentials"));
-    for (const CredentialConfig& credential : credentials_)
-        combo_credential_->addItem(credential.displayName(), QVariant::fromValue(credential.id()));
 
     Button* connect_button = new Button(tr("Connect"), Button::Role::FILLED);
 
@@ -161,6 +141,21 @@ AuthorizationWindow::AuthorizationWindow(const HostConfig& host, proto::peer::Se
         modes->addButton(button);
         connect(button, &RadioButton::toggled, this, &AuthorizationWindow::onModeToggled);
     }
+
+    connect(combo_credential_, &CredentialComboBox::sig_reloaded, this, [this]()
+    {
+        if (combo_credential_->currentIndex() < 0)
+        {
+            if (radio_saved_credentials_->isChecked())
+                radio_user_password_->setChecked(true);
+
+            combo_credential_->setCurrentIndex(0);
+        }
+
+        updateModes();
+    });
+
+    combo_credential_->onReload();
 
     if (isOneTimePasswordOffered() && host.username().isEmpty())
         radio_one_time_password_->setChecked(true);
@@ -270,7 +265,7 @@ bool AuthorizationWindow::isOneTimePasswordOffered() const
 //--------------------------------------------------------------------------------------------------
 bool AuthorizationWindow::hasSavedCredentials() const
 {
-    return !credentials_.isEmpty();
+    return combo_credential_->count() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,14 +280,7 @@ const CredentialConfig* AuthorizationWindow::selectedCredential() const
     if (!usesSavedCredentials())
         return nullptr;
 
-    const qint64 credential_id = combo_credential_->currentData().toLongLong();
-    for (const CredentialConfig& credential : credentials_)
-    {
-        if (credential.id() == credential_id)
-            return &credential;
-    }
-
-    return nullptr;
+    return combo_credential_->currentCredential();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,6 +288,12 @@ void AuthorizationWindow::updateModes()
 {
     const bool one_time_offered = isOneTimePasswordOffered();
     const bool saved_credentials_offered = hasSavedCredentials();
+
+    if (!saved_credentials_offered && radio_saved_credentials_->isChecked())
+    {
+        const QSignalBlocker saved_credentials_blocker(radio_saved_credentials_);
+        radio_user_password_->setChecked(true);
+    }
 
     // The indent is what makes a block belong to the choice above it.
     const bool has_choice = one_time_offered || saved_credentials_offered;

@@ -48,9 +48,11 @@ protected:
 
         const std::optional<QByteArray> verifier = DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
-        ASSERT_TRUE(db_.reencryptAll({}, {}, {}, {}, ProxyConfig(), salt, *verifier, 1));
 
+        Database::Reencryption reencryption(db_);
+        ASSERT_EQ(reencryption.begin(), Database::ReencryptResult::DONE);
         DataCryptor::instance().setKey(key);
+        ASSERT_TRUE(reencryption.commit(salt, *verifier, 1));
     }
 
     void addGroup()

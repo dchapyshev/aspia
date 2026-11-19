@@ -131,6 +131,7 @@ public:
     // missing record, so the two are separate answers and neither can be dropped by accident.
     std::string_view findUser(const QString& username, RouterUser* user) const;
     std::string_view findUser(qint64 entry_id, RouterUser* user) const;
+    std::string_view findUserByGuid(const QString& guid, RouterUser* user) const;
 
     //----------------------------------------------------------------------------------------------
     // TOTP per-user state

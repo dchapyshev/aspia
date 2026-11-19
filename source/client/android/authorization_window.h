@@ -29,7 +29,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class AppBar;
-class ComboBox;
+class CredentialComboBox;
 class Label;
 class LineEdit;
 class QWidget;
@@ -45,8 +45,7 @@ class AuthorizationWindow final : public QWidget
 public:
     // |save_credentials_available| enables the switch that keeps the credentials on the device.
     AuthorizationWindow(const HostConfig& host, proto::peer::SessionType session_type,
-                        bool save_credentials_available,
-                        const QList<CredentialConfig>& credentials, QWidget* parent = nullptr);
+                        bool save_credentials_available, QWidget* parent = nullptr);
     ~AuthorizationWindow() final;
 
     // The host with the entered credentials. The user name is empty when a one-time password is
@@ -84,7 +83,6 @@ private:
 
     const HostConfig host_;
     const proto::peer::SessionType session_type_;
-    const QList<CredentialConfig> credentials_;
 
     AppBar* app_bar_ = nullptr;
     RadioButton* radio_user_password_ = nullptr;
@@ -96,7 +94,7 @@ private:
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     LineEdit* edit_one_time_password_ = nullptr;
-    ComboBox* combo_credential_ = nullptr;
+    CredentialComboBox* combo_credential_ = nullptr;
     Switch* switch_save_credentials_ = nullptr;
     Label* label_error_ = nullptr;
 

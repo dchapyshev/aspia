@@ -44,14 +44,11 @@ ClientManager::~ClientManager()
 //--------------------------------------------------------------------------------------------------
 void ClientManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::router::CHANNEL_ID_CLIENT)
+    if (channel_id != proto::router::CHANNEL_ID_MANAGER)
     {
         ClientOperator::onSessionMessage(channel_id, buffer);
         return;
     }
-
-    if (channel_id != proto::router::CHANNEL_ID_MANAGER)
-        return;
 
     if (!isTwoFactorCompleted())
     {

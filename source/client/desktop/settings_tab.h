@@ -60,6 +60,8 @@ private slots:
     void onCategoryChanged(int id);
     void onGeneralChanged();
     void onRouterChanged();
+    void onRouterStatusChanged();
+    void onResetSyncClicked();
     void onSelectBackupPath();
     void onProxyTypeChanged();
     void onAutoUnlockToggled();

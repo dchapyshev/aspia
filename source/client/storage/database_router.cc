@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
 #include "proto/router.h"
 
 namespace {
@@ -113,17 +114,440 @@ Database::FindResult Database::routerConfig(RouterConfig* router) const
 //--------------------------------------------------------------------------------------------------
 bool Database::setRouterConfig(const RouterConfig& router)
 {
-    if (!router.isValid())
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    RouterConfig stored;
+    if (routerConfig(&stored) == FindResult::FAILED)
+        return false;
+
+    RouterConfig config = router;
+
+    if (config.userGuid().isEmpty() && (!stored.isSyncConfirmationNeeded(config) || stored.hasSameAccount(config)))
+        config.setUserGuid(stored.userGuid());
+
+    if (config.isSyncEnabled())
+    {
+        config.setSyncStorageId(stored.syncStorageId());
+        config.setSyncStorageKey(stored.syncStorageKey());
+        config.setSyncStorageResetPending(stored.isSyncStorageResetPending());
+    }
+    else
+    {
+        config.setSyncStorageId(QByteArray());
+        config.setSyncStorageKey(SecureByteArray());
+        config.setSyncStorageResetPending(false);
+
+        if (!stored.syncStorageId().isEmpty())
+        {
+            LOG(INFO) << "The device is detached from the storage" << stored.syncStorageId().toHex();
+
+            if (!resetSyncState())
+            {
+                LOG(ERROR) << "Unable to detach the records from the storage";
+                return false;
+            }
+        }
+    }
+
+    if (!writeRouter(config))
+        return false;
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::SyncResult Database::setSyncStorage(
+    const RouterConfig& router, const QByteArray& storage_id, const SecureByteArray& key, bool reset)
+{
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return SyncResult::FAILED;
+    }
+
+    RouterConfig stored;
+    const FindResult found = routerConfig(&stored);
+    if (found == FindResult::NOT_FOUND)
+    {
+        LOG(WARNING) << "The router is not saved";
+        return SyncResult::DETACHED;
+    }
+
+    if (found != FindResult::FOUND)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        return SyncResult::FAILED;
+    }
+
+    if (!stored.hasSameAccount(router))
+    {
+        LOG(WARNING) << "The router is saved for another account";
+        return SyncResult::DETACHED;
+    }
+
+    if (!stored.isSyncEnabled())
+    {
+        LOG(WARNING) << "The synchronization is turned off";
+        return SyncResult::DETACHED;
+    }
+
+    const bool another_storage = stored.syncStorageId() != storage_id;
+
+    if (another_storage)
+    {
+        const bool discard = reset && !stored.syncStorageId().isEmpty() && !storage_id.isEmpty() &&
+            !stored.isSyncStorageResetPending();
+
+        LOG(INFO) << "Storage" << stored.syncStorageId().toHex() << "is replaced with" << storage_id.toHex()
+                  << "reset:" << reset << "reset pending:" << stored.isSyncStorageResetPending()
+                  << "discard:" << discard;
+
+        if (!(discard ? discardSyncData() : resetSyncState()))
+        {
+            LOG(ERROR) << "Unable to prepare the records for another storage";
+            return SyncResult::FAILED;
+        }
+    }
+
+    const bool reset_finished = router.isSyncStorageResetPending() && stored.isSyncStorageResetPending();
+
+    if (another_storage || stored.syncStorageKey() != key || reset_finished)
+    {
+        stored.setSyncStorageId(storage_id);
+        stored.setSyncStorageKey(key);
+
+        if (reset_finished)
+            stored.setSyncStorageResetPending(false);
+
+        if (!writeRouter(stored))
+        {
+            LOG(ERROR) << "Unable to write the router";
+            return SyncResult::FAILED;
+        }
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return SyncResult::FAILED;
+    }
+
+    return SyncResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setSyncStorageResetPending(const RouterConfig& router)
+{
+    SqlTransaction transaction(db_);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    RouterConfig stored;
+    if (routerConfig(&stored) != FindResult::FOUND)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        return false;
+    }
+
+    if (!stored.hasSameAccount(router))
+    {
+        LOG(WARNING) << "The router is saved for another account";
+        return false;
+    }
+
+    if (!stored.isSyncEnabled())
+    {
+        LOG(WARNING) << "The synchronization is turned off";
+        return false;
+    }
+
+    if (!stored.isSyncStorageResetPending())
+    {
+        stored.setSyncStorageResetPending(true);
+
+        if (!writeRouter(stored))
+        {
+            LOG(ERROR) << "Unable to write the router";
+            return false;
+        }
+
+        LOG(INFO) << "The reset of the storage is set pending";
+    }
+
+    return transaction.commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::SyncTransaction::SyncTransaction(Database& db)
+    : db_(db)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::SyncResult Database::SyncTransaction::begin(const QByteArray& storage_id)
+{
+    transaction_.emplace(db_.db_);
+
+    if (!transaction_->begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        transaction_.reset();
+        return SyncResult::FAILED;
+    }
+
+    RouterConfig router;
+    const FindResult found = db_.routerConfig(&router);
+    if (found != FindResult::FOUND && found != FindResult::NOT_FOUND)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        transaction_.reset();
+        return SyncResult::FAILED;
+    }
+
+    if (storage_id.isEmpty() || found == FindResult::NOT_FOUND || router.syncStorageId() != storage_id)
+    {
+        LOG(WARNING) << "The device is not attached to the storage";
+        transaction_.reset();
+        return SyncResult::DETACHED;
+    }
+
+    return SyncResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::commit()
+{
+    return transaction_.has_value() && transaction_->commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (!credential.isValid() || credential.guid().isEmpty() || sync_revision <= 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
-    std::optional<QByteArray> encrypted_data = router.encryptedData();
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
     if (!encrypted_data.has_value())
         return false;
 
-    return writeSetting(kSettingRouter, QString::fromLatin1(encrypted_data->toBase64()));
+    SqlQuery query(db, "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_revision) "
+                       "VALUES (NULL, ?, ?, ?, ?, ?, ?) "
+                       "ON CONFLICT(guid) DO UPDATE SET type=excluded.type, name=excluded.name, "
+                       "data=excluded.data, modify_time=excluded.modify_time, "
+                       "sync_revision=excluded.sync_revision, sync_dirty=0, deleted=0 "
+                       "WHERE credentials.sync_revision!=excluded.sync_revision");
+    query.addInt64(static_cast<int>(credential.type()));
+    query.addText(credential.displayName());
+    query.addBlob(*encrypted_data);
+    query.addText(credential.guid());
+    query.addInt64(credential.modifyTime());
+    query.addInt64(sync_revision);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::eraseCredential(const QString& guid)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery query(db, "DELETE FROM credentials WHERE guid=?");
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setCredentialSyncRevision(const QString& guid, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery query(db, "UPDATE credentials SET sync_revision=? WHERE guid=?");
+    query.addInt64(sync_revision);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setCredentialUnknownData(const QString& guid, const QByteArray& unknown_data)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery row(db, "SELECT data FROM credentials WHERE guid=? AND deleted=0");
+    row.addText(guid);
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        else
+            LOG(ERROR) << "Credential with guid" << guid << "not found";
+        return false;
+    }
+
+    CredentialConfig credential;
+    credential.setGuid(guid);
+
+    if (!credential.setEncryptedData(row.columnBlob(0)))
+    {
+        LOG(ERROR) << "Unable to read encrypted data of credential with guid" << guid;
+        return false;
+    }
+
+    credential.setUnknownData(unknown_data);
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+    {
+        LOG(ERROR) << "Unable to seal credential with guid" << guid;
+        return false;
+    }
+
+    SqlQuery query(db, "UPDATE credentials SET data=? WHERE guid=?");
+    query.addBlob(*encrypted_data);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (guid.isEmpty() || sync_revision <= 0 || sync_dirty < 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery update_query(db, "UPDATE credentials SET sync_revision=?, sync_dirty=sync_dirty-? WHERE guid=?");
+    update_query.addInt64(sync_revision);
+    update_query.addInt64(sync_dirty);
+    update_query.addText(guid);
+
+    if (!update_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    if (db.changes() != 0)
+    {
+        SqlQuery erase_query(db, "DELETE FROM credentials WHERE guid=? AND deleted!=0 AND sync_dirty=0");
+        erase_query.addText(guid);
+
+        if (!erase_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+    else
+    {
+        SqlQuery mark_query(db, "INSERT INTO credentials (id, guid, modify_time, sync_revision, sync_dirty, "
+                                "deleted) VALUES (NULL, ?, ?, ?, 1, 1)");
+        mark_query.addText(guid);
+        mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+        mark_query.addInt64(sync_revision);
+
+        if (!mark_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setReceivedCredentialsRevision(qint64 revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    return db_.setReceivedCredentialsRevision(revision);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::isActive() const
+{
+    return transaction_.has_value() && transaction_->isActive();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -314,7 +738,11 @@ std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    if (findCredential(host.credentialId(), &credential) != FindResult::FOUND)
+    const FindResult found = findCredential(host.credentialId(), &credential);
+    if (found == FindResult::NOT_FOUND)
+        return std::make_pair(host.username(), host.password());
+
+    if (found != FindResult::FOUND)
         return std::nullopt;
 
     return std::make_pair(credential.username(), credential.password());
@@ -451,6 +879,22 @@ bool Database::setRouterHostProfileId(HostId host_id, qint64 profile_id)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::writeRouter(const RouterConfig& router)
+{
+    if (!router.isValid())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    std::optional<QByteArray> encrypted_data = router.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    return writeSetting(kSettingRouter, QString::fromLatin1(encrypted_data->toBase64()));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
@@ -267,6 +268,26 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
 {
     LOG(INFO) << "Login completed";
 
+    bool config_changed = false;
+
+    const QString user_guid = QString::fromStdString(result.user_guid());
+    if (!user_guid.isEmpty() && config_->userGuid() != user_guid)
+    {
+        LOG(INFO) << "The record of the router takes the guid of the user";
+
+        if (!config_->userGuid().isEmpty() && config_->isSyncEnabled())
+        {
+            LOG(INFO) << "Another user has signed in, the synchronization is turned off";
+
+            config_->setSyncEnabled(false);
+            RouterController::instance().addEvent(RouterEvent::Severity::WARNING,
+                tr("Signed in as another user. Data synchronization has been turned off."));
+        }
+
+        config_->setUserGuid(user_guid);
+        config_changed = true;
+    }
+
     // A token arrives only when a TOTP submission produced one. Failures drop the connection
     // instead of answering, so getting here at all means the session is open.
     const QByteArray new_token = QByteArray::fromStdString(result.new_token());
@@ -280,8 +301,7 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
         if (OSCrypt::encryptBytes(new_token, &wrapped) && !wrapped.isEmpty())
         {
             config_->setDeviceToken(wrapped);
-            if (!Database::instance().setRouterConfig(*config_))
-                LOG(WARNING) << "Failed to persist new device token";
+            config_changed = true;
         }
         else
         {
@@ -294,6 +314,9 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
         // storing it would only buy a doomed round of presenting it back.
         LOG(WARNING) << "Device token of unexpected size";
     }
+
+    if (config_changed && !Database::instance().setRouterConfig(*config_))
+        LOG(ERROR) << "Failed to persist the record of the router";
 
     // The login is over. The owner stops feeding the object on this report and only then
     // destroys it, so no late message can reach it.

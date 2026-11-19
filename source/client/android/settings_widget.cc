@@ -231,7 +231,7 @@ void SettingsWidget::onMasterPasswordChanged()
 //--------------------------------------------------------------------------------------------------
 void SettingsWidget::onShowCredentials()
 {
-    credentials_page_->reload();
+    credentials_page_->onReload();
     stack_->setCurrentWidget(credentials_page_);
     emit sig_titleChanged(tr("Credentials"), true);
     emit sig_appBarActionsChanged();

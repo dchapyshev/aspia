@@ -18,8 +18,6 @@
 
 #include "client/desktop/authorization_dialog.h"
 
-#include <QComboBox>
-#include <QIcon>
 #include <QRadioButton>
 #include <QTimer>
 
@@ -55,6 +53,20 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
         connect(button, &QRadioButton::clicked, this, &AuthorizationDialog::onModeClicked);
     }
 
+    connect(ui->combo_credential, &CredentialComboBox::sig_reloaded, this, [this]()
+    {
+        if (ui->combo_credential->currentIndex() < 0)
+        {
+            if (ui->radio_saved_credentials->isChecked())
+                ui->radio_user_password->setChecked(true);
+
+            ui->combo_credential->setCurrentIndex(0);
+        }
+
+        updateModes();
+    });
+
+    ui->combo_credential->onReload();
     updateModes();
 }
 
@@ -82,28 +94,6 @@ void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 void AuthorizationDialog::setOneTimePasswordOnly(bool only)
 {
     one_time_password_only_ = only;
-    updateModes();
-}
-
-//--------------------------------------------------------------------------------------------------
-void AuthorizationDialog::setSavedCredentials(const QList<CredentialConfig>& credentials)
-{
-    credentials_.clear();
-    ui->combo_credential->clear();
-
-    const QIcon icon(":/img/keys.svg");
-
-    // A record that did not open hands over an empty user name and password. Offered, it
-    // would connect with nothing and the host would refuse credentials the user never saw.
-    for (const CredentialConfig& credential : credentials)
-    {
-        if (!credential.isValid())
-            continue;
-
-        credentials_.append(credential);
-        ui->combo_credential->addItem(icon, credential.displayName(), QVariant::fromValue(credential.id()));
-    }
-
     updateModes();
 }
 
@@ -275,7 +265,7 @@ bool AuthorizationDialog::isSaveCredentialsOffered() const
 //--------------------------------------------------------------------------------------------------
 bool AuthorizationDialog::hasSavedCredentials() const
 {
-    return !credentials_.isEmpty();
+    return ui->combo_credential->count() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -290,14 +280,7 @@ const CredentialConfig* AuthorizationDialog::selectedCredential() const
     if (!usesSavedCredentials())
         return nullptr;
 
-    const qint64 credential_id = ui->combo_credential->currentData().toLongLong();
-    for (const CredentialConfig& credential : std::as_const(credentials_))
-    {
-        if (credential.id() == credential_id)
-            return &credential;
-    }
-
-    return nullptr;
+    return ui->combo_credential->currentCredential();
 }
 
 //--------------------------------------------------------------------------------------------------

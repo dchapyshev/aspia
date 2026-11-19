@@ -313,8 +313,9 @@ message TwoFactorResponse
 // Failures never send this message. They drop the connection instead.
 message LoginResult
 {
-    bytes new_token = 1;
-    int64 user_id   = 2;
+    bytes new_token  = 1;
+    int64 user_id    = 2;
+    string user_guid = 3;
 }
 
 message RouterToClient

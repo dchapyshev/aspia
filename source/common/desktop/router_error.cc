@@ -55,6 +55,8 @@ QString routerErrorText(std::string_view error_code)
             "RouterError", "There are no relays available or the key pool is empty.");
     else if (error_code == proto::router::kErrorTooManyRequests)
         message = QT_TRANSLATE_NOOP("RouterError", "Too many connection requests. Try again later.");
+    else if (error_code == proto::router::kErrorLimitExceeded)
+        message = QT_TRANSLATE_NOOP("RouterError", "The limit on the number of records has been reached.");
     else
         message = QT_TRANSLATE_NOOP("RouterError", "Unknown error type.");
 

@@ -19,6 +19,7 @@
 #include "router/workers/client_worker.h"
 
 #include <QDateTime>
+#include <QUuid>
 
 #include <gtest/gtest.h>
 
@@ -27,11 +28,13 @@
 
 #include "base/serialization.h"
 #include "base/crypto/totp.h"
+#include "proto/router_sync.h"
 #include "router/client_admin.h"
 #include "router/client_operator.h"
 #include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
+#include "router/sync_storage.h"
 #include "router/handlers/two_factor_handler.h"
 
 namespace {
@@ -132,6 +135,19 @@ public:
         worker.access_log_days_ = days;
     }
     static AccessLog& accessLog(ClientWorker& worker) { return worker.access_log_; }
+
+    // The announcement of a change in the synchronized data, wired the way onNewConnection does
+    // it. Direct for the same reason as the removal of a session.
+    static void connectSyncChanged(ClientWorker& worker, ClientOperator* client)
+    {
+        QObject::connect(client, &ClientOperator::sig_syncChanged,
+                         &worker, &ClientWorker::onSyncChanged, Qt::DirectConnection);
+    }
+
+    static void removeUnusedSyncStorages(Database& database)
+    {
+        ClientWorker::removeUnusedSyncStorages(database);
+    }
 };
 
 // The stop command against live sessions and which of them the pair (user, token list) takes down.
@@ -162,9 +178,10 @@ protected:
     }
 
     // A session of |user| held by the worker. Of the wiring onNewConnection sets up, the stand
-    // reproduces the mask update on passing the stage and the removal on sig_finished. A negative
-    // |code_time| leaves the session at the two-factor stage; otherwise the stage is passed with
-    // the code of that step (the secret of the built-in administrator). Runs in the worker thread.
+    // reproduces the mask update on passing the stage, the removal on sig_finished and the
+    // announcement of a change in the synchronized data. A negative |code_time| leaves the session
+    // at the two-factor stage; otherwise the stage is passed with the code of that step (the secret
+    // of the built-in administrator). Runs in the worker thread.
     template <typename ClientT = ClientOperator>
     ClientT* addSession(ClientWorker& worker, const RouterUser& user, qint64 code_time,
                         LoopbackChannel** channel_out = nullptr,
@@ -181,6 +198,7 @@ protected:
         QObject::connect(client, &ClientOperator::sig_twoFactorCompleted, client,
                          [&worker]() { ClientWorkerTestPeer::updateClientsMask(worker); });
         ClientWorkerTestPeer::connectFinished(worker, client);
+        ClientWorkerTestPeer::connectSyncChanged(worker, client);
 
         client->start();
 
@@ -194,6 +212,13 @@ protected:
         }
 
         return client;
+    }
+
+    static QStringList syncUserGuids()
+    {
+        QStringList user_guids = SyncStorage::userGuids();
+        user_guids.sort();
+        return user_guids;
     }
 
     static bool holds(ClientWorker& worker, const ClientOperator* client)
@@ -528,4 +553,135 @@ TEST_F(ClientWorkerAccessLogTest, LogIsNotPrunedWithoutTheConfiguration)
     });
 
     EXPECT_EQ(entryCount(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A stored record is announced to the sessions of the same user that asked about the
+// synchronization, and not to the one that stored it. The announced session reads the record
+// from its own connection to the storage of the user.
+TEST_F(ClientWorkerStopTest, SyncChangeIsToldToTheOtherSessionsOfTheUser)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(bob.entry_id, 0);
+    ASSERT_TRUE(db_.setUserOtp(bob.entry_id, secret_, 0));
+
+    worker_->invoke([&]()
+    {
+        ClientWorker worker;
+
+        const qint64 now = QDateTime::currentSecsSinceEpoch();
+        LoopbackChannel* idle_channel = nullptr;
+        LoopbackChannel* sender_channel = nullptr;
+        LoopbackChannel* listener_channel = nullptr;
+        LoopbackChannel* at_stage_channel = nullptr;
+        LoopbackChannel* other_user_channel = nullptr;
+
+        addSession(worker, admin_, now - Totp::kDefaultStepSec, &idle_channel);
+        addSession(worker, admin_, now, &sender_channel);
+        addSession(worker, admin_, now + Totp::kDefaultStepSec, &listener_channel);
+        addSession(worker, admin_, -1, &at_stage_channel);
+        addSession(worker, bob, now, &other_user_channel);
+
+        proto::router::SyncToRouter storage_info_request;
+        storage_info_request.mutable_storage_info_request()->set_request_id(1);
+
+        for (LoopbackChannel* channel : { listener_channel, at_stage_channel, other_user_channel })
+            channel->receive(proto::router::CHANNEL_ID_SYNC, serialize(storage_info_request));
+
+        proto::router::SyncToRouter storage_key_request;
+        storage_key_request.mutable_storage_key_request()->set_request_id(2);
+        storage_key_request.mutable_storage_key_request()->set_mode(proto::router::SyncStorageKeyRequest::MODE_CREATE);
+
+        proto::router::SyncStorageKey* key = storage_key_request.mutable_storage_key_request()->mutable_key();
+        key->set_salt("salt");
+        key->set_verifier("verifier");
+        key->set_data("data");
+
+        sender_channel->receive(proto::router::CHANNEL_ID_SYNC, serialize(storage_key_request));
+
+        proto::router::RouterToSync created;
+        ASSERT_FALSE(sender_channel->sent().empty());
+        ASSERT_TRUE(parse(sender_channel->sent().back().buffer, &created));
+        ASSERT_EQ(created.storage_info().error_code(), proto::router::kErrorOk);
+
+        const std::string storage_id = created.storage_info().storage_id();
+
+        const std::vector<LoopbackChannel*> channels =
+            { idle_channel, sender_channel, listener_channel, at_stage_channel, other_user_channel };
+
+        for (LoopbackChannel* channel : channels)
+            channel->clearSent();
+
+        proto::router::SyncToRouter record_request;
+        record_request.mutable_record_request()->set_request_id(3);
+        record_request.mutable_record_request()->set_storage_id(storage_id);
+
+        proto::router::SyncRecord* record = record_request.mutable_record_request()->add_record();
+        record->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
+        record->set_id("a");
+        record->set_data("data");
+
+        sender_channel->receive(proto::router::CHANNEL_ID_SYNC, serialize(record_request));
+
+        for (LoopbackChannel* channel : { idle_channel, at_stage_channel, other_user_channel })
+            EXPECT_TRUE(channel->nothingSent());
+
+        proto::router::RouterToSync stored;
+        ASSERT_EQ(sender_channel->sent().size(), 1);
+        ASSERT_TRUE(parse(sender_channel->sent().at(0).buffer, &stored));
+        ASSERT_TRUE(stored.has_record_result());
+        EXPECT_EQ(stored.record_result().error_code(), proto::router::kErrorOk);
+
+        ASSERT_EQ(listener_channel->sent().size(), 1);
+        EXPECT_EQ(listener_channel->sent().at(0).channel_id, proto::router::CHANNEL_ID_SYNC);
+
+        proto::router::RouterToSync announced;
+        ASSERT_TRUE(parse(listener_channel->sent().at(0).buffer, &announced));
+        ASSERT_TRUE(announced.has_storage_notification());
+        EXPECT_EQ(announced.storage_notification().revision(), 1);
+
+        proto::router::SyncToRouter list_request;
+        list_request.mutable_record_list_request()->set_request_id(4);
+        list_request.mutable_record_list_request()->set_storage_id(storage_id);
+        list_request.mutable_record_list_request()->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
+        list_request.mutable_record_list_request()->set_count(proto::router::kMaxSyncPageSize);
+
+        listener_channel->receive(proto::router::CHANNEL_ID_SYNC, serialize(list_request));
+
+        proto::router::RouterToSync list;
+        ASSERT_TRUE(parse(listener_channel->sent().back().buffer, &list));
+        ASSERT_EQ(list.record_list().error_code(), proto::router::kErrorOk);
+        ASSERT_EQ(list.record_list().record_size(), 1);
+        EXPECT_EQ(list.record_list().record(0).id(), "a");
+
+        ClientWorkerTestPeer::stop(worker);
+    });
+
+    TwoFactorHandler::forgetUser(bob.entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientWorkerStopTest, SyncStoragesOfMissingUsersAreRemoved)
+{
+    const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
+    ASSERT_GT(bob.entry_id, 0);
+
+    const QString missing_user_guid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+
+    for (const QString& user_guid : { admin_.guid, bob.guid, missing_user_guid })
+    {
+        SyncStorage storage;
+        ASSERT_TRUE(storage.open(user_guid));
+    }
+
+    QStringList kept = { admin_.guid, bob.guid };
+    kept.sort();
+
+    ClientWorkerTestPeer::removeUnusedSyncStorages(db_);
+    EXPECT_EQ(syncUserGuids(), kept);
+
+    ASSERT_EQ(db_.removeUser(bob.entry_id), proto::router::kErrorOk);
+
+    ClientWorkerTestPeer::removeUnusedSyncStorages(db_);
+    EXPECT_EQ(syncUserGuids(), QStringList({ admin_.guid }));
 }

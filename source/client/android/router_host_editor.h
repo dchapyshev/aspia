@@ -24,6 +24,7 @@
 #include "base/peer/host_id.h"
 
 class ComboBox;
+class CredentialComboBox;
 class Label;
 class LineEdit;
 class Switch;
@@ -57,7 +58,7 @@ private:
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     Label* label_note_ = nullptr;
-    ComboBox* combo_credential_ = nullptr;
+    CredentialComboBox* combo_credential_ = nullptr;
     ComboBox* combo_profile_ = nullptr;
     Label* label_error_ = nullptr;
     HostId host_id_ = kInvalidHostId;

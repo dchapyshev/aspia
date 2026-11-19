@@ -194,7 +194,25 @@ bool Database::setLockTimeout(Minutes timeout)
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult Database::proxyConfig(ProxyConfig* proxy) const
 {
-    if (!proxy->setEncryptedData(QByteArray::fromBase64(readSetting(kSettingProxy).toLatin1())))
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return ReadResult::FAILED;
+    }
+
+    SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
+    query.addText(std::string_view(kSettingProxy));
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return ReadResult::FAILED;
+    }
+
+    const QString value = step == SqlQuery::StepResult::ROW ? query.columnText(0) : QString();
+
+    if (!proxy->setEncryptedData(QByteArray::fromBase64(value.toLatin1())))
     {
         LOG(ERROR) << "Unable to read encrypted data of proxy";
         return ReadResult::INCOMPLETE;

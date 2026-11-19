@@ -52,6 +52,7 @@
 #include "client/mcp/mcp_worker.h"
 #include "client/desktop/ui_settings_tab.h"
 #include "client/desktop/update_server_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "client/storage/master_password.h"
 #include "client/storage/system_settings.h"
@@ -343,6 +344,10 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->combo_router_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onRouterChanged);
     connect(ui->checkbox_router_enabled, &QCheckBox::toggled, this, &SettingsTab::onRouterChanged);
+    connect(ui->checkbox_router_sync, &QCheckBox::toggled, this, &SettingsTab::onRouterChanged);
+    connect(ui->button_router_sync_reset, &QPushButton::clicked, this, &SettingsTab::onResetSyncClicked);
+    connect(&RouterController::instance(), &RouterController::sig_statusChanged,
+            this, &SettingsTab::onRouterStatusChanged);
 
     connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &SettingsTab::onGeneralChanged);
@@ -484,6 +489,41 @@ void SettingsTab::onRouterChanged()
 {
     router_changed_ = true;
     onGeneralChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onRouterStatusChanged()
+{
+    RouterConfig router;
+    const Database::FindResult found = Database::instance().routerConfig(&router);
+    const bool sync_enabled = found == Database::FindResult::FOUND && router.isSyncEnabled();
+
+    if (found == Database::FindResult::FOUND && !router_changed_)
+    {
+        QSignalBlocker blocker(ui->checkbox_router_sync);
+        ui->checkbox_router_sync->setChecked(sync_enabled);
+    }
+
+    ui->button_router_sync_reset->setEnabled(sync_enabled && RouterController::status() == RouterStatus::ONLINE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onResetSyncClicked()
+{
+    LOG(INFO) << "[ACTION] Reset synchronization";
+
+    const QString question =
+        tr("The synchronized data on the router and on the other devices of the account will be replaced with "
+           "the data of this device. Reset the synchronization?");
+
+    if (MsgBox::question(this, question) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    if (!RouterController::resetSyncStorage())
+        MsgBox::warning(this, tr("Failed to reset the synchronization."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1058,12 +1098,15 @@ void SettingsTab::loadRouter()
     ui->edit_router_username->setText(router.username());
     ui->edit_router_password->setPassword(router.password());
     ui->checkbox_router_enabled->setChecked(router.isEnabled());
+    ui->checkbox_router_sync->setChecked(router.isSyncEnabled());
 
     if (found == Database::FindResult::UNREADABLE)
         LOG(ERROR) << "Data of the router could not be read";
 
     ui->label_router_damaged->setVisible(found == Database::FindResult::UNREADABLE);
     router_changed_ = false;
+
+    onRouterStatusChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1122,6 +1165,7 @@ bool SettingsTab::routerFromUi(std::optional<RouterConfig>* router)
     config.setUsername(username);
     config.setPassword(password);
     config.setEnabled(ui->checkbox_router_enabled->isChecked());
+    config.setSyncEnabled(ui->checkbox_router_sync->isChecked());
 
     *router = config;
     return true;
@@ -1142,7 +1186,21 @@ bool SettingsTab::saveRouter(RouterConfig router)
     }
 
     if (stored_found == Database::FindResult::FOUND && stored.hasSameAccount(router))
-        router.setDeviceToken(stored.deviceToken());
+    {
+        if (stored.password() == router.password())
+            router.setDeviceToken(stored.deviceToken());
+    }
+
+    if (stored.isSyncConfirmationNeeded(router))
+    {
+        if (MsgBox::question(this,
+                tr("The synchronized data of this device will be sent to the storage of the account \"%1\". "
+                   "Continue?").arg(router.username())) != MsgBox::Yes)
+        {
+            LOG(INFO) << "[ACTION] Saving the router rejected";
+            return false;
+        }
+    }
 
     if (!db.setRouterConfig(router))
     {

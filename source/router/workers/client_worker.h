@@ -34,6 +34,7 @@ class ClientRequest;
 } // namespace proto::router
 
 class ClientOperator;
+class Database;
 class TcpServer;
 
 class ClientWorker final : public Worker
@@ -105,10 +106,17 @@ private slots:
     void onClientListRequest(const proto::router::ClientListRequest& request);
     void onClientRequest(const proto::router::ClientRequest& request);
 
+    // Tells the other sessions of the user of |session_id| that take part in the synchronization
+    // that the records of the user have changed.
+    void onSyncChanged(qint64 session_id, qint64 revision);
+
 private:
     bool isUserLimitReached(qint64 user_id) const;
     bool stopClient(qint64 client_id);
     void updateClientsMask();
+
+    // Removes the storages of the users |database| no longer has.
+    static void removeUnusedSyncStorages(Database& database);
 
     QString listen_interface_;
     quint16 listen_port_ = 0;

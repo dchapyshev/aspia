@@ -26,6 +26,7 @@
 #include "base/shared_pointer.h"
 #include "client/router/router_2fa.h"
 #include "client/router/router_session.h"
+#include "client/workers/sync_worker.h"
 
 class RouterController final : public QObject
 {
@@ -46,6 +47,9 @@ public:
     // The two-factor question of the router, nullptr while nothing is asked. Answered and
     // dismissed through the object itself; who shows it and when is the business of the GUI.
     static TwoFactorPrompt* twoFactorPrompt();
+
+    static void startSyncRecordExchange();
+    static bool resetSyncStorage();
 
     // Syncs the login and the session with the stored router. A new router with usable
     // credentials starts logging in, a router that stays receives its fresh config, and
@@ -69,6 +73,7 @@ signals:
     void sig_usersChanged();
     void sig_workspacesChanged();
     void sig_groupsChanged();
+    void sig_credentialsChanged();
 
 private slots:
     void onTwoFactorRequired();
@@ -77,6 +82,7 @@ private slots:
     void onRouterReconnecting();
     void onRouterError(TcpChannel::ErrorCode error_code);
     void onRouterMessage(quint8 channel_id, const QByteArray& buffer);
+    void onSyncEvent(SyncWorker::Event event, const QString& error_code);
 
 private:
     struct RouterContext
@@ -89,10 +95,13 @@ private:
     };
 
     void startTwoFactor();
+    void startSession(qint64 user_id, const QVersionNumber& peer_version, bool user_stored);
+    void finishSession();
     void updateStatus();
 
     std::optional<RouterContext> context_;
     QPointer<RouterWorker> router_worker_;
+    QPointer<SyncWorker> sync_worker_;
 
     Q_DISABLE_COPY_MOVE(RouterController)
 };

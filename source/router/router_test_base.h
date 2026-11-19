@@ -37,6 +37,7 @@
 #include "base/sql/sql_query.h"
 #include "router/access_log.h"
 #include "router/database.h"
+#include "router/sync_storage.h"
 #include "router/workspace.h"
 #include "router/handlers/request_caller.h"
 
@@ -60,6 +61,8 @@ protected:
 
         access_log_file_path_ = temp_dir_.path() + "/access_log.db3";
         ASSERT_TRUE(access_log_.open(access_log_file_path_));
+
+        SyncStorage::setDirectoryPathForTesting(temp_dir_.path() + "/sync");
 
         ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
                   proto::router::kErrorOk);

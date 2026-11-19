@@ -61,5 +61,6 @@ const char* const kErrorLostConnection  = "lost_connection";
 const char* const kErrorHostOffline     = "host_offline";
 const char* const kErrorKeyPoolEmpty    = "key_pool_empty";
 const char* const kErrorTooManyRequests = "too_many_requests";
+const char* const kErrorLimitExceeded   = "limit_exceeded";
 
 } // namespace proto::router

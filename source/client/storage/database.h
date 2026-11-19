@@ -28,6 +28,7 @@
 
 #include "base/time_types.h"
 #include "base/sql/sql_database.h"
+#include "base/sql/sql_transaction.h"
 #include "client/config.h"
 #include "client/storage/auto_backup.h"
 
@@ -75,6 +76,12 @@ public:
     enum class FindResult { FOUND, NOT_FOUND, UNREADABLE, FAILED };
     Q_ENUM(FindResult)
 
+    enum class SyncResult { DONE, DETACHED, FAILED };
+    Q_ENUM(SyncResult)
+
+    enum class ReencryptResult { DONE, UNREADABLE_RECORD, FAILED };
+    Q_ENUM(ReencryptResult)
+
     // Local Hosts.
     ReadResult localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
     ReadResult allLocalHosts(QList<LocalHostConfig>* hosts) const;
@@ -102,6 +109,33 @@ public:
     // Router.
     FindResult routerConfig(RouterConfig* router) const;
     bool setRouterConfig(const RouterConfig& router);
+    SyncResult setSyncStorage(const RouterConfig& router, const QByteArray& storage_id,
+        const SecureByteArray& key, bool reset);
+    bool setSyncStorageResetPending(const RouterConfig& router);
+
+    class SyncTransaction final
+    {
+    public:
+        explicit SyncTransaction(Database& db);
+
+        SyncResult begin(const QByteArray& storage_id);
+        bool commit();
+
+        bool storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision);
+        bool eraseCredential(const QString& guid);
+        bool setCredentialSyncRevision(const QString& guid, qint64 sync_revision);
+        bool setCredentialUnknownData(const QString& guid, const QByteArray& unknown_data);
+        bool confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty);
+        bool setReceivedCredentialsRevision(qint64 revision);
+
+    private:
+        bool isActive() const;
+
+        Database& db_;
+        std::optional<SqlTransaction> transaction_;
+
+        Q_DISABLE_COPY_MOVE(SyncTransaction)
+    };
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
@@ -116,6 +150,14 @@ public:
     bool setRouterHostProfileId(HostId host_id, qint64 profile_id);
 
     // Credentials.
+    struct UnsyncedCredential
+    {
+        CredentialConfig credential;
+        bool deleted = false;
+        qint64 sync_revision = 0;
+        qint64 sync_dirty = 0;
+    };
+
     ReadResult credentialList(QList<CredentialConfig>* credentials,
         std::optional<CredentialConfig::Type> type = std::nullopt) const;
     bool addCredential(CredentialConfig& credential);
@@ -123,6 +165,8 @@ public:
     bool removeCredential(qint64 credential_id);
     FindResult findCredential(qint64 credential_id, CredentialConfig* credential) const;
     FindResult findCredentialByGuid(const QString& guid, CredentialConfig* credential) const;
+    ReadResult unsyncedCredentials(QList<UnsyncedCredential>* credentials) const;
+    qint64 receivedCredentialsRevision() const;
 
     // Connection profiles.
     ReadResult profileList(QList<ProfileConfig>* profiles) const;
@@ -167,14 +211,26 @@ public:
     // Master password.
     bool isMasterPasswordSet() const;
 
-    bool reencryptAll(const QList<LocalHostConfig>& local_hosts,
-                      const std::optional<RouterConfig>& router,
-                      const QList<RouterHostConfig>& router_hosts,
-                      const QList<CredentialConfig>& credentials,
-                      const ProxyConfig& proxy,
-                      const QByteArray& salt,
-                      const QByteArray& verifier,
-                      quint32 version);
+    class Reencryption final
+    {
+    public:
+        explicit Reencryption(Database& db);
+
+        ReencryptResult begin();
+        bool commit(const QByteArray& salt, const QByteArray& verifier, quint32 version);
+
+    private:
+        Database& db_;
+        std::optional<SqlTransaction> transaction_;
+        QList<LocalHostConfig> local_hosts_;
+        std::optional<RouterConfig> router_;
+        QList<RouterHostConfig> router_hosts_;
+        QList<CredentialConfig> credentials_;
+        ProxyConfig proxy_;
+
+        Q_DISABLE_COPY_MOVE(Reencryption)
+    };
+
     QByteArray masterPasswordSalt() const;
     QByteArray masterPasswordVerifier() const;
     quint32 masterPasswordVersion() const;
@@ -198,11 +254,20 @@ private:
 
     bool openDatabase();
     bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
+    bool rewriteEncryptedData(const QList<LocalHostConfig>& local_hosts,
+                              const std::optional<RouterConfig>& router,
+                              const QList<RouterHostConfig>& router_hosts,
+                              const QList<CredentialConfig>& credentials,
+                              const ProxyConfig& proxy);
 
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
     bool ensureDefaultProfile();
+    bool writeRouter(const RouterConfig& router);
     bool clearRouter();
+    bool resetSyncState();
+    bool discardSyncData();
+    bool setReceivedCredentialsRevision(qint64 revision);
 
     mutable SqlDatabase db_;
 };

@@ -26,6 +26,7 @@
 #include "client/config.h"
 #include "client/storage/database.h"
 #include "proto/key_exchange.h"
+#include "proto/router.h"
 
 namespace {
 
@@ -131,6 +132,44 @@ void RouterWorker::onTimer(TimePoint now)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorker::onChannelAuthenticated()
+{
+    if (!connection_ || !connection_->channel)
+        return;
+
+    connection_->channel->setPaused(false);
+    emit sig_authenticated(connection_->channel->peerVersion());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onChannelErrorOccurred(TcpChannel::ErrorCode error_code)
+{
+    if (!connection_)
+        return;
+
+    if (connection_->channel)
+    {
+        connection_->channel->disconnect();
+        connection_->channel->deleteLater();
+        connection_->channel = nullptr;
+    }
+
+    // The one-second timer retries once the countdown elapses.
+    connection_->reconnect_countdown = kReconnectTicks;
+
+    emit sig_errorOccurred(error_code);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorker::onChannelMessageReceived(quint8 channel_id, const QByteArray& buffer)
+{
+    if (channel_id == proto::router::CHANNEL_ID_SYNC)
+        emit sig_syncMessageReceived(buffer);
+    else
+        emit sig_sessionMessageReceived(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorker::startConnection()
 {
     if (!connection_ || connection_->channel)
@@ -172,38 +211,7 @@ void RouterWorker::startConnection()
 
     connect(channel, &TcpChannel::sig_authenticated, this, &RouterWorker::onChannelAuthenticated);
     connect(channel, &TcpChannel::sig_errorOccurred, this, &RouterWorker::onChannelErrorOccurred);
-    connect(channel, &TcpChannel::sig_messageReceived, this, &RouterWorker::sig_messageReceived);
+    connect(channel, &TcpChannel::sig_messageReceived, this, &RouterWorker::onChannelMessageReceived);
 
     channel->connectTo(addr.host(), addr.port());
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorker::onChannelAuthenticated()
-{
-    if (!connection_ || !connection_->channel)
-        return;
-
-    // Authentication passed; let the router replies flow and hand the peer version to the
-    // controller.
-    connection_->channel->setPaused(false);
-    emit sig_authenticated(connection_->channel->peerVersion());
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorker::onChannelErrorOccurred(TcpChannel::ErrorCode error_code)
-{
-    if (!connection_)
-        return;
-
-    if (connection_->channel)
-    {
-        connection_->channel->disconnect();
-        connection_->channel->deleteLater();
-        connection_->channel = nullptr;
-    }
-
-    // The one-second timer retries once the countdown elapses.
-    connection_->reconnect_countdown = kReconnectTicks;
-
-    emit sig_errorOccurred(error_code);
 }

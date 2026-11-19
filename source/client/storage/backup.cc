@@ -261,9 +261,17 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
 
     for (const RouterHostConfig& host : std::as_const(router_hosts))
     {
-        buildRouterHost(host, credential_guids.value(host.credentialId()),
-                        credential_guids.value(host.osCredentialId()), profile_guids.value(host.profileId()),
-                        data->add_router_hosts());
+        const QString credential_guid = credential_guids.value(host.credentialId());
+        const QString os_credential_guid = credential_guids.value(host.osCredentialId());
+        const QString profile_guid = profile_guids.value(host.profileId());
+
+        if (credential_guid.isEmpty() && os_credential_guid.isEmpty() && profile_guid.isEmpty() &&
+            host.username().isEmpty())
+        {
+            continue;
+        }
+
+        buildRouterHost(host, credential_guid, os_credential_guid, profile_guid, data->add_router_hosts());
         ++report->router_hosts;
     }
 

@@ -26,11 +26,13 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
+#include "common/android/message_dialog.h"
 #include "common/android/scroll_area.h"
 #include "common/android/switch.h"
 #include "proto/router.h"
@@ -49,7 +51,9 @@ RouterEditor::RouterEditor(QWidget* parent)
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
       switch_enabled_(new Switch(tr("Enabled"))),
-      label_error_(new Label(QString(), Label::Role::CAPTION))
+      switch_sync_(new Switch(tr("Synchronize data"))),
+      label_error_(new Label(QString(), Label::Role::CAPTION)),
+      button_reset_sync_(new Button(tr("Reset Synchronization"), Button::Role::TEXT))
 {
     edit_address_->setLabel(tr("Address"));
     edit_username_->setLabel(tr("User Name"));
@@ -65,6 +69,9 @@ RouterEditor::RouterEditor(QWidget* parent)
 
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
+    button_reset_sync_->setAccentColor(Controls::errorColor());
+    button_reset_sync_->hide();
+
     QWidget* form = new QWidget();
     QVBoxLayout* form_layout = new QVBoxLayout(form);
     form_layout->setContentsMargins(kFormMargin, kFormMargin, kFormMargin, kFormMargin);
@@ -74,7 +81,9 @@ RouterEditor::RouterEditor(QWidget* parent)
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
     form_layout->addWidget(switch_enabled_);
+    form_layout->addWidget(switch_sync_);
     form_layout->addWidget(save);
+    form_layout->addWidget(button_reset_sync_);
     form_layout->addStretch();
 
     ScrollArea* scroll = new ScrollArea(this);
@@ -86,6 +95,9 @@ RouterEditor::RouterEditor(QWidget* parent)
     layout->addWidget(scroll);
 
     connect(save, &Button::clicked, this, &RouterEditor::onSaveClicked);
+    connect(button_reset_sync_, &Button::clicked, this, &RouterEditor::onResetSyncClicked);
+    connect(&RouterController::instance(), &RouterController::sig_statusChanged,
+            this, &RouterEditor::onRouterStatusChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -98,7 +110,9 @@ void RouterEditor::prepareForAdd()
     edit_username_->clear();
     edit_password_->clear();
     switch_enabled_->setChecked(true);
+    switch_sync_->setChecked(false);
     label_error_->setVisible(false);
+    button_reset_sync_->hide();
 
     edit_address_->setFocus();
 }
@@ -118,7 +132,10 @@ bool RouterEditor::prepareForEdit()
     edit_username_->setText(router.username());
     edit_password_->setText(router.password().toString());
     switch_enabled_->setChecked(router.isEnabled());
+    switch_sync_->setChecked(router.isSyncEnabled());
     label_error_->setVisible(false);
+
+    onRouterStatusChanged();
 
     edit_address_->setFocus();
 
@@ -169,14 +186,10 @@ void RouterEditor::onSaveClicked()
     data.setUsername(username);
     data.setPassword(password);
     data.setEnabled(switch_enabled_->isChecked());
+    data.setSyncEnabled(switch_sync_->isChecked());
 
     Database& db = Database::instance();
 
-    // The token is not edited here. The login of this record writes a fresh one whenever a TOTP
-    // code is accepted, so it is read now instead of when the editor opened and a token issued
-    // meanwhile survives the save. It belongs to the account of the router, and an edit that
-    // changes the account leaves it behind, because presented for another one it would only be
-    // refused.
     RouterConfig stored;
     const Database::FindResult stored_found = db.routerConfig(&stored);
     if (stored_found == Database::FindResult::FAILED)
@@ -187,7 +200,20 @@ void RouterEditor::onSaveClicked()
     }
 
     if (stored_found == Database::FindResult::FOUND && stored.hasSameAccount(data))
-        data.setDeviceToken(stored.deviceToken());
+    {
+        if (stored.password() == data.password())
+            data.setDeviceToken(stored.deviceToken());
+    }
+
+    if (stored.isSyncConfirmationNeeded(data))
+    {
+        const QString text =
+            tr("The synchronized data of this device will be sent to the storage of the account \"%1\". "
+               "Continue?").arg(username);
+
+        if (!MessageDialog::confirm(this, tr("Confirmation"), text, tr("Continue")))
+            return;
+    }
 
     if (!db.setRouterConfig(data))
     {
@@ -196,6 +222,30 @@ void RouterEditor::onSaveClicked()
     }
 
     emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterEditor::onResetSyncClicked()
+{
+    const QString text =
+        tr("The synchronized data on the router and on the other devices of the account will be replaced with "
+           "the data of this device. Reset the synchronization?");
+
+    if (!MessageDialog::confirm(this, tr("Reset Synchronization"), text, tr("Reset")))
+        return;
+
+    if (!RouterController::resetSyncStorage())
+        showError(tr("Failed to reset the synchronization."));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterEditor::onRouterStatusChanged()
+{
+    RouterConfig router;
+    const bool sync_enabled =
+        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+
+    button_reset_sync_->setVisible(sync_enabled && RouterController::status() == RouterStatus::ONLINE);
 }
 
 //--------------------------------------------------------------------------------------------------

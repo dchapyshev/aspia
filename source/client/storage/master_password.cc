@@ -59,67 +59,23 @@ bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 MasterPassword::Result changeKeyAndReencrypt(
     const SecureByteArray& new_key, const QByteArray& new_salt, const QByteArray& new_verifier)
 {
-    Database& db = Database::instance();
-    if (!db.isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
+    Database::Reencryption reencryption(Database::instance());
+
+    const Database::ReencryptResult begun = reencryption.begin();
+    if (begun == Database::ReencryptResult::UNREADABLE_RECORD)
+        return MasterPassword::Result::UNREADABLE_RECORD;
+
+    if (begun != Database::ReencryptResult::DONE)
         return MasterPassword::Result::FAILED;
-    }
 
     DataCryptor& cryptor = DataCryptor::instance();
     const SecureByteArray old_key = cryptor.key();
 
-    QList<LocalHostConfig> local_hosts;
-    RouterConfig router;
-    QList<RouterHostConfig> router_hosts;
-    QList<CredentialConfig> credentials;
-    ProxyConfig proxy;
-
-    const Database::ReadResult read_results[] =
-    {
-        db.allLocalHosts(&local_hosts),
-        db.allRouterHosts(&router_hosts),
-        db.credentialList(&credentials),
-        db.proxyConfig(&proxy)
-    };
-
-    const Database::FindResult router_found = db.routerConfig(&router);
-    if (router_found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read the address book";
-        return MasterPassword::Result::FAILED;
-    }
-
-    bool incomplete = router_found == Database::FindResult::UNREADABLE;
-
-    for (Database::ReadResult read_result : read_results)
-    {
-        if (read_result == Database::ReadResult::FAILED)
-        {
-            LOG(ERROR) << "Unable to read the address book";
-            return MasterPassword::Result::FAILED;
-        }
-
-        if (read_result == Database::ReadResult::INCOMPLETE)
-            incomplete = true;
-    }
-
-    if (incomplete)
-    {
-        LOG(ERROR) << "Unable to read the address book completely";
-        return MasterPassword::Result::UNREADABLE_RECORD;
-    }
-
     cryptor.setKey(new_key);
 
-    std::optional<RouterConfig> stored_router;
-    if (router_found == Database::FindResult::FOUND)
-        stored_router = router;
-
-    if (!db.reencryptAll(local_hosts, stored_router, router_hosts, credentials, proxy, new_salt, new_verifier,
-                         kCurrentVersion))
+    if (!reencryption.commit(new_salt, new_verifier, kCurrentVersion))
     {
-        // Nothing was written, so restore the in-memory key to keep it consistent with the database.
+        LOG(ERROR) << "Unable to re-encrypt the database";
         cryptor.setKey(old_key);
         return MasterPassword::Result::FAILED;
     }

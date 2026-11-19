@@ -416,7 +416,11 @@ std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(q
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    if (findCredential(host.credentialId(), &credential) != FindResult::FOUND)
+    const FindResult found = findCredential(host.credentialId(), &credential);
+    if (found == FindResult::NOT_FOUND)
+        return std::make_pair(host.username(), host.password());
+
+    if (found != FindResult::FOUND)
         return std::nullopt;
 
     return std::make_pair(credential.username(), credential.password());

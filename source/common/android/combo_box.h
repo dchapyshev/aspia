@@ -29,14 +29,14 @@ class Animation;
 // focus, a label resting on the outline and a drop-down indicator. Keeps the QComboBox API, so it
 // is used the same way. Like Dialog, Menu and BottomSheet, the drop-down list is an overlay child
 // widget covering the window rather than a separate native window.
-class ComboBox final : public QComboBox
+class ComboBox : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QString label READ label WRITE setLabel)
 
 public:
     explicit ComboBox(QWidget* parent = nullptr);
-    ~ComboBox() final;
+    ~ComboBox() override;
 
     void setLabel(const QString& label);
     const QString& label() const { return label_; }

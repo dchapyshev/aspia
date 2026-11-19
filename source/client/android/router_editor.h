@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class Button;
 class Label;
 class LineEdit;
 class Switch;
@@ -47,6 +48,8 @@ signals:
 
 private slots:
     void onSaveClicked();
+    void onResetSyncClicked();
+    void onRouterStatusChanged();
 
 private:
     void showError(const QString& message);
@@ -55,7 +58,9 @@ private:
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     Switch* switch_enabled_ = nullptr;
+    Switch* switch_sync_ = nullptr;
     Label* label_error_ = nullptr;
+    Button* button_reset_sync_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterEditor)
 };

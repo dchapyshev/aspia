@@ -18,13 +18,13 @@
 
 #include "router/client_operator.h"
 
-
 #include "base/core_application.h"
 #include "base/serialization.h"
 #include "base/threading/worker.h"
 #include "proto/router.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+#include "proto/router_sync.h"
 #include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
@@ -153,6 +153,12 @@ void ClientOperator::setStunInfo(quint16 port)
 //--------------------------------------------------------------------------------------------------
 void ClientOperator::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id == proto::router::CHANNEL_ID_SYNC)
+    {
+        readSyncMessage(buffer);
+        return;
+    }
+
     if (channel_id != proto::router::CHANNEL_ID_CLIENT)
         return;
 
@@ -335,6 +341,7 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
         return;
     }
 
+    user_guid_ = user.guid;
     two_factor_completed_ = true;
     emit sig_twoFactorCompleted();
 
@@ -344,6 +351,7 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     proto::router::LoginResult* login_result = message.mutable_login_result();
     login_result->set_new_token(std::move(new_token));
     login_result->set_user_id(userId());
+    login_result->set_user_guid(user.guid.toStdString());
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
@@ -591,6 +599,115 @@ void ClientOperator::readChangePasswordRequest(const proto::router::ChangePasswo
     // above shares the fate of the channel, so the client keeps the new password by itself and
     // signs in with it, passing the two-factor stage on a fresh session.
     emit sig_stopClients(userId(), {});
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientOperator::readSyncMessage(const QByteArray& buffer)
+{
+    if (!two_factor_completed_)
+    {
+        CLOG(ERROR) << "Sync message before 2FA completion";
+        return;
+    }
+
+    proto::router::SyncToRouter message;
+    if (!parse(buffer, &message))
+    {
+        CLOG(ERROR) << "Could not read sync message from client";
+        return;
+    }
+
+    if (!sync_storage_.isValid())
+        sync_storage_.open(user_guid_);
+
+    proto::router::RouterToSync reply;
+    bool changed = false;
+    qint64 revision = 0;
+
+    if (message.has_storage_info_request())
+    {
+        proto::router::SyncStorageInfo* info = reply.mutable_storage_info();
+        info->set_request_id(message.storage_info_request().request_id());
+        sync_storage_.readStorageInfo(info);
+
+        if (info->error_code() != proto::router::kErrorOk)
+            CLOG(INFO) << "Sync storage info:" << info->error_code();
+    }
+    else if (message.has_storage_key_request())
+    {
+        const proto::router::SyncStorageKeyRequest& request = message.storage_key_request();
+
+        proto::router::SyncStorageInfo* info = reply.mutable_storage_info();
+        info->set_request_id(request.request_id());
+
+        switch (request.mode())
+        {
+            case proto::router::SyncStorageKeyRequest::MODE_CREATE:
+                sync_storage_.createStorage(request, info);
+                break;
+
+            case proto::router::SyncStorageKeyRequest::MODE_MODIFY:
+                sync_storage_.changeKey(request, info);
+                changed = info->error_code() == proto::router::kErrorOk;
+                break;
+
+            case proto::router::SyncStorageKeyRequest::MODE_RESET:
+                sync_storage_.resetStorage(request, info);
+                changed = info->error_code() == proto::router::kErrorOk;
+                break;
+
+            default:
+                CLOG(ERROR) << "Invalid sync key request mode:" << request.mode();
+                info->set_error_code(proto::router::kErrorInvalidRequest);
+                break;
+        }
+
+        revision = info->revision();
+
+        CLOG(INFO) << "Sync key request, mode:" << proto::router::SyncStorageKeyRequest::Mode_Name(request.mode())
+                   << "result:" << info->error_code()
+                   << "storage:" << QByteArray::fromStdString(info->storage_id()).toHex();
+    }
+    else if (message.has_record_list_request())
+    {
+        proto::router::SyncRecordList* list = reply.mutable_record_list();
+        list->set_request_id(message.record_list_request().request_id());
+        sync_storage_.readRecords(message.record_list_request(), list);
+
+        if (list->error_code() != proto::router::kErrorOk)
+            CLOG(WARNING) << "Sync record list refused:" << list->error_code();
+    }
+    else if (message.has_record_request())
+    {
+        proto::router::SyncRecordResult* result = reply.mutable_record_result();
+        result->set_request_id(message.record_request().request_id());
+        sync_storage_.storeRecords(message.record_request(), result, &changed);
+        revision = result->revision();
+
+        if (result->error_code() != proto::router::kErrorOk)
+        {
+            CLOG(WARNING) << "Sync records refused:" << result->error_code();
+        }
+        else
+        {
+            const qint64 refused = std::ranges::count(result->record_revision(), 0);
+            if (refused != 0)
+            {
+                CLOG(INFO) << "Sync records refused by revision:" << refused << "of"
+                           << result->record_revision_size();
+            }
+        }
+    }
+    else
+    {
+        CLOG(ERROR) << "Unhandled sync message from client";
+        return;
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_SYNC, serialize(reply));
+
+    if (changed)
+        emit sig_syncChanged(session_id_, revision);
 }
 
 //--------------------------------------------------------------------------------------------------

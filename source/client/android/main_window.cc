@@ -807,13 +807,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
 
     if (host.username().isEmpty() || host.password().isEmpty())
     {
-        QList<CredentialConfig> credentials;
-        if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
-            Database::ReadResult::OK)
-            LOG(ERROR) << "Unable to read credentials";
-
-        authorization_ =
-            new AuthorizationWindow(host, session_type, can_save_credentials, credentials);
+        authorization_ = new AuthorizationWindow(host, session_type, can_save_credentials);
         connect(authorization_, &AuthorizationWindow::sig_accepted,
                 this, &AndroidMainWindow::onAuthorizationAccepted);
         connect(authorization_, &AuthorizationWindow::sig_closed,

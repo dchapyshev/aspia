@@ -512,13 +512,6 @@ bool ClientWindow::askCredentials(HostConfig* host)
     auth_dialog->setUserName(host->username());
     auth_dialog->setPassword(host->password());
 
-    QList<CredentialConfig> credentials;
-    if (Database::instance().credentialList(&credentials, CredentialConfig::Type::ASPIA) !=
-        Database::ReadResult::OK)
-        LOG(ERROR) << "Unable to read credentials";
-
-    auth_dialog->setSavedCredentials(credentials);
-
     if (auth_dialog->exec() == AuthorizationDialog::Rejected)
     {
         LOG(INFO) << "Authorization rejected by user";

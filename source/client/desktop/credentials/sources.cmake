@@ -17,6 +17,8 @@
 #
 
 collect_sources(SOURCE_CLIENT_CORE_DESKTOP_CREDENTIALS
+    credential_combo_box.cc
+    credential_combo_box.h
     credential_dialog.cc
     credential_dialog.h
     credential_dialog.ui

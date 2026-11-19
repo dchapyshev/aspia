@@ -58,6 +58,7 @@ list(APPEND SOURCE_CLIENT
 list(APPEND SOURCE_CLIENT_TESTS
     config_unittest.cc
     desktop/authorization_dialog_unittest.cc
+    desktop/credentials/credential_combo_box_unittest.cc
     desktop/credentials/credential_list_model_unittest.cc
     desktop/management/access_log_list_model_unittest.cc
     desktop/management/client_list_model_unittest.cc
@@ -84,7 +85,10 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/database_migration_unittest.cc
     storage/database_unittest.cc
     storage/user_settings_unittest.cc
+    sync/sync_credentials_unittest.cc
+    sync/sync_crypto_unittest.cc
     tests_main.cc
+    workers/sync_worker_unittest.cc
     workers/video_worker_unittest.cc)
 
 if (WIN32)
@@ -128,6 +132,7 @@ include(desktop/management/sources.cmake)
 include(desktop/terminal/sources.cmake)
 include(router/sources.cmake)
 include(storage/sources.cmake)
+include(sync/sources.cmake)
 include(workers/sources.cmake)
 
 if (WIN32)
@@ -150,6 +155,7 @@ source_group(desktop\\terminal FILES ${SOURCE_CLIENT_CORE_DESKTOP_TERMINAL})
 source_group(desktop\\management FILES ${SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB})
 source_group(router FILES ${SOURCE_CLIENT_ROUTER})
 source_group(storage FILES ${SOURCE_CLIENT_STORAGE})
+source_group(sync FILES ${SOURCE_CLIENT_SYNC})
 source_group(win FILES ${SOURCE_CLIENT_WIN})
 source_group(workers FILES ${SOURCE_CLIENT_WORKERS})
 
@@ -180,6 +186,7 @@ if (ANDROID)
         ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
         ${SOURCE_CLIENT_ROUTER}
         ${SOURCE_CLIENT_STORAGE}
+        ${SOURCE_CLIENT_SYNC}
         ${SOURCE_CLIENT_WORKERS})
 else()
     add_library(aspia_client_core STATIC
@@ -197,6 +204,7 @@ else()
         ${SOURCE_CLIENT_CORE_MCP_TOOLS}
         ${SOURCE_CLIENT_ROUTER}
         ${SOURCE_CLIENT_STORAGE}
+        ${SOURCE_CLIENT_SYNC}
         ${SOURCE_CLIENT_WIN}
         ${SOURCE_CLIENT_WORKERS})
 endif()

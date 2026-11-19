@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QUuid>
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
@@ -70,6 +71,7 @@ bool ensureSchema(SqlDatabase& db)
              "\"otp_secret\" BLOB NOT NULL DEFAULT X'',"
              "\"otp_counter\" INTEGER NOT NULL DEFAULT 0,"
              "\"email\" TEXT NOT NULL DEFAULT '',"
+             "\"guid\" TEXT NOT NULL DEFAULT '',"
              "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         return false;
@@ -217,6 +219,87 @@ bool ensureSchema(SqlDatabase& db)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
+bool migrateTables(SqlDatabase& db)
+{
+    SqlTransaction transaction(db);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to start transaction:" << db.lastError();
+        return false;
+    }
+
+    qint64 version = 0;
+
+    {
+        SqlQuery query(db, "PRAGMA user_version");
+        if (query.next() != SqlQuery::StepResult::ROW)
+        {
+            LOG(ERROR) << "Unable to read the version of the schema:" << db.lastError();
+            return false;
+        }
+
+        version = query.columnInt64(0);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // 3.4.x -> 3.5.0
+    //----------------------------------------------------------------------------------------------
+    if (version < 1)
+    {
+        if (!db.addColumn("users", "guid", "TEXT NOT NULL DEFAULT ''"))
+            return false;
+
+        std::vector<qint64> users_without_guid;
+
+        {
+            SqlQuery query(db, "SELECT id FROM users WHERE guid=''");
+
+            for (;;)
+            {
+                const SqlQuery::StepResult step = query.next();
+                if (step == SqlQuery::StepResult::FAILED)
+                {
+                    LOG(ERROR) << "Unable to read the users without a guid:" << db.lastError();
+                    return false;
+                }
+
+                if (step == SqlQuery::StepResult::DONE)
+                    break;
+
+                users_without_guid.emplace_back(query.columnInt64(0));
+            }
+        }
+
+        for (qint64 user_id : users_without_guid)
+        {
+            SqlQuery query(db, "UPDATE users SET guid=? WHERE id=?");
+            query.addText(QUuid::createUuid().toString(QUuid::WithoutBraces));
+            query.addInt64(user_id);
+
+            if (!query.exec())
+            {
+                LOG(ERROR) << "Unable to give the user" << user_id << "a guid:" << db.lastError();
+                return false;
+            }
+        }
+
+        if (!db.exec("PRAGMA user_version = 1"))
+        {
+            LOG(ERROR) << "Unable to update the schema to version 1:" << db.lastError();
+            return false;
+        }
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -300,7 +383,7 @@ bool Database::open(const QString& file_path)
     if (!db_.exec("PRAGMA cache_size = -8000"))
         LOG(WARNING) << "Unable to set cache_size:" << db_.lastError();
 
-    if (!ensureSchema(db_))
+    if (!ensureSchema(db_) || !migrateTables(db_))
     {
         db_.close();
         return false;

@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "client/android/credential_selection_list.h"
+#include "client/router/router_controller.h"
 #include "client/storage/credential_file.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
@@ -235,10 +236,13 @@ void CredentialImportWidget::onImportClicked()
                    "Credentials added: %2\n"
                    "Credentials replaced: %3")
                     .arg(credential.displayName()).arg(added).arg(replaced));
+            RouterController::startSyncRecordExchange();
             emit sig_finished();
             return;
         }
     }
+
+    RouterController::startSyncRecordExchange();
 
     MessageDialog::info(this, tr("Import Credentials"),
         tr("Import completed successfully.\n"

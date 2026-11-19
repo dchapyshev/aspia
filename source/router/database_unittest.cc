@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 
 #include <QTemporaryDir>
+#include <QUuid>
 
 #include <set>
 #include <string>
@@ -31,6 +32,7 @@
 #include "base/peer/router_user.h"
 #include "base/peer/user.h"
 #include "base/sql/sql_database.h"
+#include "base/sql/sql_query.h"
 #include "proto/router.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
@@ -173,6 +175,62 @@ TEST_F(RouterDatabaseTest, AddUserStoresRecord)
     EXPECT_EQ(stored.sessions, proto::router::SESSION_TYPE_OPERATOR);
     EXPECT_EQ(stored.flags, quint32(User::ENABLED));
     EXPECT_EQ(stored.verifier, user.verifier);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The users table of 3.4.2 has no guid column. Opening such a database adds it and gives every
+// user a guid of its own.
+TEST_F(RouterDatabaseTest, UsersTableOf342GainsTheGuidColumn)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)), proto::router::kErrorOk);
+    ASSERT_TRUE(execRaw("ALTER TABLE users DROP COLUMN guid"));
+    ASSERT_TRUE(execRaw("PRAGMA user_version = 0"));
+
+    Database reopened;
+    ASSERT_TRUE(reopened.open(file_path_));
+
+    RouterUser admin;
+    ASSERT_EQ(reopened.findUser(admin_.entry_id, &admin), proto::router::kErrorOk);
+    EXPECT_FALSE(QUuid::fromString(admin.guid).isNull());
+
+    RouterUser bob;
+    ASSERT_EQ(reopened.findUser("bob", &bob), proto::router::kErrorOk);
+    EXPECT_FALSE(QUuid::fromString(bob.guid).isNull());
+    EXPECT_NE(bob.guid, admin.guid);
+
+    Database opened_again;
+    ASSERT_TRUE(opened_again.open(file_path_));
+
+    RouterUser unchanged;
+    ASSERT_EQ(opened_again.findUser("bob", &unchanged), proto::router::kErrorOk);
+    EXPECT_EQ(unchanged.guid, bob.guid);
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path_));
+
+    SqlQuery version(raw, "PRAGMA user_version");
+    ASSERT_EQ(version.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(version.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid names the user for as long as the record lives. A rename, which always comes with a
+// password, leaves it as it is, and a user added later gets another one.
+TEST_F(RouterDatabaseTest, GuidOfTheUserSurvivesARename)
+{
+    ASSERT_EQ(db_.addUser(makeUser("bob", proto::router::SESSION_TYPE_OPERATOR)), proto::router::kErrorOk);
+
+    const RouterUser bob = findUser("bob");
+    ASSERT_FALSE(QUuid::fromString(bob.guid).isNull());
+    EXPECT_NE(bob.guid, admin_.guid);
+
+    RouterUser renamed = makeUser("robert", proto::router::SESSION_TYPE_OPERATOR);
+    renamed.entry_id = bob.entry_id;
+    ASSERT_EQ(db_.modifyUser(renamed), proto::router::kErrorOk);
+
+    const RouterUser robert = findUser("robert");
+    EXPECT_EQ(robert.entry_id, bob.entry_id);
+    EXPECT_EQ(robert.guid, bob.guid);
 }
 
 //--------------------------------------------------------------------------------------------------

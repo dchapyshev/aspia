@@ -40,13 +40,14 @@ public:
 
     QList<QWidget*> appBarActions() const;
 
-    // Reads the records from the database again.
-    void reload();
-
     // Returns to the list from the editor, the export or the import screen. Driven by the app bar
     // back button.
     void goBack();
     bool isListPage() const;
+
+public slots:
+    // Reads the records from the database again.
+    void onReload();
 
 signals:
     // Requests the app bar to show |title|.
@@ -58,13 +59,13 @@ signals:
 private slots:
     void onAddCredential();
     void onShowMenu();
-    void onExport();
-    void onImport();
-    void onItemClicked(QTreeWidgetItem* item);
     void onReturnFromEditor();
+    void onShowList();
 
 private:
-    void showList();
+    void exportCredentials();
+    void importCredentials();
+    void editCredential(QTreeWidgetItem* item);
 
     QStackedWidget* stack_ = nullptr;
     TreeWidget* tree_ = nullptr;

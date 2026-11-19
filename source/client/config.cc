@@ -20,11 +20,13 @@
 
 #include <QStandardPaths>
 
+#include "base/build_config.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
+#include "base/net/address.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
 #include "proto/storage.h"
@@ -109,8 +111,23 @@ bool RouterConfig::isValid() const
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::hasSameAccount(const RouterConfig& other) const
 {
-    return address_ == other.address_ && username_ == other.username_ &&
-           password_ == other.password_;
+    if (username_.compare(other.username_, Qt::CaseInsensitive) != 0)
+        return false;
+
+    const Address address = Address::fromString(address_, kDefaultRouterClientTcpPort);
+    const Address other_address = Address::fromString(other.address_, kDefaultRouterClientTcpPort);
+
+    if (!address.isValid() || !other_address.isValid())
+        return address_ == other.address_;
+
+    return address.port() == other_address.port() &&
+           address.host().compare(other_address.host(), Qt::CaseInsensitive) == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterConfig::isSyncConfirmationNeeded(const RouterConfig& edited) const
+{
+    return edited.sync_enabled_ && !(sync_enabled_ && (hasSameAccount(edited) || !user_guid_.isEmpty()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,8 +137,15 @@ std::optional<QByteArray> RouterConfig::encryptedData() const
     data.set_address(address_.toStdString());
     data.set_username(username_.toStdString());
     data.set_device_token(device_token_.toStdString());
+    data.set_user_guid(user_guid_.toStdString());
     data.set_session_type(static_cast<quint32>(session_type_));
     data.set_enabled(enabled_);
+
+    proto::storage::RouterBlob::Sync* sync = data.mutable_sync();
+    sync->set_enabled(sync_enabled_);
+    sync->set_storage_id(sync_storage_id_.toStdString());
+    sync->set_storage_key(sync_storage_key_.constData(), static_cast<size_t>(sync_storage_key_.size()));
+    sync->set_storage_reset_pending(sync_storage_reset_pending_);
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
@@ -131,6 +155,7 @@ std::optional<QByteArray> RouterConfig::encryptedData() const
     memZero(data.mutable_address());
     memZero(data.mutable_username());
     memZero(data.mutable_password());
+    memZero(sync->mutable_storage_key());
 
     return sealed;
 }
@@ -142,6 +167,11 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     username_.clear();
     password_.clear();
     device_token_.clear();
+    user_guid_.clear();
+    sync_storage_id_.clear();
+    sync_storage_key_.clear();
+    sync_enabled_ = false;
+    sync_storage_reset_pending_ = false;
     session_type_ = proto::router::SESSION_TYPE_OPERATOR;
     enabled_ = true;
 
@@ -156,12 +186,20 @@ bool RouterConfig::setEncryptedData(const QByteArray& blob)
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
     device_token_ = QByteArray::fromStdString(data.device_token());
+    user_guid_ = QString::fromStdString(data.user_guid());
     session_type_ = static_cast<proto::router::SessionType>(data.session_type());
     enabled_ = data.enabled();
+
+    proto::storage::RouterBlob::Sync* sync = data.mutable_sync();
+    sync_enabled_ = sync->enabled();
+    sync_storage_id_ = QByteArray::fromStdString(sync->storage_id());
+    sync_storage_key_ = SecureByteArray(sync->storage_key().data(), static_cast<qsizetype>(sync->storage_key().size()));
+    sync_storage_reset_pending_ = sync->storage_reset_pending();
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
     memZero(data.mutable_password());
+    memZero(sync->mutable_storage_key());
 
     return true;
 }
@@ -287,11 +325,12 @@ bool CredentialConfig::isValid() const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> CredentialConfig::encryptedData() const
 {
-    proto::storage::HostBlob data;
+    proto::storage::CredentialBlob data;
     data.set_username(username_.toStdString());
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
+    data.set_unknown_data(unknown_data_.constData(), static_cast<size_t>(unknown_data_.size()));
 
     std::optional<QByteArray> sealed = sealMessage(data, credentialAad(guid_));
 
@@ -306,16 +345,18 @@ bool CredentialConfig::setEncryptedData(const QByteArray& blob)
 {
     username_.clear();
     password_.clear();
+    unknown_data_.clear();
 
     if (blob.isEmpty())
         return true;
 
-    proto::storage::HostBlob data;
+    proto::storage::CredentialBlob data;
     if (!unsealMessage(blob, credentialAad(guid_), &data))
         return false;
 
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
+    unknown_data_ = QByteArray::fromStdString(data.unknown_data());
 
     memZero(data.mutable_username());
     memZero(data.mutable_password());

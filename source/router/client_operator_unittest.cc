@@ -23,6 +23,7 @@
 #include "base/crypto/totp.h"
 #include "proto/router_admin.h"
 #include "proto/router_manager.h"
+#include "proto/router_sync.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/loopback_channel.h"
@@ -175,6 +176,57 @@ protected:
         proto::router::AccessLogListRequest* request = message.mutable_access_log_list_request();
         request->set_request_id(request_id);
         request->set_count(count);
+        return serialize(message);
+    }
+
+    static QByteArray syncStorageInfoRequest(qint64 request_id)
+    {
+        proto::router::SyncToRouter message;
+        message.mutable_storage_info_request()->set_request_id(request_id);
+        return serialize(message);
+    }
+
+    static QByteArray syncStorageKeyRequest(
+        proto::router::SyncStorageKeyRequest::Mode mode, const std::string& storage_id, qint64 key_revision = 0)
+    {
+        proto::router::SyncToRouter message;
+        proto::router::SyncStorageKeyRequest* request = message.mutable_storage_key_request();
+        request->set_request_id(1);
+        request->set_mode(mode);
+        request->set_storage_id(storage_id);
+        request->set_key_revision(key_revision);
+
+        proto::router::SyncStorageKey* key = request->mutable_key();
+        key->set_salt("salt");
+        key->set_verifier("verifier");
+        key->set_data("data");
+        return serialize(message);
+    }
+
+    static QByteArray syncRecordListRequest(const std::string& storage_id)
+    {
+        proto::router::SyncToRouter message;
+        proto::router::SyncRecordListRequest* request = message.mutable_record_list_request();
+        request->set_request_id(1);
+        request->set_storage_id(storage_id);
+        request->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
+        request->set_count(proto::router::kMaxSyncPageSize);
+        return serialize(message);
+    }
+
+    // A change of the record |id| based on |revision|.
+    static QByteArray syncRecordRequest(const std::string& storage_id, const std::string& id, qint64 revision)
+    {
+        proto::router::SyncToRouter message;
+        proto::router::SyncRecordRequest* request = message.mutable_record_request();
+        request->set_request_id(1);
+        request->set_storage_id(storage_id);
+
+        proto::router::SyncRecord* record = request->add_record();
+        record->set_revision(revision);
+        record->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
+        record->set_id(id);
+        record->set_data("data");
         return serialize(message);
     }
 
@@ -342,6 +394,33 @@ TEST_F(ClientOperatorTest, ValidCodeOpensTheSessionWithAToken)
         ASSERT_TRUE(message.has_login_result());
         EXPECT_FALSE(message.login_result().new_token().empty());
         EXPECT_EQ(message.login_result().user_id(), admin_.entry_id);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The answer that opens the session names the user by the guid, which stays the same when the
+// user is renamed.
+TEST_F(ClientOperatorTest, LoginResultCarriesTheGuidOfTheUser)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                       [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        client.start();
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_CLIENT,
+                         totpResponse(Totp::code(secret_, QDateTime::currentSecsSinceEpoch())));
+
+        ASSERT_EQ(channel->sent().size(), 1);
+
+        proto::router::RouterToClient message;
+        ASSERT_TRUE(parse(channel->sent().at(0).buffer, &message));
+        ASSERT_TRUE(message.has_login_result());
+
+        RouterUser stored;
+        ASSERT_EQ(db_.findUser(admin_.entry_id, &stored), proto::router::kErrorOk);
+        ASSERT_FALSE(stored.guid.isEmpty());
+        EXPECT_EQ(message.login_result().user_guid(), stored.guid.toStdString());
     });
 }
 
@@ -1186,5 +1265,169 @@ TEST_F(ClientOperatorTest, RefusedRequestsDoNotSpendTheBudget)
         }
 
         EXPECT_FALSE(ClientOperatorTestPeer::isOfferLimitReached(client, Clock::now()));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, SyncRequestIsAnsweredAfterTheStage)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+        EXPECT_FALSE(client.isSyncUsed());
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncStorageInfoRequest(77));
+
+        const std::optional<proto::router::RouterToSync> message =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(message.has_value());
+        ASSERT_TRUE(message->has_storage_info());
+        EXPECT_EQ(message->storage_info().request_id(), 77);
+        EXPECT_EQ(message->storage_info().error_code(), proto::router::kErrorNotFound);
+        EXPECT_TRUE(client.isSyncUsed());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, SyncMessageBeforeTheStageIsDropped)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [](ClientOperator& client, LoopbackChannel* channel)
+    {
+        client.start();
+        channel->clearSent();
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncStorageInfoRequest(77));
+
+        EXPECT_TRUE(channel->nothingSent());
+        EXPECT_FALSE(client.isSyncUsed());
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, ManagerAnswersSyncRequests)
+{
+    withClient<ClientManager>(proto::router::SESSION_TYPE_MANAGER,
+                              [this](ClientManager& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncStorageInfoRequest(77));
+
+        const std::optional<proto::router::RouterToSync> message =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(message.has_value());
+        EXPECT_EQ(message->storage_info().request_id(), 77);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, AdminAnswersSyncRequests)
+{
+    withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
+                            [this](ClientAdmin& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncStorageInfoRequest(77));
+
+        const std::optional<proto::router::RouterToSync> message =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(message.has_value());
+        EXPECT_EQ(message->storage_info().request_id(), 77);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The session announces a change only when the storage has taken one, which is a stored record, a
+// changed key or a reset. A refused record, a refused key, a read and a new storage are not
+// announced.
+TEST_F(ClientOperatorTest, StoredSyncChangesAreAnnounced)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        std::vector<qint64> changes;
+        QObject::connect(&client, &ClientOperator::sig_syncChanged, &client,
+                         [&changes, &client](qint64 session_id, qint64 revision)
+        {
+            EXPECT_EQ(session_id, client.sessionId());
+            changes.emplace_back(revision);
+        });
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC,
+                         syncStorageKeyRequest(proto::router::SyncStorageKeyRequest::MODE_CREATE, std::string()));
+
+        const std::optional<proto::router::RouterToSync> created =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(created.has_value());
+        ASSERT_EQ(created->storage_info().error_code(), proto::router::kErrorOk);
+
+        const std::string storage_id = created->storage_info().storage_id();
+        EXPECT_TRUE(changes.empty());
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncRecordRequest(storage_id, "a", 0));
+
+        const std::optional<proto::router::RouterToSync> stored =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(stored.has_value());
+        ASSERT_EQ(stored->record_result().error_code(), proto::router::kErrorOk);
+        EXPECT_EQ(changes, std::vector<qint64>({ 1 }));
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncRecordRequest(storage_id, "a", 0));
+        channel->receive(proto::router::CHANNEL_ID_SYNC, syncRecordListRequest(storage_id));
+
+        const std::optional<proto::router::RouterToSync> list =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(list.has_value());
+        EXPECT_EQ(list->record_list().record_size(), 1);
+        EXPECT_EQ(changes, std::vector<qint64>({ 1 }));
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC,
+                         syncStorageKeyRequest(proto::router::SyncStorageKeyRequest::MODE_MODIFY, storage_id,
+                                               created->storage_info().key_revision()));
+
+        const std::optional<proto::router::RouterToSync> changed =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(changed.has_value());
+        ASSERT_EQ(changed->storage_info().error_code(), proto::router::kErrorOk);
+        EXPECT_EQ(changes, std::vector<qint64>({ 1, 1 }));
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC,
+                         syncStorageKeyRequest(proto::router::SyncStorageKeyRequest::MODE_MODIFY, storage_id,
+                                               created->storage_info().key_revision()));
+
+        const std::optional<proto::router::RouterToSync> refused =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(refused.has_value());
+        ASSERT_EQ(refused->storage_info().error_code(), proto::router::kErrorConflict);
+        EXPECT_EQ(changes, std::vector<qint64>({ 1, 1 }));
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC,
+                         syncStorageKeyRequest(proto::router::SyncStorageKeyRequest::MODE_RESET, storage_id));
+
+        EXPECT_EQ(changes, std::vector<qint64>({ 1, 1, 0 }));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(ClientOperatorTest, SyncStorageKeyRequestOfUnknownModeIsRefused)
+{
+    withClient<ClientOperator>(proto::router::SESSION_TYPE_OPERATOR,
+                               [this](ClientOperator& client, LoopbackChannel* channel)
+    {
+        passTwoFactor(&client, channel);
+
+        channel->receive(proto::router::CHANNEL_ID_SYNC,
+                         syncStorageKeyRequest(proto::router::SyncStorageKeyRequest::MODE_UNKNOWN, std::string()));
+
+        const std::optional<proto::router::RouterToSync> message =
+            lastMessage<proto::router::RouterToSync>(channel, proto::router::CHANNEL_ID_SYNC);
+        ASSERT_TRUE(message.has_value());
+        EXPECT_EQ(message->storage_info().request_id(), 1);
+        EXPECT_EQ(message->storage_info().error_code(), proto::router::kErrorInvalidRequest);
     });
 }

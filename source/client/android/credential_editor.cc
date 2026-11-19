@@ -26,6 +26,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/peer/user.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -208,14 +209,15 @@ void CredentialEditor::onSaveClicked()
 
     Database& db = Database::instance();
 
-    const bool saved = (credential_id_ < 0) ? db.addCredential(credential)
-                                            : db.modifyCredential(credential);
+    const bool saved = (credential_id_ < 0) ?
+        db.addCredential(credential) : db.modifyCredential(credential);
     if (!saved)
     {
         showError(tr("Failed to save the credentials."));
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 
@@ -223,7 +225,7 @@ void CredentialEditor::onSaveClicked()
 void CredentialEditor::onDeleteClicked()
 {
     if (!MessageDialog::confirm(this, tr("Delete Credentials"),
-                                tr("Delete the credentials \"%1\"?").arg(edit_name_->text()), tr("Delete")))
+        tr("Delete the credentials \"%1\"?").arg(edit_name_->text()), tr("Delete")))
     {
         return;
     }
@@ -234,6 +236,7 @@ void CredentialEditor::onDeleteClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 

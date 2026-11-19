@@ -31,6 +31,7 @@
 #include "client/desktop/credentials/credential_export_dialog.h"
 #include "client/desktop/credentials/credential_import_dialog.h"
 #include "client/desktop/credentials/credential_list_model.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
@@ -74,6 +75,15 @@ CredentialsTab::CredentialsTab(QWidget* parent)
     connect(ui->action_add, &QAction::triggered, this, &CredentialsTab::onAddAction);
     connect(ui->action_edit, &QAction::triggered, this, &CredentialsTab::onEditAction);
     connect(ui->action_delete, &QAction::triggered, this, &CredentialsTab::onDeleteAction);
+
+    connect(&RouterController::instance(), &RouterController::sig_credentialsChanged, this, [this]()
+    {
+        if (!isVisibleTo(window()))
+            return;
+
+        const CredentialConfig* credential = selectedCredential();
+        reload(credential ? credential->id() : -1);
+    });
 
     addActions(ActionRole::FILE, { ui->action_export, ui->action_import });
     addActions(ActionRole::EDIT, { ui->action_add, ui->action_edit, ui->action_delete });
@@ -208,6 +218,7 @@ void CredentialsTab::onDeleteAction()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     reload(-1);
 }
 
@@ -260,10 +271,7 @@ void CredentialsTab::reload(qint64 credential_id)
 
     const int row = model_->rowOf(credential_id);
     if (row >= 0)
-    {
-        ui->tree_credentials->selectionModel()->select(
-            model_->index(row, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-    }
+        ui->tree_credentials->setCurrentIndex(model_->index(row, 0));
 
     onSelectionChanged();
 }

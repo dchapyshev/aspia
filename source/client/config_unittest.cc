@@ -20,6 +20,7 @@
 
 #include <gtest/gtest.h>
 
+#include "base/build_config.h"
 #include "proto/router.h"
 
 namespace {
@@ -37,10 +38,13 @@ RouterConfig makeConfig()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// The account predicate decides whether the editors carry the device token over: the router
-// binds the token to the user, so the address, the user name and the password make the account.
-// The session type is not part of it.
-TEST(RouterConfigTest, SameAccountFollowsTheCredentialsOnly)
+// The account predicate decides whether the editors carry the synchronization over: the storage
+// on the router belongs to the account, and its key stays the same when the password of the
+// account changes. So the address and the user name make the account, and neither the password
+// nor the session type is part of it. The address is the host and the port the device connects
+// to, and the router compares the names of the users regardless of the case, so another spelling
+// of the same host, port or name is the same account.
+TEST(RouterConfigTest, SameAccountFollowsTheAddressAndTheUserName)
 {
     const RouterConfig base = makeConfig();
     EXPECT_TRUE(base.hasSameAccount(makeConfig()));
@@ -50,14 +54,59 @@ TEST(RouterConfigTest, SameAccountFollowsTheCredentialsOnly)
     EXPECT_FALSE(base.hasSameAccount(other));
 
     other = makeConfig();
+    other.setAddress("Router.Example.com");
+    EXPECT_TRUE(base.hasSameAccount(other));
+
+    other = makeConfig();
+    other.setAddress(QString("router.example.com:%1").arg(kDefaultRouterClientTcpPort));
+    EXPECT_TRUE(base.hasSameAccount(other));
+
+    other = makeConfig();
+    other.setAddress(QString("router.example.com:%1").arg(kDefaultRouterClientTcpPort + 1));
+    EXPECT_FALSE(base.hasSameAccount(other));
+
+    other = makeConfig();
     other.setUsername("somebody");
     EXPECT_FALSE(base.hasSameAccount(other));
 
     other = makeConfig();
+    other.setUsername("User");
+    EXPECT_TRUE(base.hasSameAccount(other));
+
+    other = makeConfig();
     other.setPassword(SecureString(QString("rotated")));
-    EXPECT_FALSE(base.hasSameAccount(other));
+    EXPECT_TRUE(base.hasSameAccount(other));
 
     other = makeConfig();
     other.setSessionType(proto::router::SESSION_TYPE_OPERATOR);
     EXPECT_TRUE(base.hasSameAccount(other));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Turning the synchronization on asks the user, unless it goes on with the same account or a known user.
+TEST(RouterConfigTest, SyncConfirmationIsNeededUnlessTheAccountOrTheUserIsKnown)
+{
+    RouterConfig edited = makeConfig();
+    edited.setSyncEnabled(true);
+
+    RouterConfig another = edited;
+    another.setUsername("somebody");
+
+    RouterConfig stored = makeConfig();
+    EXPECT_TRUE(stored.isSyncConfirmationNeeded(edited));
+    EXPECT_TRUE(stored.isSyncConfirmationNeeded(another));
+
+    stored.setSyncEnabled(true);
+    EXPECT_FALSE(stored.isSyncConfirmationNeeded(edited));
+    EXPECT_TRUE(stored.isSyncConfirmationNeeded(another));
+
+    stored.setUserGuid("6f1c2b0e-5d4a-4c3b-9a8f-7e6d5c4b3a21");
+    EXPECT_FALSE(stored.isSyncConfirmationNeeded(edited));
+    EXPECT_FALSE(stored.isSyncConfirmationNeeded(another));
+
+    stored.setSyncEnabled(false);
+    EXPECT_TRUE(stored.isSyncConfirmationNeeded(another));
+
+    another.setSyncEnabled(false);
+    EXPECT_FALSE(stored.isSyncConfirmationNeeded(another));
 }

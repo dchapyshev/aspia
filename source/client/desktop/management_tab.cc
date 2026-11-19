@@ -1675,8 +1675,17 @@ void ManagementTab::onImportBookAction()
         return;
     }
 
-    if (MsgBox::question(this, tr("Everything stored now is deleted and replaced with what the "
-                                  "backup holds. Continue?")) == MsgBox::No)
+    RouterConfig router;
+    const bool sync_enabled =
+        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+
+    const QString question = sync_enabled ?
+        tr("Everything stored now is deleted and replaced with what the backup holds. The synchronized data "
+           "on the router and on the other devices of the account saved in the backup will be replaced as "
+           "well. Continue?") :
+        tr("Everything stored now is deleted and replaced with what the backup holds. Continue?");
+
+    if (MsgBox::question(this, question) == MsgBox::No)
     {
         LOG(INFO) << "[ACTION] Cancelled by user";
         return;

@@ -19,12 +19,11 @@
 #ifndef CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_PANEL_H
 #define CLIENT_DESKTOP_CREDENTIALS_CREDENTIAL_PANEL_H
 
-#include <QList>
 #include <QWidget>
 
 #include "client/config.h"
 
-class QComboBox;
+class CredentialComboBox;
 class QLabel;
 class QToolButton;
 
@@ -60,9 +59,8 @@ private:
     void updatePosition();
 
     QLabel* label_message_ = nullptr;
-    QComboBox* combo_credential_ = nullptr;
+    CredentialComboBox* combo_credential_ = nullptr;
     QToolButton* sign_in_button_ = nullptr;
-    QList<CredentialConfig> credentials_;
 
     Q_DISABLE_COPY_MOVE(CredentialPanel)
 };

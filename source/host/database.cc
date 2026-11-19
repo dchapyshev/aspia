@@ -99,6 +99,40 @@ bool createTables(SqlDatabase& db)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
+bool migrateTables(SqlDatabase& db)
+{
+    SqlTransaction transaction(db);
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction:" << db.lastError();
+        return false;
+    }
+
+    qint64 version = 0;
+
+    {
+        SqlQuery query(db, "PRAGMA user_version");
+        if (query.next() != SqlQuery::StepResult::ROW)
+        {
+            LOG(ERROR) << "Unable to read the version of the schema:" << db.lastError();
+            return false;
+        }
+
+        version = query.columnInt64(0);
+    }
+
+    LOG(INFO) << "Version of the schema:" << version;
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -797,7 +831,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_))
+    if (!createTables(db_) || !migrateTables(db_))
     {
         db_.close();
         return false;

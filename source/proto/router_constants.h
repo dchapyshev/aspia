@@ -57,6 +57,16 @@ namespace proto::router {
 [[maybe_unused]] constexpr size_t kMaxEntryNameLength = 64;
 [[maybe_unused]] constexpr size_t kMaxCommentLength = 2048;
 
+// Bounds on the synchronized data of a user. Sizes are in bytes and the id length is in characters.
+// kMaxSyncPageSize bounds both a list reply and a write request.
+[[maybe_unused]] constexpr int kSyncStorageIdSize = 16;
+[[maybe_unused]] constexpr size_t kMaxSyncStorageKeyFieldSize = 256;
+[[maybe_unused]] constexpr size_t kMaxSyncRecordIdLength = 64;
+[[maybe_unused]] constexpr size_t kMaxSyncRecordDataSize = 32 * 1024;
+[[maybe_unused]] constexpr int kMaxSyncRecordCount = 30000;
+[[maybe_unused]] constexpr int kMaxSyncDeletedRecordCount = 30000;
+[[maybe_unused]] constexpr int kMaxSyncPageSize = 100;
+
 // Version of the JSON the host sends in HostTelemetry.
 [[maybe_unused]] constexpr int kTelemetryVersion = 1;
 
@@ -110,6 +120,7 @@ extern const char* const kErrorLostConnection;
 extern const char* const kErrorHostOffline;
 extern const char* const kErrorKeyPoolEmpty;
 extern const char* const kErrorTooManyRequests;
+extern const char* const kErrorLimitExceeded;
 
 } // namespace proto::router
 

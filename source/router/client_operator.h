@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
+#include "router/sync_storage.h"
 #include "router/handlers/request_caller.h"
 #include "router/handlers/two_factor_handler.h"
 
@@ -76,6 +77,7 @@ public:
     void setStunInfo(quint16 port);
 
     bool isTwoFactorCompleted() const { return two_factor_completed_; }
+    bool isSyncUsed() const { return sync_storage_.isValid(); }
 
     // Router-side row id of the device token bound to this session, either the one it presented
     // or the one just issued to it; 0 when no token backs the session. Lets the admin channel
@@ -88,6 +90,7 @@ signals:
     void sig_finished(qint64 session_id);
     void sig_notifyChanged(quint32 flags);
     void sig_stopClients(qint64 user_id, const std::vector<qint64>& token_ids);
+    void sig_syncChanged(qint64 session_id, qint64 revision);
 
 protected:
     LOG_DECLARE_CONTEXT(ClientOperator);
@@ -130,6 +133,7 @@ private:
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
     void readGroupListRequest(const proto::router::GroupListRequest& request);
     void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
+    void readSyncMessage(const QByteArray& buffer);
 
     // Whether the session has issued as many connection offers as it may within the current
     // window. Only issued offers count, so a client retrying an offline host is not held back.
@@ -147,6 +151,9 @@ private:
     TwoFactorHandler two_factor_;
     bool two_factor_completed_ = false;
     qint64 token_id_ = 0;
+
+    QString user_guid_;
+    SyncStorage sync_storage_;
 
     TimePoint offer_window_start_;
     int offer_count_ = 0;

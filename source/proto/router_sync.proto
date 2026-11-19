@@ -1,0 +1,154 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.router;
+
+enum SyncDataType
+{
+    SYNC_DATA_TYPE_UNKNOWN     = 0;
+    SYNC_DATA_TYPE_CREDENTIALS = 1;
+}
+
+message SyncCredential
+{
+    uint32 type         = 1;
+    string display_name = 2;
+    string username     = 3;
+    string password     = 4;
+}
+
+// The key the records are encrypted with, sealed by the client.
+message SyncStorageKey
+{
+    bytes salt     = 1;
+    bytes verifier = 2;
+    bytes data     = 3;
+}
+
+message SyncStorageInfoRequest
+{
+    int64 request_id = 1;
+}
+
+message SyncStorageKeyRequest
+{
+    enum Mode
+    {
+        MODE_UNKNOWN = 0;
+        // Creates the storage of the user. Refused when the user already has one.
+        MODE_CREATE  = 1;
+        // Replaces the key of |storage_id|. |key_revision| is the one the client saw last.
+        MODE_MODIFY  = 2;
+        // Drops the records of |storage_id| and gives the storage a new id. Creates the storage when the
+        // user has none.
+        MODE_RESET   = 3;
+    }
+
+    int64 request_id   = 1;
+    Mode mode          = 2;
+    bytes storage_id   = 3;
+    int64 key_revision = 4;
+    SyncStorageKey key = 5;
+}
+
+// Answer to SyncStorageInfoRequest and to SyncStorageKeyRequest.
+message SyncStorageInfo
+{
+    int64 request_id   = 1;
+    // "ok" | "invalid_request" | "already_exists" | "not_found" | "conflict" | "internal_error"
+    string error_code  = 2;
+    bytes storage_id   = 3;
+    bool reset         = 4;
+    int64 revision     = 5; // Revision of the newest record.
+    int64 key_revision = 6;
+    SyncStorageKey key = 7;
+}
+
+message SyncRecord
+{
+    int64 revision    = 1;
+    int64 time        = 2; // Unix seconds of the moment the router stored the record. Set by the router.
+    SyncDataType type = 3;
+    string id         = 4;
+    bool deleted      = 5;
+    bytes data        = 6; // Empty when |deleted| is set.
+}
+
+message SyncRecordListRequest
+{
+    int64 request_id  = 1;
+    bytes storage_id  = 2;
+    SyncDataType type = 3;
+    int64 revision    = 4; // Only the records newer than this revision are returned, the oldest first.
+    int64 count       = 5; // Records to return. A zero count is refused, as is one over the cap.
+}
+
+message SyncRecordList
+{
+    int64 request_id           = 1;
+    string error_code          = 2; // "ok" | "invalid_request" | "not_found" | "internal_error"
+    int64 revision             = 3; // Revision of the newest record of the storage.
+    int64 current_time         = 4; // Unix seconds of the router at the moment of the answer.
+    bool has_more              = 5;
+    repeated SyncRecord record = 6;
+}
+
+// |revision| of a record is the revision the sender based its change on, zero for a new record.
+message SyncRecordRequest
+{
+    int64 request_id           = 1;
+    bytes storage_id           = 2;
+    repeated SyncRecord record = 3;
+}
+
+message SyncRecordResult
+{
+    int64 request_id               = 1;
+    // "ok" | "invalid_request" | "not_found" | "limit_exceeded" | "internal_error"
+    string error_code              = 2;
+    int64 revision                 = 3; // Revision of the newest record of the storage.
+    // New revisions of the records of the request, in its order. Zero stands for a record that was
+    // not stored, because the storage holds a revision other than the one the change was based on.
+    repeated int64 record_revision = 4;
+}
+
+// Tells the other sessions of the user that the records of the storage have changed.
+message SyncStorageNotification
+{
+    int64 revision = 1;
+}
+
+message RouterToSync
+{
+    SyncStorageInfo storage_info                 = 1;
+    SyncRecordList record_list                   = 2;
+    SyncRecordResult record_result               = 3;
+    SyncStorageNotification storage_notification = 4;
+}
+
+message SyncToRouter
+{
+    SyncStorageInfoRequest storage_info_request = 1;
+    SyncStorageKeyRequest storage_key_request   = 2;
+    SyncRecordListRequest record_list_request   = 3;
+    SyncRecordRequest record_request            = 4;
+}

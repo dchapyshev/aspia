@@ -305,6 +305,12 @@ bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
         return false;
     }
 
+    if (!to.exec("UPDATE credentials SET sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to mark the credentials to be sent:" << to.lastError();
+        return false;
+    }
+
     if (!copyRows(from, to, "local_groups",
                   { { "id", Kind::INTEGER }, { "parent_id", Kind::INTEGER }, { "name", Kind::TEXT },
                     { "comment", Kind::TEXT }, { "guid", Kind::TEXT } }))
@@ -523,7 +529,7 @@ bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
     // What the user entered here already stays as it is.
     RouterConfig stored_router;
     if (router.has_value() && db.routerConfig(&stored_router) == Database::FindResult::NOT_FOUND &&
-        !db.setRouterConfig(*router))
+        !db.writeRouter(*router))
     {
         return false;
     }

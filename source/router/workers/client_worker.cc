@@ -32,12 +32,14 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
+#include "proto/router_sync.h"
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/client_operator.h"
 #include "router/database.h"
 #include "router/router_user_list.h"
 #include "router/settings.h"
+#include "router/sync_storage.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
@@ -85,6 +87,8 @@ void ClientWorker::onPrepare()
 
     access_log_.open(AccessLog::filePath());
     access_log_days_ = settings.accessLogDays();
+
+    removeUnusedSyncStorages(Database::instance());
 
     QString listen_interface = settings.clientListenInterface();
     if (!NetUtils::isValidListenInterface(listen_interface))
@@ -339,6 +343,7 @@ void ClientWorker::onNewConnection()
         connect(client, &ClientOperator::sig_finished, this, &ClientWorker::onSessionFinished);
         connect(client, &ClientOperator::sig_notifyChanged, this, &ClientWorker::onNotifyChanged);
         connect(client, &ClientOperator::sig_stopClients, this, &ClientWorker::onStopClients);
+        connect(client, &ClientOperator::sig_syncChanged, this, &ClientWorker::onSyncChanged);
         client->start();
 
         updateClientsMask();
@@ -512,6 +517,32 @@ void ClientWorker::onClientRequest(const proto::router::ClientRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientWorker::onSyncChanged(qint64 session_id, qint64 revision)
+{
+    const auto session = std::ranges::find_if(clients_, [session_id](const ClientOperator* client)
+    {
+        return client->sessionId() == session_id;
+    });
+
+    if (session == clients_.end())
+        return;
+
+    const qint64 user_id = (*session)->userId();
+
+    proto::router::RouterToSync message;
+    message.mutable_storage_notification()->set_revision(revision);
+
+    const QByteArray payload = serialize(message);
+
+    const std::vector<ClientOperator*> client_sessions = clients_;
+    for (ClientOperator* client : client_sessions)
+    {
+        if (client->sessionId() != session_id && client->userId() == user_id && client->isSyncUsed())
+            client->sendMessage(proto::router::CHANNEL_ID_SYNC, payload);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 std::vector<qint64> ClientWorker::sessionsToStop(const std::vector<qint64>& session_ids,
                                                  qint64 entry_id, qint64 requesting_session_id)
@@ -606,4 +637,21 @@ void ClientWorker::updateClientsMask()
 
     clients_mask_ = clients_mask;
     emit sig_clientsChanged(clients_mask_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void ClientWorker::removeUnusedSyncStorages(Database& database)
+{
+    const QStringList user_guids = SyncStorage::userGuids();
+
+    for (const QString& user_guid : user_guids)
+    {
+        RouterUser user;
+        if (database.findUserByGuid(user_guid, &user) != proto::router::kErrorNotFound)
+            continue;
+
+        if (SyncStorage::remove(user_guid))
+            LOG(INFO) << "Removed the sync storage of the missing user" << user_guid;
+    }
 }

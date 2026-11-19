@@ -19,7 +19,6 @@
 #include "client/desktop/credentials/credential_panel.h"
 
 #include <QApplication>
-#include <QComboBox>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QIcon>
@@ -29,7 +28,7 @@
 #include <QVBoxLayout>
 
 #include "base/logging.h"
-#include "client/storage/database.h"
+#include "client/desktop/credentials/credential_combo_box.h"
 
 namespace {
 
@@ -49,9 +48,16 @@ CredentialPanel::CredentialPanel(QWidget* parent)
     label_message_->setStyleSheet("color: #e5484d;");
     label_message_->hide();
 
-    combo_credential_ = new QComboBox(this);
+    combo_credential_ = new CredentialComboBox(this);
+    combo_credential_->setCredentialType(CredentialConfig::Type::OS);
+    combo_credential_->setPlaceholderText(tr("Not Selected"));
     combo_credential_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(combo_credential_, &QComboBox::currentIndexChanged, this, &CredentialPanel::onCurrentCredentialChanged);
+    connect(combo_credential_, &CredentialComboBox::sig_reloaded, this, [this]()
+    {
+        if (isVisible() && combo_credential_->count() == 0)
+            onDismiss();
+    });
 
     sign_in_button_ = new QToolButton(this);
     sign_in_button_->setIcon(QIcon(":/img/login.svg"));
@@ -86,46 +92,13 @@ CredentialPanel::~CredentialPanel() = default;
 //--------------------------------------------------------------------------------------------------
 void CredentialPanel::popup(qint64 credential_id, const QString& message)
 {
-    QList<CredentialConfig> credentials;
-    if (Database::instance().credentialList(&credentials, CredentialConfig::Type::OS) != Database::ReadResult::OK)
-        LOG(ERROR) << "Unable to read credentials";
-
-    credentials_.clear();
-    combo_credential_->clear();
-
-    int current = -1;
-
-    for (const CredentialConfig& credential : std::as_const(credentials))
-    {
-        if (!credential.isValid())
-            continue;
-
-        if (credential.id() == credential_id)
-            current = credentials_.size();
-
-        credentials_.append(credential);
-    }
-
-    if (credentials_.isEmpty())
+    if (!combo_credential_->onReload() || combo_credential_->count() == 0)
     {
         onDismiss();
         return;
     }
 
-    const QIcon icon(":/img/keys.svg");
-
-    if (current < 0)
-    {
-        const QPixmap disabled = icon.pixmap(combo_credential_->iconSize(), devicePixelRatioF(), QIcon::Disabled);
-        combo_credential_->addItem(QIcon(disabled), tr("Not Selected"));
-    }
-
-    for (int i = 0; i < credentials_.size(); ++i)
-        combo_credential_->addItem(icon, credentials_[i].displayName(), i);
-
-    if (current >= 0)
-        combo_credential_->setCurrentIndex(combo_credential_->findData(current));
-
+    combo_credential_->setCurrentCredentialId(credential_id);
     onCurrentCredentialChanged();
 
     label_message_->setText(message);
@@ -140,15 +113,11 @@ void CredentialPanel::popup(qint64 credential_id, const QString& message)
 //--------------------------------------------------------------------------------------------------
 bool CredentialPanel::signIn()
 {
-    const QVariant data = combo_credential_->currentData();
-    if (!data.isValid())
+    const CredentialConfig* selected = combo_credential_->currentCredential();
+    if (!selected)
         return false;
 
-    const int index = data.toInt();
-    if (index < 0 || index >= credentials_.size())
-        return false;
-
-    const CredentialConfig credential = credentials_[index];
+    const CredentialConfig credential = *selected;
 
     LOG(INFO) << "[ACTION] Sign in with saved credentials";
     onDismiss();
@@ -163,8 +132,7 @@ void CredentialPanel::onDismiss()
     const bool had_focus = isAncestorOf(QApplication::focusWidget());
 
     hide();
-    credentials_.clear();
-    combo_credential_->clear();
+    combo_credential_->clearCredentials();
     label_message_->clear();
     label_message_->hide();
 
@@ -200,7 +168,7 @@ void CredentialPanel::onSignIn()
 //--------------------------------------------------------------------------------------------------
 void CredentialPanel::onCurrentCredentialChanged()
 {
-    sign_in_button_->setEnabled(combo_credential_->currentData().isValid());
+    sign_in_button_->setEnabled(combo_credential_->currentCredential() != nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -54,6 +54,7 @@ public:
     QByteArray otp_secret;
     quint64 otp_counter = 0;
     QString email;
+    QString guid;
 };
 
 #endif // BASE_PEER_ROUTER_USER_H

@@ -22,16 +22,63 @@
 #include <QComboBox>
 #include <QRadioButton>
 #include <QLineEdit>
+#include <QTemporaryDir>
 #include <QTest>
 
 #include <gtest/gtest.h>
 
+#include "base/crypto/data_cryptor.h"
+#include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
+#include "base/sql/sql_database.h"
+#include "base/sql/sql_query.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
+#include "client/router/router_test_fixture.h"
 #include "client/storage/user_settings.h"
 
+// The dialog offers the records of the database of the test thread and hears of their changes
+// from the controller, which stands here without a worker.
 class AuthorizationDialogTest : public testing::Test
 {
+protected:
+    void SetUp() override
+    {
+        DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
+
+        ASSERT_TRUE(dir_.isValid());
+
+        file_path_ = dir_.filePath("client.db3");
+        DatabaseTestPeer::setFilePath(file_path_);
+        ASSERT_TRUE(Database::instance().isValid());
+    }
+
+    static qint64 addCredential(const QString& name, const QString& username, const QString& password)
+    {
+        CredentialConfig credential;
+        credential.setDisplayName(name);
+        credential.setUsername(username);
+        credential.setPassword(SecureString(password));
+
+        EXPECT_TRUE(Database::instance().addCredential(credential));
+        return credential.id();
+    }
+
+    // Makes the record one that does not open.
+    void damageCredential(qint64 credential_id)
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path_));
+
+        SqlQuery query(raw, "UPDATE credentials SET data=X'00' WHERE id=?");
+        query.addInt64(credential_id);
+        ASSERT_TRUE(query.exec());
+    }
+
+    QTemporaryDir dir_;
+    QString file_path_;
+    RouterController controller_;
+
 public:
     // The dialog takes the one-time password choice from the settings when it opens and writes
     // it back when it closes, so every test says what it starts from.
@@ -64,17 +111,6 @@ public:
     static QComboBox* credentialCombo(const AuthorizationDialog& dialog)
     {
         return dialog.findChild<QComboBox*>("combo_credential");
-    }
-
-    static CredentialConfig credential(qint64 id, const QString& name, const QString& username,
-                                       const QString& password)
-    {
-        CredentialConfig credential;
-        credential.setId(id);
-        credential.setDisplayName(name);
-        credential.setUsername(username);
-        credential.setPassword(SecureString(password));
-        return credential;
     }
 };
 
@@ -260,9 +296,10 @@ TEST_F(AuthorizationDialogTest, RecordOfTheManagerIsHandedOverInPlaceOfTheFields
 {
     rememberOneTimePassword(false);
 
+    addCredential("first", "first-user", "first-password");
+    const qint64 second_id = addCredential("second", "second-user", "second-password");
+
     AuthorizationDialog dialog;
-    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password"),
-                            credential(2, "second", "second-user", "second-password") });
     dialog.show();
 
     QLineEdit* username = userNameEdit(dialog);
@@ -276,12 +313,12 @@ TEST_F(AuthorizationDialogTest, RecordOfTheManagerIsHandedOverInPlaceOfTheFields
 
     EXPECT_TRUE(saved->isVisible());
     saved->setChecked(true);
-    combo->setCurrentIndex(combo->findData(QVariant::fromValue<qint64>(2)));
+    combo->setCurrentIndex(combo->findData(QVariant::fromValue(second_id)));
 
     EXPECT_FALSE(username->isEnabled());
     EXPECT_EQ(dialog.userName(), "second-user");
     EXPECT_EQ(dialog.password().toString(), "second-password");
-    EXPECT_EQ(dialog.credentialId(), 2);
+    EXPECT_EQ(dialog.credentialId(), second_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -290,8 +327,9 @@ TEST_F(AuthorizationDialogTest, PairTypedByHandLeavesNoLinkBehind)
 {
     rememberOneTimePassword(false);
 
+    addCredential("first", "first-user", "first-password");
+
     AuthorizationDialog dialog;
-    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password") });
     dialog.show();
 
     QLineEdit* username = userNameEdit(dialog);
@@ -329,9 +367,10 @@ TEST_F(AuthorizationDialogTest, RecordThatDidNotOpenIsNotOffered)
 {
     rememberOneTimePassword(false);
 
+    damageCredential(addCredential("office", "office-user", "office-password"));
+    const qint64 home_id = addCredential("home", "home-user", "home-password");
+
     AuthorizationDialog dialog;
-    dialog.setSavedCredentials({ credential(1, "office", QString(), QString()),
-                                 credential(2, "home", "home-user", "home-password") });
     dialog.show();
 
     QRadioButton* saved = savedCredentialsButton(dialog);
@@ -342,8 +381,8 @@ TEST_F(AuthorizationDialogTest, RecordThatDidNotOpenIsNotOffered)
     saved->setChecked(true);
 
     ASSERT_EQ(combo->count(), 1);
-    EXPECT_EQ(combo->itemData(0).toLongLong(), 2);
-    EXPECT_EQ(dialog.credentialId(), 2);
+    EXPECT_EQ(combo->itemData(0).toLongLong(), home_id);
+    EXPECT_EQ(dialog.credentialId(), home_id);
     EXPECT_EQ(dialog.userName(), "home-user");
 }
 
@@ -353,8 +392,9 @@ TEST_F(AuthorizationDialogTest, ChoiceIsNotOfferedWhenTheOnlyRecordDidNotOpen)
 {
     rememberOneTimePassword(false);
 
+    damageCredential(addCredential("office", "office-user", "office-password"));
+
     AuthorizationDialog dialog;
-    dialog.setSavedCredentials({ credential(1, "office", QString(), QString()) });
     dialog.show();
 
     QRadioButton* saved = savedCredentialsButton(dialog);
@@ -373,8 +413,9 @@ TEST_F(AuthorizationDialogTest, OneTimePasswordLeavesTheRecordUnchosen)
 {
     rememberOneTimePassword(true);
 
+    addCredential("first", "first-user", "first-password");
+
     AuthorizationDialog dialog;
-    dialog.setSavedCredentials({ credential(1, "first", "first-user", "first-password") });
     dialog.setOneTimePasswordEnabled(true);
     dialog.show();
 
@@ -397,11 +438,12 @@ TEST_F(AuthorizationDialogTest, OneTimePasswordOnlyLocksTheOtherModes)
 {
     rememberOneTimePassword(false);
 
+    addCredential("office", "admin", "secret");
+
     {
         AuthorizationDialog dialog;
         dialog.setOneTimePasswordEnabled(true);
         dialog.setOneTimePasswordOnly(true);
-        dialog.setSavedCredentials({ credential(1, "office", "admin", "secret") });
         dialog.show();
 
         QRadioButton* one_time = oneTimePasswordButton(dialog);
@@ -416,4 +458,62 @@ TEST_F(AuthorizationDialogTest, OneTimePasswordOnlyLocksTheOtherModes)
     }
 
     EXPECT_FALSE(UserSettings().isOneTimePasswordChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The records are read again while the dialog is open. A record that came from another device
+// is offered at once, and the choice appears with it.
+TEST_F(AuthorizationDialogTest, NewRecordAppearsWhileTheDialogIsOpen)
+{
+    rememberOneTimePassword(false);
+
+    AuthorizationDialog dialog;
+    dialog.show();
+
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    QComboBox* combo = credentialCombo(dialog);
+    ASSERT_TRUE(saved && combo);
+
+    EXPECT_FALSE(saved->isVisible());
+
+    const qint64 credential_id = addCredential("office", "office-user", "office-password");
+    emit controller_.sig_credentialsChanged();
+
+    EXPECT_TRUE(saved->isVisible());
+    ASSERT_EQ(combo->count(), 1);
+
+    saved->setChecked(true);
+
+    EXPECT_EQ(dialog.credentialId(), credential_id);
+    EXPECT_EQ(dialog.userName(), "office-user");
+}
+
+//--------------------------------------------------------------------------------------------------
+// The chosen record is removed on another device, and the host is not entered with another one.
+TEST_F(AuthorizationDialogTest, ChosenRecordRemovedOnAnotherDeviceIsNotReplacedByAnother)
+{
+    rememberOneTimePassword(false);
+
+    addCredential("first", "first-user", "first-password");
+    const qint64 second_id = addCredential("second", "second-user", "second-password");
+
+    AuthorizationDialog dialog;
+    dialog.show();
+
+    QRadioButton* saved = savedCredentialsButton(dialog);
+    QRadioButton* user_password = dialog.findChild<QRadioButton*>("radio_user_password");
+    QComboBox* combo = credentialCombo(dialog);
+    ASSERT_TRUE(saved && user_password && combo);
+
+    saved->setChecked(true);
+    combo->setCurrentIndex(combo->findData(QVariant::fromValue(second_id)));
+    ASSERT_EQ(dialog.credentialId(), second_id);
+
+    ASSERT_TRUE(Database::instance().removeCredential(second_id));
+    emit controller_.sig_credentialsChanged();
+
+    EXPECT_FALSE(saved->isChecked());
+    EXPECT_TRUE(user_password->isChecked());
+    EXPECT_EQ(dialog.credentialId(), 0);
+    EXPECT_TRUE(dialog.userName().isEmpty());
 }

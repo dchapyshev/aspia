@@ -18,6 +18,8 @@
 
 #include "router/database.h"
 
+#include <QUuid>
+
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
@@ -49,6 +51,7 @@ RouterUser readUser(const SqlQuery& query)
     user.otp_secret  = query.columnBlob(7);
     user.otp_counter = query.columnUInt64(8);
     user.email       = query.columnText(9);
+    user.guid        = query.columnText(10);
     return user;
 }
 
@@ -76,7 +79,7 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
     // The page has to name the same records every time it is asked for, so the order is fixed
     // here instead of being left to the query planner.
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users ORDER BY id LIMIT ? OFFSET ?";
     SqlQuery query(db_, kSql);
     query.addInt64(count);
@@ -170,8 +173,8 @@ std::string_view Database::addUser(const RouterUser& user)
     }
 
     const char kSql[] =
-        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, email) "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, email, guid) "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
     SqlQuery query(db_, kSql);
     query.addText(user.name);
     query.addText(user.group);
@@ -180,6 +183,7 @@ std::string_view Database::addUser(const RouterUser& user)
     query.addInt64(RouterUser::expandSessionTypes(user.sessions));
     query.addInt64(user.flags);
     query.addText(user.email);
+    query.addText(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     if (!query.exec())
     {
@@ -448,7 +452,7 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users WHERE casefold(name)=casefold(?)";
     SqlQuery query(db_, kSql);
     query.addText(username);
@@ -484,7 +488,7 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
     }
 
     const char kSql[] =
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email "
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users WHERE id=?";
     SqlQuery query(db_, kSql);
     query.addInt64(entry_id);
@@ -493,6 +497,39 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
     if (step == SqlQuery::StepResult::FAILED)
     {
         // See the overload above: a failed read is not a missing record.
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (step != SqlQuery::StepResult::ROW)
+        return proto::router::kErrorNotFound;
+
+    *user = readUser(query);
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::findUserByGuid(const QString& guid, RouterUser* user) const
+{
+    CHECK(user);
+
+    *user = RouterUser();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    const char kSql[] =
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
+        "FROM users WHERE guid=?";
+    SqlQuery query(db_, kSql);
+    query.addText(guid);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return proto::router::kErrorInternalError;
     }

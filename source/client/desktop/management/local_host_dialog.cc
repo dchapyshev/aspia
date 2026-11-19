@@ -247,28 +247,24 @@ void LocalHostDialog::onLoadData()
 {
     Database& db = Database::instance();
 
-    QList<CredentialConfig> credentials;
-    const Database::ReadResult credentials_result = db.credentialList(
-        &credentials, CredentialConfig::Type::ASPIA);
-    if (credentials_result == Database::ReadResult::FAILED)
+    connect(ui->combo_credential, &CredentialComboBox::sig_reloaded, this, [this]()
     {
-        LOG(ERROR) << "Unable to read the list of credentials";
+        if (ui->combo_credential->currentIndex() < 0)
+        {
+            ui->checkbox_saved_credentials->setChecked(false);
+            ui->combo_credential->setCurrentIndex(0);
+        }
+
+        ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
+    });
+
+    ui->combo_credential->setUnreadableShown(true);
+
+    if (!ui->combo_credential->onReload())
+    {
         MsgBox::warning(this, tr("Failed to read the list of credentials."));
         reject();
         return;
-    }
-
-    if (credentials_result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the credentials";
-
-    const QIcon credential_icon(":/img/keys.svg");
-    const QIcon unread_credential_icon(":/img/key-corrupted.svg");
-
-    for (const CredentialConfig& credential : std::as_const(credentials))
-    {
-        ui->combo_credential->addItem(credential.isValid() ? credential_icon : unread_credential_icon,
-                                      credential.displayName(),
-                                      QVariant::fromValue(credential.id()));
     }
 
     QList<ProfileConfig> profiles;
@@ -336,11 +332,11 @@ void LocalHostDialog::onLoadData()
         ui->edit_password->setPassword(host.password());
         ui->edit_comment->setPlainText(host.comment());
 
-        if (host.credentialId() > 0)
+        const int credential_index = ui->combo_credential->findData(QVariant::fromValue(host.credentialId()));
+        if (credential_index >= 0)
         {
             ui->checkbox_saved_credentials->setChecked(true);
-            ui->combo_credential->setCurrentIndex(
-                ui->combo_credential->findData(QVariant::fromValue(host.credentialId())));
+            ui->combo_credential->setCurrentIndex(credential_index);
         }
 
         ui->combo_profile->setCurrentIndex(
@@ -350,9 +346,6 @@ void LocalHostDialog::onLoadData()
     }
 
     ui->combo_group->selectGroup(group_id_);
-
-    // Nothing to share until a record of credentials is added. A record that did not open is
-    // in the list too, so a host never refers to one the combo does not hold.
     ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
 
     onSavedCredentialsToggled(ui->checkbox_saved_credentials->isChecked());

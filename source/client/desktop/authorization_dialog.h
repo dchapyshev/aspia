@@ -20,7 +20,6 @@
 #define CLIENT_DESKTOP_AUTHORIZATION_DIALOG_H
 
 #include <QDialog>
-#include <QList>
 
 #include <memory>
 
@@ -43,7 +42,6 @@ public:
     void setOneTimePasswordEnabled(bool enable);
     void setOneTimePasswordOnly(bool only);
 
-    void setSavedCredentials(const QList<CredentialConfig>& credentials);
     qint64 credentialId() const;
 
     void setSaveCredentialsVisible(bool visible);
@@ -76,7 +74,6 @@ private:
     void updateModes();
 
     std::unique_ptr<Ui::AuthorizationDialog> ui;
-    QList<CredentialConfig> credentials_;
     bool one_time_password_enabled_ = false;
     bool one_time_password_only_ = false;
     bool one_time_password_choice_ = false;

@@ -130,8 +130,8 @@ protected:
         ASSERT_TRUE(target_.open(targetPath()));
 
         // The file is sealed with the key of the book it is saved from, so the book has to be one
-        // with a master password set. reencryptAll() with nothing to re-encrypt is how a book gets
-        // one without going through the singleton MasterPassword talks to.
+        // with a master password set. Database::Reencryption with nothing to re-encrypt is how a
+        // book gets one without going through the singleton MasterPassword talks to.
         const QByteArray salt = Random::byteArray(32);
         const SecureByteArray key(PasswordHash::hash(PasswordHash::ARGON2ID, password(), salt));
 
@@ -139,9 +139,10 @@ protected:
             DataCryptor(key).encrypt(Random::byteArray(32));
         ASSERT_TRUE(verifier.has_value());
 
-        ASSERT_TRUE(source_.reencryptAll({}, {}, {}, {}, ProxyConfig(), salt, *verifier, 1));
-
+        Database::Reencryption reencryption(source_);
+        ASSERT_EQ(reencryption.begin(), Database::ReencryptResult::DONE);
         DataCryptor::instance().setKey(key);
+        ASSERT_TRUE(reencryption.commit(salt, *verifier, 1));
     }
 
     // The master password of the source book, which is what its files are sealed with.
@@ -1366,6 +1367,45 @@ TEST_F(BackupTest, BookWithALinkedRouterHostThatDoesNotOpenIsNotExported)
     }
 
     EXPECT_EQ(exportBook(), Backup::Result::UNREADABLE_RECORD);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removed record of credentials the router holds keeps its row, and the hosts keep their links
+// to it. The record is not a part of the book any more, so the file carries neither the record
+// nor the links, nor the row of a router host that had nothing but such a link.
+TEST_F(BackupTest, RemovedCredentialsTakeTheirLinksOutOfTheFile)
+{
+    const qint64 credential_id = addCredential(source_, "office", "user", "secret");
+    addRouter(source_, "router.example.com");
+
+    LocalHostConfig local_host;
+    local_host.setName("host");
+    local_host.setAddress("192.168.0.1");
+    local_host.setCredentialId(credential_id);
+    ASSERT_TRUE(source_.addLocalHost(local_host));
+
+    RouterHostConfig router_host;
+    router_host.setHostId(100500);
+    router_host.setCredentialId(credential_id);
+    ASSERT_TRUE(source_.addRouterHost(router_host));
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(QFileInfo(backupPath()).dir().filePath("source.db3")));
+        ASSERT_TRUE(raw.exec("UPDATE credentials SET sync_revision=7, sync_dirty=0"));
+    }
+
+    ASSERT_TRUE(source_.removeCredential(credential_id));
+
+    ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
+    ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
+
+    EXPECT_TRUE(credentialList(target_).isEmpty());
+    EXPECT_TRUE(allRouterHosts(target_).isEmpty());
+
+    const QList<LocalHostConfig> local_hosts = allLocalHosts(target_);
+    ASSERT_EQ(local_hosts.size(), 1);
+    EXPECT_EQ(local_hosts.front().credentialId(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

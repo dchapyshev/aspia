@@ -321,12 +321,18 @@ void LocalWidget::onImport()
     if (path.isEmpty())
         return;
 
-    if (!MessageDialog::confirm(this, tr("Restore from Backup"),
-                                tr("Everything stored now is deleted and replaced with what the "
-                                   "backup holds."), tr("Restore")))
-    {
+    RouterConfig router;
+    const bool sync_enabled =
+        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+
+    const QString text = sync_enabled ?
+        tr("Everything stored now is deleted and replaced with what the backup holds. The synchronized data "
+           "on the router and on the other devices of the account saved in the backup will be replaced as "
+           "well.") :
+        tr("Everything stored now is deleted and replaced with what the backup holds.");
+
+    if (!MessageDialog::confirm(this, tr("Restore from Backup"), text, tr("Restore")))
         return;
-    }
 
     // A backup made here opens with the key the data is already open with. One made elsewhere
     // takes the master password of that installation.

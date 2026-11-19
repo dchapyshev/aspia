@@ -39,6 +39,7 @@ enum ChannelId
     CHANNEL_ID_CLIENT  = 2;
     CHANNEL_ID_MANAGER = 3;
     CHANNEL_ID_ADMIN   = 4;
+    CHANNEL_ID_SYNC    = 5;
 }
 
 message RelayKey

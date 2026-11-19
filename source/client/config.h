@@ -38,12 +38,12 @@ class RouterConfig final
 public:
     RouterConfig();
 
-    // A router is entered with an account of its own, so a record read back without an address, a
-    // user name or a password did not open.
     bool isValid() const;
 
-    // The same router entered with the same account: address, user name and password.
+    // The same router entered with the same account: address and user name.
     bool hasSameAccount(const RouterConfig& other) const;
+
+    bool isSyncConfirmationNeeded(const RouterConfig& edited) const;
 
     proto::router::SessionType sessionType() const { return session_type_; }
     void setSessionType(proto::router::SessionType type) { session_type_ = type; }
@@ -63,16 +63,25 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
-    // The "remember this device" token of the record, in the form the OS keystore wrapped it.
-    // The class carries the bytes as opaque data. Presenting them to the router takes an unwrap,
-    // and a fresh token is stored already wrapped. Empty until the user enrolls or enters a TOTP
-    // code at least once.
     const QByteArray& deviceToken() const { return device_token_; }
     void setDeviceToken(const QByteArray& value) { device_token_ = value; }
 
-    // Clears the stored token. Called when the router rejects it (revoked remotely, password
-    // changed elsewhere) so the next login walks the TOTP path again.
     void clearDeviceToken() { device_token_.clear(); }
+
+    const QString& userGuid() const { return user_guid_; }
+    void setUserGuid(const QString& value) { user_guid_ = value; }
+
+    const QByteArray& syncStorageId() const { return sync_storage_id_; }
+    void setSyncStorageId(const QByteArray& value) { sync_storage_id_ = value; }
+
+    const SecureByteArray& syncStorageKey() const { return sync_storage_key_; }
+    void setSyncStorageKey(const SecureByteArray& value) { sync_storage_key_ = value; }
+
+    bool isSyncEnabled() const { return sync_enabled_; }
+    void setSyncEnabled(bool enable) { sync_enabled_ = enable; }
+
+    bool isSyncStorageResetPending() const { return sync_storage_reset_pending_; }
+    void setSyncStorageResetPending(bool pending) { sync_storage_reset_pending_ = pending; }
 
     // The encrypted column for database I/O. Returns nothing when the record cannot be sealed, so a
     // failure is never written as a record that simply holds nothing. The setter answers whether the
@@ -88,6 +97,11 @@ private:
     QString username_;
     SecureString password_;
     QByteArray device_token_;
+    QString user_guid_;
+    QByteArray sync_storage_id_;
+    SecureByteArray sync_storage_key_;
+    bool sync_enabled_ = false;
+    bool sync_storage_reset_pending_ = false;
 };
 
 class RouterHostConfig final
@@ -254,6 +268,9 @@ public:
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
 
+    qint64 modifyTime() const { return modify_time_; }
+    void setModifyTime(qint64 value) { modify_time_ = value; }
+
     Type type() const { return type_; }
     void setType(Type value) { type_ = value; }
 
@@ -266,6 +283,9 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    const QByteArray& unknownData() const { return unknown_data_; }
+    void setUnknownData(const QByteArray& value) { unknown_data_ = value; }
+
     // The sealed column for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
@@ -273,10 +293,12 @@ public:
 private:
     qint64 id_ = -1;
     QString guid_;
+    qint64 modify_time_ = 0;
     Type type_ = Type::ASPIA;
     QString display_name_;
     QString username_;
     SecureString password_;
+    QByteArray unknown_data_;
 };
 
 class ProfileConfig final

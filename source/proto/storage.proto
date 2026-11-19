@@ -24,7 +24,6 @@ import "desktop_control.proto";
 
 package proto.storage;
 
-// The encrypted column of a host record.
 message HostBlob
 {
     string address  = 1;
@@ -32,18 +31,33 @@ message HostBlob
     string password = 3;
 }
 
-// The encrypted column of a router record.
+message CredentialBlob
+{
+    string username    = 2;
+    string password    = 3;
+    bytes unknown_data = 4;
+}
+
 message RouterBlob
 {
+    message Sync
+    {
+        bool enabled               = 1;
+        bytes storage_id           = 2;
+        bytes storage_key          = 3;
+        bool storage_reset_pending = 4;
+    }
+
     string address      = 1;
     string username     = 2;
     string password     = 3;
     bytes device_token  = 4;
     uint32 session_type = 5;
     bool enabled        = 6;
+    string user_guid    = 7;
+    Sync sync           = 8;
 }
 
-// The encrypted proxy settings of the client.
 message ProxyBlob
 {
     bool enabled    = 1;
@@ -60,8 +74,6 @@ message ProfileData
     control.Config desktop = 2;
 }
 
-// The exported backup. |data| and |verifier| are sealed with a key derived from |salt| and the
-// password of the backup. |verifier| tells a wrong password from a damaged file.
 message BackupFile
 {
     message Router
@@ -141,9 +153,6 @@ message BackupFile
     bytes data     = 4;
 }
 
-// Credentials exported by the user, sealed like BackupFile with a key derived from |salt| and the
-// password given on export. The fields are numbered unlike BackupFile, so that neither file reads
-// as the other.
 message CredentialFile
 {
     message Credential

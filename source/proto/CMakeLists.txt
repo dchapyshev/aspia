@@ -42,6 +42,7 @@ list(APPEND SOURCE_PROTO
     router_host.proto
     router_peer.proto
     router_relay.proto
+    router_sync.proto
     storage.proto
     stun.proto
     system_info.proto

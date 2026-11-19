@@ -23,6 +23,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "client/android/credential_combo_box.h"
 #include "client/config.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
@@ -49,7 +50,7 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
       label_note_(new Label(tr("The user name and the password are stored on this device only and "
                          "are not sent to the router. Leave both empty to forget them."),
                       Label::Role::CAPTION)),
-      combo_credential_(new ComboBox()),
+      combo_credential_(new CredentialComboBox()),
       combo_profile_(new ComboBox()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
@@ -90,6 +91,18 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
+
+    combo_credential_->setUnreadableShown(true);
+    connect(combo_credential_, &CredentialComboBox::sig_reloaded, this, [this]()
+    {
+        if (combo_credential_->currentIndex() < 0)
+        {
+            switch_saved_credentials_->setChecked(false);
+            combo_credential_->setCurrentIndex(0);
+        }
+
+        switch_saved_credentials_->setEnabled(combo_credential_->count() > 0);
+    });
 
     connect(switch_saved_credentials_, &Switch::toggled, this, &RouterHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &RouterHostEditor::onSaveClicked);
@@ -231,37 +244,21 @@ void RouterHostEditor::onSaveClicked()
 //--------------------------------------------------------------------------------------------------
 bool RouterHostEditor::loadCredentials(qint64 selected_credential_id)
 {
-    combo_credential_->clear();
-
-    QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(
-        &credentials, CredentialConfig::Type::ASPIA);
-    if (result == Database::ReadResult::FAILED)
+    if (!combo_credential_->onReload())
     {
-        LOG(ERROR) << "Unable to read the list of credentials";
         showError(tr("Failed to read data from the local database."));
         return false;
     }
 
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the credentials";
+    combo_credential_->setCurrentCredentialId(selected_credential_id);
 
-    const QIcon icon = GuiApplication::svgIcon(":/img/keys.svg");
-    const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
-
-    for (const CredentialConfig& credential : std::as_const(credentials))
-    {
-        combo_credential_->addItem(credential.isValid() ? icon : unread_icon,
-                                   credential.displayName(),
-                                   QVariant::fromValue(credential.id()));
-    }
-
-    const int index = combo_credential_->findData(QVariant::fromValue(selected_credential_id));
-    combo_credential_->setCurrentIndex(index >= 0 ? index : 0);
+    const bool selected = combo_credential_->currentIndex() >= 0;
+    if (!selected)
+        combo_credential_->setCurrentIndex(0);
 
     // Nothing to share until a record of credentials is added.
-    switch_saved_credentials_->setEnabled(!credentials.isEmpty());
-    switch_saved_credentials_->setChecked(index >= 0);
+    switch_saved_credentials_->setEnabled(combo_credential_->count() > 0);
+    switch_saved_credentials_->setChecked(selected);
     onSavedCredentialsToggled(switch_saved_credentials_->isChecked());
     return true;
 }

@@ -29,6 +29,7 @@
 #include "base/os_account.h"
 #include "base/peer/user.h"
 #include "client/desktop/credentials/ui_credential_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/desktop/msg_box.h"
 
@@ -183,6 +184,7 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
+    RouterController::startSyncRecordExchange();
     accept();
 }
 
