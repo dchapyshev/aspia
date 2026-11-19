@@ -30,6 +30,7 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #include "base/logging.h"
+#include "base/sql/sql_query.h"
 
 namespace {
 
@@ -234,9 +235,51 @@ bool SqlDatabase::exec(const char* sql)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SqlDatabase::addColumn(const char* table, const char* column, const char* definition)
+{
+    {
+        SqlQuery query(*this, "SELECT COUNT(*) FROM pragma_table_info(?) WHERE name=?");
+        query.addText(std::string_view(table));
+        query.addText(std::string_view(column));
+
+        if (query.next() != SqlQuery::StepResult::ROW)
+        {
+            LOG(ERROR) << "Unable to read the columns of" << table << ":" << lastError();
+            return false;
+        }
+
+        if (query.columnInt64(0) != 0)
+            return true;
+    }
+
+    const std::string sql = QString("ALTER TABLE \"%1\" ADD COLUMN \"%2\" %3")
+        .arg(table, column, definition).toStdString();
+
+    if (!exec(sql.c_str()))
+    {
+        LOG(ERROR) << "Unable to add the column" << column << "to" << table << ":" << lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SqlDatabase::beginTransaction(TransactionMode mode)
 {
-    return exec(mode == TransactionMode::IMMEDIATE ? "BEGIN IMMEDIATE" : "BEGIN");
+    switch (mode)
+    {
+        case TransactionMode::IMMEDIATE:
+            return exec("BEGIN IMMEDIATE");
+
+        case TransactionMode::EXCLUSIVE:
+            return exec("BEGIN EXCLUSIVE");
+
+        case TransactionMode::DEFERRED:
+            break;
+    }
+
+    return exec("BEGIN");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -249,6 +292,12 @@ bool SqlDatabase::commitTransaction()
 bool SqlDatabase::rollbackTransaction()
 {
     return exec("ROLLBACK");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SqlDatabase::isTransactionActive() const
+{
+    return db_ && sqlite3_get_autocommit(db_) == 0;
 }
 
 //--------------------------------------------------------------------------------------------------

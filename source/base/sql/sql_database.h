@@ -56,16 +56,19 @@ public:
     // Runs one or more statements that return no rows (pragmas without a result, DDL). For
     // statements that need binding or produce rows use an SqlQuery.
     bool exec(const char* sql);
+    bool addColumn(const char* table, const char* column, const char* definition);
 
     enum class TransactionMode
     {
         DEFERRED = 0,
-        IMMEDIATE = 1
+        IMMEDIATE = 1,
+        EXCLUSIVE = 2
     };
 
     bool beginTransaction(TransactionMode mode = TransactionMode::DEFERRED);
     bool commitTransaction();
     bool rollbackTransaction();
+    bool isTransactionActive() const;
 
     // Signature of a custom scalar SQL function: reads its arguments from |argv| and reports the
     // result through |context| using the sqlite3_result_* family.

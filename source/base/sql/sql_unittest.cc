@@ -273,6 +273,33 @@ TEST(SqliteTest, TransactionCommitPersists)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, TransactionIsActiveUntilItEnds)
+{
+    SqlDatabase db;
+    EXPECT_FALSE(db.isTransactionActive());
+
+    ASSERT_TRUE(db.open(":memory:"));
+    EXPECT_FALSE(db.isTransactionActive());
+
+    {
+        SqlTransaction transaction(db);
+        ASSERT_TRUE(transaction.begin());
+        EXPECT_TRUE(db.isTransactionActive());
+
+        ASSERT_TRUE(transaction.commit());
+        EXPECT_FALSE(db.isTransactionActive());
+    }
+
+    {
+        SqlTransaction transaction(db);
+        ASSERT_TRUE(transaction.begin(SqlTransaction::Mode::IMMEDIATE));
+        EXPECT_TRUE(db.isTransactionActive());
+    }
+
+    EXPECT_FALSE(db.isTransactionActive());
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, FailedCommitDoesNotWedgeConnection)
 {
     QTemporaryDir temp_dir;
@@ -342,6 +369,28 @@ TEST(SqliteTest, ImmediateTransactionTakesWriteLock)
 }
 
 //--------------------------------------------------------------------------------------------------
+TEST(SqliteTest, ExclusiveTransactionLocksOutReaders)
+{
+    QTemporaryDir temp_dir;
+    ASSERT_TRUE(temp_dir.isValid());
+
+    SqlDatabase first;
+    ASSERT_TRUE(first.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
+    ASSERT_TRUE(createSchema(first));
+
+    SqlDatabase second;
+    ASSERT_TRUE(second.open(temp_dir.filePath("test.db"), SqlDatabase::OpenMode::READ_WRITE, MilliSeconds(0)));
+
+    SqlTransaction holder(first);
+    ASSERT_TRUE(holder.begin(SqlTransaction::Mode::EXCLUSIVE));
+
+    EXPECT_FALSE(second.exec("SELECT COUNT(*) FROM t"));
+
+    ASSERT_TRUE(holder.commit());
+    EXPECT_TRUE(second.exec("SELECT COUNT(*) FROM t"));
+}
+
+//--------------------------------------------------------------------------------------------------
 TEST(SqliteTest, UInt64RoundTrip)
 {
     SqlDatabase db;
@@ -403,4 +452,35 @@ TEST(SqliteTest, UnknownDoubleQuotedNameIsAnError)
 
     EXPECT_FALSE(db.exec("CREATE INDEX i ON t(\"b\")"));
     EXPECT_FALSE(db.exec("INSERT INTO t (a) SELECT \"b\""));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A column the table lacks is added with the definition it is given, and the rows the table
+// already holds take the default. A column the table has is left as it is, so the call can be
+// made every time the database is opened.
+TEST(SqliteTest, ColumnIsAddedOnce)
+{
+    SqlDatabase db;
+    ASSERT_TRUE(db.open(":memory:"));
+    ASSERT_TRUE(db.exec("CREATE TABLE t (a INTEGER)"));
+    ASSERT_TRUE(db.exec("INSERT INTO t (a) VALUES (1)"));
+
+    ASSERT_TRUE(db.addColumn("t", "b", "INTEGER NOT NULL DEFAULT 7"));
+
+    SqlQuery select(db, "SELECT b FROM t");
+    ASSERT_EQ(select.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(select.columnInt64(0), 7);
+
+    ASSERT_TRUE(db.exec("UPDATE t SET b=9"));
+    ASSERT_TRUE(db.addColumn("t", "b", "INTEGER NOT NULL DEFAULT 7"));
+
+    SqlQuery reread(db, "SELECT b FROM t");
+    ASSERT_EQ(reread.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(reread.columnInt64(0), 9);
+
+    SqlQuery columns(db, "SELECT COUNT(*) FROM pragma_table_info('t')");
+    ASSERT_EQ(columns.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(columns.columnInt64(0), 2);
+
+    EXPECT_FALSE(db.addColumn("missing", "b", "INTEGER"));
 }
