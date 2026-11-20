@@ -45,9 +45,9 @@
 #include "client/android/settings_widget.h"
 #include "client/android/two_factor_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
 #include "client/storage/database_migration.h"
 #include "client/storage/master_password.h"
+#include "client/storage/router_host_store.h"
 #include "client/workers/update_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
@@ -795,7 +795,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
         Database& db = Database::instance();
         std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
             db.localHostCredentials(host.entryId()) :
-            db.routerHostCredentials(stringToHostId(host.address()));
+            RouterHostStore().credentials(stringToHostId(host.address()));
         if (credentials.has_value())
         {
             LOG(INFO) << "Using stored credentials of host" << host.address();
@@ -880,8 +880,10 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
     credentials.setUsername(username);
     credentials.setPassword(password);
 
+    RouterHostStore store;
+
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(host_id, &stored);
+    const Database::FindResult found = store.find(host_id, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id;
@@ -891,9 +893,9 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
     bool saved = false;
 
     if (found == Database::FindResult::NOT_FOUND)
-        saved = db.addRouterHost(credentials);
+        saved = store.add(credentials);
     else
-        saved = db.modifyRouterHost(credentials);
+        saved = store.modify(credentials);
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_id;

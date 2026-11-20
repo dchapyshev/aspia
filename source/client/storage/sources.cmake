@@ -39,6 +39,8 @@ collect_sources(SOURCE_CLIENT_STORAGE
     master_password.h
     profile_store.cc
     profile_store.h
+    router_host_store.cc
+    router_host_store.h
     sync_store.cc
     sync_store.h
     system_settings.cc

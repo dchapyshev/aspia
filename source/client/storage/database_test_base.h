@@ -29,6 +29,7 @@
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -92,6 +93,21 @@ inline Database::ReencryptResult reencrypt(
         return Database::ReencryptResult::FAILED;
 
     return Database::ReencryptResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+inline std::optional<RouterHostConfig> findRouterHost(Database& db, HostId host_id)
+{
+    RouterHostConfig host;
+    const Database::FindResult result = RouterHostStore(db).find(host_id, &host);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return host;
 }
 
 class DatabaseTestBase : public testing::Test
@@ -322,9 +338,66 @@ protected:
                profiles_.setUnknownData(transaction, guid, unknown_data) && transaction.commit();
     }
 
+    // Writes a check time the public API cannot produce, since it always stamps the current one.
+    bool setRouterHostCheckTime(HostId host_id, qint64 check_time)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE router_hosts SET check_time=? WHERE host_id=?");
+        query.addInt64(check_time);
+        query.addUInt64(host_id);
+
+        return query.exec();
+    }
+
+    // Spoils the sealed text of a router host the way corruptRecordData() does for a record of a table.
+    // The row is named by the id of its host.
+    bool corruptRouterHostData(HostId host_id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE router_hosts SET data=X'00' WHERE host_id=?");
+        query.addUInt64(host_id);
+
+        return query.exec();
+    }
+
+    RouterHostConfig routerHost(HostId host_id, const QString& username, const QString& password)
+    {
+        RouterHostConfig host;
+        host.setHostId(host_id);
+        host.setUsername(username);
+        host.setPassword(SecureString(password));
+        return host;
+    }
+
+    void addRouterHost(HostId host_id, const QString& username, const QString& password)
+    {
+        EXPECT_TRUE(router_hosts_.add(routerHost(host_id, username, password)));
+    }
+
+    QList<RouterHostConfig> allRouterHosts()
+    {
+        QList<RouterHostConfig> hosts;
+        EXPECT_EQ(router_hosts_.list(&hosts), Database::ReadResult::OK);
+        return hosts;
+    }
+
+    QList<HostId> outdatedRouterHosts()
+    {
+        QList<HostId> hosts;
+        EXPECT_TRUE(router_hosts_.outdated(&hosts));
+        return hosts;
+    }
+
     Database db_;
     CredentialStore credentials_{ db_ };
     ProfileStore profiles_{ db_ };
+    RouterHostStore router_hosts_{ db_ };
     SyncStore sync_store_{ db_ };
     QString file_path_;
 

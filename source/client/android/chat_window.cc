@@ -47,6 +47,7 @@
 #include "client/android/chat_view.h"
 #include "client/router/router_controller.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -445,7 +446,7 @@ void ChatWindow::forgetHostCredentials()
     RouterHostConfig router_host;
     router_host.setHostId(stringToHostId(host_.address()));
 
-    if (!Database::instance().modifyRouterHost(router_host))
+    if (!RouterHostStore().modify(router_host))
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 

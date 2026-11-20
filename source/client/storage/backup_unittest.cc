@@ -50,21 +50,6 @@ std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_
     return group;
 }
 
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<RouterHostConfig> findRouterHost(const Database& db, HostId host_id)
-{
-    RouterHostConfig host;
-    const Database::FindResult result = db.findRouterHost(host_id, &host);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return host;
-}
-
 } // namespace
 
 class BackupTest : public testing::Test
@@ -149,7 +134,7 @@ protected:
         host.setUsername(username);
         host.setPassword(SecureString(password));
 
-        EXPECT_TRUE(db.addRouterHost(host));
+        EXPECT_TRUE(RouterHostStore(db).add(host));
     }
 
     static qint64 addCredential(Database& db, const QString& name, const QString& username,
@@ -194,7 +179,7 @@ protected:
     static QList<RouterHostConfig> allRouterHosts(Database& db)
     {
         QList<RouterHostConfig> hosts;
-        EXPECT_EQ(db.allRouterHosts(&hosts), Database::ReadResult::OK);
+        EXPECT_EQ(RouterHostStore(db).list(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
@@ -752,7 +737,7 @@ TEST_F(BackupTest, SavedCredentialsOfATemporaryHostAreNotImported)
     temporary.setHostId(kMinTempHostId);
     temporary.setUsername("user");
     temporary.setPassword(SecureString(QString("secret")));
-    EXPECT_FALSE(source_.addRouterHost(temporary));
+    EXPECT_FALSE(RouterHostStore(source_).add(temporary));
 
     addRouterHost(source_, 100500, "other-user", "other-secret");
 
@@ -1161,7 +1146,7 @@ TEST_F(BackupTest, HostsKeepTheirLinksToCredentialsThroughTheFile)
     RouterHostConfig router_host;
     router_host.setHostId(100500);
     router_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addRouterHost(router_host));
+    ASSERT_TRUE(RouterHostStore(source_).add(router_host));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
@@ -1198,12 +1183,14 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
     ASSERT_TRUE(source_.addLocalHost(local_host));
     ASSERT_TRUE(source_.setLocalHostOsCredentialId(local_host.id(), os.id()));
 
+    RouterHostStore store(source_);
+
     RouterHostConfig router_host;
     router_host.setHostId(100500);
     router_host.setUsername("user");
     router_host.setPassword(SecureString(QString("secret")));
-    ASSERT_TRUE(source_.addRouterHost(router_host));
-    ASSERT_TRUE(source_.setRouterHostOsCredentialId(100500, os.id()));
+    ASSERT_TRUE(store.add(router_host));
+    ASSERT_TRUE(store.setOsCredentialId(100500, os.id()));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);
@@ -1235,7 +1222,7 @@ TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
     router_host.setHostId(100500);
     router_host.setUsername("user");
     router_host.setPassword(SecureString(QString("secret")));
-    ASSERT_TRUE(source_.addRouterHost(router_host));
+    ASSERT_TRUE(RouterHostStore(source_).add(router_host));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     editFileContent([](proto::storage::BackupFile::Content* data)
@@ -1280,7 +1267,7 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
     RouterHostConfig router_host;
     router_host.setHostId(100500);
     router_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addRouterHost(router_host));
+    ASSERT_TRUE(RouterHostStore(source_).add(router_host));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     editFileContent([](proto::storage::BackupFile::Content* data)
@@ -1307,7 +1294,7 @@ TEST_F(BackupTest, BookWithALinkedRouterHostThatDoesNotOpenIsNotExported)
     host.setCredentialId(credential_id);
     host.setUsername("own-user");
     host.setPassword(SecureString("own-secret"));
-    ASSERT_TRUE(source_.addRouterHost(host));
+    ASSERT_TRUE(RouterHostStore(source_).add(host));
 
     {
         SqlDatabase raw;
@@ -1336,7 +1323,7 @@ TEST_F(BackupTest, RemovedCredentialsTakeTheirLinksOutOfTheFile)
     RouterHostConfig router_host;
     router_host.setHostId(100500);
     router_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addRouterHost(router_host));
+    ASSERT_TRUE(RouterHostStore(source_).add(router_host));
 
     {
         SqlDatabase raw;
@@ -1483,7 +1470,7 @@ TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
     local_host.setProfileId(profile_id);
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
-    ASSERT_TRUE(source_.setRouterHostProfileId(100500, profile_id));
+    ASSERT_TRUE(RouterHostStore(source_).setProfileId(100500, profile_id));
 
     Backup::Report exported;
     ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
@@ -1516,7 +1503,7 @@ TEST_F(BackupTest, FileWhereAHostNamesAProfileItDoesNotCarryIsNotImported)
     local_host.setAddress("192.168.0.1");
     ASSERT_TRUE(source_.addLocalHost(local_host));
 
-    ASSERT_TRUE(source_.setRouterHostProfileId(100500, profile_id));
+    ASSERT_TRUE(RouterHostStore(source_).setProfileId(100500, profile_id));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     editFileContent([](proto::storage::BackupFile::Content* data)

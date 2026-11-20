@@ -32,6 +32,7 @@
 #include "client/android/file_progress_sheet.h"
 #include "client/router/router_controller.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/workers/file_worker.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
@@ -245,7 +246,7 @@ void FileTransferWindow::forgetHostCredentials()
     RouterHostConfig router_host;
     router_host.setHostId(stringToHostId(host_.address()));
 
-    if (!Database::instance().modifyRouterHost(router_host))
+    if (!RouterHostStore().modify(router_host))
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 

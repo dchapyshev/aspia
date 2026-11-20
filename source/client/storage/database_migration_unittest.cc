@@ -36,6 +36,7 @@
 #include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -281,15 +282,17 @@ protected:
         EXPECT_EQ(router.sessionType(), proto::router::SESSION_TYPE_ADMIN);
         EXPECT_TRUE(router.isEnabled());
 
+        RouterHostStore store(db);
+
         RouterHostConfig router_host;
-        ASSERT_EQ(db.findRouterHost(100500, &router_host), Database::FindResult::FOUND);
+        ASSERT_EQ(store.find(100500, &router_host), Database::FindResult::FOUND);
         EXPECT_EQ(router_host.username(), QString("user"));
         EXPECT_EQ(router_host.password().toString(), QString("secret"));
         EXPECT_EQ(router_host.credentialId(), 3);
         EXPECT_EQ(router_host.osCredentialId(), 3);
 
         // The credentials of a host of the other router are of its own database.
-        EXPECT_EQ(db.findRouterHost(100600, &router_host), Database::FindResult::NOT_FOUND);
+        EXPECT_EQ(store.find(100600, &router_host), Database::FindResult::NOT_FOUND);
     }
 
     QTemporaryDir dir_;
@@ -525,7 +528,7 @@ TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
     EXPECT_EQ(db.routerConfig(&router), Database::FindResult::FOUND);
 
     RouterHostConfig router_host;
-    EXPECT_EQ(db.findRouterHost(100500, &router_host), Database::FindResult::FOUND);
+    EXPECT_EQ(RouterHostStore(db).find(100500, &router_host), Database::FindResult::FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -549,7 +552,7 @@ TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
     EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
 
     RouterHostConfig router_host;
-    EXPECT_EQ(db.findRouterHost(100500, &router_host), Database::FindResult::FOUND);
+    EXPECT_EQ(RouterHostStore(db).find(100500, &router_host), Database::FindResult::FOUND);
 
     // Mended in the old file afterwards, the router is not taken again.
     ASSERT_TRUE(old_.open(old_path_));

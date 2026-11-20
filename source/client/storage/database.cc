@@ -30,6 +30,7 @@
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
 
 namespace {
@@ -367,7 +368,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
         config.setOsCredentialId(credential_ids.value(host.osCredentialId(), host.osCredentialId()));
         config.setProfileId(profile_ids.value(host.profileId(), host.profileId()));
 
-        if (!addRouterHost(config))
+        if (!RouterHostStore(*this).add(config))
             return false;
     }
 
@@ -404,7 +405,7 @@ Database::ReencryptResult Database::Reencryption::begin()
     const ReadResult read_results[] =
     {
         db_.allLocalHosts(&local_hosts_),
-        db_.allRouterHosts(&router_hosts_),
+        RouterHostStore(db_).list(&router_hosts_),
         CredentialStore(db_).list(&credentials_),
         db_.proxyConfig(&proxy_)
     };

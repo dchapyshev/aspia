@@ -88,6 +88,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/database_test_base.h
     storage/database_unittest.cc
     storage/profile_store_unittest.cc
+    storage/router_host_store_unittest.cc
     storage/sync_store_unittest.cc
     storage/user_settings_unittest.cc
     sync/sync_credentials_unittest.cc

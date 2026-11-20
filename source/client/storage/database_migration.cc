@@ -35,7 +35,7 @@
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
-#include "client/storage/database.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/router.h"
 #include "proto/storage.h"
@@ -534,13 +534,15 @@ bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
         return false;
     }
 
+    RouterHostStore store(db);
+
     for (const RouterHostConfig& host : std::as_const(hosts))
     {
         RouterHostConfig stored_host;
-        if (db.findRouterHost(host.hostId(), &stored_host) != Database::FindResult::NOT_FOUND)
+        if (store.find(host.hostId(), &stored_host) != Database::FindResult::NOT_FOUND)
             continue;
 
-        if (!db.addRouterHost(host))
+        if (!store.add(host))
             return false;
 
         SqlQuery reset(db.db_, "UPDATE router_hosts SET modify_time=0 WHERE host_id=?");

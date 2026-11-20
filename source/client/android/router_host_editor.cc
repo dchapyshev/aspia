@@ -25,7 +25,7 @@
 #include "client/android/credential_combo_box.h"
 #include "client/android/profile_combo_box.h"
 #include "client/config.h"
-#include "client/storage/database.h"
+#include "client/storage/router_host_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -132,7 +132,7 @@ bool RouterHostEditor::prepareForEdit(HostId host_id)
 
     RouterHostConfig credentials;
     const Database::FindResult found =
-        Database::instance().findRouterHost(host_id_, &credentials);
+        RouterHostStore().find(host_id_, &credentials);
 
     if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
     {
@@ -198,10 +198,10 @@ void RouterHostEditor::onSaveClicked()
         return;
     }
 
-    Database& db = Database::instance();
+    RouterHostStore store;
 
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(host_id_, &stored);
+    const Database::FindResult found = store.find(host_id_, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id_;
@@ -220,9 +220,9 @@ void RouterHostEditor::onSaveClicked()
         bool saved = false;
 
         if (found == Database::FindResult::NOT_FOUND)
-            saved = db.addRouterHost(credentials);
+            saved = store.add(credentials);
         else
-            saved = db.modifyRouterHost(credentials);
+            saved = store.modify(credentials);
 
         if (!saved)
         {
@@ -231,7 +231,7 @@ void RouterHostEditor::onSaveClicked()
         }
     }
 
-    if (!db.setRouterHostProfileId(host_id_, combo_profile_->currentProfileId()))
+    if (!store.setProfileId(host_id_, combo_profile_->currentProfileId()))
     {
         showError(tr("Failed to save the profile."));
         return;

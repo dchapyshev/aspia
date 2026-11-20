@@ -34,7 +34,7 @@
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_router_host_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -289,8 +289,6 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void RouterHostDialog::onLoadData()
 {
-    Database& db = Database::instance();
-
     if (!ui->combo_profile->onReload())
     {
         MsgBox::warning(this, tr("Failed to read the list of profiles."));
@@ -323,7 +321,7 @@ void RouterHostDialog::onLoadData()
     }
 
     RouterHostConfig credentials;
-    const Database::FindResult credentials_found = db.findRouterHost(host_.host_id, &credentials);
+    const Database::FindResult credentials_found = RouterHostStore().find(host_.host_id, &credentials);
     credentials_loaded_ = credentials_found != Database::FindResult::FAILED;
 
     if (credentials_found == Database::FindResult::FOUND || credentials_found == Database::FindResult::UNREADABLE)
@@ -405,7 +403,7 @@ bool RouterHostDialog::saveCredentials()
     if (!credentials_loaded_)
         return true;
 
-    Database& db = Database::instance();
+    RouterHostStore store;
 
     const qint64 credential_id =
         ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0;
@@ -413,7 +411,7 @@ bool RouterHostDialog::saveCredentials()
     const SecureString password = ui->edit_password->password();
 
     RouterHostConfig stored;
-    const Database::FindResult stored_found = db.findRouterHost(host_.host_id, &stored);
+    const Database::FindResult stored_found = store.find(host_.host_id, &stored);
     if (stored_found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_.host_id;
@@ -434,9 +432,9 @@ bool RouterHostDialog::saveCredentials()
     bool saved = false;
 
     if (row_exists)
-        saved = db.modifyRouterHost(credentials);
+        saved = store.modify(credentials);
     else
-        saved = db.addRouterHost(credentials);
+        saved = store.add(credentials);
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_.host_id;
@@ -450,7 +448,7 @@ bool RouterHostDialog::saveProfile()
     if (!credentials_loaded_)
         return true;
 
-    return Database::instance().setRouterHostProfileId(host_.host_id, ui->combo_profile->currentProfileId());
+    return RouterHostStore().setProfileId(host_.host_id, ui->combo_profile->currentProfileId());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -34,7 +34,7 @@
 #include "client/desktop/authorization_dialog.h"
 #include "client/desktop/status_overlay.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_host_store.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/router_error.h"
 #include "common/desktop/session_type.h"
@@ -73,7 +73,7 @@ std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConf
     Database& db = Database::instance();
     return host.entryId() > 0 ?
         db.localHostCredentials(host.entryId()) :
-        db.routerHostCredentials(stringToHostId(host.address()));
+        RouterHostStore().credentials(stringToHostId(host.address()));
 }
 
 } // namespace
@@ -217,7 +217,7 @@ qint64 ClientWindow::osCredentialId() const
     }
 
     RouterHostConfig router_host;
-    if (db.findRouterHost(stringToHostId(host.address()), &router_host) != Database::FindResult::FOUND)
+    if (RouterHostStore().find(stringToHostId(host.address()), &router_host) != Database::FindResult::FOUND)
         return 0;
 
     return router_host.osCredentialId();
@@ -234,7 +234,7 @@ void ClientWindow::setOsCredentialId(qint64 credential_id)
 
     const bool saved = host.entryId() > 0 ?
         db.setLocalHostOsCredentialId(host.entryId(), credential_id) :
-        db.setRouterHostOsCredentialId(stringToHostId(host.address()), credential_id);
+        RouterHostStore().setOsCredentialId(stringToHostId(host.address()), credential_id);
     if (!saved)
         LOG(ERROR) << "Unable to save the operating system credentials of the host";
 }
@@ -433,8 +433,10 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
     credentials.setUsername(username);
     credentials.setPassword(password);
 
+    RouterHostStore store;
+
     RouterHostConfig stored;
-    const Database::FindResult found = db.findRouterHost(host_id, &stored);
+    const Database::FindResult found = store.find(host_id, &stored);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the credentials of host" << host_id;
@@ -444,9 +446,9 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
     bool saved = false;
 
     if (found == Database::FindResult::NOT_FOUND)
-        saved = db.addRouterHost(credentials);
+        saved = store.add(credentials);
     else
-        saved = db.modifyRouterHost(credentials);
+        saved = store.modify(credentials);
 
     if (!saved)
         LOG(ERROR) << "Unable to save credentials of host" << host_id;
@@ -486,7 +488,7 @@ void ClientWindow::forgetRefusedCredentials()
     RouterHostConfig router_host;
     router_host.setHostId(stringToHostId(host.address()));
 
-    if (!Database::instance().modifyRouterHost(router_host))
+    if (!RouterHostStore().modify(router_host))
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 

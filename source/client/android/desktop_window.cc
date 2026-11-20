@@ -35,6 +35,7 @@
 #include "client/android/statistics_dialog.h"
 #include "client/router/router_controller.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -489,7 +490,7 @@ void DesktopWindow::forgetHostCredentials()
     RouterHostConfig router_host;
     router_host.setHostId(stringToHostId(host_.address()));
 
-    if (!Database::instance().modifyRouterHost(router_host))
+    if (!RouterHostStore().modify(router_host))
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
 }
 

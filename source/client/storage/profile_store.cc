@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
 
 namespace {
@@ -357,7 +358,7 @@ ProfileConfig ProfileStore::hostProfile(const HostConfig& host) const
     {
         RouterHostConfig router_host;
         const Database::FindResult found =
-            db_.findRouterHost(stringToHostId(host.address()), &router_host);
+            RouterHostStore(db_).find(stringToHostId(host.address()), &router_host);
         if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
             profile_id = router_host.profileId();
     }

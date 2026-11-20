@@ -36,6 +36,7 @@
 #include "client/storage/credential_store.h"
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_host_store.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -189,7 +190,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     {
         CredentialStore(db).list(&credentials),
         db.allLocalHosts(&hosts),
-        db.allRouterHosts(&router_hosts),
+        RouterHostStore(db).list(&router_hosts),
         ProfileStore(db).list(&profiles)
     };
 

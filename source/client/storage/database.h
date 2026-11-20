@@ -113,18 +113,6 @@ public:
         const SecureByteArray& key, bool reset);
     bool setSyncStorageResetPending(const RouterConfig& router);
 
-    // Router Hosts.
-    ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
-    bool addRouterHost(const RouterHostConfig& host);
-    bool modifyRouterHost(const RouterHostConfig& host);
-    bool removeRouterHost(HostId host_id);
-    FindResult findRouterHost(HostId host_id, RouterHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> routerHostCredentials(HostId host_id);
-    bool outdatedRouterHosts(QList<HostId>* hosts) const;
-    bool updateRouterHostCheckTime(HostId host_id);
-    bool setRouterHostOsCredentialId(HostId host_id, qint64 credential_id);
-    bool setRouterHostProfileId(HostId host_id, qint64 profile_id);
-
     bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
                 const QList<LocalHostConfig>& local_hosts,

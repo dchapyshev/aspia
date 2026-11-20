@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_host_store.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterHostsCleaner::RouterHostsCleaner(QObject* parent)
@@ -55,8 +55,10 @@ void RouterHostsCleaner::start()
         return;
     }
 
+    RouterHostStore store;
+
     QList<HostId> hosts;
-    if (!Database::instance().outdatedRouterHosts(&hosts) || hosts.isEmpty())
+    if (!store.outdated(&hosts) || hosts.isEmpty())
     {
         LOG(TRACE) << "No outdated hosts";
         emit sig_finished();
@@ -73,7 +75,7 @@ void RouterHostsCleaner::start()
     {
         // The moment of asking is remembered before the answer arrives. A row whose answer is lost
         // waits for its turn again instead of being asked about at every session.
-        if (!Database::instance().updateRouterHostCheckTime(host_id))
+        if (!store.updateCheckTime(host_id))
             LOG(ERROR) << "Unable to update check time of host" << host_id;
 
         session->checkHostStatus(host_id, { this,
@@ -85,7 +87,7 @@ void RouterHostsCleaner::start()
             {
                 LOG(INFO) << "Host" << host_id << "is gone. Removing saved credentials";
 
-                if (!Database::instance().removeRouterHost(host_id))
+                if (!RouterHostStore().remove(host_id))
                     LOG(ERROR) << "Unable to remove credentials of host" << host_id;
             }
 
