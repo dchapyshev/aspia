@@ -61,7 +61,7 @@ protected:
     int groupCount(qint64 workspace_id)
     {
         proto::router::GroupList list;
-        db_.groupList(workspace_id, &list);
+        groups_.list(workspace_id, &list);
         if (list.error_code() != proto::router::kErrorOk)
             return -1;
         return list.group_size();
@@ -230,8 +230,7 @@ TEST_F(WorkspaceRequestHandlerTest, DeleteReleasesHostsAndDropsGroups)
     ASSERT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorOk);
 
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(groups_.add(workspace_id, 0, "group", std::string_view(), &group_id), proto::router::kErrorOk);
     ASSERT_EQ(groupCount(workspace_id), 1);
 
     proto::router::WorkspaceRequest request;

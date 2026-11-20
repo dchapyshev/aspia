@@ -50,8 +50,8 @@ protected:
     qint64 addGroup(qint64 workspace_id, qint64 parent_id, const QString& name)
     {
         qint64 entry_id = -1;
-        if (db_.addGroup(workspace_id, parent_id, name.toStdString(), std::string_view(),
-                         &entry_id) != proto::router::kErrorOk)
+        if (groups_.add(workspace_id, parent_id, name.toStdString(), std::string_view(),
+                        &entry_id) != proto::router::kErrorOk)
         {
             return -1;
         }
@@ -61,21 +61,21 @@ protected:
     QString groupName(qint64 workspace_id, qint64 entry_id)
     {
         Group group;
-        db_.findGroup(workspace_id, entry_id, &group);
+        groups_.find(workspace_id, entry_id, &group);
         return QString::fromStdString(group.name);
     }
 
     qint64 groupRevision(qint64 workspace_id, qint64 entry_id)
     {
         Group group;
-        db_.findGroup(workspace_id, entry_id, &group);
+        groups_.find(workspace_id, entry_id, &group);
         return group.revision;
     }
 
     int groupCount(qint64 workspace_id)
     {
         proto::router::GroupList list;
-        db_.groupList(workspace_id, &list);
+        groups_.list(workspace_id, &list);
         if (list.error_code() != proto::router::kErrorOk)
             return -1;
         return list.group_size();
@@ -239,7 +239,7 @@ TEST_F(GroupRequestHandlerTest, ModifyRejectsOversizedFields)
 
     EXPECT_EQ(groupName(workspace_id_, group_id), "servers");
     Group stored;
-    ASSERT_EQ(db_.findGroup(workspace_id_, group_id, &stored), proto::router::kErrorOk);
+    ASSERT_EQ(groups_.find(workspace_id_, group_id, &stored), proto::router::kErrorOk);
     EXPECT_TRUE(stored.comment.empty());
 }
 

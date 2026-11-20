@@ -37,6 +37,7 @@
 #include "base/sql/sql_query.h"
 #include "router/access_log.h"
 #include "router/device_token_store.h"
+#include "router/group_store.h"
 #include "router/sync_storage.h"
 #include "router/workspace.h"
 #include "router/handlers/request_caller.h"
@@ -196,6 +197,7 @@ protected:
     QString file_path_;
     Database db_;
     DeviceTokenStore device_tokens_{ db_ };
+    GroupStore groups_{ db_ };
     QString access_log_file_path_;
     AccessLog access_log_;
     RouterUser admin_;

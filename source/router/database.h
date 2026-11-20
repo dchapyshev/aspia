@@ -32,26 +32,12 @@
 #include "router/workspace.h"
 
 namespace proto::router {
-class GroupList;
 class Host;
 class HostFilter;
 class HostList;
 class HostSearchResult;
 class WorkspaceList;
 } // namespace proto::router
-
-// A node in a workspace's host-group tree. Root nodes have parent_id == 0. Names are not
-// required to be unique within a parent: two siblings with the same name are allowed and the
-// client disambiguates by entry_id. Cycle protection on re-parent walks parent links upward
-// from the proposed new parent and refuses the move if it reaches the node being moved.
-struct Group
-{
-    qint64 revision  = 0;
-    qint64 entry_id  = 0;
-    qint64 parent_id = 0; // 0 means the group sits at the workspace root.
-    std::string name;
-    std::string comment;
-};
 
 // Invariants the write paths maintain, each enforced inside the mutating transaction. A change
 // to any user/workspace path must be checked against this list.
@@ -281,39 +267,6 @@ public:
     // when it has none and kErrorInternalError when the answer could not be read - a caller whose
     // skip-or-reject decision depends on the answer must not mistake an error for "no access".
     std::string_view checkWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
-
-    //----------------------------------------------------------------------------------------------
-    // Hosts Groups
-    //----------------------------------------------------------------------------------------------
-
-    // Appends every group in the given workspace (unspecified order) to |out| and sets its
-    // error_code, reading rows straight into the protobuf message. The client builds a tree by
-    // indexing on entry_id and linking via parent_id; display ordering is the client's job.
-    void groupList(qint64 workspace_id, proto::router::GroupList* out) const;
-
-    // Reads the group with the given entry_id from workspace_id into |group|. Returns
-    // kErrorNotFound when no such row exists in this workspace (an out of range id included) and
-    // kErrorInternalError when the answer could not be read - a database error must not pass for
-    // a missing group.
-    std::string_view findGroup(qint64 workspace_id, qint64 entry_id, Group* group) const;
-
-    // Inserts a new group. parent_id == 0 places it at the workspace root; otherwise parent_id
-    // must reference an existing group within the same workspace. On success *entry_id is set
-    // to the new id.
-    std::string_view addGroup(qint64 workspace_id, qint64 parent_id, std::string_view name,
-        std::string_view comment, qint64* entry_id);
-
-    // Renames and/or re-parents a group. new_parent_id must point to a group in the same
-    // workspace and must not be the group itself or one of its descendants. The cycle check
-    // runs a recursive CTE that walks parent links upward from new_parent_id; if entry_id
-    // appears anywhere in that chain the move is refused. |base_revision| is the revision the
-    // edit was built on: a stale one answers kErrorConflict.
-    std::string_view modifyGroup(qint64 workspace_id, qint64 entry_id, qint64 base_revision,
-        qint64 new_parent_id, std::string_view name, std::string_view comment);
-
-    // Deletes the group and all its descendants, moving hosts from that subtree to the
-    // workspace root (group_id <- 0).
-    std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:
     friend class DatabaseStore;

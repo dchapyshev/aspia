@@ -26,7 +26,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
-#include "router/database.h"
+#include "router/group_store.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -114,7 +114,7 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
     if (group_id != 0 && target_workspace_id != 0)
     {
         Group group;
-        const std::string_view group_code = database.findGroup(target_workspace_id, group_id, &group);
+        const std::string_view group_code = GroupStore(database).find(target_workspace_id, group_id, &group);
         if (group_code == proto::router::kErrorNotFound)
         {
             LOG(ERROR) << "Group" << group_id << "not found in workspace" << target_workspace_id;

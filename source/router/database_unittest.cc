@@ -38,6 +38,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/device_token_store.h"
+#include "router/group_store.h"
 
 namespace {
 
@@ -352,8 +353,7 @@ TEST_F(RouterDatabaseTest, HostListTakesEveryGroupOfTheWorkspace)
     ASSERT_GT(workspace_id, 0);
 
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(GroupStore(db_).add(workspace_id, 0, "group", std::string_view(), &group_id), proto::router::kErrorOk);
 
     const HostId root_host = addHost("hash-1");
     const HostId group_host = addHost("hash-2");
@@ -1007,15 +1007,16 @@ TEST_F(RouterDatabaseTest, CascadesMoveTheHostRevision)
     const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
     ASSERT_GT(workspace_id, 0);
 
+    GroupStore store(db_);
+
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(store.add(workspace_id, 0, "group", std::string_view(), &group_id), proto::router::kErrorOk);
     ASSERT_EQ(moveHost(host_id, workspace_id, group_id), proto::router::kErrorOk);
 
     // The group of the host goes away: the host drops to the workspace root and the edit built
     // while it was still in the group is stale.
     proto::router::Host snapshot = findHost(host_id);
-    ASSERT_EQ(db_.removeGroup(workspace_id, group_id), proto::router::kErrorOk);
+    ASSERT_EQ(store.remove(workspace_id, group_id), proto::router::kErrorOk);
     EXPECT_GT(findHost(host_id).revision(), snapshot.revision());
     EXPECT_EQ(db_.modifyHost(host_id, snapshot.revision(), workspace_id, 0, "renamed",
                              std::string_view()),
@@ -1097,8 +1098,7 @@ TEST_F(RouterDatabaseTest, ReleasedHostLosesItsGroupAndKeepsItsComment)
     ASSERT_GT(workspace_id, 0);
 
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id, 0, "group", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(GroupStore(db_).add(workspace_id, 0, "group", std::string_view(), &group_id), proto::router::kErrorOk);
 
     ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, group_id,
                              "display", "comment"),

@@ -29,7 +29,6 @@ list(APPEND SOURCE_ROUTER_CORE
     client_operator.h
     database.cc
     database.h
-    database_groups.cc
     database_hosts.cc
     database_store.h
     database_users.cc
@@ -40,6 +39,8 @@ list(APPEND SOURCE_ROUTER_CORE
     email_messages.h
     email_queue.cc
     email_queue.h
+    group_store.cc
+    group_store.h
     host.cc
     host.h
     migration_utils.cc

@@ -79,7 +79,7 @@ protected:
     qint64 addGroup(qint64 workspace_id, const QString& name)
     {
         qint64 entry_id = -1;
-        if (db_.addGroup(workspace_id, 0, name.toStdString(), std::string_view(), &entry_id) !=
+        if (groups_.add(workspace_id, 0, name.toStdString(), std::string_view(), &entry_id) !=
             proto::router::kErrorOk)
         {
             return -1;
@@ -564,8 +564,7 @@ TEST_F(HostListTest, FilteredListRequiresWorkspaceAccess)
 TEST_F(HostListTest, FilteredListIsScopedToWorkspaceAndGroup)
 {
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id_, 0, "servers", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(groups_.add(workspace_id_, 0, "servers", std::string_view(), &group_id), proto::router::kErrorOk);
 
     ASSERT_NE(addHostTo("hash-1", workspace_id_, group_id, "in-group"), kInvalidHostId);
     ASSERT_NE(addHostTo("hash-2", workspace_id_, 0, "at-root"), kInvalidHostId);
@@ -593,8 +592,7 @@ TEST_F(HostListTest, FilteredListIsScopedToWorkspaceAndGroup)
 TEST_F(HostListTest, FilteredListTakesEveryGroupOfTheWorkspace)
 {
     qint64 group_id = -1;
-    ASSERT_EQ(db_.addGroup(workspace_id_, 0, "servers", std::string_view(), &group_id),
-              proto::router::kErrorOk);
+    ASSERT_EQ(groups_.add(workspace_id_, 0, "servers", std::string_view(), &group_id), proto::router::kErrorOk);
 
     ASSERT_NE(addHostTo("hash-1", workspace_id_, group_id, "in-group"), kInvalidHostId);
     ASSERT_NE(addHostTo("hash-2", workspace_id_, 0, "at-root"), kInvalidHostId);

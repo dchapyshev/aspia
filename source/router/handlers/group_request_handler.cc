@@ -23,7 +23,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
-#include "router/database.h"
+#include "router/group_store.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -64,7 +64,7 @@ RequestResult handleGroupRequest(Database& database, const RequestCaller& caller
 
         qint64 new_id = -1;
         const std::string_view error_code =
-            database.addGroup(workspace_id, parent_id, name, comment, &new_id);
+            GroupStore(database).add(workspace_id, parent_id, name, comment, &new_id);
         result.error_code = error_code;
 
         if (error_code == proto::router::kErrorOk)
@@ -80,7 +80,7 @@ RequestResult handleGroupRequest(Database& database, const RequestCaller& caller
                   << "name=" << name;
 
         const std::string_view error_code =
-            database.modifyGroup(workspace_id, entry_id, group.revision(), parent_id, name, comment);
+            GroupStore(database).modify(workspace_id, entry_id, group.revision(), parent_id, name, comment);
         result.error_code = error_code;
 
         if (error_code == proto::router::kErrorOk)
@@ -91,7 +91,7 @@ RequestResult handleGroupRequest(Database& database, const RequestCaller& caller
         LOG(INFO) << "Group delete request: workspace_id=" << workspace_id
                   << "entry_id=" << entry_id;
 
-        const std::string_view error_code = database.removeGroup(workspace_id, entry_id);
+        const std::string_view error_code = GroupStore(database).remove(workspace_id, entry_id);
         result.error_code = error_code;
 
         if (error_code == proto::router::kErrorOk)
@@ -132,5 +132,5 @@ void handleGroupList(Database& database, const RequestCaller& caller,
         return;
     }
 
-    database.groupList(workspace_id, out);
+    GroupStore(database).list(workspace_id, out);
 }
