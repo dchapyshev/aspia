@@ -259,7 +259,7 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
                              "Accounting", "comment"),
               proto::router::kErrorOk);
 
-    ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
+    ASSERT_EQ(workspaces_.remove(workspace_id), proto::router::kErrorOk);
 
     const proto::router::Host stored = findHost(host_id);
     EXPECT_EQ(stored.host_id(), host_id);

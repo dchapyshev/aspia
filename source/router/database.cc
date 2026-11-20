@@ -157,8 +157,8 @@ bool ensureSchema(SqlDatabase& db)
     }
 
     // workspace_access's PRIMARY KEY is (workspace_id, user_id), which indexes only the leading
-    // column. workspaceAccessIdsForUser filters by user_id alone, so we need a dedicated index
-    // on the trailing column.
+    // column. WorkspaceStore::accessIdsForUser filters by user_id alone, so we need a dedicated
+    // index on the trailing column.
     if (!run("CREATE INDEX IF NOT EXISTS \"workspace_access_user_id\" "
              "ON \"workspace_access\"(\"user_id\")"))
     {

@@ -46,13 +46,13 @@ protected:
 
     QString workspaceName(qint64 entry_id)
     {
-        return QString::fromStdString(db_.findWorkspace(entry_id).name);
+        return QString::fromStdString(workspaces_.find(entry_id).name);
     }
 
     qint64 workspaceRevision(qint64 entry_id)
     {
         proto::router::WorkspaceList list;
-        db_.workspaceListForAdmin(entry_id, &list);
+        workspaces_.listForAdmin(entry_id, &list);
         if (list.error_code() != proto::router::kErrorOk || list.workspace_size() != 1)
             return -1;
         return list.workspace(0).revision();
@@ -185,7 +185,7 @@ TEST_F(WorkspaceRequestHandlerTest, ModifyCanDropOwnAccess)
 
     // The workspace is still listed for the administrator that left it.
     proto::router::WorkspaceList list;
-    db_.workspaceListForAdmin(workspace_id, &list);
+    workspaces_.listForAdmin(workspace_id, &list);
     ASSERT_EQ(list.workspace_size(), 1);
     EXPECT_EQ(list.workspace(0).user_id_size(), 0);
 }
@@ -307,8 +307,8 @@ TEST_F(WorkspaceListTest, AdminSeesFullMembership)
     RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {admin_.entry_id, client.entry_id}),
+    ASSERT_EQ(workspaces_.modify(workspace_id_, 1, "alpha", std::string_view(),
+                                 {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
     const proto::router::WorkspaceList list = workspaceList(0);
@@ -326,8 +326,8 @@ TEST_F(WorkspaceListTest, NonAdminSeesNoMembership)
     RouterUser client = addUser("client", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_TRUE(client.isValid());
 
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(),
-                                  {admin_.entry_id, client.entry_id}),
+    ASSERT_EQ(workspaces_.modify(workspace_id_, 1, "alpha", std::string_view(),
+                                 {admin_.entry_id, client.entry_id}),
               proto::router::kErrorOk);
 
     setCaller(client, proto::router::SESSION_TYPE_OPERATOR);
@@ -358,8 +358,7 @@ TEST_F(WorkspaceListTest, InvisibleWorkspaceIsNotListed)
 
     // The administrator is not a member of it either, and lists it regardless.
     setCaller(admin_, proto::router::SESSION_TYPE_ADMIN);
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id_, 1, "alpha", std::string_view(), {}),
-              proto::router::kErrorOk);
+    ASSERT_EQ(workspaces_.modify(workspace_id_, 1, "alpha", std::string_view(), {}), proto::router::kErrorOk);
     EXPECT_EQ(workspaceList(0).workspace_size(), 1);
 }
 

@@ -25,8 +25,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
-#include "router/workspace.h"
+#include "router/workspace_store.h"
 #include "router/workers/client_worker.h"
 
 namespace {
@@ -52,7 +51,7 @@ void handleAdd(Database& database, const proto::router::Workspace& workspace, Re
               << "access entries";
 
     qint64 new_id = -1;
-    const std::string_view error_code = database.addWorkspace(
+    const std::string_view error_code = WorkspaceStore(database).add(
         strTrimmed(workspace.name()), workspace.comment(), accessList(workspace), &new_id);
     result->error_code = error_code;
 
@@ -69,7 +68,7 @@ void handleModify(Database& database, const proto::router::Workspace& workspace,
     LOG(INFO) << "Workspace modify request:" << workspace.entry_id() << workspace.name()
               << "with" << workspace.user_id_size() << "access entries";
 
-    const std::string_view error_code = database.modifyWorkspace(
+    const std::string_view error_code = WorkspaceStore(database).modify(
         workspace.entry_id(), workspace.revision(), strTrimmed(workspace.name()),
         workspace.comment(), accessList(workspace));
     result->error_code = error_code;
@@ -85,7 +84,7 @@ void handleDelete(Database& database, qint64 entry_id, Result* result)
 {
     LOG(INFO) << "Workspace delete request:" << entry_id;
 
-    const std::string_view error_code = database.removeWorkspace(entry_id);
+    const std::string_view error_code = WorkspaceStore(database).remove(entry_id);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -107,7 +106,7 @@ std::string_view checkWorkspaceAccess(Database& database, const RequestCaller& c
     if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
         return proto::router::kErrorOk;
 
-    const std::string_view access_code = database.checkWorkspaceAccess(caller.user_id, workspace_id);
+    const std::string_view access_code = WorkspaceStore(database).checkAccess(caller.user_id, workspace_id);
     if (access_code == proto::router::kErrorAccessDenied)
         LOG(ERROR) << "User" << caller.user_id << "has no access to workspace" << workspace_id;
 
@@ -151,8 +150,10 @@ void handleWorkspaceList(Database& database, const RequestCaller& caller,
     // any other session sees the workspaces it is a member of, and the membership of a workspace
     // is not theirs to see. workspace_id == 0 means every workspace of that scope; > 0 narrows to
     // a single entry.
+    WorkspaceStore store(database);
+
     if (caller.session_type == proto::router::SESSION_TYPE_ADMIN)
-        database.workspaceListForAdmin(request.workspace_id(), out);
+        store.listForAdmin(request.workspace_id(), out);
     else
-        database.workspaceListForUser(caller.user_id, request.workspace_id(), out);
+        store.listForUser(caller.user_id, request.workspace_id(), out);
 }

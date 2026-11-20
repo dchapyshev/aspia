@@ -29,14 +29,12 @@
 #include "base/peer/host_id.h"
 #include "base/peer/router_user.h"
 #include "base/sql/sql_database.h"
-#include "router/workspace.h"
 
 namespace proto::router {
 class Host;
 class HostFilter;
 class HostList;
 class HostSearchResult;
-class WorkspaceList;
 } // namespace proto::router
 
 // Invariants the write paths maintain, each enforced inside the mutating transaction. A change
@@ -44,12 +42,13 @@ class WorkspaceList;
 // I1. users.sessions always holds the full session mask of the access level
 //     (RouterUser::expandSessionTypes): addUser and modifyUser expand the single level a client
 //     names, and a modify request without a level keeps the stored mask.
-// I2. An administrator sees every workspace by its session type alone (workspaceListForAdmin),
-//     so workspace_access holds the memberships of the regular users only.
+// I2. An administrator sees every workspace by its session type alone
+//     (WorkspaceStore::listForAdmin), so workspace_access holds the memberships of the regular
+//     users only.
 // I3. A workspace modification applies only on top of the state the client saw
 //     (workspaces.revision): a save built from a stale snapshot is rejected with kErrorConflict,
 //     never applied over the concurrent change. Every change of the membership of a workspace
-//     moves its revision: modifyWorkspace itself and the rows removed by the cascade of
+//     moves its revision: WorkspaceStore::modify itself and the rows removed by the cascade of
 //     removeUser.
 class Database
 {
@@ -217,57 +216,6 @@ public:
     // and the same machine has to be approved anew. Returns false only on a database error.
     bool pruneExpiredHostRemovals();
 
-    //----------------------------------------------------------------------------------------------
-    // Workspaces
-    //----------------------------------------------------------------------------------------------
-
-    // Append workspaces to |out|, reading rows straight into the protobuf message.
-    // workspace_id == 0 returns every workspace of the scope; > 0 narrows to that single one.
-    // Both set |out|'s error_code.
-    //
-    // ForAdmin lists every workspace of the router with the membership of each attached (for the
-    // admin sessions managing it), fetched in a single query (no per-workspace round trip).
-    // ForUser lists the workspaces |user_id| is a member of, without the membership of anybody.
-    void workspaceListForAdmin(qint64 workspace_id, proto::router::WorkspaceList* out) const;
-    void workspaceListForUser(qint64 user_id, qint64 workspace_id,
-        proto::router::WorkspaceList* out) const;
-    Workspace findWorkspace(qint64 entry_id) const;
-
-    // The initial access list holds the user_ids of the members of the workspace; an entry for a
-    // user that is gone is rejected (kErrorConflict - the sender refetches, see checkAccessUser).
-    // The hosts of a workspace are claimed one by one (see modifyHost), so a creation never
-    // touches them.
-    std::string_view addWorkspace(std::string_view name, std::string_view comment,
-        const std::vector<qint64>& initial_access, qint64* entry_id);
-
-    // Updates name/comment and synchronizes the access list in a single transaction.
-    // base_revision is the revision the client based its edit on; a mismatch with the stored
-    // value is rejected (kErrorConflict) so a save built from a stale snapshot can never silently
-    // overwrite a concurrent change, and on success the stored revision is incremented.
-    // desired_access is the complete final access list: user_ids missing from it are revoked and
-    // user_ids absent from the current DB record are inserted.
-    std::string_view modifyWorkspace(qint64 entry_id, qint64 base_revision,
-        std::string_view name, std::string_view comment, const std::vector<qint64>& desired_access);
-
-    // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0) and drops the
-    // note each of them carried within it. Deliberately takes no base_revision: a delete is an
-    // intent about the whole entity, not about a particular state of it, so it applies
-    // regardless of concurrent edits (unlike modifyWorkspace, see I3).
-    std::string_view removeWorkspace(qint64 entry_id);
-
-    // Fills |workspace_ids| with the ids of every workspace of the router. Returns false on a
-    // database error.
-    bool workspaceIds(std::set<qint64>* workspace_ids) const;
-
-    // Fills |workspace_ids| with the ids of every workspace the user has a workspace_access
-    // entry for. Returns false on a database error.
-    bool workspaceAccessIdsForUser(qint64 user_id, std::set<qint64>* workspace_ids) const;
-
-    // Returns kErrorOk when the user has an access entry for the workspace, kErrorAccessDenied
-    // when it has none and kErrorInternalError when the answer could not be read - a caller whose
-    // skip-or-reject decision depends on the answer must not mistake an error for "no access".
-    std::string_view checkWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
-
 private:
     friend class DatabaseStore;
 
@@ -278,11 +226,6 @@ private:
     static bool isPageValid(qint64 offset, qint64 count, int max_count);
 
     bool openDatabase();
-
-    // Checks that a new access entry targets a user that still exists. An unknown user means the
-    // record was deleted after the sender took its snapshot, so it answers kErrorConflict and the
-    // sender refetches. Must be called inside a transaction. Returns a proto::router error code.
-    std::string_view checkAccessUser(qint64 user_id);
 
     mutable SqlDatabase db_;
 

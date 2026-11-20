@@ -39,7 +39,7 @@
 #include "router/device_token_store.h"
 #include "router/group_store.h"
 #include "router/sync_storage.h"
-#include "router/workspace.h"
+#include "router/workspace_store.h"
 #include "router/handlers/request_caller.h"
 
 // Shared fixture for the request handlers: an isolated database in a temporary directory, starting
@@ -122,8 +122,8 @@ protected:
     qint64 addWorkspace(const QString& name)
     {
         qint64 entry_id = -1;
-        if (db_.addWorkspace(name.toStdString(), std::string_view(), {admin_.entry_id},
-                             &entry_id) != proto::router::kErrorOk)
+        if (workspaces_.add(name.toStdString(), std::string_view(), {admin_.entry_id},
+                            &entry_id) != proto::router::kErrorOk)
         {
             return -1;
         }
@@ -198,6 +198,7 @@ protected:
     Database db_;
     DeviceTokenStore device_tokens_{ db_ };
     GroupStore groups_{ db_ };
+    WorkspaceStore workspaces_{ db_ };
     QString access_log_file_path_;
     AccessLog access_log_;
     RouterUser admin_;

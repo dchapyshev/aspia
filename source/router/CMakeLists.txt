@@ -32,7 +32,6 @@ list(APPEND SOURCE_ROUTER_CORE
     database_hosts.cc
     database_store.h
     database_users.cc
-    database_workspaces.cc
     device_token_store.cc
     device_token_store.h
     email_messages.cc
@@ -60,7 +59,9 @@ list(APPEND SOURCE_ROUTER_CORE
     sync_storage.cc
     sync_storage.h
     workspace.cc
-    workspace.h)
+    workspace.h
+    workspace_store.cc
+    workspace_store.h)
 
 list(APPEND SOURCE_ROUTER
     main.cc)
@@ -80,7 +81,8 @@ list(APPEND SOURCE_ROUTER_TESTS
     settings_unittest.cc
     shared_state_unittest.cc
     sync_storage_unittest.cc
-    tests_main.cc)
+    tests_main.cc
+    workspace_store_unittest.cc)
 
 include(handlers/sources.cmake)
 include(workers/sources.cmake)

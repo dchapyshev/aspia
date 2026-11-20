@@ -17,7 +17,6 @@
 //
 
 #include "router/database.h"
-#include "router/workspace.h"
 
 #include <gtest/gtest.h>
 
@@ -39,6 +38,7 @@
 #include "proto/router_constants.h"
 #include "router/device_token_store.h"
 #include "router/group_store.h"
+#include "router/workspace_store.h"
 
 namespace {
 
@@ -99,7 +99,7 @@ protected:
     {
         qint64 entry_id = -1;
         const std::string_view error_code =
-            db_.addWorkspace(name.toStdString(), std::string_view(), access, &entry_id);
+            WorkspaceStore(db_).add(name.toStdString(), std::string_view(), access, &entry_id);
         if (error_code != proto::router::kErrorOk)
             return -1;
         return entry_id;
@@ -133,7 +133,7 @@ protected:
     qint64 workspaceRevision(qint64 workspace_id)
     {
         proto::router::WorkspaceList list;
-        db_.workspaceListForAdmin(workspace_id, &list);
+        WorkspaceStore(db_).listForAdmin(workspace_id, &list);
         if (list.error_code() != proto::router::kErrorOk || list.workspace_size() != 1)
             return -1;
         return list.workspace(0).revision();
@@ -865,80 +865,6 @@ TEST_F(RouterDatabaseTest, OtpCounterIsConsumedOnce)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An administrator sees every workspace by its session type, so a workspace can be created
-// without one - and without any member at all.
-TEST_F(RouterDatabaseTest, WorkspaceNeedsNoAdminInItsAccessList)
-{
-    qint64 entry_id = -1;
-    ASSERT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, &entry_id),
-              proto::router::kErrorOk);
-    ASSERT_GT(entry_id, 0);
-
-    proto::router::WorkspaceList list;
-    db_.workspaceListForAdmin(0, &list);
-    ASSERT_EQ(list.workspace_size(), 1);
-    EXPECT_EQ(list.workspace(0).user_id_size(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A duplicate name is answered before anything is created.
-TEST_F(RouterDatabaseTest, DuplicateWorkspaceNameIsAlreadyExists)
-{
-    ASSERT_GT(addWorkspace("alpha", {admin_.entry_id}), 0);
-
-    qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(), {}, &entry_id),
-              proto::router::kErrorAlreadyExists);
-}
-
-//--------------------------------------------------------------------------------------------------
-// I3: a modification based on a stale revision is rejected; a successful one increments the
-// stored revision.
-TEST_F(RouterDatabaseTest, RevisionGuardsConcurrentModification)
-{
-    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
-    ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(workspaceRevision(workspace_id), 1);
-
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "beta", std::string_view(),
-                                  {admin_.entry_id}),
-              proto::router::kErrorOk);
-    EXPECT_EQ(workspaceRevision(workspace_id), 2);
-
-    // A save built on the old snapshot must not overwrite the change above.
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "gamma", std::string_view(),
-                                  {admin_.entry_id}),
-              proto::router::kErrorConflict);
-    EXPECT_EQ(db_.findWorkspace(workspace_id).name, "beta");
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(RouterDatabaseTest, ModifyWorkspaceGrantsAndRevokes)
-{
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
-    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = findUser("client");
-
-    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
-    ASSERT_GT(workspace_id, 0);
-
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {admin_.entry_id, client.entry_id}),
-              proto::router::kErrorOk);
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(client.entry_id, &workspace_ids));
-    EXPECT_TRUE(workspace_ids.contains(workspace_id));
-
-    ASSERT_EQ(db_.modifyWorkspace(workspace_id, 2, "alpha", std::string_view(),
-                                  {admin_.entry_id}),
-              proto::router::kErrorOk);
-
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(client.entry_id, &workspace_ids));
-    EXPECT_TRUE(workspace_ids.empty());
-}
-
-//--------------------------------------------------------------------------------------------------
 // A host edit is applied only when it was built on the current state of the host. Two operators
 // claim the same free host: the second claim was built on the state the first one already changed,
 // so it loses and is told to refetch instead of silently stealing the host.
@@ -1025,7 +951,7 @@ TEST_F(RouterDatabaseTest, CascadesMoveTheHostRevision)
     // The workspace goes away: the host is released and the pre-removal edit must not claim it
     // back.
     snapshot = findHost(host_id);
-    ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
+    ASSERT_EQ(WorkspaceStore(db_).remove(workspace_id), proto::router::kErrorOk);
     EXPECT_GT(findHost(host_id).revision(), snapshot.revision());
     EXPECT_EQ(findHost(host_id).workspace_id(), 0);
 }
@@ -1131,30 +1057,6 @@ TEST_F(RouterDatabaseTest, UnassignedHostKeepsItsComment)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(RouterDatabaseTest, RemoveWorkspaceReleasesHostsAndAccess)
-{
-    const HostId host_id = addHost("hash-1");
-    ASSERT_NE(host_id, kInvalidHostId);
-
-    const qint64 workspace_id = addWorkspace("alpha", {admin_.entry_id});
-    ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, 0, "display",
-                             "note"),
-              proto::router::kErrorOk);
-
-    ASSERT_EQ(db_.removeWorkspace(workspace_id), proto::router::kErrorOk);
-
-    std::set<qint64> workspace_ids;
-    ASSERT_TRUE(db_.workspaceAccessIdsForUser(admin_.entry_id, &workspace_ids));
-    EXPECT_TRUE(workspace_ids.empty());
-
-    // The host is out of the workspace, its note is its own and survives the removal.
-    const proto::router::Host host = findHost(host_id);
-    EXPECT_EQ(host.workspace_id(), 0);
-    EXPECT_EQ(host.comment(), "note");
-}
-
-//--------------------------------------------------------------------------------------------------
 TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
@@ -1168,7 +1070,7 @@ TEST_F(RouterDatabaseTest, RemoveUserCascadesAccessEntries)
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
 
     proto::router::WorkspaceList list;
-    db_.workspaceListForAdmin(workspace_id, &list);
+    WorkspaceStore(db_).listForAdmin(workspace_id, &list);
     ASSERT_EQ(list.workspace_size(), 1);
     EXPECT_EQ(list.workspace(0).user_id_size(), 1);
 }
@@ -1191,28 +1093,9 @@ TEST_F(RouterDatabaseTest, RemovedUserBumpsWorkspaceRevision)
     ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
     EXPECT_EQ(workspaceRevision(workspace_id), 2);
 
-    EXPECT_EQ(db_.modifyWorkspace(workspace_id, 1, "alpha", std::string_view(),
-                                  {admin_.entry_id}),
+    EXPECT_EQ(WorkspaceStore(db_).modify(workspace_id, 1, "alpha", std::string_view(),
+                                         {admin_.entry_id}),
               proto::router::kErrorConflict);
-}
-
-//--------------------------------------------------------------------------------------------------
-// An access entry for a user that is gone is how a concurrent delete looks: the sender still
-// saw the user in its snapshot, so the answer is a conflict resolved by refetching.
-TEST_F(RouterDatabaseTest, EntryForDeletedUserIsConflict)
-{
-    RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
-    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
-    client = findUser("client");
-    ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
-
-    qint64 entry_id = -1;
-    EXPECT_EQ(db_.addWorkspace("alpha", std::string_view(),
-                               {admin_.entry_id, client.entry_id}, &entry_id),
-              proto::router::kErrorConflict);
-
-    // The transaction rolled back: the name is still free.
-    EXPECT_GT(addWorkspace("alpha", {admin_.entry_id}), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

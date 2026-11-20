@@ -27,6 +27,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/group_store.h"
+#include "router/workspace_store.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -95,8 +96,7 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
             return result;
         }
 
-        const std::string_view access_code =
-            database.checkWorkspaceAccess(caller.user_id, workspace_id);
+        const std::string_view access_code = WorkspaceStore(database).checkAccess(caller.user_id, workspace_id);
         if (access_code != proto::router::kErrorOk)
         {
             LOG(ERROR) << "User" << caller.user_id << "cannot edit host" << host_id
@@ -231,9 +231,11 @@ void handleHostSearch(Database& database, const RequestCaller& caller,
     // administrator, the ones it is a member of for anybody else.
     const bool is_admin = caller.session_type == proto::router::SESSION_TYPE_ADMIN;
 
+    WorkspaceStore store(database);
+
     std::set<qint64> workspace_ids;
-    const bool ids_known = is_admin ? database.workspaceIds(&workspace_ids)
-                                    : database.workspaceAccessIdsForUser(caller.user_id, &workspace_ids);
+    const bool ids_known = is_admin ? store.ids(&workspace_ids)
+                                    : store.accessIdsForUser(caller.user_id, &workspace_ids);
     if (!ids_known)
     {
         LOG(ERROR) << "Failed to read the workspace scope of user" << caller.user_id;
