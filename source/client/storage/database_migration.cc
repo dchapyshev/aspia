@@ -497,12 +497,24 @@ DatabaseMigration::Result DatabaseMigration::migrate(const QString& old_file_pat
 // static
 bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
 {
-    bool found = false;
-    const QString value = db.readSetting(DatabaseStore::kSettingRouterId, &found);
-    if (!found)
-        return true;
+    qint64 router_id = 0;
 
-    const qint64 router_id = value.toLongLong();
+    {
+        SqlQuery query(db.db_, "SELECT value FROM settings WHERE name=?");
+        query.addText(std::string_view(DatabaseStore::kSettingRouterId));
+
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to read the router the database waits for:" << db.db_.lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::DONE)
+            return true;
+
+        router_id = query.columnText(0).toLongLong();
+    }
 
     SqlDatabase old_db;
     if (!old_db.open(old_file_path, SqlDatabase::OpenMode::READ_ONLY))

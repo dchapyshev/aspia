@@ -122,9 +122,6 @@ private:
                               const QList<CredentialConfig>& credentials,
                               const ProxyConfig& proxy);
 
-    QString readSetting(const QString& name, bool* found = nullptr) const;
-    bool writeSetting(const QString& name, const QString& value);
-
     mutable SqlDatabase db_;
 };
 
