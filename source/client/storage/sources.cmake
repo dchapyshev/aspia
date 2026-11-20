@@ -29,7 +29,6 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database.h
     database_migration.cc
     database_migration.h
-    database_router.cc
     database_settings.cc
     database_store.h
     instance_settings.cc
@@ -44,6 +43,8 @@ collect_sources(SOURCE_CLIENT_STORAGE
     profile_store.h
     router_host_store.cc
     router_host_store.h
+    router_store.cc
+    router_store.h
     sync_store.cc
     sync_store.h
     system_settings.cc

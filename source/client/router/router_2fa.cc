@@ -29,7 +29,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 
@@ -191,7 +191,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             {
                 LOG(INFO) << "Router rejected device token - clearing local copy";
                 config_->clearDeviceToken();
-                if (!Database::instance().setRouterConfig(*config_))
+                if (!RouterStore().save(*config_))
                     LOG(WARNING) << "Failed to clear stale device token";
 
                 openPrompt(challenge, QString());
@@ -248,7 +248,7 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
             if (!config_->deviceToken().isEmpty())
             {
                 config_->clearDeviceToken();
-                if (!Database::instance().setRouterConfig(*config_))
+                if (!RouterStore().save(*config_))
                     LOG(WARNING) << "Failed to clear stale device token";
             }
 
@@ -315,7 +315,7 @@ void Router2FA::readLoginResult(const proto::router::LoginResult& result)
         LOG(WARNING) << "Device token of unexpected size";
     }
 
-    if (config_changed && !Database::instance().setRouterConfig(*config_))
+    if (config_changed && !RouterStore().save(*config_))
         LOG(ERROR) << "Failed to persist the record of the router";
 
     // The login is over. The owner stops feeding the object on this report and only then

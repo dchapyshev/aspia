@@ -28,7 +28,7 @@
 #include "client/config.h"
 #include "client/android/router_editor.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
 #include "common/android/scroll_area.h"
@@ -168,7 +168,7 @@ void RouterWidget::reload()
     RouterController::instance().reload();
 
     RouterConfig config;
-    const Database::FindResult found = Database::instance().routerConfig(&config);
+    const Database::FindResult found = RouterStore().find(&config);
     if (found == Database::FindResult::FAILED)
         LOG(ERROR) << "Unable to read the router";
 

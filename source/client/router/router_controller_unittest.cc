@@ -28,7 +28,7 @@
 #include "base/sql/sql_database.h"
 #include "client/config.h"
 #include "client/router/router_test_fixture.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 
 // The controller without a worker: nothing connects, so what is under test is which records keep
 // a context of their own and which lose it.
@@ -53,7 +53,7 @@ protected:
         router.setUsername("router-user");
         router.setPassword(SecureString("router-secret"));
 
-        EXPECT_TRUE(Database::instance().setRouterConfig(router));
+        EXPECT_TRUE(RouterStore().save(router));
     }
 
     bool writeRouter(bool enabled = true)
@@ -64,7 +64,7 @@ protected:
         router.setPassword(SecureString("router-secret"));
         router.setEnabled(enabled);
 
-        return Database::instance().setRouterConfig(router);
+        return RouterStore().save(router);
     }
 
     // What a master password entered elsewhere leaves behind: the row is there and its sealed

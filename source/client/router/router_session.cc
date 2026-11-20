@@ -24,7 +24,7 @@
 #include "base/peer/router_user.h"
 #include "base/serialization.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/workers/router_worker.h"
 #include "proto/router_constants.h"
 
@@ -146,7 +146,7 @@ bool RouterSession::storeCredentials(const QString& user_name, const SecureStrin
 
     config_->setUsername(user_name);
     config_->setPassword(password);
-    if (!Database::instance().setRouterConfig(*config_))
+    if (!RouterStore().save(*config_))
     {
         LOG(WARNING) << "Failed to persist new credentials";
         RouterController::instance().addEvent(RouterEvent::Severity::WARNING,

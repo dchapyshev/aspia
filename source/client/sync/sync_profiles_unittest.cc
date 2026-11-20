@@ -29,6 +29,7 @@
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/router_store.h"
 #include "client/sync/sync_crypto.h"
 
 namespace {
@@ -56,8 +57,9 @@ protected:
 
         for (Database* db : { &laptop_, &phone_ })
         {
-            ASSERT_TRUE(db->setRouterConfig(router));
-            ASSERT_EQ(db->setSyncStorage(router, kStorageId, key_, false), Database::SyncResult::DONE);
+            RouterStore store(*db);
+            ASSERT_TRUE(store.save(router));
+            ASSERT_EQ(store.setSyncStorage(router, kStorageId, key_, false), Database::SyncResult::DONE);
         }
     }
 

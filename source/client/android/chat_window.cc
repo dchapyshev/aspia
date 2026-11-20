@@ -49,6 +49,7 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -94,7 +95,7 @@ QString chatHistoryId(const SessionState& session_state)
             return QString();
 
         RouterConfig router;
-        Database::instance().routerConfig(&router);
+        RouterStore().find(&router);
         if (router.guid().isEmpty())
         {
             LOG(WARNING) << "Router entry not found";

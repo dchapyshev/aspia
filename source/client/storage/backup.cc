@@ -39,6 +39,7 @@
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -202,7 +203,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         return Backup::Result::INTERNAL_ERROR;
     }
 
-    const Database::FindResult router_found = db.routerConfig(&router);
+    const Database::FindResult router_found = RouterStore(db).find(&router);
     if (router_found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the address book";

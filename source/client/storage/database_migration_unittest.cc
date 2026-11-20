@@ -39,6 +39,7 @@
 #include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -277,7 +278,7 @@ protected:
         EXPECT_EQ(credential.username(), QString("shared-user"));
 
         RouterConfig router;
-        ASSERT_EQ(db.routerConfig(&router), Database::FindResult::FOUND);
+        ASSERT_EQ(RouterStore(db).find(&router), Database::FindResult::FOUND);
         EXPECT_EQ(router.address(), QString("router.example.com"));
         EXPECT_EQ(router.username(), QString("router-user"));
         EXPECT_EQ(router.password().toString(), QString("router-secret"));
@@ -372,7 +373,7 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
     ASSERT_TRUE(DatabaseMigration::finish(second, old_path_));
 
     RouterConfig router;
-    ASSERT_EQ(second.routerConfig(&router), Database::FindResult::FOUND);
+    ASSERT_EQ(RouterStore(second).find(&router), Database::FindResult::FOUND);
     EXPECT_EQ(router.sessionType(), proto::router::SESSION_TYPE_ADMIN);
 }
 
@@ -454,18 +455,20 @@ TEST_F(DatabaseMigrationTest, RouterIsMovedOnce)
 
     Database db;
     ASSERT_TRUE(db.open(firstPath()));
+    RouterStore store(db);
+
 
     RouterConfig router;
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(store.find(&router), Database::FindResult::NOT_FOUND);
 
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
-    ASSERT_EQ(db.routerConfig(&router), Database::FindResult::FOUND);
+    ASSERT_EQ(store.find(&router), Database::FindResult::FOUND);
 
     router.setSessionType(proto::router::SESSION_TYPE_ADMIN);
-    ASSERT_TRUE(db.setRouterConfig(router));
+    ASSERT_TRUE(store.save(router));
 
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
-    ASSERT_EQ(db.routerConfig(&router), Database::FindResult::FOUND);
+    ASSERT_EQ(store.find(&router), Database::FindResult::FOUND);
     EXPECT_EQ(router.sessionType(), proto::router::SESSION_TYPE_ADMIN);
 }
 
@@ -520,14 +523,16 @@ TEST_F(DatabaseMigrationTest, RouterWaitsForTheOldFile)
     ASSERT_TRUE(QFile::rename(old_path_, away_path));
 
     EXPECT_FALSE(DatabaseMigration::finish(db, old_path_));
+    RouterStore store(db);
+
 
     RouterConfig router;
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(store.find(&router), Database::FindResult::NOT_FOUND);
 
     ASSERT_TRUE(QFile::rename(away_path, old_path_));
 
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::FOUND);
+    EXPECT_EQ(store.find(&router), Database::FindResult::FOUND);
 
     RouterHostConfig router_host;
     EXPECT_EQ(RouterHostStore(db).find(100500, &router_host), Database::FindResult::FOUND);
@@ -549,9 +554,11 @@ TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
     Database db;
     ASSERT_TRUE(db.open(firstPath()));
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
+    RouterStore store(db);
+
 
     RouterConfig router;
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(store.find(&router), Database::FindResult::NOT_FOUND);
 
     RouterHostConfig router_host;
     EXPECT_EQ(RouterHostStore(db).find(100500, &router_host), Database::FindResult::FOUND);
@@ -563,7 +570,7 @@ TEST_F(DatabaseMigrationTest, RouterThatDoesNotOpenIsNotMoved)
     closeOldBook();
 
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(store.find(&router), Database::FindResult::NOT_FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -588,7 +595,7 @@ TEST_F(DatabaseMigrationTest, BookWithoutRoutersGivesOneDatabase)
     EXPECT_EQ(hostNames(db), QSet<QString>({ "direct" }));
 
     RouterConfig router;
-    EXPECT_EQ(db.routerConfig(&router), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(RouterStore(db).find(&router), Database::FindResult::NOT_FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------

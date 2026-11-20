@@ -28,7 +28,7 @@
 #include "base/crypto/random.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/sync/sync_crypto.h"
 #include "proto/router_constants.h"
 
@@ -58,8 +58,9 @@ protected:
 
         for (Database* db : { &laptop_, &phone_ })
         {
-            ASSERT_TRUE(db->setRouterConfig(router));
-            ASSERT_EQ(db->setSyncStorage(router, kStorageId, key_, false), Database::SyncResult::DONE);
+            RouterStore store(*db);
+            ASSERT_TRUE(store.save(router));
+            ASSERT_EQ(store.setSyncStorage(router, kStorageId, key_, false), Database::SyncResult::DONE);
         }
     }
 
@@ -681,12 +682,14 @@ TEST_F(SyncCredentialsTest, OversizedRecordIsNotSentAndTheRestAre)
 TEST_F(SyncCredentialsTest, RecordsAreNotReadForAStorageTheDeviceHasLeft)
 {
     addCredential(laptop_, "user");
+    RouterStore store(laptop_);
+
 
     RouterConfig router;
-    ASSERT_EQ(laptop_.routerConfig(&router), Database::FindResult::FOUND);
+    ASSERT_EQ(store.find(&router), Database::FindResult::FOUND);
 
     router.setSyncEnabled(false);
-    ASSERT_TRUE(laptop_.setRouterConfig(router));
+    ASSERT_TRUE(store.save(router));
 
     ASSERT_EQ(unsyncedCredentials(laptop_).size(), 1);
 

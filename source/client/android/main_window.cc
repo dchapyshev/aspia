@@ -49,6 +49,7 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/master_password.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/workers/update_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/bottom_navigation_bar.h"
@@ -760,7 +761,7 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
     if (host.entryId() > 0 && isHostId(host.address()))
     {
         RouterConfig router;
-        const Database::FindResult found = Database::instance().routerConfig(&router);
+        const Database::FindResult found = RouterStore().find(&router);
         if (found != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to read the router";

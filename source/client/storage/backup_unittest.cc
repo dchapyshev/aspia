@@ -105,7 +105,7 @@ protected:
         router.setUsername("router-user");
         router.setPassword(SecureString(QString("router-secret")));
 
-        EXPECT_TRUE(db.setRouterConfig(router));
+        EXPECT_TRUE(RouterStore(db).save(router));
     }
 
     static void addRouterHost(Database& db, HostId host_id, const QString& username, const QString& password)
@@ -696,7 +696,7 @@ TEST_F(BackupTest, RouterTurnedOffStaysTurnedOff)
     router.setUsername("router-user");
     router.setPassword(SecureString(QString("router-secret")));
     router.setEnabled(false);
-    ASSERT_TRUE(source_.setRouterConfig(router));
+    ASSERT_TRUE(RouterStore(source_).save(router));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);

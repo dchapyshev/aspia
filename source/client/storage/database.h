@@ -82,13 +82,6 @@ public:
     enum class ReencryptResult { DONE, UNREADABLE_RECORD, FAILED };
     Q_ENUM(ReencryptResult)
 
-    // Router.
-    FindResult routerConfig(RouterConfig* router) const;
-    bool setRouterConfig(const RouterConfig& router);
-    SyncResult setSyncStorage(const RouterConfig& router, const QByteArray& storage_id,
-        const SecureByteArray& key, bool reset);
-    bool setSyncStorageResetPending(const RouterConfig& router);
-
     bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
                 const QList<LocalHostConfig>& local_hosts,
@@ -175,8 +168,6 @@ private:
 
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
-    bool writeRouter(const RouterConfig& router);
-    bool clearRouter();
 
     mutable SqlDatabase db_;
 };

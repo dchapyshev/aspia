@@ -27,6 +27,7 @@
 #include "base/crypto/random.h"
 #include "base/net/udp_channel.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/router_store.h"
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
 #include "client/sync/sync_profiles.h"
@@ -92,12 +93,16 @@ protected:
 
         DatabaseTestPeer::setFilePath(dir_.filePath("laptop.db3"));
         ASSERT_TRUE(Database::instance().isValid());
-        ASSERT_TRUE(Database::instance().setRouterConfig(config()));
-        ASSERT_EQ(Database::instance().setSyncStorage(config(), kStorageId, key_, false), Database::SyncResult::DONE);
+
+        RouterStore laptop_store;
+        ASSERT_TRUE(laptop_store.save(config()));
+        ASSERT_EQ(laptop_store.setSyncStorage(config(), kStorageId, key_, false), Database::SyncResult::DONE);
 
         ASSERT_TRUE(phone_db_.open(dir_.filePath("phone.db3")));
-        ASSERT_TRUE(phone_db_.setRouterConfig(config()));
-        ASSERT_EQ(phone_db_.setSyncStorage(config(), kStorageId, key_, false), Database::SyncResult::DONE);
+
+        RouterStore phone_store(phone_db_);
+        ASSERT_TRUE(phone_store.save(config()));
+        ASSERT_EQ(phone_store.setSyncStorage(config(), kStorageId, key_, false), Database::SyncResult::DONE);
 
         QObject::connect(&worker_, &SyncWorker::sig_sendMessage, &worker_,
                          [this](quint8 channel_id, const QByteArray& buffer)
@@ -136,7 +141,7 @@ protected:
     static RouterConfig storedRouter()
     {
         RouterConfig router;
-        EXPECT_EQ(Database::instance().routerConfig(&router), Database::FindResult::FOUND);
+        EXPECT_EQ(RouterStore().find(&router), Database::FindResult::FOUND);
         return router;
     }
 
@@ -707,8 +712,9 @@ TEST_F(SyncWorkerTest, LocalChangeWaitsWhileThereIsNoOneToExchangeWith)
     EXPECT_EQ(storage_info_request_count_, 0);
     EXPECT_EQ(list_request_count_, 0);
 
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
     worker_.onStartRecordExchange();
@@ -848,7 +854,7 @@ TEST_F(SyncWorkerTest, DeviceWithSyncTurnedOffAsksTheRouterNothing)
 
     RouterConfig router = config();
     router.setSyncEnabled(false);
-    ASSERT_TRUE(db.setRouterConfig(router));
+    ASSERT_TRUE(RouterStore(db).save(router));
 
     worker_.onSessionStarted();
     sendStorageNotification();
@@ -872,7 +878,7 @@ TEST_F(SyncWorkerTest, SyncTurnedOffInTheRunningSessionDetachesTheDevice)
 
     RouterConfig router = config();
     router.setSyncEnabled(false);
-    ASSERT_TRUE(db.setRouterConfig(router));
+    ASSERT_TRUE(RouterStore(db).save(router));
     worker_.onSyncEnabledChanged();
 
     addCredential(db, "user");
@@ -901,12 +907,14 @@ TEST_F(SyncWorkerTest, SyncTurnedOnInTheRunningSessionAttachesTheDevice)
 
     RouterConfig router = config();
     router.setSyncEnabled(false);
-    ASSERT_TRUE(db.setRouterConfig(router));
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(router));
 
     worker_.onSessionStarted();
     ASSERT_EQ(storage_info_request_count_, 0);
 
-    ASSERT_TRUE(db.setRouterConfig(config()));
+    ASSERT_TRUE(store.save(config()));
     worker_.onSyncEnabledChanged();
 
     EXPECT_EQ(storage_info_request_count_, 1);
@@ -929,7 +937,8 @@ TEST_F(SyncWorkerTest, StorageIsCreatedWhenTheRouterHoldsNone)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore(db).setSyncStorage(config(), QByteArray(), SecureByteArray(), false),
+              Database::SyncResult::DONE);
     storage_id_.clear();
 
     worker_.onSessionStarted();
@@ -959,7 +968,8 @@ TEST_F(SyncWorkerTest, DeviceTakesTheKeyOfTheStorageTheRouterHolds)
     const QString guid = addCredential(phone_db_, "user").guid();
     sendPhoneRecords();
 
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore(db).setSyncStorage(config(), QByteArray(), SecureByteArray(), false),
+              Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
 
@@ -980,9 +990,8 @@ TEST_F(SyncWorkerTest, DeviceTakesTheKeyOfTheStorageTheRouterHolds)
 // the one that is there.
 TEST_F(SyncWorkerTest, StorageCreatedByAnotherDeviceMeanwhileIsTaken)
 {
-    Database& db = Database::instance();
-
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore().setSyncStorage(config(), QByteArray(), SecureByteArray(), false),
+              Database::SyncResult::DONE);
     storage_id_.clear();
 
     before_storage_key_request_ = [this]()
@@ -1009,7 +1018,7 @@ TEST_F(SyncWorkerTest, StorageThatIsGoneIsCreatedFromTheRecordsOfTheDevice)
 {
     Database& db = Database::instance();
 
-    ASSERT_EQ(db.setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore(db).setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
 
     const QString guid = addCredential(db, "user").guid();
     storage_id_.clear();
@@ -1037,7 +1046,7 @@ TEST_F(SyncWorkerTest, DeviceKeepsItsRecordsInTheStorageMadeInPlaceOfALostOne)
 {
     Database& db = Database::instance();
 
-    ASSERT_EQ(db.setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore(db).setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
     const QString guid = addCredential(db, "user").guid();
 
     const QString phone_guid = addCredential(phone_db_, "phone-user").guid();
@@ -1061,7 +1070,7 @@ TEST_F(SyncWorkerTest, StorageTheOtherDeviceMadeInPlaceOfALostOneIsNotReset)
 {
     Database& db = Database::instance();
 
-    ASSERT_EQ(db.setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
+    ASSERT_EQ(RouterStore(db).setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
     const QString guid = addCredential(db, "user").guid();
     const QString phone_guid = addCredential(phone_db_, "phone-user").guid();
     storage_id_.clear();
@@ -1091,8 +1100,9 @@ TEST_F(SyncWorkerTest, StorageMadeForAResetInPlaceOfALostOneTellsOfTheReset)
 {
     Database& db = Database::instance();
 
-    ASSERT_EQ(db.setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    RouterStore store(db);
+    ASSERT_EQ(store.setSyncStorage(config(), kAnotherStorageId, key_, false), Database::SyncResult::DONE);
+    ASSERT_TRUE(store.setSyncStorageResetPending(config()));
     addCredential(db, "user");
     storage_id_.clear();
 
@@ -1114,7 +1124,7 @@ TEST_F(SyncWorkerTest, KeyIsWrappedAnewAfterThePasswordOfTheAccountHasChanged)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
+    ASSERT_TRUE(RouterStore(db).save(config(kNewPassword)));
 
     worker_.onSessionStarted();
 
@@ -1146,7 +1156,7 @@ TEST_F(SyncWorkerTest, RenamedUserGoesOnWithTheSameStorage)
 
     RouterConfig renamed = config();
     renamed.setUsername("renamed-user");
-    ASSERT_TRUE(db.setRouterConfig(renamed));
+    ASSERT_TRUE(RouterStore(db).save(renamed));
 
     worker_.onSessionStarted();
 
@@ -1176,7 +1186,7 @@ TEST_F(SyncWorkerTest, KeyIsWrappedAnewAfterTheUserIsRenamedWithAnotherPassword)
 
     RouterConfig renamed = config(kNewPassword);
     renamed.setUsername("renamed-user");
-    ASSERT_TRUE(db.setRouterConfig(renamed));
+    ASSERT_TRUE(RouterStore(db).save(renamed));
 
     worker_.onSessionStarted();
 
@@ -1203,7 +1213,7 @@ TEST_F(SyncWorkerTest, KeyWrappedAnewByAnotherDeviceMeanwhileIsLeftAsItIs)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
+    ASSERT_TRUE(RouterStore(db).save(config(kNewPassword)));
 
     before_storage_key_request_ = [this]()
     {
@@ -1230,8 +1240,10 @@ TEST_F(SyncWorkerTest, DeviceWithoutTheKeyWaitsWhenTheKeyDoesNotOpen)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
 
@@ -1255,8 +1267,10 @@ TEST_F(SyncWorkerTest, DeviceWithoutTheKeyAttachesOnceTheKeyIsWrappedAnew)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
 
@@ -1381,7 +1395,7 @@ TEST_F(SyncWorkerTest, AnswerThatComesAfterSyncIsTurnedOffChangesNothing)
     {
         RouterConfig router = config();
         router.setSyncEnabled(false);
-        ASSERT_TRUE(db.setRouterConfig(router));
+        ASSERT_TRUE(RouterStore(db).save(router));
     };
 
     worker_.onSessionStarted();
@@ -1540,9 +1554,9 @@ TEST_F(SyncWorkerTest, RouterNotReadWithTheKeyOfTheStorageIsReadAgainBeforeTheIn
 // Only the user can make the key open, by signing in with the current password of the account.
 TEST_F(SyncWorkerTest, KeyThatDoesNotOpenIsNotAskedForAgainOnceTheIntervalHasPassed)
 {
-    Database& db = Database::instance();
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    RouterStore store;
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
     ASSERT_EQ(storage_info_request_count_, 1);
@@ -1580,10 +1594,9 @@ TEST_F(SyncWorkerTest, AttachedStorageIsAnnounced)
 // something about it.
 TEST_F(SyncWorkerTest, KeyThatDoesNotOpenIsAnnounced)
 {
-    Database& db = Database::instance();
-
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+    RouterStore store;
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
 
@@ -1677,7 +1690,7 @@ TEST_F(SyncWorkerTest, StorageIsResetWhenTheDeviceIsToldTo)
 
     ASSERT_EQ(records_.size(), 2);
 
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
     worker_.onStorageResetPending();
 
     EXPECT_EQ(storage_info_request_count_, 2);
@@ -1706,14 +1719,16 @@ TEST_F(SyncWorkerTest, DeviceWithoutTheKeyResetsTheStorage)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
-    ASSERT_EQ(db.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(config(kNewPassword)));
+    ASSERT_EQ(store.setSyncStorage(config(), QByteArray(), SecureByteArray(), false), Database::SyncResult::DONE);
 
     worker_.onSessionStarted();
 
     ASSERT_EQ(list_request_count_, 0);
 
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(store.setSyncStorageResetPending(config()));
     worker_.onStorageResetPending();
 
     EXPECT_EQ(storage_key_request_count_, 1);
@@ -1744,7 +1759,7 @@ TEST_F(SyncWorkerTest, StorageResetByAnotherDeviceMeanwhileIsResetAgain)
         resetStorage(kAnotherStorageId, another.wrapped);
     };
 
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
     worker_.onStorageResetPending();
 
     EXPECT_EQ(storage_info_request_count_, 3);
@@ -1773,7 +1788,7 @@ TEST_F(SyncWorkerTest, ResetAskedForAgainDuringResetIsDoneOnce)
         worker_.onStorageResetPending();
     };
 
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
     worker_.onStorageResetPending();
 
     EXPECT_EQ(storage_info_request_count_, 2);
@@ -1794,11 +1809,11 @@ TEST_F(SyncWorkerTest, ResetAskedForDuringAttachIsNotLost)
     Database& db = Database::instance();
 
     addCredential(db, "user");
-    ASSERT_TRUE(db.setRouterConfig(config(kNewPassword)));
+    ASSERT_TRUE(RouterStore(db).save(config(kNewPassword)));
 
     before_storage_key_request_ = [&db]()
     {
-        ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+        ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
     };
 
     worker_.onSessionStarted();
@@ -1831,7 +1846,7 @@ TEST_F(SyncWorkerTest, ResetLeftUnfinishedIsDoneInTheNextSession)
     ASSERT_EQ(records_.size(), 1);
 
     worker_.onSessionFinished();
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
 
     worker_.onSessionStarted();
 
@@ -1897,7 +1912,7 @@ TEST_F(SyncWorkerTest, PendingResetComingWithoutASessionIsDoneInTheNextSession)
     worker_.onSessionFinished();
 
     const auto info_request_count = storage_info_request_count_;
-    ASSERT_TRUE(db.setSyncStorageResetPending(config()));
+    ASSERT_TRUE(RouterStore(db).setSyncStorageResetPending(config()));
 
     worker_.onStorageResetPending();
 
@@ -1916,7 +1931,7 @@ TEST_F(SyncWorkerTest, PendingResetIsNotDoneWhileSyncIsOff)
 {
     RouterConfig router = config();
     router.setSyncEnabled(false);
-    ASSERT_TRUE(Database::instance().setRouterConfig(router));
+    ASSERT_TRUE(RouterStore().save(router));
 
     worker_.onSessionStarted();
     worker_.onStorageResetPending();

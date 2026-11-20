@@ -27,7 +27,7 @@
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -121,7 +121,7 @@ void RouterEditor::prepareForAdd()
 bool RouterEditor::prepareForEdit()
 {
     RouterConfig router;
-    const Database::FindResult found = Database::instance().routerConfig(&router);
+    const Database::FindResult found = RouterStore().find(&router);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Router not found:" << found;
@@ -188,10 +188,10 @@ void RouterEditor::onSaveClicked()
     data.setEnabled(switch_enabled_->isChecked());
     data.setSyncEnabled(switch_sync_->isChecked());
 
-    Database& db = Database::instance();
+    RouterStore store;
 
     RouterConfig stored;
-    const Database::FindResult stored_found = db.routerConfig(&stored);
+    const Database::FindResult stored_found = store.find(&stored);
     if (stored_found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Failed to re-read the router";
@@ -215,7 +215,7 @@ void RouterEditor::onSaveClicked()
             return;
     }
 
-    if (!db.setRouterConfig(data))
+    if (!store.save(data))
     {
         showError(tr("Failed to save the router."));
         return;
@@ -243,7 +243,7 @@ void RouterEditor::onRouterStatusChanged()
 {
     RouterConfig router;
     const bool sync_enabled =
-        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+        RouterStore().find(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
 
     button_reset_sync_->setVisible(sync_enabled && RouterController::status() == RouterStatus::ONLINE);
 }

@@ -50,6 +50,7 @@
 #include "client/storage/instance_settings.h"
 #include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
+#include "client/storage/router_store.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -258,7 +259,7 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 Database::ReadResult Sidebar::loadRouter()
 {
     RouterConfig router_config;
-    const Database::FindResult found = Database::instance().routerConfig(&router_config);
+    const Database::FindResult found = RouterStore().find(&router_config);
 
     Database::ReadResult result = Database::ReadResult::OK;
     if (found == Database::FindResult::FAILED)
@@ -288,7 +289,7 @@ Database::ReadResult Sidebar::loadRouter()
 void Sidebar::reloadRouter()
 {
     RouterConfig router_config;
-    const Database::FindResult found = Database::instance().routerConfig(&router_config);
+    const Database::FindResult found = RouterStore().find(&router_config);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the router";

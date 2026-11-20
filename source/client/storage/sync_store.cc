@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/router_store.h"
 
 namespace {
 
@@ -79,7 +80,7 @@ Database::SyncResult SyncTransaction::begin(const QByteArray& storage_id)
     }
 
     RouterConfig router;
-    const Database::FindResult found = db_.routerConfig(&router);
+    const Database::FindResult found = RouterStore(db_).find(&router);
     if (found != Database::FindResult::FOUND && found != Database::FindResult::NOT_FOUND)
     {
         LOG(ERROR) << "Unable to read the router";

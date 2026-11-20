@@ -32,14 +32,15 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/sync_store.h"
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-inline std::optional<RouterConfig> findRouter(const Database& db)
+inline std::optional<RouterConfig> findRouter(Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.routerConfig(&router);
+    const Database::FindResult result = RouterStore(db).find(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -270,7 +271,7 @@ protected:
         router.setPassword(SecureString("router-secret"));
         router.setSyncEnabled(sync_enabled);
 
-        EXPECT_TRUE(db_.setRouterConfig(router));
+        EXPECT_TRUE(router_store_.save(router));
     }
 
     // The synchronization changes the records in a transaction of the storage the device is
@@ -280,7 +281,8 @@ protected:
         addRouter(true);
 
         const SecureByteArray key(Random::byteArray(32));
-        ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), key, false), Database::SyncResult::DONE);
+        ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), Random::byteArray(16), key, false),
+                  Database::SyncResult::DONE);
     }
 
     QByteArray syncStorageId()
@@ -498,6 +500,7 @@ protected:
     ProfileStore profiles_{ db_ };
     LocalGroupStore local_groups_{ db_ };
     LocalHostStore local_hosts_{ db_ };
+    RouterStore router_store_{ db_ };
     RouterHostStore router_hosts_{ db_ };
     SyncStore sync_store_{ db_ };
     QString file_path_;

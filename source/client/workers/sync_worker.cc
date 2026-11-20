@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
 #include "client/sync/sync_profiles.h"
@@ -178,7 +178,7 @@ void SyncWorker::onTimer(TimePoint now)
 void SyncWorker::reloadConfig()
 {
     RouterConfig config;
-    const Database::FindResult found = Database::instance().routerConfig(&config);
+    const Database::FindResult found = RouterStore().find(&config);
     if (found != Database::FindResult::FOUND && found != Database::FindResult::NOT_FOUND)
     {
         LOG(ERROR) << "Unable to read the router";
@@ -319,7 +319,7 @@ void SyncWorker::attachStorage(bool reset)
 {
     const bool another_storage = config_->syncStorageId() != storage_id_;
 
-    const Database::SyncResult result = Database::instance().setSyncStorage(*config_, storage_id_, key_, reset);
+    const Database::SyncResult result = RouterStore().setSyncStorage(*config_, storage_id_, key_, reset);
     if (result == Database::SyncResult::DETACHED)
     {
         LOG(INFO) << "The device has left the synchronization meanwhile";
@@ -552,7 +552,7 @@ void SyncWorker::readStorageKey(const proto::router::SyncStorageInfo& info)
     const SyncCrypto::Result result = SyncCrypto::unwrapStorageKey(info.key(), config_->password(), &key);
 
     RouterConfig stored;
-    const Database::FindResult found = Database::instance().routerConfig(&stored);
+    const Database::FindResult found = RouterStore().find(&stored);
     if (found != Database::FindResult::FOUND && found != Database::FindResult::NOT_FOUND)
     {
         LOG(ERROR) << "Unable to read the router";

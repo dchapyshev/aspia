@@ -60,7 +60,7 @@ TEST_F(SyncStoreTest, SyncChangesAreRefusedForAnotherStorage)
     addRouter(true);
 
     const QByteArray storage_id = Random::byteArray(16);
-    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, SecureByteArray(Random::byteArray(32)), false),
+    ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), storage_id, SecureByteArray(Random::byteArray(32)), false),
               Database::SyncResult::DONE);
 
     SyncTransaction transaction(db_);

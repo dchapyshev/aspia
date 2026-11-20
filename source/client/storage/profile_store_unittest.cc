@@ -343,8 +343,9 @@ TEST_F(ProfileStoreTest, DefaultProfileIsNeverRemoved)
 TEST_F(ProfileStoreTest, ProfileIsFoundByItsGuid)
 {
     addRouter(true);
-    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)),
-                                 false), Database::SyncResult::DONE);
+    ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), Random::byteArray(16),
+                                           SecureByteArray(Random::byteArray(32)), false),
+              Database::SyncResult::DONE);
 
     const qint64 profile_id = addProfile("office");
     ProfileConfig added;

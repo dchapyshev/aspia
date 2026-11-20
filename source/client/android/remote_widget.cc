@@ -33,7 +33,7 @@
 #include "client/android/router_host_editor.h"
 #include "client/android/search_widget.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
@@ -319,7 +319,7 @@ void RemoteWidget::reload()
     tree_->clear();
 
     RouterConfig config;
-    const Database::FindResult found = Database::instance().routerConfig(&config);
+    const Database::FindResult found = RouterStore().find(&config);
     if (found == Database::FindResult::FAILED)
         LOG(ERROR) << "Unable to read the router";
 

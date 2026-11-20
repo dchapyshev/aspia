@@ -24,6 +24,7 @@
 #include "base/peer/host_id.h"
 #include "client/desktop/chat/ui_chat_window.h"
 #include "client/storage/local_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/chat_widget.h"
 #include "proto/chat.h"
@@ -56,7 +57,7 @@ QString chatHistoryId(const SessionState& session_state)
             return QString();
 
         RouterConfig router;
-        Database::instance().routerConfig(&router);
+        RouterStore().find(&router);
         if (router.guid().isEmpty())
         {
             LOG(WARNING) << "Router entry not found";

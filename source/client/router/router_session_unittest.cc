@@ -29,7 +29,7 @@
 #include "base/crypto/secure_byte_array.h"
 #include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
@@ -40,10 +40,10 @@ constexpr qint64 kWorkspaceId = 10;
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db)
+std::optional<RouterConfig> findRouter(Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.routerConfig(&router);
+    const Database::FindResult result = RouterStore(db).find(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -107,7 +107,7 @@ protected:
     void seedRecord(const QByteArray& device_token = QByteArray())
     {
         RouterConfig record = *config(device_token);
-        ASSERT_TRUE(Database::instance().setRouterConfig(record));
+        ASSERT_TRUE(RouterStore().save(record));
     }
 
     // Hands a reply to the session the way the owner does after parsing the wire.

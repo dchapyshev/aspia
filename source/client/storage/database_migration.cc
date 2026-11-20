@@ -36,6 +36,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/router.h"
 #include "proto/storage.h"
@@ -526,10 +527,12 @@ bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
         return false;
     }
 
+    RouterStore router_store(db);
+
     // What the user entered here already stays as it is.
     RouterConfig stored_router;
-    if (router.has_value() && db.routerConfig(&stored_router) == Database::FindResult::NOT_FOUND &&
-        !db.writeRouter(*router))
+    if (router.has_value() && router_store.find(&stored_router) == Database::FindResult::NOT_FOUND &&
+        !router_store.writeConfig(*router))
     {
         return false;
     }

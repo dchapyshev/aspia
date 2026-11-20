@@ -22,7 +22,7 @@
 
 #include "client/mcp/mcp_controller.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/storage/user_settings.h"
 
 namespace {
@@ -147,7 +147,7 @@ RouterSession* routerSession(QString* error)
         return session;
 
     RouterConfig config;
-    switch (Database::instance().routerConfig(&config))
+    switch (RouterStore().find(&config))
     {
         case Database::FindResult::NOT_FOUND:
             *error = "No router is set in Aspia Client.";

@@ -21,7 +21,7 @@
 #include <QJsonDocument>
 
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 
 namespace {
 
@@ -71,7 +71,7 @@ QJsonObject GetRouterTool::definition() const
 void GetRouterTool::call(const QJsonObject& /* arguments */, Reply reply)
 {
     RouterConfig router;
-    const Database::FindResult found = Database::instance().routerConfig(&router);
+    const Database::FindResult found = RouterStore().find(&router);
     if (found == Database::FindResult::FAILED)
     {
         reply(false, "Unable to read the database.");

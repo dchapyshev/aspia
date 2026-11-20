@@ -33,6 +33,7 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/sync_store.h"
 
 namespace {
@@ -264,8 +265,10 @@ bool Database::import(const std::optional<RouterConfig>& router,
         return false;
     }
 
+    RouterStore router_store(*this);
+
     RouterConfig stored;
-    if (routerConfig(&stored) == FindResult::FAILED)
+    if (router_store.find(&stored) == FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the router";
         return false;
@@ -276,7 +279,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (stored.isSyncEnabled())
         LOG(INFO) << "Import into a database with the synchronization turned on, synchronization kept:" << sync_kept;
 
-    if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
+    if (!db_.exec("DELETE FROM local_groups") || !router_store.clearConfig() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
         !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
         !SyncStore(*this).clearReceivedRevisions())
@@ -327,7 +330,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
         if (stored.hasSameAccount(config))
             config.setUserGuid(stored.userGuid());
 
-        if (!writeRouter(config))
+        if (!router_store.writeConfig(config))
         {
             LOG(ERROR) << "Unable to write the router";
             return false;
@@ -439,7 +442,7 @@ Database::ReencryptResult Database::Reencryption::begin()
         db_.proxyConfig(&proxy_)
     };
 
-    const FindResult router_found = db_.routerConfig(&router);
+    const FindResult router_found = RouterStore(db_).find(&router);
     if (router_found == FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the router";
@@ -689,7 +692,7 @@ bool Database::rewriteEncryptedData(const QList<LocalHostConfig>& local_hosts,
         }
     }
 
-    if (router && !writeRouter(*router))
+    if (router && !RouterStore(*this).writeConfig(*router))
     {
         LOG(ERROR) << "Unable to re-encrypt the router";
         return false;

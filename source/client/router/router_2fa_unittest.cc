@@ -34,7 +34,7 @@
 #include "base/crypto/secure_byte_array.h"
 #include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "proto/router_constants.h"
 
 namespace {
@@ -45,10 +45,10 @@ const char kAnotherUserGuid[] = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db)
+std::optional<RouterConfig> findRouter(Database& db)
 {
     RouterConfig router;
-    const Database::FindResult result = db.routerConfig(&router);
+    const Database::FindResult result = RouterStore(db).find(&router);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -133,7 +133,7 @@ protected:
     void seedRecord(const QByteArray& device_token = QByteArray())
     {
         RouterConfig record = *config(device_token);
-        ASSERT_TRUE(Database::instance().setRouterConfig(record));
+        ASSERT_TRUE(RouterStore().save(record));
     }
 
     static proto::router::RouterToClient activeChallenge()
@@ -244,7 +244,7 @@ TEST_F(Router2FATest, EnrollmentWithoutAStoredTokenLeavesTheRecordAlone)
     // An edit made behind the login's back: a needless rewrite would revert it.
     RouterConfig edited = *config();
     edited.setSessionType(proto::router::SESSION_TYPE_ADMIN);
-    ASSERT_TRUE(Database::instance().setRouterConfig(edited));
+    ASSERT_TRUE(RouterStore().save(edited));
 
     proto::router::RouterToClient message;
     message.mutable_two_factor_challenge()->set_mode(proto::router::TWO_FACTOR_MODE_ENROLL);
@@ -382,8 +382,11 @@ TEST_F(Router2FATest, LoginOfAnotherUserTurnsSyncOff)
     const SharedPointer<RouterConfig> record = config();
     record->setSyncEnabled(true);
     record->setUserGuid(kUserGuid);
-    ASSERT_TRUE(db.setRouterConfig(*record));
-    ASSERT_EQ(db.setSyncStorage(*record, QByteArray("0123456789abcdef"), SecureByteArray(QByteArray(32, 's')), false),
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(*record));
+    ASSERT_EQ(store.setSyncStorage(*record, QByteArray("0123456789abcdef"),
+                                   SecureByteArray(QByteArray(32, 's')), false),
               Database::SyncResult::DONE);
 
     Router2FA login(record);
@@ -423,8 +426,11 @@ TEST_F(Router2FATest, LoginOfAnotherUserWithAnIssuedTokenTurnsSyncOff)
     const SharedPointer<RouterConfig> record = config();
     record->setSyncEnabled(true);
     record->setUserGuid(kUserGuid);
-    ASSERT_TRUE(db.setRouterConfig(*record));
-    ASSERT_EQ(db.setSyncStorage(*record, QByteArray("0123456789abcdef"), SecureByteArray(QByteArray(32, 's')), false),
+
+    RouterStore store(db);
+    ASSERT_TRUE(store.save(*record));
+    ASSERT_EQ(store.setSyncStorage(*record, QByteArray("0123456789abcdef"),
+                                   SecureByteArray(QByteArray(32, 's')), false),
               Database::SyncResult::DONE);
 
     Router2FA login(record);

@@ -52,6 +52,7 @@
 #include "client/router/router_controller.h"
 #include "client/storage/backup.h"
 #include "client/storage/local_host_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -1677,7 +1678,7 @@ void ManagementTab::onImportBookAction()
 
     RouterConfig router;
     const bool sync_enabled =
-        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+        RouterStore().find(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
 
     const QString question = sync_enabled ?
         tr("Everything stored now is deleted and replaced with what the backup holds. The synchronized data "
@@ -2164,7 +2165,7 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
     if (isHostId(host.address()))
     {
         RouterConfig router;
-        const Database::FindResult found = Database::instance().routerConfig(&router);
+        const Database::FindResult found = RouterStore().find(&router);
         if (found == Database::FindResult::UNREADABLE)
         {
             MsgBox::warning(this, tr("The data of the router is damaged. Edit the router and enter it again."));

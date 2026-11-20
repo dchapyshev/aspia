@@ -23,7 +23,7 @@
 #include "base/serialization.h"
 #include "client/config.h"
 #include "client/router/router_hosts_cleaner.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "client/workers/router_worker.h"
 #include "common/desktop/router_error.h"
 #include "proto/router_constants.h"
@@ -159,7 +159,7 @@ bool RouterController::resetSyncStorage()
 
     const RouterConfig& config = *controller.context_->config;
 
-    if (!Database::instance().setSyncStorageResetPending(config))
+    if (!RouterStore().setSyncStorageResetPending(config))
     {
         LOG(ERROR) << "Unable to set the reset of the storage pending";
         return false;
@@ -184,7 +184,7 @@ bool RouterController::resetSyncStorage()
 void RouterController::reload()
 {
     RouterConfig config;
-    const Database::FindResult found = Database::instance().routerConfig(&config);
+    const Database::FindResult found = RouterStore().find(&config);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Failed to read the router - keeping the current state";
@@ -365,7 +365,7 @@ void RouterController::onTwoFactorFinished(qint64 user_id, const QVersionNumber&
     bool user_stored = false;
 
     RouterConfig config;
-    if (Database::instance().routerConfig(&config) == Database::FindResult::FOUND && config.isValid())
+    if (RouterStore().find(&config) == Database::FindResult::FOUND && config.isValid())
     {
         user_stored = config.userGuid() == context.config->userGuid();
         *context.config = config;
@@ -440,7 +440,7 @@ void RouterController::onRouterError(TcpChannel::ErrorCode error_code)
     finishSession();
 
     RouterConfig config;
-    const Database::FindResult found = Database::instance().routerConfig(&config);
+    const Database::FindResult found = RouterStore().find(&config);
     if (found == Database::FindResult::UNREADABLE)
     {
         LOG(ERROR) << "Data of the router could not be read";

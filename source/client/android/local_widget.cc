@@ -38,6 +38,7 @@
 #include "client/storage/backup.h"
 #include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
+#include "client/storage/router_store.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
@@ -324,7 +325,7 @@ void LocalWidget::onImport()
 
     RouterConfig router;
     const bool sync_enabled =
-        Database::instance().routerConfig(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
+        RouterStore().find(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
 
     const QString text = sync_enabled ?
         tr("Everything stored now is deleted and replaced with what the backup holds. The synchronized data "

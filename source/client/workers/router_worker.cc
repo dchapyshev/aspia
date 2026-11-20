@@ -24,7 +24,7 @@
 #include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
 #include "client/config.h"
-#include "client/storage/database.h"
+#include "client/storage/router_store.h"
 #include "proto/key_exchange.h"
 #include "proto/router.h"
 
@@ -175,10 +175,8 @@ void RouterWorker::startConnection()
     if (!connection_ || connection_->channel)
         return;
 
-    Database& db = Database::instance();
-
     RouterConfig config;
-    if (db.routerConfig(&config) != Database::FindResult::FOUND || !config.isValid() || !config.isEnabled())
+    if (RouterStore().find(&config) != Database::FindResult::FOUND || !config.isValid() || !config.isEnabled())
     {
         LOG(ERROR) << "No usable config for router";
         connection_->reconnect_countdown = kReconnectTicks;
@@ -186,7 +184,7 @@ void RouterWorker::startConnection()
     }
 
     ProxyConfig proxy;
-    if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+    if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "No readable proxy config for router";
         connection_->reconnect_countdown = kReconnectTicks;

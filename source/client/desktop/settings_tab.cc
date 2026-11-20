@@ -55,6 +55,7 @@
 #include "client/router/router_controller.h"
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/router_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
@@ -500,7 +501,7 @@ void SettingsTab::onRouterChanged()
 void SettingsTab::onRouterStatusChanged()
 {
     RouterConfig router;
-    const Database::FindResult found = Database::instance().routerConfig(&router);
+    const Database::FindResult found = RouterStore().find(&router);
     const bool sync_enabled = found == Database::FindResult::FOUND && router.isSyncEnabled();
 
     if (found == Database::FindResult::FOUND && !router_changed_)
@@ -1091,7 +1092,7 @@ bool SettingsTab::enableAutoUnlock()
 void SettingsTab::loadRouter()
 {
     RouterConfig router;
-    const Database::FindResult found = Database::instance().routerConfig(&router);
+    const Database::FindResult found = RouterStore().find(&router);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the router";
@@ -1127,7 +1128,7 @@ bool SettingsTab::routerFromUi(std::optional<RouterConfig>* router)
     if (address_text.isEmpty() && username.isEmpty() && password.isEmpty())
     {
         RouterConfig stored;
-        const Database::FindResult found = Database::instance().routerConfig(&stored);
+        const Database::FindResult found = RouterStore().find(&stored);
         if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::UNREADABLE)
         {
             router->reset();
@@ -1182,10 +1183,10 @@ bool SettingsTab::routerFromUi(std::optional<RouterConfig>* router)
 //--------------------------------------------------------------------------------------------------
 bool SettingsTab::saveRouter(RouterConfig router)
 {
-    Database& db = Database::instance();
+    RouterStore store;
 
     RouterConfig stored;
-    const Database::FindResult stored_found = db.routerConfig(&stored);
+    const Database::FindResult stored_found = store.find(&stored);
     if (stored_found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Failed to re-read the router";
@@ -1210,7 +1211,7 @@ bool SettingsTab::saveRouter(RouterConfig router)
         }
     }
 
-    if (!db.setRouterConfig(router))
+    if (!store.save(router))
     {
         LOG(ERROR) << "Failed to write router to database";
         MsgBox::warning(this, tr("Failed to save the router."));
