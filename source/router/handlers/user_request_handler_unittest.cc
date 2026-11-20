@@ -71,7 +71,7 @@ protected:
     {
         std::string token;
         qint64 token_id = 0;
-        if (!db_.issueClientDeviceToken(user_id, "127.0.0.1", &token, &token_id))
+        if (!device_tokens_.issue(user_id, "127.0.0.1", &token, &token_id))
             return -1;
         return token_id;
     }
@@ -79,7 +79,7 @@ protected:
     size_t tokenCount(qint64 user_id)
     {
         std::vector<DeviceToken> tokens;
-        if (db_.listClientDeviceTokens(user_id, &tokens) != proto::router::kErrorOk)
+        if (device_tokens_.list(user_id, &tokens) != proto::router::kErrorOk)
             return static_cast<size_t>(-1);
         return tokens.size();
     }
@@ -463,7 +463,7 @@ TEST_F(UserRequestHandlerTest, TokenListExposesMetadataOnly)
 {
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     proto::router::UserTokenListRequest request;
     request.set_user_id(admin_.entry_id);
@@ -658,7 +658,7 @@ TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
 {
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     const RouterUser rotated = makeUser("admin", kAllSessions);
 
@@ -678,7 +678,7 @@ TEST_F(ChangePasswordTest, RotatesCredentialsAndRevokesTokens)
     EXPECT_EQ(stored.flags, admin_.flags);
 
     std::vector<DeviceToken> tokens;
-    ASSERT_EQ(db_.listClientDeviceTokens(admin_.entry_id, &tokens), proto::router::kErrorOk);
+    ASSERT_EQ(device_tokens_.list(admin_.entry_id, &tokens), proto::router::kErrorOk);
     EXPECT_TRUE(tokens.empty());
 }
 

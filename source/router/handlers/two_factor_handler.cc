@@ -22,7 +22,7 @@
 #include "base/crypto/totp.h"
 #include "base/peer/router_user.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
+#include "router/device_token_store.h"
 
 namespace {
 
@@ -109,10 +109,11 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         // and check that its owner is the user that just passed SRP.
         const std::string_view token = response.token();
 
+        DeviceTokenStore store(database);
+
         qint64 stored_user_id = 0;
         qint64 token_id = 0;
-        const std::string_view error_code =
-            database.findClientDeviceToken(token, &stored_user_id, &token_id);
+        const std::string_view error_code = store.find(token, &stored_user_id, &token_id);
 
         if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorNotFound)
         {
@@ -141,7 +142,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
         // Failure to refresh the sliding lifetime is non-fatal. The token was judged valid, so
         // the user is let in and the lifetime stays where the previous use left it.
-        if (!database.touchClientDeviceToken(token, address))
+        if (!store.touch(token, address))
             LOG(WARNING) << "Failed to touch device token for user" << caller.name;
 
         // The token came out of a verified code, so this login proves the same thing the code
@@ -270,7 +271,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     // is non-fatal: the user is still let in, they will be prompted for TOTP again next time.
     std::string new_token;
     qint64 new_token_id = 0;
-    if (!database.issueClientDeviceToken(caller.user_id, address, &new_token, &new_token_id))
+    if (!DeviceTokenStore(database).issue(caller.user_id, address, &new_token, &new_token_id))
         LOG(WARNING) << "Failed to issue device token for user" << caller.name;
 
     result.action = Action::ACCEPT;

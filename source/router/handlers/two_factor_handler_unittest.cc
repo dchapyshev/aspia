@@ -99,7 +99,7 @@ protected:
     size_t tokenCount(qint64 user_id)
     {
         std::vector<DeviceToken> tokens;
-        if (db_.listClientDeviceTokens(user_id, &tokens) != proto::router::kErrorOk)
+        if (device_tokens_.list(user_id, &tokens) != proto::router::kErrorOk)
             return static_cast<size_t>(-1);
         return tokens.size();
     }
@@ -882,7 +882,7 @@ TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
     const TwoFactorHandler::Result accepted = submitCode(first, Totp::code(secret, kNow), kNow);
     ASSERT_EQ(accepted.action, TwoFactorHandler::Action::ACCEPT);
 
-    ASSERT_EQ(db_.revokeUserClientDeviceTokens(admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(device_tokens_.revokeAll(admin_.entry_id), proto::router::kErrorOk);
 
     TwoFactorHandler second;
     ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -943,8 +943,7 @@ TEST_F(TwoFactorHandlerTest, TokenOfAnotherUserIsRejected)
 
     std::string foreign_token;
     qint64 foreign_token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(client.entry_id, "127.0.0.1", &foreign_token,
-                                           &foreign_token_id));
+    ASSERT_TRUE(device_tokens_.issue(client.entry_id, "127.0.0.1", &foreign_token, &foreign_token_id));
 
     ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
@@ -1042,7 +1041,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
 
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     // Eight days without a single use - one more than the lifetime of a token.
     ASSERT_TRUE(ageToken(token_id, 8));
@@ -1065,7 +1064,7 @@ TEST_F(TwoFactorHandlerTest, TokenUseRefreshesItsLifetime)
 
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     // Six days: still inside the lifetime.
     ASSERT_TRUE(ageToken(token_id, 6));
@@ -1089,7 +1088,7 @@ TEST_F(TwoFactorHandlerTest, TokenIsIgnoredDuringEnrollment)
 {
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
     TwoFactorHandler handler;
     const TwoFactorHandler::Result challenge = start(handler);
@@ -1108,7 +1107,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsNotListed)
 {
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
     ASSERT_EQ(tokenCount(admin_.entry_id), 1u);
 
     ASSERT_TRUE(ageToken(token_id, 8));
@@ -1123,13 +1122,12 @@ TEST_F(TwoFactorHandlerTest, IssuingATokenDropsTheDeadOnesOfTheSameUser)
 {
     std::string dead_token;
     qint64 dead_token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &dead_token,
-                                           &dead_token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &dead_token, &dead_token_id));
     ASSERT_TRUE(ageToken(dead_token_id, 8));
 
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.2", &token, &token_id));
 
     EXPECT_EQ(storedTokenCount(), 1);
     EXPECT_EQ(tokenCount(admin_.entry_id), 1u);
@@ -1141,12 +1139,12 @@ TEST_F(TwoFactorHandlerTest, IssuingATokenKeepsTheLiveOnesOfTheSameUser)
 {
     std::string first;
     qint64 first_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.1", &first, &first_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &first, &first_id));
     ASSERT_TRUE(ageToken(first_id, 6));
 
     std::string second;
     qint64 second_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &second, &second_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.2", &second, &second_id));
 
     EXPECT_EQ(tokenCount(admin_.entry_id), 2u);
 }
@@ -1161,13 +1159,12 @@ TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
 
     std::string foreign_token;
     qint64 foreign_token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(other.entry_id, "127.0.0.1", &foreign_token,
-                                           &foreign_token_id));
+    ASSERT_TRUE(device_tokens_.issue(other.entry_id, "127.0.0.1", &foreign_token, &foreign_token_id));
     ASSERT_TRUE(ageToken(foreign_token_id, 8));
 
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(admin_.entry_id, "127.0.0.2", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.2", &token, &token_id));
 
     EXPECT_EQ(storedTokenCount(), 2);
 }

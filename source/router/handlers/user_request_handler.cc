@@ -26,7 +26,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
+#include "router/device_token_store.h"
 #include "router/handlers/two_factor_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -189,7 +189,7 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller,
     if (request.token_id_size() == 0)
     {
         // Empty list - drop every token of the user atomically.
-        const std::string_view error_code = database.revokeUserClientDeviceTokens(user_id);
+        const std::string_view error_code = DeviceTokenStore(database).revokeAll(user_id);
         result->error_code = error_code;
 
         if (error_code != proto::router::kErrorOk)
@@ -219,7 +219,7 @@ void handleRevokeTokens(Database& database, const RequestCaller& caller,
 
     // Revoke atomically: either every requested token is removed or nothing is, so a missing token
     // or database error never leaves a half-revoked set behind.
-    const std::string_view error_code = database.revokeClientDeviceTokens(user_id, token_ids);
+    const std::string_view error_code = DeviceTokenStore(database).revoke(user_id, token_ids);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -360,7 +360,7 @@ void handleUserTokenList(Database& database, const RequestCaller& caller,
     // The router exposes the opaque numeric id and the timestamp metadata. The token hash and
     // anything else that could identify the token outside the router stay here.
     std::vector<DeviceToken> tokens;
-    const std::string_view error_code = database.listClientDeviceTokens(user_id, &tokens);
+    const std::string_view error_code = DeviceTokenStore(database).list(user_id, &tokens);
     if (error_code != proto::router::kErrorOk)
     {
         out->set_error_code(error_code);

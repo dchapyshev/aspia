@@ -53,16 +53,6 @@ struct Group
     std::string comment;
 };
 
-// Metadata for a client device token returned to admin callers. Intentionally omits the token
-// hash and any other material that could identify the token outside the router.
-struct DeviceToken
-{
-    qint64 token_id     = 0; // client_device_tokens.token_id. Opaque to admins.
-    qint64 created_at   = 0; // Unix seconds.
-    qint64 last_used_at = 0; // Unix seconds.
-    std::string address;     // Address of the session at last use (or issue, if untouched).
-};
-
 // Invariants the write paths maintain, each enforced inside the mutating transaction. A change
 // to any user/workspace path must be checked against this list.
 // I1. users.sessions always holds the full session mask of the access level
@@ -154,46 +144,6 @@ public:
     // kErrorNotFound when no row matched: the step was consumed meanwhile or the user is gone.
     // kErrorInternalError when the database refused the write.
     std::string_view consumeUserOtpCounter(qint64 user_id, quint64 counter);
-
-    //----------------------------------------------------------------------------------------------
-    // Client device tokens (bearer "remember this device" credentials issued during client sessions)
-    //----------------------------------------------------------------------------------------------
-
-    // Issues a new client device token for |user_id|. |address| is stored as the address of
-    // the session that requested the issue (shown to admins). On success writes the freshly
-    // generated opaque token into |token| and, when not null, the router-side row id into
-    // |token_id|. Returns false on database error.
-    bool issueClientDeviceToken(
-        qint64 user_id, std::string_view address, std::string* token, qint64* token_id = nullptr);
-
-    // Looks up a token by its opaque value. On success writes the owner user_id into |user_id|
-    // and, when not null, the router-side row id into |token_id|. Returns kErrorNotFound for a
-    // token that is absent or expired (the expired row is dropped), kErrorInternalError when the
-    // database did not answer.
-    std::string_view findClientDeviceToken(std::string_view token, qint64* user_id, qint64* token_id = nullptr);
-
-    // Updates the token's last_used_at timestamp and last seen |address|. Called after a
-    // successful token lookup.
-    bool touchClientDeviceToken(std::string_view token, std::string_view address);
-
-    // Removes the given tokens by their router-side row ids, but only those belonging to
-    // |user_id|. The user_id check is defense in depth - the admin channel is already
-    // privileged, but the extra predicate prevents a malformed request from touching another
-    // user's row. All deletes run in one transaction: if any token id does not match a row the
-    // whole batch is rolled back. Returns kErrorNotFound if a token is missing, kErrorInternalError
-    // on database failure, kErrorOk when every token was revoked (or the list was empty).
-    std::string_view revokeClientDeviceTokens(qint64 user_id, const std::vector<qint64>& token_ids);
-
-    // Removes every device token of |user_id| in a single statement. Succeeds for an existing user
-    // with no tokens, but returns kErrorNotFound if the user row is absent.
-    std::string_view revokeUserClientDeviceTokens(qint64 user_id);
-
-    // Fills |tokens| with the device tokens of |user_id| that are still inside their lifetime;
-    // an expired row is not a credential any more and is not listed. The router never exposes
-    // token material to admins - only the opaque numeric id and timestamp metadata. Returns
-    // kErrorNotFound if the user row is absent; a user with no tokens answers kErrorOk and an
-    // empty list.
-    std::string_view listClientDeviceTokens(qint64 user_id, std::vector<DeviceToken>* tokens) const;
 
     //----------------------------------------------------------------------------------------------
     // Hosts
@@ -366,6 +316,8 @@ public:
     std::string_view removeGroup(qint64 workspace_id, qint64 entry_id);
 
 private:
+    friend class DatabaseStore;
+
     // Every list query has to name the page it wants. Whatever comes out of one goes into a single
     // reply, and a reply the channel cannot carry is not sent at all but ends the session, so the
     // size of an answer must never follow the size of the database. A request that names no page

@@ -994,7 +994,7 @@ TEST_F(ClientOperatorTest, TokenRevokeCommandRaisesStopAndNotify)
 
     std::string token;
     qint64 token_id = 0;
-    ASSERT_TRUE(db_.issueClientDeviceToken(bob.entry_id, "127.0.0.1", &token, &token_id));
+    ASSERT_TRUE(device_tokens_.issue(bob.entry_id, "127.0.0.1", &token, &token_id));
 
     withClient<ClientAdmin>(proto::router::SESSION_TYPE_ADMIN,
                             [&, this](ClientAdmin& client, LoopbackChannel* channel)

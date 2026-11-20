@@ -36,7 +36,7 @@
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "router/access_log.h"
-#include "router/database.h"
+#include "router/device_token_store.h"
 #include "router/sync_storage.h"
 #include "router/workspace.h"
 #include "router/handlers/request_caller.h"
@@ -195,6 +195,7 @@ protected:
     QTemporaryDir temp_dir_;
     QString file_path_;
     Database db_;
+    DeviceTokenStore device_tokens_{ db_ };
     QString access_log_file_path_;
     AccessLog access_log_;
     RouterUser admin_;

@@ -29,11 +29,13 @@ list(APPEND SOURCE_ROUTER_CORE
     client_operator.h
     database.cc
     database.h
-    database_device_tokens.cc
     database_groups.cc
     database_hosts.cc
+    database_store.h
     database_users.cc
     database_workspaces.cc
+    device_token_store.cc
+    device_token_store.h
     email_messages.cc
     email_messages.h
     email_queue.cc
@@ -66,6 +68,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     access_log_unittest.cc
     client_operator_unittest.cc
     database_unittest.cc
+    device_token_store_unittest.cc
     email_queue_unittest.cc
     host_lifecycle_unittest.cc
     host_unittest.cc
