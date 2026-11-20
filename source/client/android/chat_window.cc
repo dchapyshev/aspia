@@ -50,6 +50,7 @@
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -461,9 +462,8 @@ void ChatWindow::start()
     if (host_.username().isEmpty())
         host_.setUsername(u"#" + host_.address());
 
-    Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_CHAT, db.displayName());
+        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_CHAT, SettingsStore().displayName());
 
     history_id_ = chatHistoryId(*session_state_);
     loadHistory();

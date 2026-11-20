@@ -37,6 +37,7 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
+#include "client/storage/settings_store.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -505,9 +506,8 @@ void DesktopWindow::start()
     if (host_.username().isEmpty())
         host_.setUsername(u"#" + host_.address());
 
-    Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_DESKTOP, db.displayName());
+        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_DESKTOP, SettingsStore().displayName());
 
     setStatusText(tr("Connecting..."));
 

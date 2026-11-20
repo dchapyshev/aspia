@@ -29,13 +29,11 @@
 #include "client/storage/database_test_base.h"
 #include "client/storage/master_password.h"
 #include "proto/desktop_control.h"
-#include "proto/router.h"
 #include "proto/storage.h"
 
 namespace {
 
 const char kUserGuid[] = "4f0c1c2e-6a5b-4b0e-9f3a-1d2c3b4a5e6f";
-const char kAnotherUserGuid[] = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
 } // namespace
 
@@ -154,17 +152,6 @@ TEST_F(DatabaseTest, DatabaseIsIdentifiedByTheNameOfItsFile)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, DatabaseHasNoNameUntilItIsGiven)
-{
-    EXPECT_TRUE(db_.name().isEmpty());
-    ASSERT_TRUE(db_.setName("Office"));
-
-    Database reopened;
-    ASSERT_TRUE(reopened.open(file_path_));
-    EXPECT_EQ(reopened.name(), QString("Office"));
-}
-
-//--------------------------------------------------------------------------------------------------
 // Only the files named by a guid are databases, and the list tells them apart before any is unlocked.
 TEST_F(DatabaseTest, DatabasesOfTheDirectoryAreListed)
 {
@@ -176,12 +163,12 @@ TEST_F(DatabaseTest, DatabasesOfTheDirectoryAreListed)
 
     Database first;
     ASSERT_TRUE(first.open(dir.filePath(first_id + ".db3")));
-    ASSERT_TRUE(first.setName("First"));
+    ASSERT_TRUE(SettingsStore(first).setName("First"));
 
     Database second;
     ASSERT_TRUE(second.open(dir.filePath(second_id + ".db3")));
-    ASSERT_TRUE(second.setName("Second"));
-    ASSERT_TRUE(second.setAutoUnlockBlob("blob"));
+    ASSERT_TRUE(SettingsStore(second).setName("Second"));
+    ASSERT_TRUE(UnlockStore(second).setAutoUnlockBlob("blob"));
     ASSERT_EQ(reencrypt(second, DataCryptor::instance().key(), "salt", "verifier"),
               Database::ReencryptResult::DONE);
 
@@ -219,7 +206,7 @@ TEST_F(DatabaseTest, RemovedDatabaseIsNoLongerListed)
     const QString file_path = QFileInfo(file_path_).dir().filePath(id + ".db3");
 
     DatabaseTestPeer::setFilePath(file_path);
-    ASSERT_TRUE(Database::instance().setName("First"));
+    ASSERT_TRUE(SettingsStore().setName("First"));
     ASSERT_EQ(Database::list().size(), 1);
 
     ASSERT_TRUE(Database::remove(id));
@@ -232,14 +219,14 @@ TEST_F(DatabaseTest, RemovedDatabaseIsNoLongerListed)
 TEST_F(DatabaseTest, ConnectionFollowsTheSelectedDatabase)
 {
     DatabaseTestPeer::setFilePath(file_path_);
-    ASSERT_TRUE(Database::instance().setName("First"));
+    ASSERT_TRUE(SettingsStore().setName("First"));
 
     Database::select("other");
     EXPECT_EQ(Database::filePath(), QFileInfo(file_path_).dir().filePath("other.db3"));
-    EXPECT_TRUE(Database::instance().name().isEmpty());
+    EXPECT_TRUE(SettingsStore().name().isEmpty());
 
     Database::select("client");
-    EXPECT_EQ(Database::instance().name(), QString("First"));
+    EXPECT_EQ(SettingsStore().name(), QString("First"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -649,19 +636,6 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Without a choice of the user the application is never locked.
-TEST_F(DatabaseTest, LockTimeoutIsOffUntilChosen)
-{
-    EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
-
-    ASSERT_TRUE(db_.setLockTimeout(Minutes(5)));
-    EXPECT_EQ(db_.lockTimeout(), Minutes(5));
-
-    ASSERT_TRUE(db_.setLockTimeout(Minutes::zero()));
-    EXPECT_EQ(db_.lockTimeout(), Minutes::zero());
-}
-
-//--------------------------------------------------------------------------------------------------
 // A default profile whose data does not read stands for the built-in parameters, and it is still
 // the row it was: a save writes the row over, and the next read gives what was saved.
 TEST_F(DatabaseTest, DamagedDefaultProfileIsRepairedByASave)
@@ -736,35 +710,6 @@ TEST_F(DatabaseTest, BatchReplacesTheDefaultProfile)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Until the user chooses one, no proxy is used; a choice is kept with all its fields.
-TEST_F(DatabaseTest, ProxyIsOffUntilChosen)
-{
-    ProxyConfig proxy;
-    ASSERT_EQ(db_.proxyConfig(&proxy), Database::ReadResult::OK);
-    EXPECT_FALSE(proxy.settings().enabled);
-
-    ProxySettings settings;
-    settings.enabled = true;
-    settings.type = ProxySettings::Type::SOCKS5H;
-    settings.address = "proxy.example.com";
-    settings.port = 1080;
-    settings.user = "user";
-    settings.password = SecureString("secret");
-
-    proxy.setSettings(settings);
-    ASSERT_TRUE(db_.setProxyConfig(proxy));
-
-    ProxyConfig reread;
-    ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
-    EXPECT_TRUE(reread.settings().enabled);
-    EXPECT_EQ(reread.settings().type, ProxySettings::Type::SOCKS5H);
-    EXPECT_EQ(reread.settings().address, QString("proxy.example.com"));
-    EXPECT_EQ(reread.settings().port, 1080);
-    EXPECT_EQ(reread.settings().user, QString("user"));
-    EXPECT_EQ(reread.settings().password.toString(), QString("secret"));
-}
-
-//--------------------------------------------------------------------------------------------------
 // The password of the proxy is a secret like the ones of the address book. A change of the master
 // password reseals it, and a key that does not open it gets nothing of it.
 TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
@@ -779,7 +724,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
 
     ProxyConfig proxy;
     proxy.setSettings(settings);
-    ASSERT_TRUE(db_.setProxyConfig(proxy));
+    ASSERT_TRUE(settings_store_.setProxyConfig(proxy));
 
     const SecureByteArray old_key = DataCryptor::instance().key();
 
@@ -787,7 +732,7 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
               Database::ReencryptResult::DONE);
 
     ProxyConfig reread;
-    ASSERT_EQ(db_.proxyConfig(&reread), Database::ReadResult::OK);
+    ASSERT_EQ(settings_store_.proxyConfig(&reread), Database::ReadResult::OK);
     EXPECT_TRUE(reread.settings().enabled);
     EXPECT_EQ(reread.settings().type, ProxySettings::Type::HTTPS);
     EXPECT_EQ(reread.settings().address, QString("10.0.0.1"));
@@ -797,34 +742,10 @@ TEST_F(DatabaseTest, ProxyIsResealedWithTheMasterPassword)
     DataCryptor::instance().setKey(old_key);
 
     ProxyConfig unreadable;
-    EXPECT_EQ(db_.proxyConfig(&unreadable), Database::ReadResult::INCOMPLETE);
+    EXPECT_EQ(settings_store_.proxyConfig(&unreadable), Database::ReadResult::INCOMPLETE);
     EXPECT_FALSE(unreadable.settings().enabled);
     EXPECT_TRUE(unreadable.settings().address.isEmpty());
     EXPECT_TRUE(unreadable.settings().password.isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, ProxyIsNotReadAsAbsentWhileTheBaseIsLocked)
-{
-    ProxySettings settings;
-    settings.enabled = true;
-    settings.type = ProxySettings::Type::SOCKS5H;
-    settings.address = "proxy.example.com";
-    settings.port = 1080;
-
-    ProxyConfig proxy;
-    proxy.setSettings(settings);
-    ASSERT_TRUE(db_.setProxyConfig(proxy));
-
-    SqlDatabase locker;
-    ASSERT_TRUE(locker.open(file_path_));
-
-    SqlTransaction transaction(locker);
-    ASSERT_TRUE(transaction.begin(SqlTransaction::Mode::EXCLUSIVE));
-
-    ProxyConfig reread;
-    EXPECT_EQ(db_.proxyConfig(&reread), Database::ReadResult::FAILED);
-    EXPECT_FALSE(reread.settings().enabled);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2433,13 +2354,14 @@ TEST_F(DatabaseTest, AutoUnlockIsTurnedOffOnlyByAKeyThatDoesNotFit)
     ASSERT_EQ(MasterPassword::setNew(SecureString(QString("Password123"))),
               MasterPassword::Result::SUCCESS);
 
-    ASSERT_TRUE(db.setAutoUnlockBlob(Random::byteArray(64)));
+    UnlockStore store(db);
+    ASSERT_TRUE(store.setAutoUnlockBlob(Random::byteArray(64)));
     EXPECT_FALSE(MasterPassword::autoUnlock());
     EXPECT_TRUE(MasterPassword::isAutoUnlockEnabled());
 
     QByteArray blob;
     ASSERT_TRUE(OSCrypt::encryptBytes(Random::byteArray(32), &blob));
-    ASSERT_TRUE(db.setAutoUnlockBlob(blob));
+    ASSERT_TRUE(store.setAutoUnlockBlob(blob));
     EXPECT_FALSE(MasterPassword::autoUnlock());
     EXPECT_FALSE(MasterPassword::isAutoUnlockEnabled());
 

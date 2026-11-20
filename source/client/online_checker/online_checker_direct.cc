@@ -27,7 +27,7 @@
 #include "base/net/address.h"
 #include "base/net/tcp_channel_proxy.h"
 #include "base/peer/client_authenticator.h"
-#include "client/storage/database.h"
+#include "client/storage/settings_store.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 
@@ -165,7 +165,7 @@ void OnlineCheckerDirect::start()
         return;
     }
 
-    if (Database::instance().proxyConfig(&proxy_) != Database::ReadResult::OK)
+    if (SettingsStore().proxyConfig(&proxy_) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "No readable proxy config";
         pending_queue_.clear();

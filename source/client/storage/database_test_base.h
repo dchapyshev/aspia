@@ -33,7 +33,9 @@
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/sync_store.h"
+#include "client/storage/unlock_store.h"
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
@@ -502,7 +504,9 @@ protected:
     LocalHostStore local_hosts_{ db_ };
     RouterStore router_store_{ db_ };
     RouterHostStore router_hosts_{ db_ };
+    SettingsStore settings_store_{ db_ };
     SyncStore sync_store_{ db_ };
+    UnlockStore unlock_store_{ db_ };
     QString file_path_;
 
 private:

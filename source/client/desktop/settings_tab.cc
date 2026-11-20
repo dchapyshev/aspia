@@ -56,6 +56,7 @@
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
@@ -119,7 +120,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->setupUi(this);
 
     UserSettings settings;
-    Database& db = Database::instance();
+    SettingsStore store;
 
     category_group_ = new QButtonGroup(this);
     category_group_->setExclusive(true);
@@ -196,11 +197,11 @@ SettingsTab::SettingsTab(QWidget* parent)
             ui->combo_theme->setCurrentIndex(ui->combo_theme->count() - 1);
     }
 
-    ui->edit_display_name->setText(db.displayName());
+    ui->edit_display_name->setText(store.displayName());
     ui->checkbox_confirm_close->setChecked(settings.isConfirmCloseEnabled());
 
-    ui->checkbox_backup_on_startup->setChecked(db.isBackupOnStartupEnabled());
-    ui->edit_backup_dir->setText(db.backupPath());
+    ui->checkbox_backup_on_startup->setChecked(store.isBackupOnStartupEnabled());
+    ui->edit_backup_dir->setText(store.backupPath());
 
     ui->combo_backup_retention->addItem(tr("1 week"), static_cast<int>(AutoBackup::Retention::ONE_WEEK));
     ui->combo_backup_retention->addItem(tr("2 weeks"), static_cast<int>(AutoBackup::Retention::TWO_WEEKS));
@@ -208,7 +209,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_backup_retention->addItem(tr("6 months"), static_cast<int>(AutoBackup::Retention::SIX_MONTHS));
     ui->combo_backup_retention->addItem(tr("1 year"), static_cast<int>(AutoBackup::Retention::ONE_YEAR));
     ui->combo_backup_retention->setCurrentIndex(
-        ui->combo_backup_retention->findData(static_cast<int>(db.backupRetention())));
+        ui->combo_backup_retention->findData(static_cast<int>(store.backupRetention())));
 
     ui->combo_router_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
     ui->combo_router_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
@@ -227,7 +228,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_lock_timeout->addItem(tr("30 minutes"), 30);
     ui->combo_lock_timeout->addItem(tr("1 hour"), 60);
 
-    const int lock_index = ui->combo_lock_timeout->findData(static_cast<int>(db.lockTimeout().count()));
+    const int lock_index = ui->combo_lock_timeout->findData(static_cast<int>(store.lockTimeout().count()));
     ui->combo_lock_timeout->setCurrentIndex(lock_index >= 0 ? lock_index : 0);
 
 #if defined(Q_OS_LINUX)
@@ -249,7 +250,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     ui->combo_proxy_type->addItem("SOCKS5H", static_cast<int>(ProxySettings::Type::SOCKS5H));
 
     ProxyConfig proxy;
-    db.proxyConfig(&proxy);
+    store.proxyConfig(&proxy);
     const ProxySettings& proxy_settings = proxy.settings();
     ui->combo_proxy_type->setCurrentIndex(
         ui->combo_proxy_type->findData(proxy_settings.enabled ? static_cast<int>(proxy_settings.type) : kNoProxy));
@@ -574,7 +575,7 @@ void SettingsTab::onSaveGeneral()
     if (router_changed_ && !routerFromUi(&router))
         return;
 
-    Database& db = Database::instance();
+    SettingsStore store;
     UserSettings settings;
 
     const QString locale = ui->combo_language->currentData().toString();
@@ -595,16 +596,16 @@ void SettingsTab::onSaveGeneral()
 
     settings.setConfirmCloseEnabled(ui->checkbox_confirm_close->isChecked());
 
-    bool written = db.setDisplayName(ui->edit_display_name->text());
-    written &= db.setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
+    bool written = store.setDisplayName(ui->edit_display_name->text());
+    written &= store.setBackupOnStartupEnabled(ui->checkbox_backup_on_startup->isChecked());
 
     // An empty field names no directory, so the stored one stays.
     if (ui->edit_backup_dir->text().isEmpty())
-        ui->edit_backup_dir->setText(db.backupPath());
+        ui->edit_backup_dir->setText(store.backupPath());
     else
-        written &= db.setBackupPath(ui->edit_backup_dir->text());
+        written &= store.setBackupPath(ui->edit_backup_dir->text());
 
-    written &= db.setBackupRetention(
+    written &= store.setBackupRetention(
         static_cast<AutoBackup::Retention>(ui->combo_backup_retention->currentData().toInt()));
 
     const int proxy_type = ui->combo_proxy_type->currentData().toInt();
@@ -620,7 +621,7 @@ void SettingsTab::onSaveGeneral()
 
     ProxyConfig proxy;
     proxy.setSettings(proxy_settings);
-    written &= db.setProxyConfig(proxy);
+    written &= store.setProxyConfig(proxy);
 
     // The master password is asked for here, and a refusal leaves the box as the stored state is.
     const bool auto_unlock = ui->checkbox_auto_unlock->isChecked();
@@ -641,9 +642,9 @@ void SettingsTab::onSaveGeneral()
         ui->combo_lock_timeout->setCurrentIndex(ui->combo_lock_timeout->findData(0));
 
     const Minutes lock_timeout(ui->combo_lock_timeout->currentData().toInt());
-    if (lock_timeout != db.lockTimeout())
+    if (lock_timeout != store.lockTimeout())
     {
-        written &= db.setLockTimeout(lock_timeout);
+        written &= store.setLockTimeout(lock_timeout);
         emit sig_lockTimeoutChanged();
     }
 
@@ -919,7 +920,7 @@ void SettingsTab::onCheckForUpdatesClicked()
     LOG(INFO) << "[ACTION] Check for updates";
 
     ProxyConfig proxy;
-    if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+    if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "No readable proxy config";
         MsgBox::warning(this, tr("Unable to read the proxy settings."));

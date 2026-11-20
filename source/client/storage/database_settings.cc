@@ -20,29 +20,11 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QStandardPaths>
 #include <QUuid>
 
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
-#include "base/sql/sql_transaction.h"
-
-namespace {
-
-constexpr auto kSettingName          = "database_name";
-constexpr auto kSettingDisplayName   = "display_name";
-constexpr auto kSettingBackupEnabled = "backup_on_startup";
-constexpr auto kSettingBackupPath    = "backup_path";
-constexpr auto kSettingBackupKeep    = "backup_retention";
-constexpr auto kSettingLockTimeout   = "lock_timeout";
-constexpr auto kSettingProxy         = "proxy";
-constexpr auto kSettingSalt          = "master_password_salt";
-constexpr auto kSettingVerifier      = "master_password_verifier";
-constexpr auto kSettingVersion       = "master_password_version";
-constexpr auto kSettingBiometricBlob = "biometric_blob";
-constexpr auto kSettingAutoUnlock    = "auto_unlock";
-
-} // namespace
+#include "client/storage/database_store.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -72,9 +54,9 @@ QList<Database::Info> Database::list()
         if (db.open(file_path, SqlDatabase::OpenMode::READ_ONLY))
         {
             SqlQuery query(db, "SELECT name, value FROM settings WHERE name IN (?, ?, ?)");
-            query.addText(std::string_view(kSettingName));
-            query.addText(std::string_view(kSettingAutoUnlock));
-            query.addText(std::string_view(kSettingVerifier));
+            query.addText(std::string_view(DatabaseStore::kSettingName));
+            query.addText(std::string_view(DatabaseStore::kSettingAutoUnlock));
+            query.addText(std::string_view(DatabaseStore::kSettingVerifier));
 
             bool has_password = false;
 
@@ -83,9 +65,9 @@ QList<Database::Info> Database::list()
             {
                 const std::string_view name = query.columnTextView(0);
 
-                if (name == kSettingName)
+                if (name == DatabaseStore::kSettingName)
                     info.name = query.columnText(1);
-                else if (name == kSettingAutoUnlock)
+                else if (name == DatabaseStore::kSettingAutoUnlock)
                     info.auto_unlock = !query.columnTextView(1).empty();
                 else
                     has_password = !query.columnTextView(1).empty();
@@ -101,212 +83,6 @@ QList<Database::Info> Database::list()
     }
 
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Database::name() const
-{
-    return readSetting(kSettingName);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setName(const QString& name)
-{
-    return writeSetting(kSettingName, name);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Database::displayName() const
-{
-    return readSetting(kSettingDisplayName);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setDisplayName(const QString& name)
-{
-    return writeSetting(kSettingDisplayName, name);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isBackupOnStartupEnabled() const
-{
-    return readSetting(kSettingBackupEnabled) == "1";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setBackupOnStartupEnabled(bool enable)
-{
-    return writeSetting(kSettingBackupEnabled, enable ? "1" : "0");
-}
-
-//--------------------------------------------------------------------------------------------------
-QString Database::backupPath() const
-{
-    QString value = readSetting(kSettingBackupPath);
-    if (value.isEmpty())
-        value = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Aspia/Backups";
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setBackupPath(const QString& path)
-{
-    return writeSetting(kSettingBackupPath, path);
-}
-
-//--------------------------------------------------------------------------------------------------
-AutoBackup::Retention Database::backupRetention() const
-{
-    bool ok = false;
-    const int value = readSetting(kSettingBackupKeep).toInt(&ok);
-    if (!ok || value < static_cast<int>(AutoBackup::Retention::ONE_WEEK) ||
-        value > static_cast<int>(AutoBackup::Retention::ONE_YEAR))
-    {
-        return AutoBackup::Retention::ONE_MONTH;
-    }
-
-    return static_cast<AutoBackup::Retention>(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setBackupRetention(AutoBackup::Retention retention)
-{
-    return writeSetting(kSettingBackupKeep, QString::number(static_cast<int>(retention)));
-}
-
-//--------------------------------------------------------------------------------------------------
-Minutes Database::lockTimeout() const
-{
-    bool ok = false;
-    const int value = readSetting(kSettingLockTimeout).toInt(&ok);
-    if (!ok || value < 0)
-        return Minutes::zero();
-
-    return Minutes(value);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setLockTimeout(Minutes timeout)
-{
-    return writeSetting(kSettingLockTimeout, QString::number(timeout.count()));
-}
-
-//--------------------------------------------------------------------------------------------------
-Database::ReadResult Database::proxyConfig(ProxyConfig* proxy) const
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return ReadResult::FAILED;
-    }
-
-    SqlQuery query(db_, "SELECT value FROM settings WHERE name=?");
-    query.addText(std::string_view(kSettingProxy));
-
-    const SqlQuery::StepResult step = query.next();
-    if (step == SqlQuery::StepResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return ReadResult::FAILED;
-    }
-
-    const QString value = step == SqlQuery::StepResult::ROW ? query.columnText(0) : QString();
-
-    if (!proxy->setEncryptedData(QByteArray::fromBase64(value.toLatin1())))
-    {
-        LOG(ERROR) << "Unable to read encrypted data of proxy";
-        return ReadResult::INCOMPLETE;
-    }
-
-    return ReadResult::OK;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setProxyConfig(const ProxyConfig& proxy)
-{
-    std::optional<QByteArray> encrypted_data = proxy.encryptedData();
-    if (!encrypted_data.has_value())
-        return false;
-
-    return writeSetting(kSettingProxy, QString::fromLatin1(encrypted_data->toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isMasterPasswordSet() const
-{
-    SqlTransaction transaction(db_);
-    if (!transaction.begin())
-    {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
-        return false;
-    }
-
-    return !readSetting(kSettingSalt).isEmpty() && !readSetting(kSettingVerifier).isEmpty();
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::masterPasswordSalt() const
-{
-    return QByteArray::fromBase64(readSetting(kSettingSalt).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::masterPasswordVerifier() const
-{
-    return QByteArray::fromBase64(readSetting(kSettingVerifier).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 Database::masterPasswordVersion() const
-{
-    return readSetting(kSettingVersion).toUInt();
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::autoUnlockBlob() const
-{
-    return QByteArray::fromBase64(readSetting(kSettingAutoUnlock).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setAutoUnlockBlob(const QByteArray& blob)
-{
-    return writeSetting(kSettingAutoUnlock, QString::fromLatin1(blob.toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::isBiometricUnlockEnabled() const
-{
-    // The presence of a wrapped key is the single source of truth for the feature being enabled.
-    return !biometricBlob().isEmpty();
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::biometricBlob() const
-{
-    return QByteArray::fromBase64(readSetting(kSettingBiometricBlob).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setBiometricBlob(const QByteArray& blob)
-{
-    return writeSetting(kSettingBiometricBlob, QString::fromLatin1(blob.toBase64()));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::clearBiometricUnlock()
-{
-    // Overwrite the wrapped key so the stored blob does not survive disabling the feature
-    // (the database runs with secure_delete enabled).
-    return writeSetting(kSettingBiometricBlob, QString());
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version)
-{
-    return writeSetting(kSettingSalt, QString::fromLatin1(salt.toBase64())) &&
-           writeSetting(kSettingVerifier, QString::fromLatin1(verifier.toBase64())) &&
-           writeSetting(kSettingVersion, QString::number(version));
 }
 
 //--------------------------------------------------------------------------------------------------

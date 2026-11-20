@@ -25,6 +25,7 @@
 #include "base/peer/client_authenticator.h"
 #include "client/config.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "proto/key_exchange.h"
 #include "proto/router.h"
 
@@ -184,7 +185,7 @@ void RouterWorker::startConnection()
     }
 
     ProxyConfig proxy;
-    if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+    if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "No readable proxy config for router";
         connection_->reconnect_countdown = kReconnectTicks;

@@ -35,9 +35,10 @@
 #include "client/android/master_password_dialog.h"
 #include "client/android/master_password_widget.h"
 #include "client/android/profiles_widget.h"
-#include "client/storage/database.h"
 #include "client/storage/master_password.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/system_settings.h"
+#include "client/storage/unlock_store.h"
 #include "client/storage/user_settings.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
@@ -372,10 +373,10 @@ void SettingsWidget::buildInterfaceSection(QVBoxLayout* layout)
     LineEdit* display_name = new LineEdit();
     display_name->setLabel(tr("Display name when connected"));
     display_name->setMaxLength(16);
-    display_name->setText(Database::instance().displayName());
+    display_name->setText(SettingsStore().displayName());
     connect(display_name, &QLineEdit::editingFinished, this, [display_name]()
     {
-        Database::instance().setDisplayName(display_name->text());
+        SettingsStore().setDisplayName(display_name->text());
     });
     layout->addWidget(display_name);
 }
@@ -390,7 +391,7 @@ void SettingsWidget::buildSecuritySection(QVBoxLayout* layout)
     layout->addWidget(change_password);
 
     const BiometricGate::Status biometric_status = BiometricGate::status();
-    const bool biometric_enabled = Database::instance().isBiometricUnlockEnabled();
+    const bool biometric_enabled = UnlockStore().isBiometricUnlockEnabled();
     const bool usable = biometric_status == BiometricGate::Status::AVAILABLE || biometric_enabled;
 
     QPointer<Switch> biometric = new Switch(tr("Unlock with biometrics"));
@@ -570,11 +571,11 @@ void SettingsWidget::buildUpdateSection(QVBoxLayout* layout)
 //--------------------------------------------------------------------------------------------------
 bool SettingsWidget::setBiometricEnabled(bool enable)
 {
-    Database& db = Database::instance();
+    UnlockStore store;
 
     if (!enable)
     {
-        db.clearBiometricUnlock();
+        store.clearBiometricUnlock();
         BiometricGate::deleteKey();
         return true;
     }
@@ -594,7 +595,7 @@ bool SettingsWidget::setBiometricEnabled(bool enable)
     if (!blob.has_value())
         return false;
 
-    return db.setBiometricBlob(BiometricGate::pack(*blob));
+    return store.setBiometricBlob(BiometricGate::pack(*blob));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 #include "base/build_config.h"
 #include "base/logging.h"
 #include "base/update/update_checker.h"
-#include "client/storage/database.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 
@@ -41,7 +41,6 @@ UpdateWorker::~UpdateWorker()
 //--------------------------------------------------------------------------------------------------
 void UpdateWorker::onPrepare()
 {
-    Database& db = Database::instance();
     UserSettings user_settings;
 
     if (!user_settings.isCheckUpdatesEnabled())
@@ -51,7 +50,7 @@ void UpdateWorker::onPrepare()
     }
 
     ProxyConfig proxy;
-    if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+    if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "No readable proxy config, update check is skipped";
         return;

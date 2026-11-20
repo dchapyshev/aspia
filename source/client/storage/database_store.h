@@ -23,6 +23,24 @@
 
 class DatabaseStore
 {
+public:
+    static constexpr char kSettingName[] = "database_name";
+    static constexpr char kSettingDisplayName[] = "display_name";
+    static constexpr char kSettingBackupEnabled[] = "backup_on_startup";
+    static constexpr char kSettingBackupPath[] = "backup_path";
+    static constexpr char kSettingBackupKeep[] = "backup_retention";
+    static constexpr char kSettingLockTimeout[] = "lock_timeout";
+    static constexpr char kSettingProxy[] = "proxy";
+    static constexpr char kSettingSalt[] = "master_password_salt";
+    static constexpr char kSettingVerifier[] = "master_password_verifier";
+    static constexpr char kSettingVersion[] = "master_password_version";
+    static constexpr char kSettingAutoUnlock[] = "auto_unlock";
+    static constexpr char kSettingBiometricBlob[] = "biometric_blob";
+    static constexpr char kSettingRouter[] = "router";
+
+    // The id of the router of the old file a database waits for. The row goes once the router is there.
+    static constexpr char kSettingRouterId[] = "migration_router_id";
+
 protected:
     explicit DatabaseStore(Database& db)
         : db_(db)

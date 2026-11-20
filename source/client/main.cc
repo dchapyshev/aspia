@@ -45,9 +45,9 @@
 #include "client/desktop/main_window.h"
 #include "client/desktop/update_server_dialog.h"
 #include "client/mcp/mcp_worker.h"
-#include "client/storage/database.h"
 #include "client/storage/database_migration.h"
 #include "client/storage/master_password.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
@@ -72,12 +72,14 @@ bool openOnlyDatabase()
 void backupOnStartup()
 {
     Database& db = Database::instance();
-    if (!db.isBackupOnStartupEnabled())
+
+    SettingsStore store(db);
+    if (!store.isBackupOnStartupEnabled())
         return;
 
-    const QString directory = db.backupPath();
+    const QString directory = store.backupPath();
 
-    switch (AutoBackup::run(db, directory, db.backupRetention()))
+    switch (AutoBackup::run(db, directory, store.backupRetention()))
     {
         case Backup::Result::SUCCESS:
             break;

@@ -26,11 +26,9 @@
 #include <optional>
 #include <utility>
 
-#include "base/time_types.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_transaction.h"
 #include "client/config.h"
-#include "client/storage/auto_backup.h"
 
 class Database
 {
@@ -89,33 +87,6 @@ public:
                 const QList<CredentialConfig>& credentials,
                 const QList<ProfileConfig>& profiles);
 
-    // Settings.
-    QString name() const;
-    bool setName(const QString& name);
-
-    QString displayName() const;
-    bool setDisplayName(const QString& name);
-
-    bool isBackupOnStartupEnabled() const;
-    bool setBackupOnStartupEnabled(bool enable);
-
-    QString backupPath() const;
-    bool setBackupPath(const QString& path);
-
-    AutoBackup::Retention backupRetention() const;
-    bool setBackupRetention(AutoBackup::Retention retention);
-
-    Minutes lockTimeout() const;
-    bool setLockTimeout(Minutes timeout);
-
-    // Without a saved value the proxy is not used. A value that did not open leaves |proxy| that
-    // way and answers INCOMPLETE.
-    ReadResult proxyConfig(ProxyConfig* proxy) const;
-    bool setProxyConfig(const ProxyConfig& proxy);
-
-    // Master password.
-    bool isMasterPasswordSet() const;
-
     class Reencryption final
     {
     public:
@@ -136,20 +107,6 @@ public:
         Q_DISABLE_COPY_MOVE(Reencryption)
     };
 
-    QByteArray masterPasswordSalt() const;
-    QByteArray masterPasswordVerifier() const;
-    quint32 masterPasswordVersion() const;
-
-    // Automatic unlock on startup.
-    QByteArray autoUnlockBlob() const;
-    bool setAutoUnlockBlob(const QByteArray& blob);
-
-    // Biometric unlock.
-    bool isBiometricUnlockEnabled() const;
-    QByteArray biometricBlob() const;
-    bool setBiometricBlob(const QByteArray& blob);
-    bool clearBiometricUnlock();
-
 private:
     friend class DatabaseMigration;
     friend class DatabaseStore;
@@ -159,7 +116,6 @@ private:
     static bool createTables(SqlDatabase& db);
 
     bool openDatabase();
-    bool setMasterPassword(const QByteArray& salt, const QByteArray& verifier, quint32 version);
     bool rewriteEncryptedData(const QList<LocalHostConfig>& local_hosts,
                               const std::optional<RouterConfig>& router,
                               const QList<RouterHostConfig>& router_hosts,

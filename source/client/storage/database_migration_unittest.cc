@@ -40,6 +40,7 @@
 #include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -357,13 +358,13 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
     Database first;
     ASSERT_TRUE(first.open(firstPath()));
     EXPECT_EQ(first.guid(), QString(kFirstGuid));
-    EXPECT_EQ(first.displayName(), QString("operator"));
+    EXPECT_EQ(SettingsStore(first).displayName(), QString("operator"));
     EXPECT_EQ(hostNames(first), QSet<QString>({ "direct", "first-host" }));
 
     Database second;
     ASSERT_TRUE(second.open(dir_path_ + '/' + kSecondGuid + ".db3"));
     EXPECT_EQ(second.guid(), QString(kSecondGuid));
-    EXPECT_EQ(second.displayName(), QString("operator"));
+    EXPECT_EQ(SettingsStore(second).displayName(), QString("operator"));
     EXPECT_EQ(hostNames(second), QSet<QString>({ "direct", "second-host" }));
 
     QList<LocalGroupConfig> groups;
@@ -389,11 +390,11 @@ TEST_F(DatabaseMigrationTest, DatabasesAreNumberedInTheOrderOfTheirRouters)
 
     Database first;
     ASSERT_TRUE(first.open(firstPath()));
-    EXPECT_EQ(first.name(), QString("Database #1"));
+    EXPECT_EQ(SettingsStore(first).name(), QString("Database #1"));
 
     Database second;
     ASSERT_TRUE(second.open(dir_path_ + '/' + kSecondGuid + ".db3"));
-    EXPECT_EQ(second.name(), QString("Database #2"));
+    EXPECT_EQ(SettingsStore(second).name(), QString("Database #2"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -591,7 +592,7 @@ TEST_F(DatabaseMigrationTest, BookWithoutRoutersGivesOneDatabase)
     ASSERT_TRUE(DatabaseMigration::finish(db, old_path_));
 
     EXPECT_FALSE(db.guid().isEmpty());
-    EXPECT_EQ(db.name(), QString("Database #1"));
+    EXPECT_EQ(SettingsStore(db).name(), QString("Database #1"));
     EXPECT_EQ(hostNames(db), QSet<QString>({ "direct" }));
 
     RouterConfig router;

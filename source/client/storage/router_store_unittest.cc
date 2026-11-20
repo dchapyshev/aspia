@@ -19,6 +19,14 @@
 #include "client/storage/router_store.h"
 
 #include "client/storage/database_test_base.h"
+#include "proto/router.h"
+
+namespace {
+
+const char kUserGuid[] = "4f0c1c2e-6a5b-4b0e-9f3a-1d2c3b4a5e6f";
+const char kAnotherUserGuid[] = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
+
+} // namespace
 
 using RouterStoreTest = DatabaseTestBase;
 

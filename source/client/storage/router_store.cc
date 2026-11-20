@@ -26,8 +26,6 @@
 
 namespace {
 
-const char kSettingRouter[] = "router";
-
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult readRouter(const SqlQuery& query, RouterConfig* router)
 {

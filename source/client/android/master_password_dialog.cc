@@ -24,8 +24,8 @@
 #include "base/time_types.h"
 #include "base/crypto/secure_string.h"
 #include "client/android/biometric_gate.h"
-#include "client/storage/database.h"
 #include "client/storage/master_password.h"
+#include "client/storage/unlock_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -86,7 +86,7 @@ MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     // The system already shows a biometric prompt automatically when unlock is available; the
     // password entry stays as the fallback if the user dismisses it.
     const bool biometric_available = mode_ == Mode::UNLOCK &&
-        Database::instance().isBiometricUnlockEnabled() &&
+        UnlockStore().isBiometricUnlockEnabled() &&
         BiometricGate::status() == BiometricGate::Status::AVAILABLE;
     if (biometric_available)
     {
@@ -152,7 +152,7 @@ void MasterPasswordDialog::onAccept()
     }
 
     // The master key changed, so any biometric enrollment bound to the old key no longer works.
-    Database::instance().clearBiometricUnlock();
+    UnlockStore().clearBiometricUnlock();
     BiometricGate::deleteKey();
 
     accept();
@@ -161,9 +161,7 @@ void MasterPasswordDialog::onAccept()
 //--------------------------------------------------------------------------------------------------
 void MasterPasswordDialog::tryBiometricUnlock()
 {
-    Database& db = Database::instance();
-
-    std::optional<BiometricGate::Blob> blob = BiometricGate::unpack(db.biometricBlob());
+    std::optional<BiometricGate::Blob> blob = BiometricGate::unpack(UnlockStore().biometricBlob());
     if (!blob.has_value())
         return;
 
@@ -216,7 +214,7 @@ void MasterPasswordDialog::showError(const QString& message)
 //--------------------------------------------------------------------------------------------------
 void MasterPasswordDialog::dropBiometric(const QString& message)
 {
-    Database::instance().clearBiometricUnlock();
+    UnlockStore().clearBiometricUnlock();
     BiometricGate::deleteKey();
 
     showError(message);

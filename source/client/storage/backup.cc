@@ -40,6 +40,7 @@
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/unlock_store.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -843,10 +844,12 @@ Backup::Result Backup::exportToFile(Database& db, const QString& file_path, Repo
     if (!db.isValid())
         return Result::DATABASE_UNAVAILABLE;
 
+    UnlockStore store(db);
+
     // The file is sealed with the key of this address book, so what proves that key right goes into
     // it as it is. Nothing of the key itself does.
-    const QByteArray salt = db.masterPasswordSalt();
-    const QByteArray verifier = db.masterPasswordVerifier();
+    const QByteArray salt = store.masterPasswordSalt();
+    const QByteArray verifier = store.masterPasswordVerifier();
     const SecureByteArray key = MasterPassword::currentKey();
 
     if (salt.isEmpty() || verifier.isEmpty() || key.isEmpty())

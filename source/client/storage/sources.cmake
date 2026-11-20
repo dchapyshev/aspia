@@ -45,8 +45,12 @@ collect_sources(SOURCE_CLIENT_STORAGE
     router_host_store.h
     router_store.cc
     router_store.h
+    settings_store.cc
+    settings_store.h
     sync_store.cc
     sync_store.h
+    unlock_store.cc
+    unlock_store.h
     system_settings.cc
     system_settings.h
     user_settings.cc

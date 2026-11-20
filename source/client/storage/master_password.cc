@@ -27,7 +27,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
-#include "client/storage/database.h"
+#include "client/storage/unlock_store.h"
 
 namespace {
 
@@ -124,7 +124,7 @@ bool MasterPassword::isSet()
     if (!db.isValid())
         return false;
 
-    return db.isMasterPasswordSet();
+    return UnlockStore(db).isMasterPasswordSet();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -138,8 +138,9 @@ MasterPassword::Result MasterPassword::unlock(const SecureString& password)
         return Result::FAILED;
     }
 
-    QByteArray salt = db.masterPasswordSalt();
-    QByteArray verifier = db.masterPasswordVerifier();
+    UnlockStore store(db);
+    QByteArray salt = store.masterPasswordSalt();
+    QByteArray verifier = store.masterPasswordVerifier();
 
     if (salt.isEmpty() || verifier.isEmpty())
     {
@@ -147,7 +148,7 @@ MasterPassword::Result MasterPassword::unlock(const SecureString& password)
         return Result::FAILED;
     }
 
-    quint32 version = db.masterPasswordVersion();
+    quint32 version = store.masterPasswordVersion();
     if (version != kCurrentVersion)
     {
         LOG(ERROR) << "Unsupported master password version:" << version;
@@ -176,14 +177,15 @@ bool MasterPassword::unlockWithKey(const SecureByteArray& key)
         return false;
     }
 
-    QByteArray verifier = db.masterPasswordVerifier();
+    UnlockStore store(db);
+    QByteArray verifier = store.masterPasswordVerifier();
     if (verifier.isEmpty())
     {
         LOG(ERROR) << "Master password is not set";
         return false;
     }
 
-    quint32 version = db.masterPasswordVersion();
+    quint32 version = store.masterPasswordVersion();
     if (version != kCurrentVersion)
     {
         LOG(ERROR) << "Unsupported master password version:" << version;
@@ -218,7 +220,8 @@ bool MasterPassword::autoUnlock()
         return false;
     }
 
-    const QByteArray blob = db.autoUnlockBlob();
+    UnlockStore store(db);
+    const QByteArray blob = store.autoUnlockBlob();
     if (blob.isEmpty())
         return false;
 
@@ -235,7 +238,7 @@ bool MasterPassword::autoUnlock()
         return true;
 
     LOG(WARNING) << "Remembered key does not unlock the database";
-    db.setAutoUnlockBlob(QByteArray());
+    store.setAutoUnlockBlob(QByteArray());
     return false;
 }
 
@@ -243,16 +246,17 @@ bool MasterPassword::autoUnlock()
 // static
 bool MasterPassword::isAutoUnlockEnabled()
 {
-    return !Database::instance().autoUnlockBlob().isEmpty();
+    return !UnlockStore().autoUnlockBlob().isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool MasterPassword::setAutoUnlockEnabled(bool enable)
 {
-    Database& db = Database::instance();
+    UnlockStore store;
+
     if (!enable)
-        return db.setAutoUnlockBlob(QByteArray());
+        return store.setAutoUnlockBlob(QByteArray());
 
     QByteArray blob;
     if (!OSCrypt::encryptBytes(currentKey().toByteArray(), &blob) || blob.isEmpty())
@@ -261,7 +265,7 @@ bool MasterPassword::setAutoUnlockEnabled(bool enable)
         return false;
     }
 
-    return db.setAutoUnlockBlob(blob);
+    return store.setAutoUnlockBlob(blob);
 }
 
 //--------------------------------------------------------------------------------------------------

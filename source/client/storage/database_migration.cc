@@ -45,10 +45,6 @@ namespace {
 
 const char kOldFileName[] = "client.db3";
 
-// The id of the router of the old file a database waits for. The row goes once the router is there.
-const char kSettingRouterId[] = "migration_router_id";
-const char kSettingName[] = "database_name";
-
 // The rows of the old file that go to UserSettings instead of the databases.
 const char kUserSettings[] = "'confirm_close', 'check_updates', 'update_channel', 'mcp_enabled', 'mcp_auto_confirm', "
                              "'mcp_sign_in', 'mcp_session_types'";
@@ -502,7 +498,7 @@ DatabaseMigration::Result DatabaseMigration::migrate(const QString& old_file_pat
 bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
 {
     bool found = false;
-    const QString value = db.readSetting(kSettingRouterId, &found);
+    const QString value = db.readSetting(DatabaseStore::kSettingRouterId, &found);
     if (!found)
         return true;
 
@@ -559,7 +555,7 @@ bool DatabaseMigration::finish(Database& db, const QString& old_file_path)
     }
 
     SqlQuery query(db.db_, "DELETE FROM settings WHERE name=?");
-    query.addText(std::string_view(kSettingRouterId));
+    query.addText(std::string_view(DatabaseStore::kSettingRouterId));
 
     if (!query.exec())
     {
@@ -640,10 +636,10 @@ bool DatabaseMigration::buildDatabase(SqlDatabase& old_db, const QString& file_p
     if (!copyBook(old_db, db, router_id))
         return false;
 
-    if (!writeSetting(db, kSettingName, name))
+    if (!writeSetting(db, DatabaseStore::kSettingName, name))
         return false;
 
-    if (router_id != 0 && !writeSetting(db, kSettingRouterId, QString::number(router_id)))
+    if (router_id != 0 && !writeSetting(db, DatabaseStore::kSettingRouterId, QString::number(router_id)))
         return false;
 
     return transaction.commit();

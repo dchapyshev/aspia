@@ -34,7 +34,9 @@
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/sync_store.h"
+#include "client/storage/unlock_store.h"
 
 namespace {
 
@@ -439,7 +441,7 @@ Database::ReencryptResult Database::Reencryption::begin()
         LocalHostStore(db_).all(&local_hosts_),
         RouterHostStore(db_).list(&router_hosts_),
         CredentialStore(db_).list(&credentials_),
-        db_.proxyConfig(&proxy_)
+        SettingsStore(db_).proxyConfig(&proxy_)
     };
 
     const FindResult router_found = RouterStore(db_).find(&router);
@@ -493,7 +495,7 @@ bool Database::Reencryption::commit(const QByteArray& salt, const QByteArray& ve
         return false;
     }
 
-    if (!db_.setMasterPassword(salt, verifier, version))
+    if (!UnlockStore(db_).setMasterPassword(salt, verifier, version))
     {
         LOG(ERROR) << "Unable to write the master password";
         return false;
@@ -733,7 +735,7 @@ bool Database::rewriteEncryptedData(const QList<LocalHostConfig>& local_hosts,
         }
     }
 
-    if (!setProxyConfig(proxy))
+    if (!SettingsStore(*this).setProxyConfig(proxy))
     {
         LOG(ERROR) << "Unable to re-encrypt proxy";
         return false;

@@ -33,6 +33,7 @@
 #include "client/desktop/ui_unlock_dialog.h"
 #include "client/storage/instance_settings.h"
 #include "client/storage/master_password.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 
@@ -401,7 +402,7 @@ void UnlockDialog::create()
     Database::select(id);
 
     if (MasterPassword::setNew(password) != MasterPassword::Result::SUCCESS ||
-        !Database::instance().setName(name))
+        !SettingsStore().setName(name))
     {
         LOG(ERROR) << "Unable to create the database";
 
@@ -434,7 +435,7 @@ void UnlockDialog::rename()
 
     Database::select(id);
 
-    if (!Database::instance().setName(name))
+    if (!SettingsStore().setName(name))
     {
         LOG(ERROR) << "Unable to rename the database";
         MsgBox::warning(this, tr("Unable to rename the database."));

@@ -55,6 +55,7 @@
 #include "client/mcp/mcp_worker.h"
 #include "client/storage/instance_settings.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/settings_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "client/workers/update_worker.h"
@@ -110,7 +111,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->setupUi(this);
 
-    const QString database_name = Database::instance().name();
+    SettingsStore store;
+    const QString database_name = store.name();
     if (!database_name.isEmpty() && Database::list().size() > 1)
         setWindowTitle(QString("%1 - %2").arg(database_name, windowTitle()));
 
@@ -195,10 +197,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(GuiApplication::findWorker<UpdateWorker>(), &UpdateWorker::sig_updateAvailable,
             this, [this](const UpdateInfo& /* update_info */)
     {
-        Database& db = Database::instance();
-
         ProxyConfig proxy;
-        if (db.proxyConfig(&proxy) != Database::ReadResult::OK)
+        if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
         {
             LOG(ERROR) << "No readable proxy config";
             return;
@@ -246,7 +246,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     app_lock_ = new AppLock(this);
     connect(app_lock_, &AppLock::sig_lockRequested, this, &MainWindow::onLockRequested);
-    app_lock_->setTimeout(Database::instance().lockTimeout());
+    app_lock_->setTimeout(store.lockTimeout());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,7 +494,7 @@ void MainWindow::onSettings()
 
     connect(settings_tab, &SettingsTab::sig_lockTimeoutChanged, this, [this]()
     {
-        app_lock_->setTimeout(Database::instance().lockTimeout());
+        app_lock_->setTimeout(SettingsStore().lockTimeout());
     });
 
     connect(settings_tab, &SettingsTab::sig_routerChanged, this, [this]()
@@ -717,7 +717,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     if (!client_window)
         return;
 
-    QString display_name = Database::instance().displayName();
+    QString display_name = SettingsStore().displayName();
     QString computer_name = host.name().isEmpty() ? host.address() : host.name();
     QIcon icon = sessionIcon(session_type);
 

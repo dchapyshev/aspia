@@ -26,7 +26,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer.h"
 #include "client/udp_attempt.h"
-#include "client/storage/database.h"
+#include "client/storage/settings_store.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router_client.h"
@@ -438,7 +438,7 @@ void NetworkWorker::startConnection()
         }
 
         ProxyConfig proxy;
-        if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+        if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
         {
             LOG(ERROR) << "No readable proxy config";
             onTcpErrorOccurred(TcpChannel::ErrorCode::UNKNOWN);
@@ -467,7 +467,7 @@ void NetworkWorker::startConnection()
         }
 
         ProxyConfig proxy;
-        if (Database::instance().proxyConfig(&proxy) != Database::ReadResult::OK)
+        if (SettingsStore().proxyConfig(&proxy) != Database::ReadResult::OK)
         {
             LOG(ERROR) << "No readable proxy config";
             onTcpErrorOccurred(TcpChannel::ErrorCode::UNKNOWN);
