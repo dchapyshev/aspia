@@ -28,6 +28,7 @@
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
@@ -101,6 +102,21 @@ inline std::optional<RouterHostConfig> findRouterHost(Database& db, HostId host_
 {
     RouterHostConfig host;
     const Database::FindResult result = RouterHostStore(db).find(host_id, &host);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return host;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+inline std::optional<LocalHostConfig> findLocalHost(Database& db, qint64 entry_id)
+{
+    LocalHostConfig host;
+    const Database::FindResult result = LocalHostStore(db).find(entry_id, &host);
     if (result != Database::FindResult::FOUND)
     {
         EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
@@ -394,9 +410,54 @@ protected:
         return hosts;
     }
 
+    qint64 addGroup(const QString& name, qint64 parent_id)
+    {
+        LocalGroupConfig group;
+        group.setName(name);
+        group.setParentId(parent_id);
+
+        EXPECT_TRUE(db_.addLocalGroup(group));
+        return group.id();
+    }
+
+    qint64 addHost(const QString& name, qint64 group_id)
+    {
+        LocalHostConfig host;
+        host.setName(name);
+        host.setAddress("192.168.0.1");
+        host.setGroupId(group_id);
+
+        EXPECT_TRUE(local_hosts_.add(host));
+        return host.id();
+    }
+
+    QStringList hostNamesOfGroup(qint64 group_id)
+    {
+        QStringList names;
+        for (const LocalHostConfig& host : localHostList(group_id))
+            names.append(host.name());
+        names.sort();
+        return names;
+    }
+
+    QList<LocalHostConfig> localHostList(qint64 group_id)
+    {
+        QList<LocalHostConfig> hosts;
+        EXPECT_EQ(local_hosts_.list(group_id, &hosts), Database::ReadResult::OK);
+        return hosts;
+    }
+
+    QList<LocalHostConfig> allLocalHosts()
+    {
+        QList<LocalHostConfig> hosts;
+        EXPECT_EQ(local_hosts_.all(&hosts), Database::ReadResult::OK);
+        return hosts;
+    }
+
     Database db_;
     CredentialStore credentials_{ db_ };
     ProfileStore profiles_{ db_ };
+    LocalHostStore local_hosts_{ db_ };
     RouterHostStore router_hosts_{ db_ };
     SyncStore sync_store_{ db_ };
     QString file_path_;

@@ -36,7 +36,7 @@
 #include "client/online_checker/online_checker.h"
 #include "client/router/router_controller.h"
 #include "client/storage/backup.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
@@ -188,7 +188,7 @@ void LocalWidget::reload()
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
     const QIcon unread_icon = GuiApplication::svgIcon(":/img/computer-unknown.svg");
     QList<LocalHostConfig> root_hosts;
-    const Database::ReadResult result = Database::instance().localHostList(0, &root_hosts);
+    const Database::ReadResult result = LocalHostStore().list(0, &root_hosts);
     if (result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read the ungrouped hosts:" << result;
 
@@ -253,7 +253,7 @@ void LocalWidget::searchQuery(const QString& query)
 
     QList<SearchWidget::Result> results;
     QList<LocalHostConfig> matches;
-    const Database::ReadResult read_result = Database::instance().searchLocalHosts(query, &matches);
+    const Database::ReadResult read_result = LocalHostStore().search(query, &matches);
     if (read_result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to search the hosts:" << read_result;
 
@@ -509,7 +509,7 @@ void LocalWidget::onRefreshClicked()
     QList<qint64> entry_ids;
     OnlineChecker::HostList hosts;
     QList<LocalHostConfig> group_hosts;
-    const Database::ReadResult result = Database::instance().localHostList(group_id, &group_hosts);
+    const Database::ReadResult result = LocalHostStore().list(group_id, &group_hosts);
     if (result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read the hosts of group" << group_id << ":" << result;
 
@@ -629,7 +629,7 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
     const QIcon unread_icon = GuiApplication::svgIcon(":/img/computer-unknown.svg");
 
     QList<LocalHostConfig> group_hosts;
-    const Database::ReadResult result = Database::instance().localHostList(group_id, &group_hosts);
+    const Database::ReadResult result = LocalHostStore().list(group_id, &group_hosts);
     if (result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read the hosts of group" << group_id << ":" << result;
 

@@ -29,6 +29,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
@@ -431,7 +432,7 @@ Database::ReencryptResult Database::Reencryption::begin()
 
     const ReadResult read_results[] =
     {
-        db_.allLocalHosts(&local_hosts_),
+        LocalHostStore(db_).all(&local_hosts_),
         RouterHostStore(db_).list(&router_hosts_),
         CredentialStore(db_).list(&credentials_),
         db_.proxyConfig(&proxy_)

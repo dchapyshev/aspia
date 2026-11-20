@@ -43,7 +43,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "common/desktop/icon_text_button.h"
 #include "proto/router_constants.h"
 
@@ -340,15 +340,13 @@ void SearchWidget::search(const QString& query)
         return;
     }
 
-    Database& db = Database::instance();
-
     QList<LocalGroupConfig> all_groups;
-    db.allLocalGroups(&all_groups);
+    Database::instance().allLocalGroups(&all_groups);
     local_groups_.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
 
-    const Database::ReadResult read_result = db.searchLocalHosts(query, &local_matches_);
+    const Database::ReadResult read_result = LocalHostStore().search(query, &local_matches_);
     if (read_result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to search the hosts of the local database:" << read_result;
 
@@ -635,7 +633,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
         return;
 
     LocalHostConfig updated;
-    const Database::FindResult result = Database::instance().findLocalHost(entry_id, &updated);
+    const Database::FindResult result = LocalHostStore().find(entry_id, &updated);
     if (result == Database::FindResult::NOT_FOUND)
     {
         removeItem(entry_id);

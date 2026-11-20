@@ -34,7 +34,7 @@
 #include "client/desktop/management/ui_local_group_widget.h"
 #include "client/online_checker/online_checker.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "common/desktop/msg_box.h"
 
 namespace {
@@ -151,7 +151,7 @@ QList<LocalHostConfig> LocalGroupWidget::selectedHosts() const
 void LocalGroupWidget::showGroup(qint64 group_id)
 {
     QList<LocalHostConfig> hosts;
-    const Database::ReadResult result = Database::instance().localHostList(group_id, &hosts);
+    const Database::ReadResult result = LocalHostStore().list(group_id, &hosts);
 
     if (result != Database::ReadResult::FAILED || group_id != current_group_id_)
     {
@@ -201,7 +201,7 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
         return;
 
     LocalHostConfig updated;
-    const Database::FindResult result = Database::instance().findLocalHost(entry_id, &updated);
+    const Database::FindResult result = LocalHostStore().find(entry_id, &updated);
     if (result == Database::FindResult::NOT_FOUND)
     {
         removeItem(entry_id);

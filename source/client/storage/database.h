@@ -82,21 +82,6 @@ public:
     enum class ReencryptResult { DONE, UNREADABLE_RECORD, FAILED };
     Q_ENUM(ReencryptResult)
 
-    // Local Hosts.
-    ReadResult localHostList(qint64 group_id, QList<LocalHostConfig>* hosts) const;
-    ReadResult allLocalHosts(QList<LocalHostConfig>* hosts) const;
-    bool addLocalHost(LocalHostConfig& host);
-    bool modifyLocalHost(LocalHostConfig& host);
-    bool moveLocalHost(qint64 entry_id, qint64 new_group_id);
-    bool removeLocalHost(qint64 entry_id);
-    bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
-    bool setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id);
-    FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id);
-
-    // Local Search.
-    ReadResult searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
-
     // Local Groups.
     bool localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const;
     bool allLocalGroups(QList<LocalGroupConfig>* groups) const;

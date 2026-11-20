@@ -29,7 +29,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 
 class AutoBackupTest : public testing::Test
 {
@@ -185,7 +185,7 @@ TEST_F(AutoBackupTest, FailedBackupRemovesNothing)
     LocalHostConfig host;
     host.setName("host");
     host.setAddress("192.168.0.1");
-    ASSERT_TRUE(db_.addLocalHost(host));
+    ASSERT_TRUE(LocalHostStore(db_).add(host));
 
     const QString expired = nameOfDaysAgo(400);
     createFile(expired);

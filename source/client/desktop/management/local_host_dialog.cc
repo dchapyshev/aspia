@@ -34,7 +34,7 @@
 #include "client/config.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_host_dialog.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/password_edit.h"
@@ -186,8 +186,10 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui->combo_group->currentGroupId();
 
+    LocalHostStore store;
+
     QList<LocalHostConfig> hosts;
-    if (Database::instance().localHostList(group_id, &hosts) == Database::ReadResult::FAILED)
+    if (store.list(group_id, &hosts) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the hosts of the selected group";
         MsgBox::warning(this, tr("Failed to read data from the local database."));
@@ -217,11 +219,9 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host.setProfileId(ui->combo_profile->currentProfileId());
     host.setComment(ui->edit_comment->toPlainText());
 
-    Database& db = Database::instance();
-
     if (entry_id_ == -1)
     {
-        if (!db.addLocalHost(host))
+        if (!store.add(host))
         {
             MsgBox::warning(this, tr("Unable to add host"));
             LOG(INFO) << "Unable to add host to database";
@@ -231,7 +231,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        if (!db.modifyLocalHost(host))
+        if (!store.modify(host))
         {
             MsgBox::warning(this, tr("Unable to modify host"));
             LOG(INFO) << "Unable to modify host in database";
@@ -245,8 +245,6 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void LocalHostDialog::onLoadData()
 {
-    Database& db = Database::instance();
-
     connect(ui->combo_credential, &CredentialComboBox::sig_reloaded, this, [this]()
     {
         if (ui->combo_credential->currentIndex() < 0)
@@ -275,7 +273,7 @@ void LocalHostDialog::onLoadData()
     }
 
     QList<LocalGroupConfig> all_groups;
-    if (!db.allLocalGroups(&all_groups))
+    if (!Database::instance().allLocalGroups(&all_groups))
     {
         LOG(ERROR) << "Unable to read the list of groups";
         MsgBox::warning(this, tr("Failed to read the list of groups."));
@@ -301,7 +299,7 @@ void LocalHostDialog::onLoadData()
     if (entry_id_ != -1)
     {
         LocalHostConfig host;
-        host_found = db.findLocalHost(entry_id_, &host);
+        host_found = LocalHostStore().find(entry_id_, &host);
 
         if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
         {

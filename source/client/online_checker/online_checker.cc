@@ -25,7 +25,7 @@
 #include "client/config.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 
 namespace {
 
@@ -103,7 +103,7 @@ void OnlineChecker::start(const HostList& hosts)
         if (direct_host.credentialId() > 0)
         {
             std::optional<std::pair<QString, SecureString>> credentials =
-                Database::instance().localHostCredentials(id);
+                LocalHostStore().credentials(id);
             if (credentials.has_value())
             {
                 direct_host.setUsername(credentials->first);

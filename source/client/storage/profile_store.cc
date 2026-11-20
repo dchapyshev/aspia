@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/sync_store.h"
 
@@ -350,7 +351,7 @@ ProfileConfig ProfileStore::hostProfile(const HostConfig& host) const
     if (host.entryId() > 0)
     {
         LocalHostConfig local_host;
-        const Database::FindResult found = db_.findLocalHost(host.entryId(), &local_host);
+        const Database::FindResult found = LocalHostStore(db_).find(host.entryId(), &local_host);
         if (found == Database::FindResult::FOUND || found == Database::FindResult::UNREADABLE)
             profile_id = local_host.profileId();
     }

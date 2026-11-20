@@ -51,7 +51,7 @@
 #include "client/desktop/management/search_widget.h"
 #include "client/router/router_controller.h"
 #include "client/storage/backup.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -1004,7 +1004,7 @@ void ManagementTab::onEditHost()
     }
 
     LocalHostConfig host;
-    const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
+    const Database::FindResult host_found = LocalHostStore().find(entry_id, &host);
     if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
     {
         MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -1033,8 +1033,6 @@ void ManagementTab::onCopyHost()
         return;
     }
 
-    Database& db = Database::instance();
-
     LocalHostConfig host;
     if (!readLocalHost(entry_id, &host))
         return;
@@ -1042,7 +1040,7 @@ void ManagementTab::onCopyHost()
     host.setName(host.name() + " " + tr("(copy)"));
     host.setGuid(QString());
 
-    if (!db.addLocalHost(host))
+    if (!LocalHostStore().add(host))
     {
         MsgBox::warning(this, tr("Failed to add the host to the local database."));
         return;
@@ -1070,6 +1068,8 @@ void ManagementTab::onRemoveHost()
 {
     LOG(INFO) << "[ACTION] Delete host";
 
+    LocalHostStore store;
+
     QList<LocalHostConfig> hosts;
     if (current_content_ == local_group_widget_)
     {
@@ -1081,7 +1081,7 @@ void ManagementTab::onRemoveHost()
         if (entry_id > 0)
         {
             LocalHostConfig host;
-            const Database::FindResult host_found = Database::instance().findLocalHost(entry_id, &host);
+            const Database::FindResult host_found = store.find(entry_id, &host);
             if (host_found == Database::FindResult::NOT_FOUND || host_found == Database::FindResult::FAILED)
             {
                 MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
@@ -1115,7 +1115,7 @@ void ManagementTab::onRemoveHost()
     int failed = 0;
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
-        if (Database::instance().removeLocalHost(host.id()))
+        if (store.remove(host.id()))
         {
             removeItem(host.id());
         }
@@ -2140,7 +2140,7 @@ proto::peer::SessionType ManagementTab::defaultSessionType() const
 //--------------------------------------------------------------------------------------------------
 bool ManagementTab::readLocalHost(qint64 entry_id, LocalHostConfig* host)
 {
-    const Database::FindResult result = Database::instance().findLocalHost(entry_id, host);
+    const Database::FindResult result = LocalHostStore().find(entry_id, host);
     if (result == Database::FindResult::FOUND)
         return true;
 
@@ -2214,7 +2214,7 @@ bool ManagementTab::validateHostForConnect(const HostConfig& host)
 void ManagementTab::setHostConnectTime(qint64 entry_id)
 {
     const qint64 connect_time = QDateTime::currentSecsSinceEpoch();
-    Database::instance().setLocalHostConnectTime(entry_id, connect_time);
+    LocalHostStore().setConnectTime(entry_id, connect_time);
     local_group_widget_->setConnectTime(entry_id, connect_time);
 }
 

@@ -87,6 +87,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/database_migration_unittest.cc
     storage/database_test_base.h
     storage/database_unittest.cc
+    storage/local_host_store_unittest.cc
     storage/profile_store_unittest.cc
     storage/router_host_store_unittest.cc
     storage/sync_store_unittest.cc

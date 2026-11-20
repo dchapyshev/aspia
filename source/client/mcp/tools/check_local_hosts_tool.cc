@@ -26,7 +26,7 @@
 
 #include "client/mcp/mcp_controller.h"
 #include "client/online_checker/online_checker.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 
 namespace {
 
@@ -97,13 +97,11 @@ void CheckLocalHostsTool::call(const QJsonObject& arguments, Reply reply)
         ids.append(id.toInteger());
     }
 
-    Database& db = Database::instance();
-
     OnlineChecker::HostList hosts;
     for (qint64 id : std::as_const(ids))
     {
         LocalHostConfig host;
-        switch (db.findLocalHost(id, &host))
+        switch (LocalHostStore().find(id, &host))
         {
             case Database::FindResult::FOUND:
                 hosts.append(host);

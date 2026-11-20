@@ -36,6 +36,7 @@
 #include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/peer.h"
@@ -64,10 +65,10 @@ QByteArray fileHash(const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-QSet<QString> hostNames(const Database& db)
+QSet<QString> hostNames(Database& db)
 {
     QList<LocalHostConfig> hosts;
-    EXPECT_EQ(db.allLocalHosts(&hosts), Database::ReadResult::OK);
+    EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
 
     QSet<QString> names;
     for (const LocalHostConfig& host : std::as_const(hosts))
@@ -77,10 +78,10 @@ QSet<QString> hostNames(const Database& db)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<LocalHostConfig> hostByName(const Database& db, const QString& name)
+std::optional<LocalHostConfig> hostByName(Database& db, const QString& name)
 {
     QList<LocalHostConfig> hosts;
-    EXPECT_EQ(db.allLocalHosts(&hosts), Database::ReadResult::OK);
+    EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
 
     for (const LocalHostConfig& host : std::as_const(hosts))
     {

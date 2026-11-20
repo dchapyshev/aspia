@@ -113,7 +113,7 @@ protected:
         host.setAddress("192.168.0.1");
         host.setGroupId(group_id);
 
-        EXPECT_TRUE(db.addLocalHost(host));
+        EXPECT_TRUE(LocalHostStore(db).add(host));
         return host.id();
     }
 
@@ -156,7 +156,7 @@ protected:
         host.setAddress(address);
         host.setGroupId(group_id);
 
-        EXPECT_TRUE(db.addLocalHost(host));
+        EXPECT_TRUE(LocalHostStore(db).add(host));
         return host.id();
     }
 
@@ -165,7 +165,7 @@ protected:
     static QList<LocalHostConfig> allLocalHosts(Database& db)
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_EQ(db.allLocalHosts(&hosts), Database::ReadResult::OK);
+        EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
         return hosts;
     }
 
@@ -411,7 +411,7 @@ TEST_F(BackupTest, ExportedBookIsImportedBackWithItsTree)
     EXPECT_EQ(new_parent->parentId(), 0);
     EXPECT_EQ(new_child->parentId(), new_parent->id());
     QList<LocalHostConfig> child_hosts;
-    EXPECT_EQ(target_.localHostList(new_child->id(), &child_hosts), Database::ReadResult::OK);
+    EXPECT_EQ(LocalHostStore(target_).list(new_child->id(), &child_hosts), Database::ReadResult::OK);
     EXPECT_EQ(child_hosts.size(), 1);
 }
 
@@ -872,7 +872,7 @@ TEST_F(BackupTest, FileOfAnotherBookTakesItsOwnPassword)
 TEST_F(BackupTest, MomentsOfAHostTravelWithIt)
 {
     const qint64 entry_id = addHost(source_, "host", 0);
-    ASSERT_TRUE(source_.setLocalHostConnectTime(entry_id, 1500000000));
+    ASSERT_TRUE(LocalHostStore(source_).setConnectTime(entry_id, 1500000000));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
 
@@ -1141,7 +1141,7 @@ TEST_F(BackupTest, HostsKeepTheirLinksToCredentialsThroughTheFile)
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
     local_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(LocalHostStore(source_).add(local_host));
 
     RouterHostConfig router_host;
     router_host.setHostId(100500);
@@ -1180,8 +1180,10 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
     LocalHostConfig local_host;
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
-    ASSERT_TRUE(source_.addLocalHost(local_host));
-    ASSERT_TRUE(source_.setLocalHostOsCredentialId(local_host.id(), os.id()));
+
+    LocalHostStore local_host_store(source_);
+    ASSERT_TRUE(local_host_store.add(local_host));
+    ASSERT_TRUE(local_host_store.setOsCredentialId(local_host.id(), os.id()));
 
     RouterHostStore store(source_);
 
@@ -1216,7 +1218,7 @@ TEST_F(BackupTest, FileWhereAHostNamesOsCredentialsItDoesNotCarryIsNotImported)
     LocalHostConfig local_host;
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(LocalHostStore(source_).add(local_host));
 
     RouterHostConfig router_host;
     router_host.setHostId(100500);
@@ -1253,7 +1255,9 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
     local_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+
+    LocalHostStore source_store(source_);
+    ASSERT_TRUE(source_store.add(local_host));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     editFileContent([](proto::storage::BackupFile::Content* data)
@@ -1262,7 +1266,7 @@ TEST_F(BackupTest, FileWhereAHostNamesCredentialsItDoesNotCarryIsNotImported)
     });
     EXPECT_EQ(importBook(), Backup::Result::INVALID_FORMAT);
 
-    ASSERT_TRUE(source_.removeLocalHost(local_host.id()));
+    ASSERT_TRUE(source_store.remove(local_host.id()));
 
     RouterHostConfig router_host;
     router_host.setHostId(100500);
@@ -1318,7 +1322,7 @@ TEST_F(BackupTest, RemovedCredentialsTakeTheirLinksOutOfTheFile)
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
     local_host.setCredentialId(credential_id);
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(LocalHostStore(source_).add(local_host));
 
     RouterHostConfig router_host;
     router_host.setHostId(100500);
@@ -1468,7 +1472,7 @@ TEST_F(BackupTest, HostsKeepTheirProfilesThroughTheFile)
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
     local_host.setProfileId(profile_id);
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(LocalHostStore(source_).add(local_host));
 
     ASSERT_TRUE(RouterHostStore(source_).setProfileId(100500, profile_id));
 
@@ -1501,7 +1505,7 @@ TEST_F(BackupTest, FileWhereAHostNamesAProfileItDoesNotCarryIsNotImported)
     LocalHostConfig local_host;
     local_host.setName("host");
     local_host.setAddress("192.168.0.1");
-    ASSERT_TRUE(source_.addLocalHost(local_host));
+    ASSERT_TRUE(LocalHostStore(source_).add(local_host));
 
     ASSERT_TRUE(RouterHostStore(source_).setProfileId(100500, profile_id));
 

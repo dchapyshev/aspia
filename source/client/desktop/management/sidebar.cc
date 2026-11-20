@@ -47,8 +47,8 @@
 #include "client/desktop/management/local_group_dialog.h"
 #include "client/desktop/management/local_group_widget.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
 #include "client/storage/instance_settings.h"
+#include "client/storage/local_host_store.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/router_error.h"
@@ -1446,9 +1446,11 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         const bool single = hosts.size() == 1;
 
+        LocalHostStore store;
+
         // Check if hosts with the same names already exist in the target group.
         QList<LocalHostConfig> target_hosts;
-        if (Database::instance().localHostList(target_group_id, &target_hosts) == Database::ReadResult::FAILED)
+        if (store.list(target_group_id, &target_hosts) == Database::ReadResult::FAILED)
         {
             LOG(ERROR) << "Unable to read the hosts of the target group";
             MsgBox::warning(tree_widget_, single ?
@@ -1475,7 +1477,7 @@ bool Sidebar::onDrop(QDropEvent* event)
                 continue;
             }
 
-            if (!Database::instance().moveLocalHost(host.id(), target_group_id))
+            if (!store.move(host.id(), target_group_id))
             {
                 ++failed;
                 continue;

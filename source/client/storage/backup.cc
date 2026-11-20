@@ -34,6 +34,7 @@
 #include "base/crypto/secure_memory.h"
 #include "base/peer/host_id.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
@@ -189,7 +190,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     const Database::ReadResult read_results[] =
     {
         CredentialStore(db).list(&credentials),
-        db.allLocalHosts(&hosts),
+        LocalHostStore(db).all(&hosts),
         RouterHostStore(db).list(&router_hosts),
         ProfileStore(db).list(&profiles)
     };

@@ -34,6 +34,7 @@
 #include "client/desktop/authorization_dialog.h"
 #include "client/desktop/status_overlay.h"
 #include "client/router/router_controller.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/router_error.h"
@@ -70,9 +71,8 @@ std::optional<std::pair<QString, SecureString>> storedCredentials(const HostConf
     if (!canSaveCredentials(host))
         return std::nullopt;
 
-    Database& db = Database::instance();
     return host.entryId() > 0 ?
-        db.localHostCredentials(host.entryId()) :
+        LocalHostStore().credentials(host.entryId()) :
         RouterHostStore().credentials(stringToHostId(host.address()));
 }
 
@@ -205,12 +205,10 @@ qint64 ClientWindow::osCredentialId() const
     if (!canSaveCredentials(host))
         return 0;
 
-    Database& db = Database::instance();
-
     if (host.entryId() > 0)
     {
         LocalHostConfig local_host;
-        if (db.findLocalHost(host.entryId(), &local_host) != Database::FindResult::FOUND)
+        if (LocalHostStore().find(host.entryId(), &local_host) != Database::FindResult::FOUND)
             return 0;
 
         return local_host.osCredentialId();
@@ -230,10 +228,8 @@ void ClientWindow::setOsCredentialId(qint64 credential_id)
     if (!canSaveCredentials(host))
         return;
 
-    Database& db = Database::instance();
-
     const bool saved = host.entryId() > 0 ?
-        db.setLocalHostOsCredentialId(host.entryId(), credential_id) :
+        LocalHostStore().setOsCredentialId(host.entryId(), credential_id) :
         RouterHostStore().setOsCredentialId(stringToHostId(host.address()), credential_id);
     if (!saved)
         LOG(ERROR) << "Unable to save the operating system credentials of the host";
@@ -401,15 +397,15 @@ void ClientWindow::onNetworkConnected()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential_id)
 {
-    Database& db = Database::instance();
-
     const QString username = credential_id > 0 ? QString() : host.username();
     const SecureString password = credential_id > 0 ? SecureString() : host.password();
 
     if (host.entryId() > 0)
     {
+        LocalHostStore store;
+
         LocalHostConfig local_host;
-        const Database::FindResult found = db.findLocalHost(host.entryId(), &local_host);
+        const Database::FindResult found = store.find(host.entryId(), &local_host);
         if (found != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
@@ -420,7 +416,7 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
         local_host.setUsername(username);
         local_host.setPassword(password);
 
-        if (!db.modifyLocalHost(local_host))
+        if (!store.modify(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
         return;
     }
@@ -468,8 +464,10 @@ void ClientWindow::forgetRefusedCredentials()
 
     if (host.entryId() > 0)
     {
+        LocalHostStore store;
+
         LocalHostConfig local_host;
-        const Database::FindResult found = Database::instance().findLocalHost(host.entryId(), &local_host);
+        const Database::FindResult found = store.find(host.entryId(), &local_host);
         if (found != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
@@ -480,7 +478,7 @@ void ClientWindow::forgetRefusedCredentials()
         local_host.setUsername(QString());
         local_host.setPassword(SecureString());
 
-        if (!Database::instance().modifyLocalHost(local_host))
+        if (!store.modify(local_host))
             LOG(ERROR) << "Unable to remove credentials of local host" << host.entryId();
         return;
     }

@@ -22,7 +22,7 @@
 
 #include "client/mcp/mcp_controller.h"
 #include "client/mcp/tools/mcp_utils.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 
 //--------------------------------------------------------------------------------------------------
 QString ConnectLocalHostTool::name() const
@@ -78,7 +78,7 @@ void ConnectLocalHostTool::call(const QJsonObject& arguments, Reply reply)
     const qint64 id = id_value.toInteger();
 
     LocalHostConfig host;
-    switch (Database::instance().findLocalHost(id, &host))
+    switch (LocalHostStore().find(id, &host))
     {
         case Database::FindResult::FOUND:
             break;

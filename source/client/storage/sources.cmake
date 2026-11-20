@@ -35,6 +35,8 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_store.h
     instance_settings.cc
     instance_settings.h
+    local_host_store.cc
+    local_host_store.h
     master_password.cc
     master_password.h
     profile_store.cc

@@ -29,7 +29,7 @@
 #include "client/android/credential_combo_box.h"
 #include "client/android/profile_combo_box.h"
 #include "client/config.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -154,7 +154,7 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 bool LocalHostEditor::prepareForEdit(qint64 host_id)
 {
     LocalHostConfig host;
-    const Database::FindResult found = Database::instance().findLocalHost(host_id, &host);
+    const Database::FindResult found = LocalHostStore().find(host_id, &host);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Host not found:" << host_id;
@@ -276,8 +276,8 @@ void LocalHostEditor::onSaveClicked()
     data.setProfileId(combo_profile_->currentProfileId());
     data.setComment(edit_comment_->text());
 
-    Database& db = Database::instance();
-    const bool saved = (entry_id_ < 0) ? db.addLocalHost(data) : db.modifyLocalHost(data);
+    LocalHostStore store;
+    const bool saved = (entry_id_ < 0) ? store.add(data) : store.modify(data);
     if (!saved)
     {
         showError(tr("Failed to save the host."));
@@ -296,7 +296,7 @@ void LocalHostEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeLocalHost(entry_id_))
+    if (!LocalHostStore().remove(entry_id_))
     {
         showError(tr("Failed to delete the host."));
         return;

@@ -46,6 +46,7 @@
 #include "client/session_state.h"
 #include "client/android/chat_view.h"
 #include "client/router/router_controller.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/workers/network_worker.h"
@@ -72,14 +73,13 @@ const Seconds kTypingClear{ 5 };
 QString chatHistoryId(const SessionState& session_state)
 {
     const HostConfig& host = session_state.host();
-    const Database& database = Database::instance();
 
     GenericHash hash(GenericHash::SHA256);
 
     if (host.entryId() > 0)
     {
         LocalHostConfig entry;
-        database.findLocalHost(host.entryId(), &entry);
+        LocalHostStore().find(host.entryId(), &entry);
         if (entry.guid().isEmpty())
         {
             LOG(WARNING) << "Host entry not found:" << host.entryId();
@@ -94,7 +94,7 @@ QString chatHistoryId(const SessionState& session_state)
             return QString();
 
         RouterConfig router;
-        database.routerConfig(&router);
+        Database::instance().routerConfig(&router);
         if (router.guid().isEmpty())
         {
             LOG(WARNING) << "Router entry not found";
@@ -426,8 +426,10 @@ void ChatWindow::forgetHostCredentials()
 
     if (host_.entryId() > 0)
     {
+        LocalHostStore store;
+
         LocalHostConfig local_host;
-        const Database::FindResult found = Database::instance().findLocalHost(host_.entryId(), &local_host);
+        const Database::FindResult found = store.find(host_.entryId(), &local_host);
         if (found != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to read local host" << host_.entryId() << ":" << found;
@@ -438,7 +440,7 @@ void ChatWindow::forgetHostCredentials()
         local_host.setUsername(QString());
         local_host.setPassword(SecureString());
 
-        if (!Database::instance().modifyLocalHost(local_host))
+        if (!store.modify(local_host))
             LOG(ERROR) << "Unable to remove credentials of local host" << host_.entryId();
         return;
     }

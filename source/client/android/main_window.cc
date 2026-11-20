@@ -46,6 +46,7 @@
 #include "client/android/two_factor_dialog.h"
 #include "client/router/router_controller.h"
 #include "client/storage/database_migration.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/master_password.h"
 #include "client/storage/router_host_store.h"
 #include "client/workers/update_worker.h"
@@ -483,7 +484,7 @@ void AndroidMainWindow::onBackClicked()
 void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType session_type)
 {
     LocalHostConfig entry;
-    const Database::FindResult found = Database::instance().findLocalHost(entry_id, &entry);
+    const Database::FindResult found = LocalHostStore().find(entry_id, &entry);
     if (found != Database::FindResult::FOUND)
     {
         LOG(ERROR) << "Unable to read host" << entry_id;
@@ -792,9 +793,8 @@ void AndroidMainWindow::openSession(HostConfig host, proto::peer::SessionType se
 
     if (can_save_credentials)
     {
-        Database& db = Database::instance();
         std::optional<std::pair<QString, SecureString>> credentials = host.entryId() > 0 ?
-            db.localHostCredentials(host.entryId()) :
+            LocalHostStore().credentials(host.entryId()) :
             RouterHostStore().credentials(stringToHostId(host.address()));
         if (credentials.has_value())
         {
@@ -847,16 +847,16 @@ void AndroidMainWindow::startSession(const HostConfig& host, proto::peer::Sessio
 //--------------------------------------------------------------------------------------------------
 void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 credential_id)
 {
-    Database& db = Database::instance();
-
     // The pair belongs to the record, so a host entered with one keeps the link alone.
     const QString username = credential_id > 0 ? QString() : host.username();
     const SecureString password = credential_id > 0 ? SecureString() : host.password();
 
     if (host.entryId() > 0)
     {
+        LocalHostStore store;
+
         LocalHostConfig local_host;
-        const Database::FindResult found = db.findLocalHost(host.entryId(), &local_host);
+        const Database::FindResult found = store.find(host.entryId(), &local_host);
         if (found != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to read local host" << host.entryId() << ":" << found;
@@ -867,7 +867,7 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
         local_host.setUsername(username);
         local_host.setPassword(password);
 
-        if (!db.modifyLocalHost(local_host))
+        if (!store.modify(local_host))
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
         return;
     }

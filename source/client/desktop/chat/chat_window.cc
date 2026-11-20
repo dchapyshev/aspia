@@ -23,7 +23,7 @@
 #include "base/crypto/generic_hash.h"
 #include "base/peer/host_id.h"
 #include "client/desktop/chat/ui_chat_window.h"
-#include "client/storage/database.h"
+#include "client/storage/local_host_store.h"
 #include "client/workers/network_worker.h"
 #include "common/desktop/chat_widget.h"
 #include "proto/chat.h"
@@ -35,14 +35,13 @@ namespace {
 QString chatHistoryId(const SessionState& session_state)
 {
     const HostConfig& host = session_state.host();
-    const Database& database = Database::instance();
 
     GenericHash hash(GenericHash::SHA256);
 
     if (host.entryId() > 0)
     {
         LocalHostConfig entry;
-        database.findLocalHost(host.entryId(), &entry);
+        LocalHostStore().find(host.entryId(), &entry);
         if (entry.guid().isEmpty())
         {
             LOG(WARNING) << "Host entry not found:" << host.entryId();
@@ -57,7 +56,7 @@ QString chatHistoryId(const SessionState& session_state)
             return QString();
 
         RouterConfig router;
-        database.routerConfig(&router);
+        Database::instance().routerConfig(&router);
         if (router.guid().isEmpty())
         {
             LOG(WARNING) << "Router entry not found";
