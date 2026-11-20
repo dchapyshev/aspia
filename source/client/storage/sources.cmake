@@ -29,7 +29,6 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database.h
     database_migration.cc
     database_migration.h
-    database_settings.cc
     database_store.h
     instance_settings.cc
     instance_settings.h
