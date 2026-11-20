@@ -26,7 +26,7 @@
 #include "base/logging.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_group_dialog.h"
-#include "client/storage/database.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 
@@ -110,8 +110,10 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
+    LocalGroupStore store;
+
     QList<LocalGroupConfig> groups;
-    if (!Database::instance().localGroupList(parent_id, &groups))
+    if (!store.list(parent_id, &groups))
     {
         LOG(ERROR) << "Unable to read the groups of the selected parent group";
         MsgBox::warning(this, tr("Failed to read the list of groups."));
@@ -135,11 +137,9 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     group.setName(name);
     group.setComment(ui->edit_comment->toPlainText());
 
-    Database& db = Database::instance();
-
     if (group_id_ == -1)
     {
-        if (!db.addLocalGroup(group))
+        if (!store.add(group))
         {
             MsgBox::warning(this, tr("Unable to add group"));
             LOG(INFO) << "Unable to add group to database";
@@ -148,7 +148,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        if (!db.modifyLocalGroup(group))
+        if (!store.modify(group))
         {
             MsgBox::warning(this, tr("Unable to modify group"));
             LOG(INFO) << "Unable to modify group in database";
@@ -162,12 +162,12 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupDialog::onLoadData()
 {
-    Database& db = Database::instance();
+    LocalGroupStore store;
 
     if (group_id_ != -1)
     {
         LocalGroupConfig group;
-        if (db.findLocalGroup(group_id_, &group) != Database::FindResult::FOUND)
+        if (store.find(group_id_, &group) != Database::FindResult::FOUND)
         {
             LOG(ERROR) << "Unable to find group with id" << group_id_;
             MsgBox::warning(this, tr("Failed to read the group."));
@@ -181,7 +181,7 @@ void LocalGroupDialog::onLoadData()
     }
 
     QList<LocalGroupConfig> all_groups;
-    if (!db.allLocalGroups(&all_groups))
+    if (!store.all(&all_groups))
     {
         // With the list empty, saving would silently move the group to the root.
         LOG(ERROR) << "Unable to read the list of groups";

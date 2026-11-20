@@ -33,25 +33,6 @@
 #include "proto/router.h"
 #include "proto/storage.h"
 
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_id)
-{
-    LocalGroupConfig group;
-    const Database::FindResult result = db.findLocalGroup(group_id, &group);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return group;
-}
-
-} // namespace
-
 class BackupTest : public testing::Test
 {
 protected:
@@ -102,7 +83,7 @@ protected:
         group.setName(name);
         group.setParentId(parent_id);
 
-        EXPECT_TRUE(db.addLocalGroup(group));
+        EXPECT_TRUE(LocalGroupStore(db).add(group));
         return group.id();
     }
 
@@ -172,7 +153,7 @@ protected:
     static QList<LocalGroupConfig> allLocalGroups(Database& db)
     {
         QList<LocalGroupConfig> groups;
-        EXPECT_TRUE(db.allLocalGroups(&groups));
+        EXPECT_TRUE(LocalGroupStore(db).all(&groups));
         return groups;
     }
 

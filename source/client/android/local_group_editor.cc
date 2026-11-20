@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "client/config.h"
-#include "client/storage/database.h"
+#include "client/storage/local_group_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
@@ -107,7 +107,7 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
     LocalGroupConfig group;
-    if (Database::instance().findLocalGroup(group_id, &group) != Database::FindResult::FOUND)
+    if (LocalGroupStore().find(group_id, &group) != Database::FindResult::FOUND)
     {
         LOG(ERROR) << "Group not found:" << group_id;
         return false;
@@ -159,8 +159,8 @@ void LocalGroupEditor::onSaveClicked()
     data.setName(name);
     data.setComment(edit_comment_->text());
 
-    Database& db = Database::instance();
-    const bool saved = (entry_id_ < 0) ? db.addLocalGroup(data) : db.modifyLocalGroup(data);
+    LocalGroupStore store;
+    const bool saved = (entry_id_ < 0) ? store.add(data) : store.modify(data);
     if (!saved)
     {
         showError(tr("Failed to save the group."));
@@ -179,7 +179,7 @@ void LocalGroupEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeLocalGroup(entry_id_))
+    if (!LocalGroupStore().remove(entry_id_))
     {
         showError(tr("Failed to delete the group."));
         return;

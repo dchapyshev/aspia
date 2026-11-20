@@ -34,6 +34,7 @@
 #include "base/crypto/secure_memory.h"
 #include "base/peer/host_id.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/master_password.h"
 #include "client/storage/profile_store.h"
@@ -195,7 +196,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         ProfileStore(db).list(&profiles)
     };
 
-    if (!db.allLocalGroups(&groups))
+    if (!LocalGroupStore(db).all(&groups))
     {
         LOG(ERROR) << "Unable to read the address book";
         return Backup::Result::INTERNAL_ERROR;

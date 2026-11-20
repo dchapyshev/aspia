@@ -82,15 +82,6 @@ public:
     enum class ReencryptResult { DONE, UNREADABLE_RECORD, FAILED };
     Q_ENUM(ReencryptResult)
 
-    // Local Groups.
-    bool localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const;
-    bool allLocalGroups(QList<LocalGroupConfig>* groups) const;
-    bool addLocalGroup(LocalGroupConfig& group);
-    bool modifyLocalGroup(const LocalGroupConfig& group);
-    bool moveLocalGroup(qint64 group_id, qint64 new_parent_id);
-    bool removeLocalGroup(qint64 group_id);
-    FindResult findLocalGroup(qint64 group_id, LocalGroupConfig* group) const;
-
     // Router.
     FindResult routerConfig(RouterConfig* router) const;
     bool setRouterConfig(const RouterConfig& router);

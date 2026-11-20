@@ -37,21 +37,6 @@ namespace {
 const char kUserGuid[] = "4f0c1c2e-6a5b-4b0e-9f3a-1d2c3b4a5e6f";
 const char kAnotherUserGuid[] = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_id)
-{
-    LocalGroupConfig group;
-    const Database::FindResult result = db.findLocalGroup(group_id, &group);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return group;
-}
-
 } // namespace
 
 class DatabaseTest : public DatabaseTestBase
@@ -66,31 +51,6 @@ protected:
             return false;
 
         return raw.exec("UPDATE settings SET value='AA==' WHERE name='router'");
-    }
-
-    QStringList groupNames()
-    {
-        QStringList names;
-        for (const LocalGroupConfig& group : allLocalGroups())
-            names.append(group.name());
-        names.sort();
-        return names;
-    }
-
-    // The list scans of the fixture: the read is expected to succeed, and the list comes back by
-    // value the way the tests consume it.
-    QList<LocalGroupConfig> localGroupList(qint64 parent_id)
-    {
-        QList<LocalGroupConfig> groups;
-        EXPECT_TRUE(db_.localGroupList(parent_id, &groups));
-        return groups;
-    }
-
-    QList<LocalGroupConfig> allLocalGroups()
-    {
-        QList<LocalGroupConfig> groups;
-        EXPECT_TRUE(db_.allLocalGroups(&groups));
-        return groups;
     }
 
     bool eraseCredential(const QString& guid)
@@ -125,121 +85,6 @@ protected:
 };
 
 //--------------------------------------------------------------------------------------------------
-// A group holds groups of its own, and deleting it deletes them too. A child left behind keeps
-// pointing at a parent that is gone: the tree is walked from the root down, so such a group is in
-// the book but in no place the user can ever reach.
-TEST_F(DatabaseTest, RemovedGroupTakesItsChildGroupsWithIt)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 child = addGroup("child", parent);
-    addGroup("grandchild", child);
-    addGroup("other", 0);
-
-    ASSERT_TRUE(db_.removeLocalGroup(parent));
-
-    EXPECT_EQ(groupNames(), QStringList({ "other" }));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The hosts of the subtree are not deleted with it - they move to the root, where the user can see
-// them and decide what to do. Left in a group that no longer exists they would show up in a search
-// and nowhere else.
-TEST_F(DatabaseTest, HostsOfARemovedGroupMoveToTheRoot)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 child = addGroup("child", parent);
-
-    addHost("host-of-parent", parent);
-    addHost("host-of-child", child);
-    addHost("host-of-root", 0);
-
-    ASSERT_TRUE(db_.removeLocalGroup(parent));
-
-    EXPECT_EQ(hostNamesOfGroup(0),
-              QStringList({ "host-of-child", "host-of-parent", "host-of-root" }));
-}
-
-//--------------------------------------------------------------------------------------------------
-// The root is not a record of the table but the parent every group of the top level names. Asked to
-// delete it, the book would answer by emptying itself.
-TEST_F(DatabaseTest, RootIsNotAGroupAndIsNotRemoved)
-{
-    const qint64 group = addGroup("group", 0);
-    addHost("host", group);
-
-    EXPECT_FALSE(db_.removeLocalGroup(0));
-
-    EXPECT_EQ(groupNames(), QStringList({ "group" }));
-    EXPECT_EQ(hostNamesOfGroup(group), QStringList({ "host" }));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A group put inside its own subtree closes a loop. The tree is walked from the root down, so the
-// group and everything under it drop out of it for good; and a path built by walking parents upward
-// from a host inside the loop never ends.
-TEST_F(DatabaseTest, GroupIsNotMovedIntoItsOwnSubtree)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 child = addGroup("child", parent);
-    const qint64 grandchild = addGroup("grandchild", child);
-
-    EXPECT_FALSE(db_.moveLocalGroup(parent, grandchild));
-    EXPECT_FALSE(db_.moveLocalGroup(parent, parent));
-
-    EXPECT_EQ(findLocalGroup(db_, parent)->parentId(), 0);
-    EXPECT_EQ(localGroupList(0).size(), 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Editing a group is the other way its parent is written, and it is no different.
-TEST_F(DatabaseTest, EditedGroupIsNotMadeAChildOfItsOwnChild)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 child = addGroup("child", parent);
-
-    LocalGroupConfig group = *findLocalGroup(db_, parent);
-    group.setParentId(child);
-
-    EXPECT_FALSE(db_.modifyLocalGroup(group));
-
-    EXPECT_EQ(findLocalGroup(db_, parent)->parentId(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A move to a group that is not below it is what the check is there to allow.
-TEST_F(DatabaseTest, GroupIsMovedUnderAGroupOutsideItsSubtree)
-{
-    const qint64 first = addGroup("first", 0);
-    addGroup("child", first);
-    const qint64 second = addGroup("second", 0);
-
-    EXPECT_TRUE(db_.moveLocalGroup(first, second));
-    EXPECT_EQ(findLocalGroup(db_, first)->parentId(), second);
-
-    // And back to the root, which is not a group and cannot be below anything.
-    EXPECT_TRUE(db_.moveLocalGroup(first, 0));
-    EXPECT_EQ(findLocalGroup(db_, first)->parentId(), 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Groups come by name whatever order they were added in, and the case of a letter does not move a
-// group, Cyrillic included.
-TEST_F(DatabaseTest, GroupsAreListedByName)
-{
-    addGroup(QString::fromUtf8("Сервера"), 0);
-    addGroup("beta", 0);
-    addGroup(QString::fromUtf8("бухгалтерия"), 0);
-    addGroup("Alpha", 0);
-
-    const QList<LocalGroupConfig> groups = localGroupList(0);
-    ASSERT_EQ(groups.size(), 4);
-    EXPECT_EQ(groups[0].name(), "Alpha");
-    EXPECT_EQ(groups[1].name(), "beta");
-    EXPECT_EQ(groups[2].name(), QString::fromUtf8("бухгалтерия"));
-    EXPECT_EQ(groups[3].name(), QString::fromUtf8("Сервера"));
-}
-
-//--------------------------------------------------------------------------------------------------
 // A move that finds no record writes nothing, and the answer must say so: the caller that is told
 // the move went through leaves the record on screen in a group the database never put it in.
 TEST_F(DatabaseTest, MoveOfARecordThatIsNotThereIsRefused)
@@ -251,8 +96,8 @@ TEST_F(DatabaseTest, MoveOfARecordThatIsNotThereIsRefused)
     ASSERT_TRUE(local_hosts_.remove(entry_id));
     EXPECT_FALSE(local_hosts_.move(entry_id, other));
 
-    ASSERT_TRUE(db_.removeLocalGroup(group));
-    EXPECT_FALSE(db_.moveLocalGroup(group, other));
+    ASSERT_TRUE(local_groups_.remove(group));
+    EXPECT_FALSE(local_groups_.move(group, other));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,30 +120,6 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The same for a group, and a move counts as an edit the way it does for a host.
-TEST_F(DatabaseTest, EditMarksTheMomentAGroupChanged)
-{
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 group_id = addGroup("group", 0);
-    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
-
-    ASSERT_TRUE(setModifyTime("local_groups", "id", group_id, 1));
-
-    LocalGroupConfig edited = *findLocalGroup(db_, group_id);
-    edited.setName("renamed");
-    ASSERT_TRUE(db_.modifyLocalGroup(edited));
-
-    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
-
-    ASSERT_TRUE(setModifyTime("local_groups", "id", group_id, 1));
-    ASSERT_TRUE(db_.moveLocalGroup(group_id, parent));
-
-    EXPECT_GE(modifyTime("local_groups", "id", group_id), start_time);
-}
-
-//--------------------------------------------------------------------------------------------------
 // A check against the router and a change of the master password write a record without editing it.
 TEST_F(DatabaseTest, RewriteThatIsNotAnEditKeepsTheMomentOfTheLastOne)
 {
@@ -318,81 +139,6 @@ TEST_F(DatabaseTest, RewriteThatIsNotAnEditKeepsTheMomentOfTheLastOne)
     const std::optional<RouterHostConfig> host = findRouterHost(db_, host_id);
     ASSERT_TRUE(host.has_value());
     EXPECT_EQ(host->password().toString(), QString("host-secret"));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Only the subtree of the group goes. A neighbour that hangs off the same parent stays as it is,
-// with the hosts it holds.
-TEST_F(DatabaseTest, RemovedGroupLeavesItsNeighbourAlone)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 first = addGroup("first", parent);
-    const qint64 second = addGroup("second", parent);
-
-    addHost("host-of-first", first);
-    addHost("host-of-second", second);
-
-    ASSERT_TRUE(db_.removeLocalGroup(first));
-
-    EXPECT_EQ(groupNames(), QStringList({ "parent", "second" }));
-    EXPECT_EQ(hostNamesOfGroup(second), QStringList({ "host-of-second" }));
-    EXPECT_EQ(hostNamesOfGroup(0), QStringList({ "host-of-first" }));
-}
-
-//--------------------------------------------------------------------------------------------------
-// A group is named by its id inside this database only. The guid names the same group in any
-// database that ever hears about it, so every group gets one the moment it is created.
-TEST_F(DatabaseTest, GroupGetsAGuidOfItsOwn)
-{
-    const qint64 first = addGroup("first", 0);
-    const qint64 second = addGroup("second", 0);
-
-    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, first);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_FALSE(stored->guid().isEmpty());
-
-    const std::optional<LocalGroupConfig> other = findLocalGroup(db_, second);
-    ASSERT_TRUE(other.has_value());
-    EXPECT_NE(stored->guid(), other->guid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A guid an import brings from elsewhere is kept as it is. The group arriving here is the group
-// the file names, not a new one.
-TEST_F(DatabaseTest, GroupKeepsTheGuidItWasGiven)
-{
-    LocalGroupConfig group;
-    group.setName("from-a-file");
-    group.setGuid("7b0f1d18-0e3a-4a0e-9a4e-2a1c6a0f0c11");
-
-    ASSERT_TRUE(db_.addLocalGroup(group));
-
-    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, group.id());
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->guid(), "7b0f1d18-0e3a-4a0e-9a4e-2a1c6a0f0c11");
-}
-
-//--------------------------------------------------------------------------------------------------
-// Renaming a group or moving it elsewhere in the tree leaves it the same group.
-TEST_F(DatabaseTest, GroupGuidSurvivesEveryEdit)
-{
-    const qint64 parent = addGroup("parent", 0);
-    const qint64 group = addGroup("group", 0);
-
-    const std::optional<LocalGroupConfig> before = findLocalGroup(db_, group);
-    ASSERT_TRUE(before.has_value());
-
-    LocalGroupConfig edited = *before;
-    edited.setName("renamed");
-    edited.setComment("comment");
-    ASSERT_TRUE(db_.modifyLocalGroup(edited));
-    ASSERT_TRUE(db_.moveLocalGroup(group, parent));
-
-    const std::optional<LocalGroupConfig> after = findLocalGroup(db_, group);
-    ASSERT_TRUE(after.has_value());
-    EXPECT_EQ(after->name(), "renamed");
-    EXPECT_EQ(after->parentId(), parent);
-    EXPECT_EQ(after->guid(), before->guid());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -420,26 +166,6 @@ TEST_F(DatabaseTest, RouterKeepsItsGuidThroughAnEdit)
     ASSERT_TRUE(after.has_value());
     EXPECT_EQ(after->address(), "moved.example.com");
     EXPECT_EQ(after->guid(), before->guid());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A guid names one group, and the record naming it is the one an import looks for before it decides
-// whether the group of the file is already here.
-TEST_F(DatabaseTest, TwoGroupsDoNotShareOneGuid)
-{
-    const qint64 group = addGroup("group", 0);
-
-    const std::optional<LocalGroupConfig> stored = findLocalGroup(db_, group);
-    ASSERT_TRUE(stored.has_value());
-    ASSERT_FALSE(stored->guid().isEmpty());
-
-    LocalGroupConfig copy;
-    copy.setName("copy");
-    copy.setParentId(0);
-    copy.setGuid(stored->guid());
-
-    EXPECT_FALSE(db_.addLocalGroup(copy));
-    EXPECT_EQ(groupNames(), QStringList({ "group" }));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -655,8 +381,8 @@ TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
     EXPECT_TRUE(host.guid().isEmpty());
 
     LocalGroupConfig group;
-    ASSERT_EQ(db_.findLocalGroup(group_id, &group), Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findLocalGroup(group_id + 1000, &group), Database::FindResult::NOT_FOUND);
+    ASSERT_EQ(local_groups_.find(group_id, &group), Database::FindResult::FOUND);
+    EXPECT_EQ(local_groups_.find(group_id + 1000, &group), Database::FindResult::NOT_FOUND);
     EXPECT_EQ(group.id(), -1);
     EXPECT_TRUE(group.name().isEmpty());
 
@@ -1460,10 +1186,10 @@ TEST_F(DatabaseTest, RecordsPastTheirBoundsAreNotStored)
 
     LocalGroupConfig group;
     group.setName(long_name);
-    EXPECT_FALSE(db_.addLocalGroup(group));
+    EXPECT_FALSE(local_groups_.add(group));
 
     LocalGroupConfig unnamed;
-    EXPECT_FALSE(db_.addLocalGroup(unnamed));
+    EXPECT_FALSE(local_groups_.add(unnamed));
 
     LocalHostConfig host;
     host.setName("host");

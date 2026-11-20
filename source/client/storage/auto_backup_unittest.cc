@@ -29,6 +29,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 
 class AutoBackupTest : public testing::Test
@@ -59,7 +60,7 @@ protected:
     {
         LocalGroupConfig group;
         group.setName("Group");
-        ASSERT_TRUE(db_.addLocalGroup(group));
+        ASSERT_TRUE(LocalGroupStore(db_).add(group));
     }
 
     QString backupDir() const { return dir_.filePath("backups"); }

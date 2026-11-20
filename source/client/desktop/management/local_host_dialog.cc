@@ -34,6 +34,7 @@
 #include "client/config.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_host_dialog.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
@@ -273,7 +274,7 @@ void LocalHostDialog::onLoadData()
     }
 
     QList<LocalGroupConfig> all_groups;
-    if (!Database::instance().allLocalGroups(&all_groups))
+    if (!LocalGroupStore().all(&all_groups))
     {
         LOG(ERROR) << "Unable to read the list of groups";
         MsgBox::warning(this, tr("Failed to read the list of groups."));

@@ -43,6 +43,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router/router_controller.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "common/desktop/icon_text_button.h"
 #include "proto/router_constants.h"
@@ -341,7 +342,7 @@ void SearchWidget::search(const QString& query)
     }
 
     QList<LocalGroupConfig> all_groups;
-    Database::instance().allLocalGroups(&all_groups);
+    LocalGroupStore().all(&all_groups);
     local_groups_.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         local_groups_.insert(group.id(), group);
@@ -645,7 +646,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
 
     QHash<qint64, LocalGroupConfig> groups;
     QList<LocalGroupConfig> all_groups;
-    Database::instance().allLocalGroups(&all_groups);
+    LocalGroupStore().all(&all_groups);
     groups.reserve(all_groups.size());
     for (const LocalGroupConfig& group : std::as_const(all_groups))
         groups.insert(group.id(), group);

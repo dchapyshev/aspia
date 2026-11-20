@@ -36,6 +36,7 @@
 #include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/user_settings.h"
@@ -267,7 +268,7 @@ protected:
         EXPECT_EQ(direct->credentialId(), 3);
 
         QList<LocalGroupConfig> groups;
-        ASSERT_TRUE(db.allLocalGroups(&groups));
+        ASSERT_TRUE(LocalGroupStore(db).all(&groups));
         ASSERT_EQ(groups.size(), 1);
         EXPECT_EQ(direct->groupId(), groups.front().id());
 
@@ -365,7 +366,7 @@ TEST_F(DatabaseMigrationTest, EveryRouterGetsADatabaseOfItsOwn)
     EXPECT_EQ(hostNames(second), QSet<QString>({ "direct", "second-host" }));
 
     QList<LocalGroupConfig> groups;
-    ASSERT_TRUE(second.allLocalGroups(&groups));
+    ASSERT_TRUE(LocalGroupStore(second).all(&groups));
     EXPECT_EQ(groups.size(), 1);
 
     ASSERT_TRUE(DatabaseMigration::finish(second, old_path_));

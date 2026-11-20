@@ -28,6 +28,7 @@
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
@@ -124,6 +125,21 @@ inline std::optional<LocalHostConfig> findLocalHost(Database& db, qint64 entry_i
     }
 
     return host;
+}
+
+//--------------------------------------------------------------------------------------------------
+// The record of the base, when it was read and the base has one.
+inline std::optional<LocalGroupConfig> findLocalGroup(Database& db, qint64 group_id)
+{
+    LocalGroupConfig group;
+    const Database::FindResult result = LocalGroupStore(db).find(group_id, &group);
+    if (result != Database::FindResult::FOUND)
+    {
+        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
+        return std::nullopt;
+    }
+
+    return group;
 }
 
 class DatabaseTestBase : public testing::Test
@@ -416,8 +432,31 @@ protected:
         group.setName(name);
         group.setParentId(parent_id);
 
-        EXPECT_TRUE(db_.addLocalGroup(group));
+        EXPECT_TRUE(local_groups_.add(group));
         return group.id();
+    }
+
+    QStringList groupNames()
+    {
+        QStringList names;
+        for (const LocalGroupConfig& group : allLocalGroups())
+            names.append(group.name());
+        names.sort();
+        return names;
+    }
+
+    QList<LocalGroupConfig> localGroupList(qint64 parent_id)
+    {
+        QList<LocalGroupConfig> groups;
+        EXPECT_TRUE(local_groups_.list(parent_id, &groups));
+        return groups;
+    }
+
+    QList<LocalGroupConfig> allLocalGroups()
+    {
+        QList<LocalGroupConfig> groups;
+        EXPECT_TRUE(local_groups_.all(&groups));
+        return groups;
     }
 
     qint64 addHost(const QString& name, qint64 group_id)
@@ -457,6 +496,7 @@ protected:
     Database db_;
     CredentialStore credentials_{ db_ };
     ProfileStore profiles_{ db_ };
+    LocalGroupStore local_groups_{ db_ };
     LocalHostStore local_hosts_{ db_ };
     RouterHostStore router_hosts_{ db_ };
     SyncStore sync_store_{ db_ };

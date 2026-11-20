@@ -29,6 +29,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
@@ -339,7 +340,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
         LocalGroupConfig config = group;
         config.setParentId(group_ids.value(group.parentId(), group.parentId()));
 
-        if (!addLocalGroup(config))
+        if (!LocalGroupStore(*this).add(config))
             return false;
 
         group_ids.insert(group.id(), config.id());

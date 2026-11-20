@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/storage/database.h"
+#include "client/storage/local_group_store.h"
 
 #include <QDateTime>
 #include <QUuid>
@@ -71,19 +71,26 @@ bool wouldCloseLoop(SqlDatabase& db, qint64 group_id, qint64 new_parent_id)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups) const
+LocalGroupStore::LocalGroupStore(Database& db)
+    : DatabaseStore(db)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalGroupStore::list(qint64 parent_id, QList<LocalGroupConfig>* groups) const
 {
     CHECK(groups);
     groups->clear();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
-                        "WHERE parent_id IS NULLIF(?, 0) ORDER BY casefold(name)");
+    SqlQuery query(sql(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+                          "WHERE parent_id IS NULLIF(?, 0) ORDER BY casefold(name)");
     query.addInt64(parent_id);
 
     for (;;)
@@ -91,7 +98,7 @@ bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups)
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
             return false;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -104,26 +111,26 @@ bool Database::localGroupList(qint64 parent_id, QList<LocalGroupConfig>* groups)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::allLocalGroups(QList<LocalGroupConfig>* groups) const
+bool LocalGroupStore::all(QList<LocalGroupConfig>* groups) const
 {
     CHECK(groups);
     groups->clear();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
-                        "ORDER BY casefold(name)");
+    SqlQuery query(sql(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+                          "ORDER BY casefold(name)");
 
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
             return false;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -136,9 +143,9 @@ bool Database::allLocalGroups(QList<LocalGroupConfig>* groups) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addLocalGroup(LocalGroupConfig& group)
+bool LocalGroupStore::add(LocalGroupConfig& group)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -153,8 +160,8 @@ bool Database::addLocalGroup(LocalGroupConfig& group)
     if (group.guid().isEmpty())
         group.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(db_, "INSERT INTO local_groups (id, parent_id, name, comment, guid, modify_time) "
-                        "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?)");
+    SqlQuery query(sql(), "INSERT INTO local_groups (id, parent_id, name, comment, guid, modify_time) "
+                          "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?)");
     query.addInt64(group.parentId());
     query.addText(group.name());
     query.addText(group.comment());
@@ -163,18 +170,18 @@ bool Database::addLocalGroup(LocalGroupConfig& group)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
-    group.setId(db_.lastInsertRowId());
+    group.setId(sql().lastInsertRowId());
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyLocalGroup(const LocalGroupConfig& group)
+bool LocalGroupStore::modify(const LocalGroupConfig& group)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -186,13 +193,14 @@ bool Database::modifyLocalGroup(const LocalGroupConfig& group)
         return false;
     }
 
-    if (wouldCloseLoop(db_, group.id(), group.parentId()))
+    if (wouldCloseLoop(sql(), group.id(), group.parentId()))
     {
         LOG(ERROR) << "Group" << group.id() << "cannot be put under" << group.parentId();
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), name=?, comment=?, modify_time=? WHERE id=?");
+    SqlQuery query(sql(), "UPDATE local_groups SET parent_id=NULLIF(?, 0), name=?, comment=?, modify_time=? "
+                          "WHERE id=?");
     query.addInt64(group.parentId());
     query.addText(group.name());
     query.addText(group.comment());
@@ -201,7 +209,7 @@ bool Database::modifyLocalGroup(const LocalGroupConfig& group)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
@@ -209,32 +217,32 @@ bool Database::modifyLocalGroup(const LocalGroupConfig& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::moveLocalGroup(qint64 group_id, qint64 new_parent_id)
+bool LocalGroupStore::move(qint64 group_id, qint64 new_parent_id)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    if (wouldCloseLoop(db_, group_id, new_parent_id))
+    if (wouldCloseLoop(sql(), group_id, new_parent_id))
     {
         LOG(ERROR) << "Group" << group_id << "cannot be put under" << new_parent_id;
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE local_groups SET parent_id=NULLIF(?, 0), modify_time=? WHERE id=?");
+    SqlQuery query(sql(), "UPDATE local_groups SET parent_id=NULLIF(?, 0), modify_time=? WHERE id=?");
     query.addInt64(new_parent_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
-    if (db_.changes() == 0)
+    if (sql().changes() == 0)
     {
         LOG(ERROR) << "Local group" << group_id << "not found";
         return false;
@@ -244,9 +252,9 @@ bool Database::moveLocalGroup(qint64 group_id, qint64 new_parent_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::removeLocalGroup(qint64 group_id)
+bool LocalGroupStore::remove(qint64 group_id)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -259,12 +267,12 @@ bool Database::removeLocalGroup(qint64 group_id)
         return false;
     }
 
-    SqlQuery query(db_, "DELETE FROM local_groups WHERE id=?");
+    SqlQuery query(sql(), "DELETE FROM local_groups WHERE id=?");
     query.addInt64(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
@@ -272,31 +280,31 @@ bool Database::removeLocalGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findLocalGroup(qint64 group_id, LocalGroupConfig* group) const
+Database::FindResult LocalGroupStore::find(qint64 group_id, LocalGroupConfig* group) const
 {
     CHECK(group);
     *group = LocalGroupConfig();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return FindResult::FAILED;
+        return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
-                        "WHERE id=?");
+    SqlQuery query(sql(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+                          "WHERE id=?");
     query.addInt64(group_id);
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return FindResult::FAILED;
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        return Database::FindResult::FAILED;
     }
 
     if (step == SqlQuery::StepResult::DONE)
-        return FindResult::NOT_FOUND;
+        return Database::FindResult::NOT_FOUND;
 
     *group = readLocalGroup(query);
-    return FindResult::FOUND;
+    return Database::FindResult::FOUND;
 }

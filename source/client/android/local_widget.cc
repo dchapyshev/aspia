@@ -36,6 +36,7 @@
 #include "client/online_checker/online_checker.h"
 #include "client/router/router_controller.h"
 #include "client/storage/backup.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "common/android/bottom_sheet.h"
 #include "common/android/icon_button.h"
@@ -586,7 +587,7 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
     QList<LocalGroupConfig> groups;
-    if (!Database::instance().localGroupList(parent_id, &groups))
+    if (!LocalGroupStore().list(parent_id, &groups))
         LOG(ERROR) << "Unable to read the groups of group" << parent_id;
 
     for (const LocalGroupConfig& group : std::as_const(groups))

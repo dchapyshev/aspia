@@ -27,7 +27,6 @@ collect_sources(SOURCE_CLIENT_STORAGE
     credential_store.h
     database.cc
     database.h
-    database_local_hosts.cc
     database_migration.cc
     database_migration.h
     database_router.cc
@@ -35,6 +34,8 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_store.h
     instance_settings.cc
     instance_settings.h
+    local_group_store.cc
+    local_group_store.h
     local_host_store.cc
     local_host_store.h
     master_password.cc

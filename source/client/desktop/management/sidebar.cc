@@ -48,6 +48,7 @@
 #include "client/desktop/management/local_group_widget.h"
 #include "client/router/router_controller.h"
 #include "client/storage/instance_settings.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "common/desktop/credentials_dialog.h"
 #include "common/desktop/msg_box.h"
@@ -197,7 +198,7 @@ bool Sidebar::dragging() const
 bool Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
     QList<LocalGroupConfig> groups;
-    if (!Database::instance().localGroupList(parent_id, &groups))
+    if (!LocalGroupStore().list(parent_id, &groups))
     {
         LOG(ERROR) << "Unable to read the list of groups";
         return false;
@@ -804,7 +805,7 @@ void Sidebar::onRemoveGroup()
     qint64 parent_id = local_group->parentId();
     qint64 group_id = local_group->groupId();
 
-    if (!Database::instance().removeLocalGroup(group_id))
+    if (!LocalGroupStore().remove(group_id))
     {
         MsgBox::warning(this, tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << group_id;
@@ -1369,9 +1370,11 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         SidebarItem* target_item = static_cast<SidebarItem*>(target_tree_item);
 
+        LocalGroupStore store;
+
         // Check if a group with the same name already exists in the target group.
         QList<LocalGroupConfig> target_groups;
-        if (!Database::instance().localGroupList(target_item->groupId(), &target_groups))
+        if (!store.list(target_item->groupId(), &target_groups))
         {
             LOG(ERROR) << "Unable to read the groups of the target group";
             MsgBox::warning(tree_widget_, tr("Failed to move the group."));
@@ -1391,7 +1394,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the group's parent in the database.
-        if (!Database::instance().moveLocalGroup(source_group->groupId(), target_item->groupId()))
+        if (!store.move(source_group->groupId(), target_item->groupId()))
         {
             MsgBox::warning(tree_widget_, tr("Failed to move the group."));
             restoreSelection();

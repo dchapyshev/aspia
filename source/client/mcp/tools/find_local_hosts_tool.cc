@@ -23,6 +23,7 @@
 #include <QJsonDocument>
 
 #include "client/mcp/tools/mcp_utils.h"
+#include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 
 namespace {
@@ -105,7 +106,7 @@ void FindLocalHostsTool::call(const QJsonObject& arguments, Reply reply)
     }
 
     QList<LocalGroupConfig> group_list;
-    if (!Database::instance().allLocalGroups(&group_list))
+    if (!LocalGroupStore().all(&group_list))
     {
         reply(false, "Unable to read the database.");
         return;
