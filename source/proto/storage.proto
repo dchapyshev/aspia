@@ -72,6 +72,7 @@ message ProfileData
 {
     uint32 udp_methods     = 1;
     control.Config desktop = 2;
+    bytes unknown_data     = 3;
 }
 
 message BackupFile

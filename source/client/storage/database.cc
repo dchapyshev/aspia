@@ -72,8 +72,11 @@ bool migrateTables(SqlDatabase& db)
     //----------------------------------------------------------------------------------------------
     if (version < 1)
     {
-        if (!db.addColumn("credentials", "deleted", "INTEGER NOT NULL DEFAULT 0"))
+        if (!db.addColumn("credentials", "deleted", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("profiles", "deleted", "INTEGER NOT NULL DEFAULT 0"))
+        {
             return false;
+        }
 
         if (!db.exec("UPDATE credentials SET sync_dirty=1") || !db.exec("PRAGMA user_version = 1"))
         {
@@ -243,7 +246,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
         !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
-        !setReceivedCredentialsRevision(0))
+        !setReceivedCredentialsRevision(0) || !setReceivedProfilesRevision(0))
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -555,6 +558,7 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"deleted\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create profiles table:" << db.lastError();

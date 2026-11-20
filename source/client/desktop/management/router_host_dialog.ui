@@ -65,7 +65,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QComboBox" name="combo_profile">
+      <widget class="ProfileComboBox" name="combo_profile">
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
        </property>
@@ -168,6 +168,11 @@
    <class>PlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>common/desktop/plain_text_edit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ProfileComboBox</class>
+   <extends>QComboBox</extends>
+   <header>client/desktop/management/profile_combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

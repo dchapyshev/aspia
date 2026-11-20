@@ -20,4 +20,8 @@ collect_sources(SOURCE_CLIENT_SYNC
     sync_credentials.cc
     sync_credentials.h
     sync_crypto.cc
-    sync_crypto.h)
+    sync_crypto.h
+    sync_profiles.cc
+    sync_profiles.h
+    sync_records.cc
+    sync_records.h)

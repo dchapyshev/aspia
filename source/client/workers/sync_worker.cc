@@ -21,7 +21,9 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "client/storage/database.h"
+#include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
+#include "client/sync/sync_profiles.h"
 #include "client/workers/router_worker.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
@@ -231,9 +233,26 @@ void SyncWorker::startReceivingRecords()
 {
     LOG(INFO) << "Exchange started";
 
-    credentials_.emplace(Database::instance(), storage_id_, key_);
+    Database& db = Database::instance();
+
+    records_.clear();
+    records_.push_back(std::make_unique<SyncCredentials>(db, storage_id_, key_));
+    records_.push_back(std::make_unique<SyncProfiles>(db, storage_id_, key_));
     repeat_requested_ = false;
 
+    exchangeRecords(0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SyncWorker::exchangeRecords(size_t index)
+{
+    if (index >= records_.size())
+    {
+        finishRecordExchange();
+        return;
+    }
+
+    records_index_ = index;
     sendRecordListRequest();
 }
 
@@ -245,7 +264,7 @@ void SyncWorker::finishRecordExchange()
     const bool repeat = repeat_requested_;
 
     state_ = State::IDLE;
-    credentials_.reset();
+    records_.clear();
     scheduleRecordExchange();
 
     if (repeat)
@@ -259,24 +278,24 @@ void SyncWorker::abortRecordExchange()
         LOG(WARNING) << "Exchange aborted, state:" << state_;
 
     state_ = State::IDLE;
-    credentials_.reset();
+    records_.clear();
     repeat_requested_ = false;
     scheduleRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SyncWorker::announceFailure(SyncCredentials::Result result)
+void SyncWorker::announceFailure(SyncRecords::Result result)
 {
-    if (result == SyncCredentials::Result::DETACHED)
+    if (result == SyncRecords::Result::DETACHED)
     {
         LOG(INFO) << "The device has left the synchronization meanwhile";
     }
-    else if (result == SyncCredentials::Result::INVALID_ANSWER)
+    else if (result == SyncRecords::Result::INVALID_ANSWER)
     {
         LOG(ERROR) << "The router returned an invalid answer";
         emit sig_event(Event::INVALID_ROUTER_ANSWER, QString());
     }
-    else if (result == SyncCredentials::Result::FAILED)
+    else if (result == SyncRecords::Result::FAILED)
     {
         LOG(ERROR) << "The device failed to keep the synchronization data";
         emit sig_event(Event::DEVICE_ERROR, QString());
@@ -325,7 +344,10 @@ void SyncWorker::attachStorage(bool reset)
     emit sig_event(Event::STORAGE_ATTACHED, QString());
 
     if (another_storage)
-        emit sig_credentialsChanged();
+    {
+        emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
+        emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_PROFILES);
+    }
 
     startRecordExchange();
 }
@@ -386,11 +408,11 @@ void SyncWorker::sendRecordListRequest()
     proto::router::SyncRecordListRequest* request = message.mutable_record_list_request();
     request->set_request_id(++request_id_);
     request->set_storage_id(storage_id_.toStdString());
-    request->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
-    request->set_revision(Database::instance().receivedCredentialsRevision());
+    request->set_type(records_[records_index_]->type());
+    request->set_revision(records_[records_index_]->receivedRevision());
     request->set_count(proto::router::kMaxSyncPageSize);
 
-    LOG(INFO) << "Asking for the records newer than revision" << request->revision();
+    LOG(INFO) << "Asking for the records of type" << request->type() << "newer than revision" << request->revision();
 
     send(message);
 }
@@ -403,8 +425,8 @@ void SyncWorker::sendRecordRequest()
     proto::router::SyncToRouter message;
 
     proto::router::SyncRecordRequest* request = message.mutable_record_request();
-    const SyncCredentials::Result read = credentials_->readUnsyncedRecords(request);
-    if (read != SyncCredentials::Result::DONE)
+    const SyncRecords::Result read = records_[records_index_]->readUnsyncedRecords(request);
+    if (read != SyncRecords::Result::DONE)
     {
         LOG(INFO) << "The records to send are not read";
         announceFailure(read);
@@ -414,7 +436,7 @@ void SyncWorker::sendRecordRequest()
 
     if (request->record().empty())
     {
-        finishRecordExchange();
+        exchangeRecords(records_index_ + 1);
         return;
     }
 
@@ -609,11 +631,11 @@ void SyncWorker::readRecordList(const proto::router::SyncRecordList& list)
         return;
     }
 
-    Database& db = Database::instance();
-    const qint64 revision = db.receivedCredentialsRevision();
+    SyncRecords& records = *records_[records_index_];
+    const qint64 revision = records.receivedRevision();
 
-    const SyncCredentials::Result stored = credentials_->storeReceivedRecords(list);
-    if (stored != SyncCredentials::Result::DONE)
+    const SyncRecords::Result stored = records.storeReceivedRecords(list);
+    if (stored != SyncRecords::Result::DONE)
     {
         LOG(INFO) << "The received records are not stored";
         announceFailure(stored);
@@ -624,7 +646,7 @@ void SyncWorker::readRecordList(const proto::router::SyncRecordList& list)
     LOG(INFO) << "Records received:" << list.record_size();
 
     if (!list.record().empty())
-        emit sig_credentialsChanged();
+        emit sig_recordsChanged(records.type());
 
     if (!list.has_more())
     {
@@ -632,7 +654,7 @@ void SyncWorker::readRecordList(const proto::router::SyncRecordList& list)
         return;
     }
 
-    if (db.receivedCredentialsRevision() <= revision)
+    if (records.receivedRevision() <= revision)
     {
         LOG(ERROR) << "The router returned a page that does not move the reading on";
         emit sig_event(Event::INVALID_ROUTER_ANSWER, QString());
@@ -668,8 +690,8 @@ void SyncWorker::readRecordResult(const proto::router::SyncRecordResult& result)
         return;
     }
 
-    const SyncCredentials::Result confirmed = credentials_->confirmSentRecords(result);
-    if (confirmed != SyncCredentials::Result::DONE)
+    const SyncRecords::Result confirmed = records_[records_index_]->confirmSentRecords(result);
+    if (confirmed != SyncRecords::Result::DONE)
     {
         LOG(INFO) << "The sent records are not confirmed";
         announceFailure(confirmed);
@@ -688,7 +710,7 @@ void SyncWorker::readRecordResult(const proto::router::SyncRecordResult& result)
     if (record_refused)
     {
         LOG(INFO) << "The router refused a record, it waits for the next exchange";
-        finishRecordExchange();
+        exchangeRecords(records_index_ + 1);
     }
     else
     {

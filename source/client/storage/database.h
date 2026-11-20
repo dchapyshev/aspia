@@ -128,6 +128,13 @@ public:
         bool confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty);
         bool setReceivedCredentialsRevision(qint64 revision);
 
+        bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision);
+        bool eraseProfile(const QString& guid);
+        bool setProfileSyncRevision(const QString& guid, qint64 sync_revision);
+        bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data);
+        bool confirmSentProfile(const QString& guid, qint64 sync_revision, qint64 sync_dirty);
+        bool setReceivedProfilesRevision(qint64 revision);
+
     private:
         bool isActive() const;
 
@@ -169,13 +176,25 @@ public:
     qint64 receivedCredentialsRevision() const;
 
     // Connection profiles.
+    struct UnsyncedProfile
+    {
+        ProfileConfig profile;
+        bool deleted = false;
+        bool damaged = false;
+        qint64 sync_revision = 0;
+        qint64 sync_dirty = 0;
+    };
+
     ReadResult profileList(QList<ProfileConfig>* profiles) const;
     bool addProfile(ProfileConfig& profile);
     bool modifyProfile(const ProfileConfig& profile);
     bool removeProfile(qint64 profile_id);
     FindResult findProfile(qint64 profile_id, ProfileConfig* profile) const;
+    FindResult findProfileByGuid(const QString& guid, ProfileConfig* profile) const;
     ProfileConfig defaultProfile() const;
     ProfileConfig hostProfile(const HostConfig& host) const;
+    ReadResult unsyncedProfiles(QList<UnsyncedProfile>* profiles) const;
+    qint64 receivedProfilesRevision() const;
 
     bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
@@ -268,6 +287,7 @@ private:
     bool resetSyncState();
     bool discardSyncData();
     bool setReceivedCredentialsRevision(qint64 revision);
+    bool setReceivedProfilesRevision(qint64 revision);
 
     mutable SqlDatabase db_;
 };

@@ -65,6 +65,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
     desktop/management/local_host_list_model_unittest.cc
+    desktop/management/profile_combo_box_unittest.cc
     desktop/management/relay_list_model_unittest.cc
     desktop/management/router_status_widget_unittest.cc
     desktop/management/router_user_dialog_unittest.cc
@@ -87,6 +88,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/user_settings_unittest.cc
     sync/sync_credentials_unittest.cc
     sync/sync_crypto_unittest.cc
+    sync/sync_profiles_unittest.cc
     tests_main.cc
     workers/sync_worker_unittest.cc
     workers/video_worker_unittest.cc)

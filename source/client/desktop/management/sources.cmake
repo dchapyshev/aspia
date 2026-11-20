@@ -45,6 +45,8 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_MANAGEMENT_TAB
     local_host_list_model.h
     peer_list_model.cc
     peer_list_model.h
+    profile_combo_box.cc
+    profile_combo_box.h
     relay_list_model.cc
     relay_list_model.h
     router_access_log_widget.cc

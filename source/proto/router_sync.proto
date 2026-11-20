@@ -20,12 +20,15 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_control.proto";
+
 package proto.router;
 
 enum SyncDataType
 {
     SYNC_DATA_TYPE_UNKNOWN     = 0;
     SYNC_DATA_TYPE_CREDENTIALS = 1;
+    SYNC_DATA_TYPE_PROFILES    = 2;
 }
 
 message SyncCredential
@@ -34,6 +37,13 @@ message SyncCredential
     string display_name = 2;
     string username     = 3;
     string password     = 4;
+}
+
+message SyncProfile
+{
+    string name            = 1;
+    uint32 udp_methods     = 2;
+    control.Config desktop = 3;
 }
 
 // The key the records are encrypted with, sealed by the client.

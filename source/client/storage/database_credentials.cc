@@ -410,13 +410,23 @@ bool Database::resetSyncState()
     CHECK(db_.isTransactionActive());
 
     if (!db_.exec("DELETE FROM credentials WHERE deleted!=0") ||
-        !db_.exec("UPDATE credentials SET sync_revision=0, sync_dirty=1"))
+        !db_.exec("UPDATE credentials SET sync_revision=0, sync_dirty=1") ||
+        !db_.exec("DELETE FROM profiles WHERE deleted!=0"))
     {
         LOG(ERROR) << "Unable to execute query:" << db_.lastError();
         return false;
     }
 
-    return setReceivedCredentialsRevision(0);
+    SqlQuery profiles_query(db_, "UPDATE profiles SET sync_revision=0, sync_dirty=(guid<>? OR modify_time<>0)");
+    profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!profiles_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return setReceivedCredentialsRevision(0) && setReceivedProfilesRevision(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,7 +442,28 @@ bool Database::discardSyncData()
 
     LOG(INFO) << "Credentials discarded:" << db_.changes();
 
-    return setReceivedCredentialsRevision(0);
+    SqlQuery profiles_query(db_, "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1 "
+                                 "WHERE guid<>?");
+    profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!profiles_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Profiles discarded:" << db_.changes();
+
+    SqlQuery default_query(db_, "UPDATE profiles SET sync_revision=0, sync_dirty=0 WHERE guid=?");
+    default_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!default_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return setReceivedCredentialsRevision(0) && setReceivedProfilesRevision(0);
 }
 
 //--------------------------------------------------------------------------------------------------

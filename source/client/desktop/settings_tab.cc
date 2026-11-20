@@ -348,6 +348,11 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->button_router_sync_reset, &QPushButton::clicked, this, &SettingsTab::onResetSyncClicked);
     connect(&RouterController::instance(), &RouterController::sig_statusChanged,
             this, &SettingsTab::onRouterStatusChanged);
+    connect(&RouterController::instance(), &RouterController::sig_profilesChanged, this, [this]()
+    {
+        reloadProfiles(ui->combo_profile->currentData().toLongLong(), false);
+        emit sig_desktopConfigChanged();
+    });
 
     connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &SettingsTab::onGeneralChanged);
@@ -688,6 +693,7 @@ void SettingsTab::onAddProfile()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     reloadProfiles(profile.id());
 }
 
@@ -709,7 +715,7 @@ void SettingsTab::onRenameProfile()
         return;
     }
 
-    const QString name = askProfileName(tr("Rename Profile"), profile.name(), ui->combo_profile->currentIndex());
+    const QString name = askProfileName(tr("Rename Profile"), profile.name(), profile_id);
     if (name.isEmpty())
         return;
 
@@ -721,6 +727,7 @@ void SettingsTab::onRenameProfile()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     reloadProfiles(profile_id);
 }
 
@@ -746,6 +753,7 @@ void SettingsTab::onDeleteProfile()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     reloadProfiles(0);
     emit sig_desktopConfigChanged();
 }
@@ -1221,10 +1229,10 @@ void SettingsTab::showRouterError(QLineEdit* edit, const QString& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::reloadProfiles(qint64 profile_id)
+void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
 {
     QList<ProfileConfig> profiles;
-    if (Database::instance().profileList(&profiles) == Database::ReadResult::FAILED)
+    if (Database::instance().profileList(&profiles) == Database::ReadResult::FAILED && warn)
         MsgBox::warning(this, tr("Failed to read the list of profiles."));
 
     {
@@ -1244,11 +1252,11 @@ void SettingsTab::reloadProfiles(qint64 profile_id)
         ui->combo_profile->setCurrentIndex(index >= 0 ? index : 0);
     }
 
-    showProfile();
+    showProfile(warn);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::showProfile()
+void SettingsTab::showProfile(bool warn)
 {
     Database& db = Database::instance();
     const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
@@ -1276,7 +1284,9 @@ void SettingsTab::showProfile()
             desktop_config = defaultDesktopConfig();
             udp_methods = UDP_METHOD_ALL;
 
-            if (result == Database::FindResult::UNREADABLE)
+            if (!warn)
+                LOG(ERROR) << "Profile" << profile_id << "is not read:" << result;
+            else if (result == Database::FindResult::UNREADABLE)
                 MsgBox::warning(this, tr("The profile is damaged. Fix or delete it."));
             else
                 MsgBox::warning(this, tr("Failed to read the profile."));
@@ -1375,7 +1385,7 @@ ProfileConfig SettingsTab::profileFromUi() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString SettingsTab::askProfileName(const QString& title, const QString& name, int own_index)
+QString SettingsTab::askProfileName(const QString& title, const QString& name, qint64 own_profile_id)
 {
     AutoQPointer<QInputDialog> dialog(new QInputDialog(this));
     dialog->setWindowTitle(title);
@@ -1405,7 +1415,8 @@ QString SettingsTab::askProfileName(const QString& title, const QString& name, i
         bool exists = false;
         for (int i = 0; i < ui->combo_profile->count(); ++i)
         {
-            if (i != own_index && ui->combo_profile->itemText(i).compare(value, Qt::CaseInsensitive) == 0)
+            if (ui->combo_profile->itemData(i).toLongLong() != own_profile_id &&
+                ui->combo_profile->itemText(i).compare(value, Qt::CaseInsensitive) == 0)
             {
                 exists = true;
                 break;
@@ -1449,5 +1460,6 @@ void SettingsTab::saveProfile()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_desktopConfigChanged();
 }

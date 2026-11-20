@@ -74,6 +74,7 @@ signals:
     void sig_workspacesChanged();
     void sig_groupsChanged();
     void sig_credentialsChanged();
+    void sig_profilesChanged();
 
 private slots:
     void onTwoFactorRequired();
@@ -83,6 +84,7 @@ private slots:
     void onRouterError(TcpChannel::ErrorCode error_code);
     void onRouterMessage(quint8 channel_id, const QByteArray& buffer);
     void onSyncEvent(SyncWorker::Event event, const QString& error_code);
+    void onSyncRecordsChanged(proto::router::SyncDataType type);
 
 private:
     struct RouterContext

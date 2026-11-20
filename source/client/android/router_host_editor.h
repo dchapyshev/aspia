@@ -23,10 +23,10 @@
 
 #include "base/peer/host_id.h"
 
-class ComboBox;
 class CredentialComboBox;
 class Label;
 class LineEdit;
+class ProfileComboBox;
 class Switch;
 
 class RouterHostEditor final : public QWidget
@@ -59,7 +59,7 @@ private:
     LineEdit* edit_password_ = nullptr;
     Label* label_note_ = nullptr;
     CredentialComboBox* combo_credential_ = nullptr;
-    ComboBox* combo_profile_ = nullptr;
+    ProfileComboBox* combo_profile_ = nullptr;
     Label* label_error_ = nullptr;
     HostId host_id_ = kInvalidHostId;
     bool credentials_loaded_ = true;

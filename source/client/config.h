@@ -319,6 +319,9 @@ public:
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
 
+    qint64 modifyTime() const { return modify_time_; }
+    void setModifyTime(qint64 value) { modify_time_ = value; }
+
     const QString& name() const { return name_; }
     void setName(const QString& value) { name_ = value; }
 
@@ -328,6 +331,9 @@ public:
     quint32 udpMethods() const { return udp_methods_; }
     void setUdpMethods(quint32 methods) { udp_methods_ = methods; }
 
+    const QByteArray& unknownData() const { return unknown_data_; }
+    void setUnknownData(const QByteArray& value) { unknown_data_ = value; }
+
     // The data column for database I/O.
     QByteArray serializedData() const;
     bool setSerializedData(const QByteArray& data);
@@ -335,9 +341,11 @@ public:
 private:
     qint64 id_ = -1;
     QString guid_;
+    qint64 modify_time_ = 0;
     QString name_;
     proto::control::Config desktop_config_;
     quint32 udp_methods_ = 0;
+    QByteArray unknown_data_;
 };
 
 class ProxyConfig final

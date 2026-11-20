@@ -19,39 +19,34 @@
 #ifndef CLIENT_SYNC_SYNC_CREDENTIALS_H
 #define CLIENT_SYNC_SYNC_CREDENTIALS_H
 
-#include <QList>
-#include <QString>
+#include "client/sync/sync_records.h"
 
-#include "base/crypto/secure_byte_array.h"
-#include "proto/router_sync.h"
-
-class Database;
-
-class SyncCredentials
+struct SyncCredentialTraits
 {
-public:
-    SyncCredentials(Database& db, const QByteArray& storage_id, const SecureByteArray& key);
+    using Config = CredentialConfig;
+    using Unsynced = Database::UnsyncedCredential;
 
-    enum class Result { DONE, DETACHED, INVALID_ANSWER, FAILED };
+    static constexpr proto::router::SyncDataType kType = proto::router::SYNC_DATA_TYPE_CREDENTIALS;
 
-    Result readUnsyncedRecords(proto::router::SyncRecordRequest* request);
-    Result confirmSentRecords(const proto::router::SyncRecordResult& result);
-    Result storeReceivedRecords(const proto::router::SyncRecordList& list);
+    static const Config& config(const Unsynced& unsynced) { return unsynced.credential; }
+    static bool isReadable(const Unsynced& unsynced) { return unsynced.credential.isValid(); }
+    static Database::ReadResult readUnsynced(const Database& db, QList<Unsynced>* unsynced);
+    static qint64 receivedRevision(const Database& db);
 
-private:
-    struct SentRecord
-    {
-        QString guid;
-        qint64 sync_dirty = 0;
-    };
-
-    Database& db_;
-    const QByteArray storage_id_;
-    const SecureByteArray key_;
-    QList<SentRecord> sent_records_;
-    qint64 storage_revision_ = -1;
-
-    Q_DISABLE_COPY_MOVE(SyncCredentials)
+    static std::optional<QByteArray> seal(const SecureByteArray& key, const Config& config);
+    static bool openReceived(const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
+    static bool hasSameContent(const Config& first, const Config& second);
+    static bool storeReceived(const Database& db, Database::SyncTransaction& transaction, Config config,
+                              qint64 sync_revision);
+    static bool storeUnknownData(Database::SyncTransaction& transaction, const Config& config);
+    static bool erase(Database::SyncTransaction& transaction, const QString& guid);
+    static bool setSyncRevision(Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision);
+    static bool confirmSent(Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision,
+                            qint64 sync_dirty);
+    static bool setReceivedRevision(Database::SyncTransaction& transaction, qint64 revision);
 };
+
+extern template class SyncRecordsOf<SyncCredentialTraits>;
+using SyncCredentials = SyncRecordsOf<SyncCredentialTraits>;
 
 #endif // CLIENT_SYNC_SYNC_CREDENTIALS_H

@@ -22,10 +22,10 @@
 #include <QWidget>
 
 class Button;
-class ComboBox;
 class CredentialComboBox;
 class Label;
 class LineEdit;
+class ProfileComboBox;
 class Switch;
 class TextArea;
 
@@ -64,7 +64,7 @@ private:
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
     CredentialComboBox* combo_credential_ = nullptr;
-    ComboBox* combo_profile_ = nullptr;
+    ProfileComboBox* combo_profile_ = nullptr;
     TextArea* edit_comment_ = nullptr;
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;

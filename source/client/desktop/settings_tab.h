@@ -92,10 +92,10 @@ private:
     bool routerFromUi(std::optional<RouterConfig>* router);
     bool saveRouter(RouterConfig router);
     void showRouterError(QLineEdit* edit, const QString& message);
-    void reloadProfiles(qint64 profile_id);
-    void showProfile();
+    void reloadProfiles(qint64 profile_id, bool warn = true);
+    void showProfile(bool warn = true);
     ProfileConfig profileFromUi() const;
-    QString askProfileName(const QString& title, const QString& name, int own_index);
+    QString askProfileName(const QString& title, const QString& name, qint64 own_profile_id);
     void saveProfile();
 
     std::unique_ptr<Ui::SettingsTab> ui;

@@ -214,7 +214,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         ui->checkbox_saved_credentials->isChecked() ? ui->combo_credential->currentData().toLongLong() : 0);
     host.setUsername(username);
     host.setPassword(password);
-    host.setProfileId(ui->combo_profile->currentData().toLongLong());
+    host.setProfileId(ui->combo_profile->currentProfileId());
     host.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
@@ -267,26 +267,11 @@ void LocalHostDialog::onLoadData()
         return;
     }
 
-    QList<ProfileConfig> profiles;
-    const Database::ReadResult profiles_result = db.profileList(&profiles);
-    if (profiles_result == Database::ReadResult::FAILED)
+    if (!ui->combo_profile->onReload())
     {
-        LOG(ERROR) << "Unable to read the list of profiles";
         MsgBox::warning(this, tr("Failed to read the list of profiles."));
         reject();
         return;
-    }
-
-    if (profiles_result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the profiles";
-
-    const QIcon profile_icon(":/img/dashboard-layout.svg");
-
-    for (const ProfileConfig& profile : std::as_const(profiles))
-    {
-        ui->combo_profile->addItem(profile_icon,
-                                   profile.isDefault() ? tr("Default") : profile.name(),
-                                   QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
     }
 
     QList<LocalGroupConfig> all_groups;
@@ -339,8 +324,7 @@ void LocalHostDialog::onLoadData()
             ui->combo_credential->setCurrentIndex(credential_index);
         }
 
-        ui->combo_profile->setCurrentIndex(
-            ui->combo_profile->findData(QVariant::fromValue(host.profileId())));
+        ui->combo_profile->setCurrentProfileId(host.profileId());
 
         group_id_ = host.groupId();
     }

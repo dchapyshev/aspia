@@ -545,6 +545,211 @@ bool Database::SyncTransaction::setReceivedCredentialsRevision(qint64 revision)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (!profile.isValid() || profile.guid().isEmpty() || sync_revision <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery query(db, "INSERT INTO profiles (id, name, data, guid, modify_time, sync_revision) "
+                       "VALUES (NULL, ?, ?, ?, ?, ?) "
+                       "ON CONFLICT(guid) DO UPDATE SET name=excluded.name, data=excluded.data, "
+                       "modify_time=excluded.modify_time, sync_revision=excluded.sync_revision, sync_dirty=0, "
+                       "deleted=0 WHERE profiles.sync_revision!=excluded.sync_revision");
+    query.addText(profile.name());
+    query.addBlob(profile.serializedData());
+    query.addText(profile.guid());
+    query.addInt64(profile.modifyTime());
+    query.addInt64(sync_revision);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::eraseProfile(const QString& guid)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (guid == ProfileConfig::kDefaultGuid)
+    {
+        LOG(ERROR) << "The default profile cannot be erased";
+        return false;
+    }
+
+    SqlQuery query(db, "DELETE FROM profiles WHERE guid=?");
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setProfileSyncRevision(const QString& guid, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery query(db, "UPDATE profiles SET sync_revision=? WHERE guid=?");
+    query.addInt64(sync_revision);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery row(db, "SELECT data FROM profiles WHERE guid=? AND deleted=0");
+    row.addText(guid);
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        else
+            LOG(ERROR) << "Profile with guid" << guid << "not found";
+        return false;
+    }
+
+    ProfileConfig profile;
+    if (!profile.setSerializedData(row.columnBlob(0)))
+    {
+        LOG(ERROR) << "Unable to read data of profile with guid" << guid;
+        return false;
+    }
+
+    profile.setUnknownData(unknown_data);
+
+    SqlQuery query(db, "UPDATE profiles SET data=? WHERE guid=?");
+    query.addBlob(profile.serializedData());
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::confirmSentProfile(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (guid.isEmpty() || sync_revision <= 0 || sync_dirty < 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery update_query(db, "UPDATE profiles SET sync_revision=?, sync_dirty=sync_dirty-? WHERE guid=?");
+    update_query.addInt64(sync_revision);
+    update_query.addInt64(sync_dirty);
+    update_query.addText(guid);
+
+    if (!update_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    if (db.changes() != 0)
+    {
+        SqlQuery erase_query(db, "DELETE FROM profiles WHERE guid=? AND deleted!=0 AND sync_dirty=0");
+        erase_query.addText(guid);
+
+        if (!erase_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+    else
+    {
+        SqlQuery mark_query(db, "INSERT INTO profiles (id, guid, modify_time, sync_revision, sync_dirty, deleted) "
+                                "VALUES (NULL, ?, ?, ?, 1, 1)");
+        mark_query.addText(guid);
+        mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+        mark_query.addInt64(sync_revision);
+
+        if (!mark_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setReceivedProfilesRevision(qint64 revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    return db_.setReceivedProfilesRevision(revision);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::SyncTransaction::isActive() const
 {
     return transaction_.has_value() && transaction_->isActive();

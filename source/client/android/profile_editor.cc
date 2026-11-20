@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
@@ -293,6 +294,7 @@ void ProfileEditor::onSaveClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 
@@ -311,6 +313,7 @@ void ProfileEditor::onDeleteClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 

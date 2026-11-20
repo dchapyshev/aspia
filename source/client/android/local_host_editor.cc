@@ -21,17 +21,16 @@
 #include <QVBoxLayout>
 
 #include "base/build_config.h"
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "client/android/credential_combo_box.h"
+#include "client/android/profile_combo_box.h"
 #include "client/config.h"
 #include "client/storage/database.h"
 #include "common/android/button.h"
-#include "common/android/combo_box.h"
 #include "common/android/controls.h"
 #include "common/android/label.h"
 #include "common/android/line_edit.h"
@@ -56,7 +55,7 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
       combo_credential_(new CredentialComboBox()),
-      combo_profile_(new ComboBox()),
+      combo_profile_(new ProfileComboBox()),
       edit_comment_(new TextArea()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
 {
@@ -274,7 +273,7 @@ void LocalHostEditor::onSaveClicked()
     data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
     data.setUsername(username);
     data.setPassword(SecureString(password));
-    data.setProfileId(combo_profile_->currentData().toLongLong());
+    data.setProfileId(combo_profile_->currentProfileId());
     data.setComment(edit_comment_->text());
 
     Database& db = Database::instance();
@@ -331,31 +330,13 @@ bool LocalHostEditor::loadCredentials(qint64 selected_credential_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostEditor::loadProfiles(qint64 selected_profile_id)
 {
-    combo_profile_->clear();
-
-    QList<ProfileConfig> profiles;
-    const Database::ReadResult result = Database::instance().profileList(&profiles);
-    if (result == Database::ReadResult::FAILED)
+    if (!combo_profile_->onReload())
     {
-        LOG(ERROR) << "Unable to read the list of profiles";
         showError(tr("Failed to read data from the local database."));
         return false;
     }
 
-    if (result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the profiles";
-
-    const QIcon icon = GuiApplication::svgIcon(":/img/dashboard-layout.svg");
-
-    for (const ProfileConfig& profile : std::as_const(profiles))
-    {
-        combo_profile_->addItem(icon,
-                                profile.isDefault() ? tr("Default") : profile.name(),
-                                QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
-    }
-
-    const int index = combo_profile_->findData(QVariant::fromValue(selected_profile_id));
-    combo_profile_->setCurrentIndex(index >= 0 ? index : 0);
+    combo_profile_->setCurrentProfileId(selected_profile_id);
     return true;
 }
 

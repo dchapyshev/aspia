@@ -264,6 +264,47 @@ protected:
         return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
     }
 
+    // Marks a profile as one the router holds at |revision| with no changes since.
+    bool markProfileSynced(qint64 profile_id, qint64 revision)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE profiles SET sync_revision=?, sync_dirty=0 WHERE id=?");
+        query.addInt64(revision);
+        query.addInt64(profile_id);
+
+        return query.exec();
+    }
+
+    // The rows of the profiles, the default one and the ones marked as deleted included.
+    qint64 profileRowCount()
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return -1;
+
+        SqlQuery query(raw, "SELECT COUNT(*) FROM profiles");
+        if (query.next() != SqlQuery::StepResult::ROW)
+            return -1;
+
+        return query.columnInt64(0);
+    }
+
+    // True when the row of the profile is in place, marked as deleted, with its name and its data wiped.
+    bool isProfileMarkedDeleted(qint64 profile_id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "SELECT COUNT(*) FROM profiles WHERE id=? AND deleted=1 AND name='' AND data=X''");
+        query.addInt64(profile_id);
+
+        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
+    }
+
     // Spoils the sealed text of a record the way a damaged database or one of another installation
     // has it: the row is in place, its data does not open.
     bool corruptRecordData(const QString& table, qint64 id)
@@ -505,6 +546,48 @@ protected:
         EXPECT_TRUE(!profiles.isEmpty() && profiles.front().isDefault());
         profiles.removeFirst();
         return profiles;
+    }
+
+    QList<Database::UnsyncedProfile> unsyncedProfiles()
+    {
+        QList<Database::UnsyncedProfile> profiles;
+        EXPECT_EQ(db_.unsyncedProfiles(&profiles), Database::ReadResult::OK);
+        return profiles;
+    }
+
+    bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.storeReceivedProfile(profile, sync_revision) && transaction.commit();
+    }
+
+    bool eraseProfile(const QString& guid)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE && transaction.eraseProfile(guid) &&
+               transaction.commit();
+    }
+
+    bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.setProfileUnknownData(guid, unknown_data) && transaction.commit();
+    }
+
+    bool confirmSentProfile(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.confirmSentProfile(guid, sync_revision, sync_dirty) && transaction.commit();
+    }
+
+    bool setReceivedProfilesRevision(qint64 revision)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.setReceivedProfilesRevision(revision) && transaction.commit();
     }
 
     QList<HostId> outdatedRouterHosts()
@@ -3764,8 +3847,8 @@ TEST_F(DatabaseTest, CredentialThatComesBackTakesTheRowOfTheRemovedOne)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A database made by an earlier version has the table of credentials without the column that marks
-// a removed record. The column is added when the database is opened, and the records it had are
+// A database made by an earlier version has the tables of credentials and profiles without the column
+// that marks a removed record. The column is added when the database is opened, and the records it had are
 // not removed ones.
 TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
 {
@@ -3796,6 +3879,25 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
         query.addBlob(*encrypted_data);
         query.addText(config.guid());
         ASSERT_TRUE(query.exec());
+
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"profiles\" ("
+                             "\"id\" INTEGER UNIQUE,"
+                             "\"name\" TEXT NOT NULL DEFAULT '',"
+                             "\"data\" BLOB DEFAULT X'',"
+                             "\"guid\" TEXT NOT NULL UNIQUE,"
+                             "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+
+        ProfileConfig profile;
+        profile.setDesktopConfig(defaultDesktopConfig());
+        profile.setUdpMethods(UDP_METHOD_ALL);
+
+        SqlQuery profile_query(raw, "INSERT INTO profiles (name, data, guid) VALUES ('office', ?, ?)");
+        profile_query.addBlob(profile.serializedData());
+        profile_query.addText(QString("22222222-2222-2222-2222-222222222222"));
+        ASSERT_TRUE(profile_query.exec());
     }
 
     // The second pass opens a database that has the column already.
@@ -3808,6 +3910,11 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
         ASSERT_EQ(earlier.credentialList(&credentials), Database::ReadResult::OK);
         ASSERT_EQ(credentials.size(), 1);
         EXPECT_EQ(credentials[0].username(), QString("user"));
+
+        QList<ProfileConfig> profiles;
+        ASSERT_EQ(earlier.profileList(&profiles), Database::ReadResult::OK);
+        ASSERT_EQ(profiles.size(), 2);
+        EXPECT_EQ(profiles[1].name(), QString("office"));
     }
 
     SqlDatabase raw;
@@ -3817,6 +3924,10 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
     ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(query.columnInt64(0), 0);
     EXPECT_EQ(query.columnInt64(1), 1);
+
+    SqlQuery profile_query(raw, "SELECT deleted FROM profiles WHERE name='office'");
+    ASSERT_EQ(profile_query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(profile_query.columnInt64(0), 0);
 
     SqlQuery version(raw, "PRAGMA user_version");
     ASSERT_EQ(version.next(), SqlQuery::StepResult::ROW);
@@ -4115,12 +4226,16 @@ TEST_F(DatabaseTest, ReceivedRevisionIsKeptUntilABatchReplacesTheRecords)
     attachSyncStorage();
 
     EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
 
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
+    ASSERT_TRUE(setReceivedProfilesRevision(14));
     EXPECT_EQ(db_.receivedCredentialsRevision(), 12);
+    EXPECT_EQ(db_.receivedProfilesRevision(), 14);
 
     ASSERT_TRUE(db_.import({}, {}, {}, {}, {}, {}));
     EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4590,6 +4705,373 @@ TEST_F(DatabaseTest, ImportOfAnotherAccountWaitsForTheUserThatSignsIn)
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->isSyncEnabled());
     EXPECT_TRUE(stored->userGuid().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A new profile and an edit of one wait to be sent to the router, and every edit counts.
+TEST_F(DatabaseTest, NewAndEditedProfilesAreUnsynced)
+{
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    const qint64 profile_id = addProfile("office");
+
+    QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].profile.id(), profile_id);
+    EXPECT_EQ(unsynced[0].profile.name(), QString("office"));
+    EXPECT_FALSE(unsynced[0].deleted);
+    EXPECT_GE(unsynced[0].profile.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 0);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+
+    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+
+    ProfileConfig edited;
+    ASSERT_EQ(db_.findProfile(profile_id, &edited), Database::FindResult::FOUND);
+    edited.setName("renamed");
+    ASSERT_TRUE(db_.modifyProfile(edited));
+    ASSERT_TRUE(db_.modifyProfile(edited));
+
+    unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].profile.name(), QString("renamed"));
+    EXPECT_FALSE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+    EXPECT_EQ(unsynced[0].sync_dirty, 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The default profile nobody edited stays on the device, so it never replaces an edited one in the storage.
+TEST_F(DatabaseTest, UntouchedDefaultProfileIsNotSentToTheStorage)
+{
+    const qint64 profile_id = addProfile("office");
+    attachSyncStorage();
+
+    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].profile.id(), profile_id);
+    EXPECT_EQ(unsynced[0].sync_revision, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edited default profile goes to the storage like any other profile.
+TEST_F(DatabaseTest, EditedDefaultProfileIsSentToTheStorage)
+{
+    ProfileConfig profile = db_.defaultProfile();
+    profile.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(db_.modifyProfile(profile));
+    ASSERT_TRUE(markProfileSynced(profile.id(), 7));
+
+    attachSyncStorage();
+
+    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].profile.isDefault());
+    EXPECT_EQ(unsynced[0].profile.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(unsynced[0].sync_revision, 0);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removed profile the router holds keeps a row marked as deleted, and its hosts run on the default one.
+TEST_F(DatabaseTest, RemovedProfileTheRouterHoldsKeepsARowMarkedAsDeleted)
+{
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(profile_id);
+    ASSERT_TRUE(db_.addLocalHost(host));
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+
+    ProfileConfig removed;
+    EXPECT_EQ(db_.findProfile(profile_id, &removed), Database::FindResult::NOT_FOUND);
+    EXPECT_TRUE(profileList().isEmpty());
+    EXPECT_TRUE(isProfileMarkedDeleted(profile_id));
+
+    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].profile.id(), profile_id);
+    EXPECT_EQ(unsynced[0].profile.guid(), stored.guid());
+    EXPECT_GE(unsynced[0].profile.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), profile_id);
+    EXPECT_TRUE(db_.hostProfile(HostConfig::forLocalHost(host)).isDefault());
+
+    EXPECT_FALSE(db_.modifyProfile(stored));
+    EXPECT_FALSE(db_.removeProfile(profile_id));
+    EXPECT_EQ(unsyncedProfiles().value(0).sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile the router has never held is gone the moment it is removed.
+TEST_F(DatabaseTest, RemovedProfileTheRouterNeverHeldIsGoneAtOnce)
+{
+    const qint64 profile_id = addProfile("office");
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+
+    EXPECT_EQ(profileRowCount(), 1);
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit keeps the fields a newer version put into the profile, which this version does not know.
+TEST_F(DatabaseTest, EditKeepsTheUnknownDataOfAProfile)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    ASSERT_TRUE(setProfileUnknownData(stored.guid(), "unknown"));
+
+    ProfileConfig edited;
+    edited.setId(profile_id);
+    edited.setName("renamed");
+    edited.setDesktopConfig(defaultDesktopConfig());
+    edited.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(db_.modifyProfile(edited));
+
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    EXPECT_EQ(stored.name(), QString("renamed"));
+    EXPECT_EQ(stored.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(stored.unknownData(), QByteArray("unknown"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A received profile takes the row of its guid, so the hosts keep it, and a revision already stored changes nothing.
+TEST_F(DatabaseTest, ReceivedProfileIsStoredWithTheRevisionOfTheRouter)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig local;
+    ASSERT_EQ(db_.findProfile(profile_id, &local), Database::FindResult::FOUND);
+    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(profile_id);
+    ASSERT_TRUE(db_.addLocalHost(host));
+
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+
+    ProfileConfig received;
+    received.setGuid(local.guid());
+    received.setName("received");
+    received.setDesktopConfig(defaultDesktopConfig());
+    received.setUdpMethods(UDP_METHOD_DIRECT);
+    received.setModifyTime(1000);
+    ASSERT_TRUE(storeReceivedProfile(received, 12));
+
+    ProfileConfig repeated = received;
+    repeated.setName("repeated");
+    ASSERT_TRUE(storeReceivedProfile(repeated, 12));
+
+    ProfileConfig other = received;
+    other.setGuid("11111111-1111-1111-1111-111111111111");
+    other.setName("other");
+    ASSERT_TRUE(storeReceivedProfile(other, 13));
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    EXPECT_EQ(stored.name(), QString("received"));
+    EXPECT_EQ(stored.udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(stored.modifyTime(), 1000);
+
+    EXPECT_EQ(db_.hostProfile(HostConfig::forLocalHost(host)).id(), profile_id);
+    EXPECT_EQ(profileList().size(), 2);
+    EXPECT_EQ(profileRowCount(), 3);
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removal received from the router leaves no row, and the hosts of the profile run on the default one.
+TEST_F(DatabaseTest, ErasedProfileLeavesNoRow)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setProfileId(profile_id);
+    ASSERT_TRUE(db_.addLocalHost(host));
+
+    stored.setName("renamed");
+    ASSERT_TRUE(db_.modifyProfile(stored));
+    ASSERT_EQ(unsyncedProfiles().size(), 1);
+
+    ASSERT_TRUE(eraseProfile(stored.guid()));
+    EXPECT_TRUE(eraseProfile(stored.guid()));
+
+    EXPECT_EQ(profileRowCount(), 1);
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+    EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The default profile stays whatever the router or the user asks.
+TEST_F(DatabaseTest, DefaultProfileIsNeverErased)
+{
+    attachSyncStorage();
+
+    const ProfileConfig profile = db_.defaultProfile();
+    EXPECT_FALSE(eraseProfile(profile.guid()));
+    EXPECT_FALSE(db_.removeProfile(profile.id()));
+
+    EXPECT_EQ(db_.defaultProfile().id(), profile.id());
+    EXPECT_EQ(profileRowCount(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile the router stored is sent again only when it was edited while it was on its way.
+TEST_F(DatabaseTest, ConfirmedProfileIsSentAgainOnlyWhenEditedMeanwhile)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig edited;
+    ASSERT_EQ(db_.findProfile(profile_id, &edited), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(confirmSentProfile(edited.guid(), 12, 1));
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+
+    edited.setName("renamed");
+    ASSERT_TRUE(db_.modifyProfile(edited));
+    ASSERT_TRUE(db_.modifyProfile(edited));
+
+    const QList<Database::UnsyncedProfile> sent = unsyncedProfiles();
+    ASSERT_EQ(sent.size(), 1);
+    EXPECT_EQ(sent[0].sync_revision, 12);
+    EXPECT_EQ(sent[0].sync_dirty, 2);
+
+    ASSERT_TRUE(db_.modifyProfile(edited));
+    ASSERT_TRUE(confirmSentProfile(edited.guid(), 13, sent[0].sync_dirty));
+
+    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 13);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile removed on its first way to the router left no row, so its removal is kept to be sent.
+TEST_F(DatabaseTest, ProfileRemovedOnItsWayToTheRouterIsRemovedThereToo)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig stored;
+    ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+    ASSERT_EQ(profileRowCount(), 1);
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(confirmSentProfile(stored.guid(), 12, 1));
+
+    EXPECT_TRUE(profileList().isEmpty());
+
+    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].profile.guid(), stored.guid());
+    EXPECT_GE(unsynced[0].profile.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 12);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Another storage takes the profiles of the device away and leaves the default one until the storage brings its own.
+TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
+{
+    addRouter(true);
+    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)),
+                                 false), Database::SyncResult::DONE);
+
+    const qint64 kept_id = addProfile("kept");
+    const qint64 new_id = addProfile("new");
+    ASSERT_TRUE(markProfileSynced(kept_id, 7));
+
+    ProfileConfig default_profile = db_.defaultProfile();
+    default_profile.setUdpMethods(UDP_METHOD_DIRECT);
+    ASSERT_TRUE(db_.modifyProfile(default_profile));
+    ASSERT_TRUE(setReceivedProfilesRevision(12));
+
+    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)), true),
+              Database::SyncResult::DONE);
+
+    EXPECT_TRUE(profileList().isEmpty());
+    EXPECT_TRUE(isProfileMarkedDeleted(kept_id));
+    EXPECT_TRUE(isProfileMarkedDeleted(new_id));
+    EXPECT_EQ(db_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid finds the profile and the default one, a removed profile is not found by it.
+TEST_F(DatabaseTest, ProfileIsFoundByItsGuid)
+{
+    addRouter(true);
+    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)),
+                                 false), Database::SyncResult::DONE);
+
+    const qint64 profile_id = addProfile("office");
+    ProfileConfig added;
+    ASSERT_EQ(db_.findProfile(profile_id, &added), Database::FindResult::FOUND);
+
+    ProfileConfig found;
+    ASSERT_EQ(db_.findProfileByGuid(added.guid(), &found), Database::FindResult::FOUND);
+    EXPECT_EQ(found.id(), profile_id);
+    EXPECT_EQ(found.name(), QString("office"));
+
+    ASSERT_EQ(db_.findProfileByGuid(ProfileConfig::kDefaultGuid, &found), Database::FindResult::FOUND);
+    EXPECT_TRUE(found.isDefault());
+
+    EXPECT_EQ(db_.findProfileByGuid(QString(), &found), Database::FindResult::NOT_FOUND);
+
+    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(db_.removeProfile(profile_id));
+    ASSERT_TRUE(isProfileMarkedDeleted(profile_id));
+    EXPECT_EQ(db_.findProfileByGuid(added.guid(), &found), Database::FindResult::NOT_FOUND);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile whose data does not read is listed among the unsynced ones as damaged.
+TEST_F(DatabaseTest, UnsyncedProfileThatDoesNotReadIsDamaged)
+{
+    const qint64 broken_id = addProfile("office");
+    addProfile("home");
+    ASSERT_TRUE(corruptRecordData("profiles", broken_id));
+
+    QList<Database::UnsyncedProfile> unsynced;
+    ASSERT_EQ(db_.unsyncedProfiles(&unsynced), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(unsynced.size(), 2);
+
+    for (const Database::UnsyncedProfile& item : std::as_const(unsynced))
+        EXPECT_EQ(item.damaged, item.profile.id() == broken_id);
 }
 
 //--------------------------------------------------------------------------------------------------

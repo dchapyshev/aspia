@@ -291,26 +291,11 @@ void RouterHostDialog::onLoadData()
 {
     Database& db = Database::instance();
 
-    QList<ProfileConfig> profiles;
-    const Database::ReadResult profiles_result = db.profileList(&profiles);
-    if (profiles_result == Database::ReadResult::FAILED)
+    if (!ui->combo_profile->onReload())
     {
-        LOG(ERROR) << "Unable to read the list of profiles";
         MsgBox::warning(this, tr("Failed to read the list of profiles."));
         reject();
         return;
-    }
-
-    if (profiles_result == Database::ReadResult::INCOMPLETE)
-        LOG(ERROR) << "Unable to read some of the profiles";
-
-    const QIcon profile_icon(":/img/dashboard-layout.svg");
-
-    for (const ProfileConfig& profile : std::as_const(profiles))
-    {
-        ui->combo_profile->addItem(profile_icon,
-                                   profile.isDefault() ? tr("Default") : profile.name(),
-                                   QVariant::fromValue<qint64>(profile.isDefault() ? 0 : profile.id()));
     }
 
     // A temporary host keeps no credentials, so there is nothing to read for it.
@@ -353,8 +338,7 @@ void RouterHostDialog::onLoadData()
             ui->combo_credential->setCurrentIndex(credential_index);
         }
 
-        ui->combo_profile->setCurrentIndex(
-            ui->combo_profile->findData(QVariant::fromValue(credentials.profileId())));
+        ui->combo_profile->setCurrentProfileId(credentials.profileId());
     }
 
     ui->checkbox_saved_credentials->setEnabled(ui->combo_credential->count() > 0);
@@ -466,7 +450,7 @@ bool RouterHostDialog::saveProfile()
     if (!credentials_loaded_)
         return true;
 
-    return Database::instance().setRouterHostProfileId(host_.host_id, ui->combo_profile->currentData().toLongLong());
+    return Database::instance().setRouterHostProfileId(host_.host_id, ui->combo_profile->currentProfileId());
 }
 
 //--------------------------------------------------------------------------------------------------

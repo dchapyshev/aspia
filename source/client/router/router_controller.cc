@@ -64,8 +64,8 @@ RouterController::RouterController(QObject* parent)
         return;
     }
 
-    connect(sync_worker_, &SyncWorker::sig_credentialsChanged,
-            this, &RouterController::sig_credentialsChanged, Qt::QueuedConnection);
+    connect(sync_worker_, &SyncWorker::sig_recordsChanged,
+            this, &RouterController::onSyncRecordsChanged, Qt::QueuedConnection);
     connect(sync_worker_, &SyncWorker::sig_event,
             this, &RouterController::onSyncEvent, Qt::QueuedConnection);
 }
@@ -569,6 +569,25 @@ void RouterController::onSyncEvent(SyncWorker::Event event, const QString& error
         case SyncWorker::Event::DEVICE_ERROR:
             addEvent(RouterEvent::Severity::WARNING,
                      tr("Synchronization stopped because of an error on this device."));
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterController::onSyncRecordsChanged(proto::router::SyncDataType type)
+{
+    switch (type)
+    {
+        case proto::router::SYNC_DATA_TYPE_CREDENTIALS:
+            emit sig_credentialsChanged();
+            break;
+
+        case proto::router::SYNC_DATA_TYPE_PROFILES:
+            emit sig_profilesChanged();
+            break;
+
+        default:
+            LOG(WARNING) << "Unhandled type of the synchronized records:" << type;
             break;
     }
 }

@@ -23,7 +23,7 @@
 
 #include "base/threading/worker.h"
 #include "client/config.h"
-#include "client/sync/sync_credentials.h"
+#include "client/sync/sync_records.h"
 
 class SyncWorker final : public Worker
 {
@@ -65,7 +65,7 @@ public slots:
 
 signals:
     void sig_sendMessage(quint8 channel_id, const QByteArray& buffer);
-    void sig_credentialsChanged();
+    void sig_recordsChanged(proto::router::SyncDataType type);
     void sig_event(SyncWorker::Event event, const QString& error_code);
 
 protected:
@@ -81,9 +81,10 @@ private:
     void reloadConfig();
     void startRecordExchange();
     void startReceivingRecords();
+    void exchangeRecords(size_t index);
     void finishRecordExchange();
     void abortRecordExchange();
-    void announceFailure(SyncCredentials::Result result);
+    void announceFailure(SyncRecords::Result result);
     void scheduleRecordExchange();
     void scheduleRouterReading();
     void attachStorage(bool reset);
@@ -101,7 +102,8 @@ private:
 
     State state_ = State::OFFLINE;
     std::optional<RouterConfig> config_;
-    std::optional<SyncCredentials> credentials_;
+    std::vector<std::unique_ptr<SyncRecords>> records_;
+    size_t records_index_ = 0;
     QByteArray storage_id_;
     SecureByteArray key_;
     qint64 request_id_ = 0;

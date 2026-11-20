@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "client/config.h"
 #include "client/android/profile_editor.h"
+#include "client/router/router_controller.h"
 #include "client/storage/database.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
@@ -69,6 +70,8 @@ ProfilesWidget::ProfilesWidget(QWidget* parent)
         onItemClicked(item);
     });
     connect(editor_, &ProfileEditor::sig_accepted, this, &ProfilesWidget::onReturnFromEditor);
+    connect(&RouterController::instance(), &RouterController::sig_profilesChanged,
+            this, &ProfilesWidget::reload);
 }
 
 //--------------------------------------------------------------------------------------------------

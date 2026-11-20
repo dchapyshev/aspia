@@ -379,6 +379,7 @@ QByteArray ProfileConfig::serializedData() const
     proto::storage::ProfileData data;
     data.mutable_desktop()->CopyFrom(desktop_config_);
     data.set_udp_methods(udp_methods_);
+    data.set_unknown_data(unknown_data_.constData(), static_cast<size_t>(unknown_data_.size()));
     return serialize(data);
 }
 
@@ -391,6 +392,7 @@ bool ProfileConfig::setSerializedData(const QByteArray& data)
 
     desktop_config_ = profile.desktop();
     udp_methods_ = profile.udp_methods();
+    unknown_data_ = QByteArray::fromStdString(profile.unknown_data());
     return true;
 }
 

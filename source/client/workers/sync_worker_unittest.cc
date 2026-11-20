@@ -25,8 +25,11 @@
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/random.h"
+#include "base/net/udp_channel.h"
 #include "client/router/router_test_fixture.h"
+#include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
+#include "client/sync/sync_profiles.h"
 #include "proto/router.h"
 
 // Test-only access to the timer of the worker, the time is handed in.
@@ -103,9 +106,13 @@ protected:
             onWorkerMessage(buffer);
         }, Qt::DirectConnection);
 
-        QObject::connect(&worker_, &SyncWorker::sig_credentialsChanged, &worker_, [this]()
+        QObject::connect(&worker_, &SyncWorker::sig_recordsChanged, &worker_,
+                         [this](proto::router::SyncDataType type)
         {
-            ++credentials_changed_count_;
+            if (type == proto::router::SYNC_DATA_TYPE_PROFILES)
+                ++profiles_changed_count_;
+            else
+                ++credentials_changed_count_;
         }, Qt::DirectConnection);
 
         QObject::connect(&worker_, &SyncWorker::sig_event, &worker_,
@@ -151,17 +158,35 @@ protected:
         }
         else if (message.has_record_list_request())
         {
-            ++list_request_count_;
+            list_request_types_.append(message.record_list_request().type());
 
-            if (before_listing_)
-                std::exchange(before_listing_, nullptr)();
+            if (message.record_list_request().type() == proto::router::SYNC_DATA_TYPE_PROFILES)
+            {
+                ++profile_list_request_count_;
+            }
+            else
+            {
+                ++list_request_count_;
+
+                if (before_listing_)
+                    std::exchange(before_listing_, nullptr)();
+            }
         }
         else if (message.has_record_request())
         {
-            ++record_request_count_;
+            const proto::router::SyncRecordRequest& request = message.record_request();
 
-            if (before_storing_)
-                std::exchange(before_storing_, nullptr)();
+            if (!request.record().empty() && request.record(0).type() == proto::router::SYNC_DATA_TYPE_PROFILES)
+            {
+                ++profile_record_request_count_;
+            }
+            else
+            {
+                ++record_request_count_;
+
+                if (before_storing_)
+                    std::exchange(before_storing_, nullptr)();
+            }
         }
 
         worker_.onMessageReceived(serialize(routerReply(message)));
@@ -249,7 +274,7 @@ protected:
             QList<proto::router::SyncRecord> newer;
             for (const proto::router::SyncRecord& record : std::as_const(records_))
             {
-                if (record.revision() > request.revision())
+                if (record.type() == request.type() && record.revision() > request.revision())
                     newer.append(record);
             }
 
@@ -289,8 +314,11 @@ protected:
             for (const proto::router::SyncRecord& record : request.record())
             {
                 qsizetype index = 0;
-                while (index < records_.size() && records_[index].id() != record.id())
+                while (index < records_.size() &&
+                       (records_[index].type() != record.type() || records_[index].id() != record.id()))
+                {
                     ++index;
+                }
 
                 const qint64 stored_revision = index < records_.size() ? records_[index].revision() : 0;
                 if (record.revision() != stored_revision)
@@ -386,30 +414,50 @@ protected:
     // unless |notify| is off.
     void sendPhoneRecords(bool notify = true)
     {
+        sendRecordsOf(phone_, notify);
+    }
+
+    void receivePhoneRecords()
+    {
+        receiveRecordsOf(phone_);
+    }
+
+    void sendPhoneProfiles()
+    {
+        sendRecordsOf(phone_profiles_, true);
+    }
+
+    void receivePhoneProfiles()
+    {
+        receiveRecordsOf(phone_profiles_);
+    }
+
+    void sendRecordsOf(SyncRecords& records, bool notify)
+    {
         proto::router::SyncToRouter message;
 
         proto::router::SyncRecordRequest* request = message.mutable_record_request();
-        ASSERT_EQ(phone_.readUnsyncedRecords(request), SyncCredentials::Result::DONE);
+        ASSERT_EQ(records.readUnsyncedRecords(request), SyncRecords::Result::DONE);
         request->set_storage_id(kStorageId);
 
         const qint64 revision = revision_;
-        ASSERT_EQ(phone_.confirmSentRecords(routerReply(message).record_result()), SyncCredentials::Result::DONE);
+        ASSERT_EQ(records.confirmSentRecords(routerReply(message).record_result()), SyncRecords::Result::DONE);
 
         if (notify && revision_ != revision)
             sendStorageNotification();
     }
 
-    void receivePhoneRecords()
+    void receiveRecordsOf(SyncRecords& records)
     {
         proto::router::SyncToRouter message;
 
         proto::router::SyncRecordListRequest* request = message.mutable_record_list_request();
         request->set_storage_id(kStorageId);
-        request->set_type(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
-        request->set_revision(phone_db_.receivedCredentialsRevision());
+        request->set_type(records.type());
+        request->set_revision(records.receivedRevision());
         request->set_count(proto::router::kMaxSyncPageSize);
 
-        ASSERT_EQ(phone_.storeReceivedRecords(routerReply(message).record_list()), SyncCredentials::Result::DONE);
+        ASSERT_EQ(records.storeReceivedRecords(routerReply(message).record_list()), SyncRecords::Result::DONE);
     }
 
     static CredentialConfig addCredential(Database& db, const QString& username)
@@ -449,10 +497,32 @@ protected:
         return credentials;
     }
 
+    static ProfileConfig addProfile(Database& db, const QString& name)
+    {
+        ProfileConfig profile;
+        profile.setName(name);
+        profile.setDesktopConfig(defaultDesktopConfig());
+        profile.setUdpMethods(UDP_METHOD_ALL);
+
+        EXPECT_TRUE(db.addProfile(profile));
+        return profile;
+    }
+
+    // The name of the profile, or an empty string when the device has no such profile.
+    static QString storedProfileName(const Database& db, const QString& guid)
+    {
+        ProfileConfig profile;
+        if (db.findProfileByGuid(guid, &profile) != Database::FindResult::FOUND)
+            return QString();
+
+        return profile.name();
+    }
+
     QTemporaryDir dir_;
     Database phone_db_;
     const SecureByteArray key_ = storageKey().key;
     SyncCredentials phone_{ phone_db_, kStorageId, key_ };
+    SyncProfiles phone_profiles_{ phone_db_, kStorageId, key_ };
     SyncWorker worker_;
 
     std::string storage_id_ = kStorageId;
@@ -468,7 +538,11 @@ protected:
     int storage_key_request_count_ = 0;
     int list_request_count_ = 0;
     int record_request_count_ = 0;
+    int profile_list_request_count_ = 0;
+    int profile_record_request_count_ = 0;
+    QList<proto::router::SyncDataType> list_request_types_;
     int credentials_changed_count_ = 0;
+    int profiles_changed_count_ = 0;
     QList<std::pair<SyncWorker::Event, QString>> events_;
     std::function<void()> before_storage_key_request_;
     std::function<void()> before_listing_;
@@ -1846,4 +1920,109 @@ TEST_F(SyncWorkerTest, PendingResetIsNotDoneWhileSyncIsOff)
 
     EXPECT_EQ(storage_info_request_count_, 0);
     EXPECT_EQ(storage_key_request_count_, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An exchange takes the credentials first and the profiles after them, each received before it is sent.
+TEST_F(SyncWorkerTest, ExchangeTakesTheCredentialsThenTheProfiles)
+{
+    Database& db = Database::instance();
+    addCredential(db, "user");
+    addProfile(db, "office");
+
+    worker_.onSessionStarted();
+
+    const QList<proto::router::SyncDataType> expected_types = {
+        proto::router::SYNC_DATA_TYPE_CREDENTIALS, proto::router::SYNC_DATA_TYPE_PROFILES };
+
+    EXPECT_EQ(list_request_types_, expected_types);
+    EXPECT_EQ(record_request_count_, 1);
+    EXPECT_EQ(profile_record_request_count_, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncWorkerTest, ProfileGoesToTheRouterAndToTheOtherDevice)
+{
+    const QString guid = addProfile(Database::instance(), "office").guid();
+
+    worker_.onSessionStarted();
+
+    EXPECT_EQ(profile_list_request_count_, 1);
+    EXPECT_EQ(profile_record_request_count_, 1);
+    EXPECT_EQ(record_request_count_, 0);
+
+    receivePhoneProfiles();
+
+    EXPECT_EQ(storedProfileName(phone_db_, guid), QString("office"));
+    EXPECT_EQ(phone_db_.receivedProfilesRevision(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A profile the other device has made is received and announced as a change of the profiles only.
+TEST_F(SyncWorkerTest, ProfileOfTheOtherDeviceIsReceivedAndAnnounced)
+{
+    Database& db = Database::instance();
+
+    worker_.onSessionStarted();
+    ASSERT_EQ(profiles_changed_count_, 0);
+
+    const QString guid = addProfile(phone_db_, "office").guid();
+    sendPhoneProfiles();
+
+    EXPECT_EQ(storedProfileName(db, guid), QString("office"));
+    EXPECT_EQ(db.receivedProfilesRevision(), 1);
+    EXPECT_EQ(profiles_changed_count_, 1);
+    EXPECT_EQ(credentials_changed_count_, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The revisions of the router are shared by the types, so the records the device sent are passed by in both.
+TEST_F(SyncWorkerTest, SentProfileIsNotReceivedBack)
+{
+    Database& db = Database::instance();
+    addCredential(db, "user");
+    addProfile(db, "office");
+
+    worker_.onSessionStarted();
+
+    EXPECT_EQ(db.receivedCredentialsRevision(), 1);
+    EXPECT_EQ(db.receivedProfilesRevision(), 2);
+
+    worker_.onStartRecordExchange();
+
+    EXPECT_EQ(profile_list_request_count_, 2);
+    EXPECT_EQ(credentials_changed_count_, 0);
+    EXPECT_EQ(profiles_changed_count_, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A credential the router refused waits for the next exchange, and the profiles are sent meanwhile.
+TEST_F(SyncWorkerTest, RefusedCredentialDoesNotHoldBackTheProfiles)
+{
+    Database& db = Database::instance();
+    record_age_ = 100;
+
+    const QString guid = addCredential(db, "user").guid();
+
+    worker_.onSessionStarted();
+    receivePhoneRecords();
+    ASSERT_EQ(storedUsername(phone_db_, guid), QString("user"));
+
+    modifyCredential(db, guid, "laptop-user");
+    modifyCredential(phone_db_, guid, "phone-user");
+    const QString profile_guid = addProfile(db, "office").guid();
+
+    before_storing_ = [this]()
+    {
+        sendPhoneRecords(false);
+    };
+
+    worker_.onStartRecordExchange();
+
+    EXPECT_EQ(unsyncedCredentials(db).size(), 1);
+    EXPECT_EQ(profile_record_request_count_, 1);
+
+    receivePhoneProfiles();
+
+    EXPECT_EQ(storedProfileName(phone_db_, profile_guid), QString("office"));
 }
