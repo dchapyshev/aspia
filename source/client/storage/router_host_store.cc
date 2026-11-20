@@ -74,7 +74,7 @@ Database::ReadResult RouterHostStore::list(QList<RouterHostConfig>* hosts) const
 
     SqlQuery query(sql(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0) "
-                          "FROM router_hosts");
+                          "FROM router_hosts WHERE deleted=0");
 
     Database::ReadResult result = Database::ReadResult::OK;
 
@@ -120,6 +120,27 @@ bool RouterHostStore::add(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
+    {
+        SqlQuery restore_query(sql(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), "
+                                      "os_credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), modify_time=?, "
+                                      "deleted=0 WHERE host_id=? AND deleted!=0");
+        restore_query.addBlob(*encrypted_data);
+        restore_query.addInt64(host.credentialId());
+        restore_query.addInt64(host.osCredentialId());
+        restore_query.addInt64(host.profileId());
+        restore_query.addInt64(QDateTime::currentSecsSinceEpoch());
+        restore_query.addUInt64(host.hostId());
+
+        if (!restore_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            return false;
+        }
+
+        if (sql().changes() != 0)
+            return true;
+    }
+
     SqlQuery query(sql(),
         "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id, modify_time) "
         "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0), ?)");
@@ -158,7 +179,8 @@ bool RouterHostStore::modify(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), modify_time=? WHERE host_id=?");
+    SqlQuery query(sql(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), modify_time=? "
+                          "WHERE host_id=? AND deleted=0");
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
     query.addInt64(QDateTime::currentSecsSinceEpoch());
@@ -189,7 +211,8 @@ bool RouterHostStore::remove(HostId host_id)
         return false;
     }
 
-    SqlQuery query(sql(), "DELETE FROM router_hosts WHERE host_id=?");
+    SqlQuery query(sql(), "UPDATE router_hosts SET data=X'', credential_id=NULL, os_credential_id=NULL, "
+                          "profile_id=NULL WHERE host_id=? AND deleted=0");
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -215,7 +238,7 @@ Database::FindResult RouterHostStore::find(HostId host_id, RouterHostConfig* hos
 
     SqlQuery query(sql(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0) "
-                          "FROM router_hosts WHERE host_id=?");
+                          "FROM router_hosts WHERE host_id=? AND deleted=0");
     query.addUInt64(host_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -272,7 +295,8 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
 
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
     // returning to the same rows.
-    SqlQuery query(sql(), "SELECT host_id FROM router_hosts WHERE check_time<? ORDER BY check_time LIMIT ?");
+    SqlQuery query(sql(), "SELECT host_id FROM router_hosts WHERE check_time<? AND deleted=0 "
+                          "ORDER BY check_time LIMIT ?");
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
     query.addInt64(kMaxRouterHostsToCheck);
 
@@ -302,7 +326,7 @@ bool RouterHostStore::updateCheckTime(HostId host_id)
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET check_time=? WHERE host_id=?");
+    SqlQuery query(sql(), "UPDATE router_hosts SET check_time=? WHERE host_id=? AND deleted=0");
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
 
@@ -331,7 +355,8 @@ bool RouterHostStore::setOsCredentialId(HostId host_id, qint64 credential_id)
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=? WHERE host_id=?");
+    SqlQuery query(sql(), "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=? "
+                          "WHERE host_id=? AND deleted=0");
     query.addInt64(credential_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
@@ -356,7 +381,7 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
 
     if (profile_id <= 0)
     {
-        SqlQuery query(sql(), "UPDATE router_hosts SET profile_id=NULL, modify_time=? WHERE host_id=?");
+        SqlQuery query(sql(), "UPDATE router_hosts SET profile_id=NULL, modify_time=? WHERE host_id=? AND deleted=0");
         query.addInt64(QDateTime::currentSecsSinceEpoch());
         query.addUInt64(host_id);
 
@@ -377,7 +402,8 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
 
     SqlQuery query(sql(),
         "INSERT INTO router_hosts (host_id, profile_id, modify_time) VALUES (?, ?, ?) "
-        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id, modify_time=excluded.modify_time");
+        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id, modify_time=excluded.modify_time, "
+        "deleted=0");
     query.addUInt64(host_id);
     query.addInt64(profile_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());

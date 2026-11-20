@@ -22,7 +22,38 @@
 
 #include "client/storage/database_test_base.h"
 
-using RouterHostStoreTest = DatabaseTestBase;
+class RouterHostStoreTest : public DatabaseTestBase
+{
+protected:
+    // Marks the row of a router host as one the router holds at |revision| with no changes since.
+    bool markRouterHostSynced(HostId host_id, qint64 revision)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "UPDATE router_hosts SET sync_revision=?, sync_dirty=0 WHERE host_id=?");
+        query.addInt64(revision);
+        query.addUInt64(host_id);
+
+        return query.exec();
+    }
+
+    // True when the row of a router host is in place, marked as deleted, wiped and waiting to be sent.
+    bool isRouterHostMarkedDeleted(HostId host_id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "SELECT COUNT(*) FROM router_hosts WHERE host_id=? AND deleted=1 AND data=X'' AND "
+                            "credential_id IS NULL AND os_credential_id IS NULL AND profile_id IS NULL AND "
+                            "sync_dirty=1");
+        query.addUInt64(host_id);
+
+        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
+    }
+};
 
 //--------------------------------------------------------------------------------------------------
 // The same for what is kept for a host of the router, whichever of its parts is written.
@@ -434,4 +465,55 @@ TEST_F(RouterHostStoreTest, RouterHostIsEnteredWithTheCredentialsItRefersToOrIts
     EXPECT_EQ(credentials->second.toString(), QString("shared-secret"));
 
     EXPECT_FALSE(router_hosts_.credentials(100502).has_value());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router learns of a removal from the device, so a removed host it holds keeps its row until then. The row is
+// marked as deleted and wiped, nothing but the exchange sees it, and the host saved again takes the row back.
+TEST_F(RouterHostStoreTest, RemovedRouterHostTheRouterHoldsKeepsARowMarkedAsDeleted)
+{
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+    ASSERT_TRUE(setRouterHostCheckTime(100500, 1));
+
+    ASSERT_TRUE(router_hosts_.remove(100500));
+
+    EXPECT_TRUE(isRouterHostMarkedDeleted(100500));
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+    EXPECT_TRUE(outdatedRouterHosts().isEmpty());
+    EXPECT_FALSE(router_hosts_.credentials(100500).has_value());
+    EXPECT_FALSE(router_hosts_.modify(routerHost(100500, "user", "secret")));
+    EXPECT_FALSE(router_hosts_.updateCheckTime(100500));
+
+    ASSERT_TRUE(router_hosts_.add(routerHost(100500, "other-user", "other-secret")));
+    EXPECT_FALSE(router_hosts_.add(routerHost(100500, "user", "secret")));
+
+    const std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+    EXPECT_EQ(rowCount("router_hosts"), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A row the router holds that is left with no pair, no links and no profile is marked as deleted the same way,
+// a link taken by a removed record of credentials included.
+TEST_F(RouterHostStoreTest, EmptiedRouterHostRowTheRouterHoldsIsMarkedAsDeleted)
+{
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, QString(), QString())));
+    EXPECT_TRUE(isRouterHostMarkedDeleted(100500));
+
+    const qint64 credential_id = addCredential("office", "user", "secret");
+    RouterHostConfig linked = routerHost(100501, QString(), QString());
+    linked.setCredentialId(credential_id);
+    ASSERT_TRUE(router_hosts_.add(linked));
+    ASSERT_TRUE(markRouterHostSynced(100501, 8));
+
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    EXPECT_TRUE(isRouterHostMarkedDeleted(100501));
+
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+    EXPECT_EQ(rowCount("router_hosts"), 2);
 }

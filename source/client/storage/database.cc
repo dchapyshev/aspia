@@ -77,14 +77,41 @@ bool migrateTables(SqlDatabase& db)
     if (version < 1)
     {
         if (!db.addColumn("credentials", "deleted", "INTEGER NOT NULL DEFAULT 0") ||
-            !db.addColumn("profiles", "deleted", "INTEGER NOT NULL DEFAULT 0"))
+            !db.addColumn("profiles", "deleted", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("router_hosts", "deleted", "INTEGER NOT NULL DEFAULT 0"))
         {
             return false;
         }
 
-        if (!db.exec("UPDATE credentials SET sync_dirty=1") || !db.exec("PRAGMA user_version = 1"))
+        if (!db.exec("DROP TRIGGER IF EXISTS \"router_hosts_drop_empty\""))
         {
-            LOG(ERROR) << "Unable to update the schema to version 1:" << db.lastError();
+            LOG(ERROR) << "Unable to drop router_hosts_drop_empty trigger:" << db.lastError();
+            return false;
+        }
+
+        if (!db.exec("CREATE TRIGGER \"router_hosts_drop_empty\" "
+                     "AFTER UPDATE ON \"router_hosts\" "
+                     "WHEN NEW.\"deleted\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                     "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
+                     "BEGIN "
+                     "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\" AND \"sync_revision\" = 0; "
+                     "UPDATE \"router_hosts\" SET \"deleted\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
+                     "\"modify_time\" = CAST(strftime('%s', 'now') AS INTEGER) WHERE \"host_id\" = NEW.\"host_id\"; "
+                     "END"))
+        {
+            LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
+            return false;
+        }
+
+        if (!db.exec("UPDATE credentials SET sync_dirty=1"))
+        {
+            LOG(ERROR) << "Unable to mark credentials for sending:" << db.lastError();
+            return false;
+        }
+
+        if (!db.exec("PRAGMA user_version = 1"))
+        {
+            LOG(ERROR) << "Unable to set the schema version to 1:" << db.lastError();
             return false;
         }
     }
@@ -534,7 +561,8 @@ bool Database::createTables(SqlDatabase& db)
                  "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0)"))
+                 "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"deleted\" INTEGER NOT NULL DEFAULT 0)"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
         return false;
@@ -573,10 +601,12 @@ bool Database::createTables(SqlDatabase& db)
 
     if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"router_hosts_drop_empty\" "
                  "AFTER UPDATE ON \"router_hosts\" "
-                 "WHEN NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                 "WHEN NEW.\"deleted\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
                  "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
                  "BEGIN "
-                 "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\"; "
+                 "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\" AND \"sync_revision\" = 0; "
+                 "UPDATE \"router_hosts\" SET \"deleted\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
+                 "\"modify_time\" = CAST(strftime('%s', 'now') AS INTEGER) WHERE \"host_id\" = NEW.\"host_id\"; "
                  "END"))
     {
         LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();

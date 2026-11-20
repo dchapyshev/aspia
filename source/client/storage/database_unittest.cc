@@ -2559,6 +2559,54 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
 }
 
 //--------------------------------------------------------------------------------------------------
+// A database made by an earlier version has the router hosts without the column that marks a removed host, and
+// the trigger that drops an emptied row whatever the router holds. Both are brought up to date when it is opened.
+TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsRemovedRouterHosts)
+{
+    const QString file_path = QFileInfo(file_path_).path() + "/earlier.db3";
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"router_hosts\" ("
+                             "\"host_id\" INTEGER PRIMARY KEY,"
+                             "\"check_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"data\" BLOB DEFAULT X'',"
+                             "\"credential_id\" INTEGER,"
+                             "\"os_credential_id\" INTEGER,"
+                             "\"profile_id\" INTEGER,"
+                             "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0)"));
+        ASSERT_TRUE(raw.exec("CREATE TRIGGER \"router_hosts_drop_empty\" AFTER UPDATE ON \"router_hosts\" "
+                             "WHEN NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                             "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
+                             "BEGIN DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\"; END"));
+    }
+
+    Database earlier;
+    ASSERT_TRUE(earlier.open(file_path));
+
+    RouterHostStore router_hosts(earlier);
+    ASSERT_TRUE(router_hosts.add(routerHost(100500, "user", "secret")));
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path));
+    ASSERT_TRUE(raw.exec("UPDATE router_hosts SET sync_revision=7, sync_dirty=0"));
+
+    ASSERT_TRUE(router_hosts.remove(100500));
+
+    SqlQuery query(raw, "SELECT deleted, sync_dirty FROM router_hosts WHERE host_id=100500");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 1);
+    EXPECT_EQ(query.columnInt64(1), 1);
+
+    SqlQuery version(raw, "PRAGMA user_version");
+    ASSERT_EQ(version.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(version.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
 // A batch replaces the records together with the router they were exchanged with, so no removal
 // is left waiting for that router.
 TEST_F(DatabaseTest, BatchLeavesNoRemovedCredentialsBehind)
