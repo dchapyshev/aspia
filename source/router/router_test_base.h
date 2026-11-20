@@ -39,6 +39,7 @@
 #include "router/device_token_store.h"
 #include "router/group_store.h"
 #include "router/sync_storage.h"
+#include "router/user_store.h"
 #include "router/workspace_store.h"
 #include "router/handlers/request_caller.h"
 
@@ -65,9 +66,8 @@ protected:
 
         SyncStorage::setDirectoryPathForTesting(temp_dir_.path() + "/sync");
 
-        ASSERT_EQ(db_.addUser(makeUser("admin", kAllSessions)),
-                  proto::router::kErrorOk);
-        ASSERT_EQ(db_.findUser("admin", &admin_), proto::router::kErrorOk);
+        ASSERT_EQ(users_.add(makeUser("admin", kAllSessions)), proto::router::kErrorOk);
+        ASSERT_EQ(users_.find("admin", &admin_), proto::router::kErrorOk);
         ASSERT_EQ(admin_.entry_id, 1);
 
         caller_.user_id = admin_.entry_id;
@@ -90,7 +90,7 @@ protected:
     // Adds a user of the given session mask and returns the stored record.
     RouterUser addUser(const QString& name, quint32 sessions)
     {
-        if (db_.addUser(makeUser(name, sessions)) != proto::router::kErrorOk)
+        if (users_.add(makeUser(name, sessions)) != proto::router::kErrorOk)
             return RouterUser();
         return findUser(name);
     }
@@ -99,14 +99,14 @@ protected:
     RouterUser findUser(const QString& name)
     {
         RouterUser user;
-        db_.findUser(name, &user);
+        users_.find(name, &user);
         return user;
     }
 
     RouterUser findUser(qint64 entry_id)
     {
         RouterUser user;
-        db_.findUser(entry_id, &user);
+        users_.find(entry_id, &user);
         return user;
     }
 
@@ -198,6 +198,7 @@ protected:
     Database db_;
     DeviceTokenStore device_tokens_{ db_ };
     GroupStore groups_{ db_ };
+    UserStore users_{ db_ };
     WorkspaceStore workspaces_{ db_ };
     QString access_log_file_path_;
     AccessLog access_log_;

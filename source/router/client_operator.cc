@@ -25,9 +25,9 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_sync.h"
-#include "router/database.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
+#include "router/user_store.h"
 #include "router/handlers/connection_request_handler.h"
 #include "router/handlers/group_request_handler.h"
 #include "router/handlers/host_request_handler.h"
@@ -326,7 +326,7 @@ void ClientOperator::completeTwoFactor(std::string&& new_token)
     }
 
     RouterUser user;
-    if (database_.findUser(userId(), &user) != proto::router::kErrorOk)
+    if (UserStore(database_).find(userId(), &user) != proto::router::kErrorOk)
     {
         CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId()
                       << "). Closing connection";

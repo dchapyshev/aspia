@@ -59,7 +59,7 @@ TEST_F(WorkspaceStoreTest, DuplicateWorkspaceNameIsAlreadyExists)
 }
 
 //--------------------------------------------------------------------------------------------------
-// I3: a modification based on a stale revision is rejected; a successful one increments the
+// A modification based on a stale revision is rejected; a successful one increments the
 // stored revision.
 TEST_F(WorkspaceStoreTest, RevisionGuardsConcurrentModification)
 {
@@ -83,7 +83,7 @@ TEST_F(WorkspaceStoreTest, RevisionGuardsConcurrentModification)
 TEST_F(WorkspaceStoreTest, ModifyWorkspaceGrantsAndRevokes)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
-    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
+    ASSERT_EQ(users_.add(client), proto::router::kErrorOk);
     client = findUser("client");
 
     const qint64 workspace_id = addWorkspace("alpha");
@@ -135,9 +135,9 @@ TEST_F(WorkspaceStoreTest, RemoveWorkspaceReleasesHostsAndAccess)
 TEST_F(WorkspaceStoreTest, EntryForDeletedUserIsConflict)
 {
     RouterUser client = makeUser("client", proto::router::SESSION_TYPE_OPERATOR);
-    ASSERT_EQ(db_.addUser(client), proto::router::kErrorOk);
+    ASSERT_EQ(users_.add(client), proto::router::kErrorOk);
     client = findUser("client");
-    ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.remove(client.entry_id), proto::router::kErrorOk);
 
     qint64 entry_id = -1;
     EXPECT_EQ(workspaces_.add("alpha", std::string_view(),

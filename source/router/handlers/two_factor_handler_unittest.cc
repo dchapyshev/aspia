@@ -221,7 +221,7 @@ TEST_F(TwoFactorHandlerTest, CompletedEnrollmentRetiresTheSharedSecret)
     ASSERT_EQ(submitCode(first, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::ACCEPT);
 
-    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.resetOtp(admin_.entry_id), proto::router::kErrorOk);
 
     TwoFactorHandler second;
     const TwoFactorHandler::Result again = start(second);
@@ -392,7 +392,7 @@ TEST_F(TwoFactorHandlerTest, EnrollmentLosesRaceToAnotherSession)
     ASSERT_FALSE(secret.isEmpty());
 
     const QByteArray other_secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, other_secret, 100));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, other_secret, 100));
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
@@ -412,7 +412,7 @@ TEST_F(TwoFactorHandlerTest, ReopenedStageFollowsTheStoredState)
     ASSERT_EQ(start(handler).challenge.mode, proto::router::TWO_FACTOR_MODE_ENROLL);
 
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const TwoFactorHandler::Result reopened = start(handler);
     ASSERT_EQ(reopened.action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -428,7 +428,7 @@ TEST_F(TwoFactorHandlerTest, ReopenedStageFollowsTheStoredState)
 TEST_F(TwoFactorHandlerTest, ActiveStageAcceptsCodeAndIssuesToken)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler handler;
 
@@ -456,7 +456,7 @@ TEST_F(TwoFactorHandlerTest, ActiveStageAcceptsCodeAndIssuesToken)
 TEST_F(TwoFactorHandlerTest, ReplayedCodeIsRefused)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString code = Totp::code(secret, kNow);
 
@@ -476,7 +476,7 @@ TEST_F(TwoFactorHandlerTest, ReplayedCodeIsRefused)
 TEST_F(TwoFactorHandlerTest, ReplayedCodeIsNotAFailedAttempt)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString code = Totp::code(secret, kNow);
 
@@ -507,7 +507,7 @@ TEST_F(TwoFactorHandlerTest, ReplayedCodeIsNotAFailedAttempt)
 TEST_F(TwoFactorHandlerTest, GuessingIsStoppedAfterTooManyFailedAttempts)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString wrong = wrongCode(secret, kNow);
 
@@ -542,7 +542,7 @@ TEST_F(TwoFactorHandlerTest, GuessingIsStoppedAfterTooManyFailedAttempts)
 TEST_F(TwoFactorHandlerTest, ExpiredBlockClosesTheSeriesItPunished)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString wrong = wrongCode(secret, kNow);
 
@@ -617,7 +617,7 @@ TEST_F(TwoFactorHandlerTest, LoginWithACodeIsReportedToTheOwner)
 TEST_F(TwoFactorHandlerTest, WrongCodeIsReportedToTheOwner)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
     ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
 
     TwoFactorHandler handler;
@@ -633,7 +633,7 @@ TEST_F(TwoFactorHandlerTest, WrongCodeIsReportedToTheOwner)
 TEST_F(TwoFactorHandlerTest, WrongCodeOfAUserWithoutAddressIsReportedToNobody)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -650,7 +650,7 @@ TEST_F(TwoFactorHandlerTest, WrongCodeOfAUserWithoutAddressIsReportedToNobody)
 TEST_F(TwoFactorHandlerTest, BlockIsReportedOnceByTheAttemptThatStartsIt)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
     ASSERT_TRUE(execRaw("UPDATE users SET email='admin@example.com'"));
 
     const QString wrong = wrongCode(secret, kNow);
@@ -708,7 +708,7 @@ TEST_F(TwoFactorHandlerTest, ReplayAndEnrollmentAreNotReported)
 TEST_F(TwoFactorHandlerTest, CodeOfAnAlreadyConsumedStepIsRefused)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -729,7 +729,7 @@ TEST_F(TwoFactorHandlerTest, CodeOfAnAlreadyConsumedStepIsRefused)
 TEST_F(TwoFactorHandlerTest, NextStepIsAccepted)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -748,7 +748,7 @@ TEST_F(TwoFactorHandlerTest, NextStepIsAccepted)
 TEST_F(TwoFactorHandlerTest, EmptyCodeClosesTheSession)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -764,12 +764,12 @@ TEST_F(TwoFactorHandlerTest, EmptyCodeClosesTheSession)
 TEST_F(TwoFactorHandlerTest, SecretResetWhileThePromptIsOpenClosesTheSession)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
 
-    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.resetOtp(admin_.entry_id), proto::router::kErrorOk);
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
@@ -787,7 +787,7 @@ TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
     ASSERT_TRUE(client.isValid());
 
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(client.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(client.entry_id, secret, 0));
 
     caller_.user_id = client.entry_id;
     caller_.name = client.name.toStdString();
@@ -796,7 +796,7 @@ TEST_F(TwoFactorHandlerTest, DeletedUserClosesTheSession)
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
 
-    ASSERT_EQ(db_.removeUser(client.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.remove(client.entry_id), proto::router::kErrorOk);
 
     EXPECT_EQ(submitCode(handler, Totp::code(secret, kNow), kNow).action,
               TwoFactorHandler::Action::CLOSE);
@@ -819,7 +819,7 @@ TEST_F(TwoFactorHandlerTest, StageOfAnUnknownUserClosesTheSession)
 TEST_F(TwoFactorHandlerTest, ValidTokenSkipsThePrompt)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -846,7 +846,7 @@ TEST_F(TwoFactorHandlerTest, ValidTokenSkipsThePrompt)
 TEST_F(TwoFactorHandlerTest, TokenLoginForgetsTheUser)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -875,7 +875,7 @@ TEST_F(TwoFactorHandlerTest, TokenLoginForgetsTheUser)
 TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -907,7 +907,7 @@ TEST_F(TwoFactorHandlerTest, RevokedTokenReopensTheStage)
 TEST_F(TwoFactorHandlerTest, SecretResetBeforeTheTokenReopensAsEnrollment)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -918,7 +918,7 @@ TEST_F(TwoFactorHandlerTest, SecretResetBeforeTheTokenReopensAsEnrollment)
     ASSERT_EQ(start(second).action, TwoFactorHandler::Action::SEND_CHALLENGE);
 
     // An administrator resets the account while the session sits on the prompt.
-    ASSERT_EQ(db_.resetUserOtp(admin_.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.resetOtp(admin_.entry_id), proto::router::kErrorOk);
 
     const TwoFactorHandler::Result rejected = submitToken(second, accepted.new_token);
 
@@ -945,7 +945,7 @@ TEST_F(TwoFactorHandlerTest, TokenOfAnotherUserIsRejected)
     qint64 foreign_token_id = 0;
     ASSERT_TRUE(device_tokens_.issue(client.entry_id, "127.0.0.1", &foreign_token, &foreign_token_id));
 
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -962,7 +962,7 @@ TEST_F(TwoFactorHandlerTest, TokenOfAnotherUserIsRejected)
 //--------------------------------------------------------------------------------------------------
 TEST_F(TwoFactorHandlerTest, UnknownTokenIsRejected)
 {
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -980,7 +980,7 @@ TEST_F(TwoFactorHandlerTest, UnknownTokenIsRejected)
 // lookup, which takes a write lock of the database, as fast as the network allows.
 TEST_F(TwoFactorHandlerTest, SecondTokenOnTheSameSessionClosesIt)
 {
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -999,7 +999,7 @@ TEST_F(TwoFactorHandlerTest, SecondTokenOnTheSameSessionClosesIt)
 // cut off as repeated.
 TEST_F(TwoFactorHandlerTest, ReopenedStageAllowsATokenAgain)
 {
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -1019,7 +1019,7 @@ TEST_F(TwoFactorHandlerTest, ReopenedStageAllowsATokenAgain)
 TEST_F(TwoFactorHandlerTest, CodeIsAcceptedAfterATokenWasRejected)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -1037,7 +1037,7 @@ TEST_F(TwoFactorHandlerTest, CodeIsAcceptedAfterATokenWasRejected)
 // credential any more, and the row goes with it instead of lingering in the table.
 TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
 {
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     std::string token;
     qint64 token_id = 0;
@@ -1060,7 +1060,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
 // Every use pushes the lifetime forward, so a device in daily use is never asked for a code again.
 TEST_F(TwoFactorHandlerTest, TokenUseRefreshesItsLifetime)
 {
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, Totp::generateSecret(), 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, Totp::generateSecret(), 0));
 
     std::string token;
     qint64 token_id = 0;
@@ -1175,7 +1175,7 @@ TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
 TEST_F(TwoFactorHandlerTest, RefusedCodeIsCarriedByTheNextChallenge)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     TwoFactorHandler first;
     EXPECT_FALSE(start(first).challenge.code_rejected);
@@ -1197,7 +1197,7 @@ TEST_F(TwoFactorHandlerTest, RefusedCodeIsCarriedByTheNextChallenge)
 TEST_F(TwoFactorHandlerTest, ReplayedCodeCountsAsRefusedForTheNextChallenge)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString code = Totp::code(secret, kNow);
 
@@ -1220,7 +1220,7 @@ TEST_F(TwoFactorHandlerTest, ReplayedCodeCountsAsRefusedForTheNextChallenge)
 TEST_F(TwoFactorHandlerTest, BlockAnnouncesItsRemainingTimeInTheChallenge)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString wrong = wrongCode(secret, kNow);
 
@@ -1250,7 +1250,7 @@ TEST_F(TwoFactorHandlerTest, BlockAnnouncesItsRemainingTimeInTheChallenge)
 TEST_F(TwoFactorHandlerTest, ClockJumpBackDoesNotStretchTheBlock)
 {
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret, 0));
 
     const QString wrong = wrongCode(secret, kNow);
 

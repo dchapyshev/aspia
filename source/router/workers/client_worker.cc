@@ -36,10 +36,10 @@
 #include "router/client_admin.h"
 #include "router/client_manager.h"
 #include "router/client_operator.h"
-#include "router/database.h"
 #include "router/router_user_list.h"
 #include "router/settings.h"
 #include "router/sync_storage.h"
+#include "router/user_store.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 
@@ -648,7 +648,7 @@ void ClientWorker::removeUnusedSyncStorages(Database& database)
     for (const QString& user_guid : user_guids)
     {
         RouterUser user;
-        if (database.findUserByGuid(user_guid, &user) != proto::router::kErrorNotFound)
+        if (UserStore(database).findByGuid(user_guid, &user) != proto::router::kErrorNotFound)
             continue;
 
         if (SyncStorage::remove(user_guid))

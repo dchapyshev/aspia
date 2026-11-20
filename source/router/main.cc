@@ -37,10 +37,10 @@
 #include "base/threading/asio_event_dispatcher.h"
 #include "base/update/console_updater.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
 #include "router/migration_utils.h"
 #include "router/service.h"
 #include "router/settings.h"
+#include "router/user_store.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/email_worker.h"
 #include "router/workers/host_worker.h"
@@ -305,7 +305,7 @@ int createConfig(QTextStream& out)
                     proto::router::SESSION_TYPE_OPERATOR;
     user.flags = User::ENABLED;
 
-    if (db.addUser(user) != proto::router::kErrorOk)
+    if (UserStore(db).add(user) != proto::router::kErrorOk)
     {
         out << "Failed to add user to database." << Qt::endl;
         return 1;
@@ -399,8 +399,10 @@ int resetOtp(QTextStream& out, const QString& user_name)
         return 1;
     }
 
+    UserStore store(db);
+
     RouterUser user;
-    const std::string_view error_code = db.findUser(user_name, &user);
+    const std::string_view error_code = store.find(user_name, &user);
     if (error_code == proto::router::kErrorNotFound)
     {
         out << "User not found: " << user_name << Qt::endl;
@@ -412,7 +414,7 @@ int resetOtp(QTextStream& out, const QString& user_name)
         return 1;
     }
 
-    if (db.resetUserOtp(user.entry_id) != proto::router::kErrorOk)
+    if (store.resetOtp(user.entry_id) != proto::router::kErrorOk)
     {
         out << "Failed to reset two-factor authentication." << Qt::endl;
         return 1;

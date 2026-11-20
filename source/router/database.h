@@ -37,19 +37,6 @@ class HostList;
 class HostSearchResult;
 } // namespace proto::router
 
-// Invariants the write paths maintain, each enforced inside the mutating transaction. A change
-// to any user/workspace path must be checked against this list.
-// I1. users.sessions always holds the full session mask of the access level
-//     (RouterUser::expandSessionTypes): addUser and modifyUser expand the single level a client
-//     names, and a modify request without a level keeps the stored mask.
-// I2. An administrator sees every workspace by its session type alone
-//     (WorkspaceStore::listForAdmin), so workspace_access holds the memberships of the regular
-//     users only.
-// I3. A workspace modification applies only on top of the state the client saw
-//     (workspaces.revision): a save built from a stale snapshot is rejected with kErrorConflict,
-//     never applied over the concurrent change. Every change of the membership of a workspace
-//     moves its revision: WorkspaceStore::modify itself and the rows removed by the cascade of
-//     removeUser.
 class Database
 {
 public:
@@ -71,64 +58,6 @@ public:
     bool open(const QString& file_path);
 
     bool isValid() const;
-
-    //----------------------------------------------------------------------------------------------
-    // Users
-    //----------------------------------------------------------------------------------------------
-
-    // Fills |users| with the requested page of the user list, ordered by entry id. The page is
-    // mandatory, so a zero count is refused along with a negative offset or a count over the cap.
-    // A database error yields an empty list - a partial one never passes for a complete page.
-    // Returns a proto::router error code.
-    std::string_view userList(qint64 offset, qint64 count, std::vector<RouterUser>* users) const;
-
-    // Reads the total user count into |count|, for the pagination of the caller. Returns
-    // kErrorInternalError when the answer could not be read - a zero count from a failed query
-    // would truncate the pagination.
-    std::string_view userCount(qint64* count) const;
-
-    // Adds a user record. Returns a proto::router error code.
-    std::string_view addUser(const RouterUser& user);
-
-    // Updates a user record. Empty salt/verifier keep the stored credentials, a zero session mask
-    // keeps the stored level, an empty address keeps the stored one. A password rotation revokes
-    // every device token of the user. |password_changed| and |sessions_changed|, if not null,
-    // report whether the rotation and the level change happened. Returns a proto::router error code.
-    std::string_view modifyUser(const RouterUser& user, bool* password_changed = nullptr,
-                                bool* sessions_changed = nullptr);
-
-    // Removes a user; its workspace_access rows go with it by cascade, and the revision of every
-    // affected workspace is bumped in the same transaction (see I3).
-    std::string_view removeUser(qint64 entry_id);
-
-    // Reads a user record into |user|. Returns kErrorNotFound when no such user exists and
-    // kErrorInternalError when the answer could not be read: a failed read must not pass for a
-    // missing record, so the two are separate answers and neither can be dropped by accident.
-    std::string_view findUser(const QString& username, RouterUser* user) const;
-    std::string_view findUser(qint64 entry_id, RouterUser* user) const;
-    std::string_view findUserByGuid(const QString& guid, RouterUser* user) const;
-
-    //----------------------------------------------------------------------------------------------
-    // TOTP per-user state
-    //----------------------------------------------------------------------------------------------
-
-    // Commits the user's TOTP enrollment: writes the shared secret and seeds otp_counter with
-    // the step that produced the confirmation code. A non-empty secret column is what activates
-    // 2FA for the user. Succeeds only while the user still has no confirmed secret, so parallel
-    // enrollment attempts cannot overwrite each other.
-    bool setUserOtp(qint64 user_id, const QByteArray& secret, quint64 counter);
-
-    // Resets the user's TOTP state: clears the secret, zeroes the replay counter and drops every
-    // device token of the user, all in one transaction. The tokens were issued against the secret
-    // being cleared, so a state where they outlive it would let a device in without a code. The
-    // next login triggers self-enrollment. Returns kErrorNotFound if the user row is absent.
-    std::string_view resetUserOtp(qint64 user_id);
-
-    // Atomically consumes a TOTP step. kErrorOk only if |counter| is newer than the value
-    // currently stored in the database, so parallel sessions cannot accept the same code.
-    // kErrorNotFound when no row matched: the step was consumed meanwhile or the user is gone.
-    // kErrorInternalError when the database refused the write.
-    std::string_view consumeUserOtpCounter(qint64 user_id, quint64 counter);
 
     //----------------------------------------------------------------------------------------------
     // Hosts

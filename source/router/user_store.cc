@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/database.h"
+#include "router/user_store.h"
 
 #include <QUuid>
 
@@ -36,8 +36,7 @@ namespace {
 constexpr qint64 kBuiltInUserId = 1;
 
 //--------------------------------------------------------------------------------------------------
-// Reads a RouterUser row. Column order must match the SELECT projections used by userList()
-// and findUser().
+// Reads a RouterUser row. Column order must match the SELECT projections used by list() and find().
 RouterUser readUser(const SqlQuery& query)
 {
     RouterUser user;
@@ -58,7 +57,14 @@ RouterUser readUser(const SqlQuery& query)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::userList(qint64 offset, qint64 count, std::vector<RouterUser>* users) const
+UserStore::UserStore(Database& db)
+    : DatabaseStore(db)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view UserStore::list(qint64 offset, qint64 count, std::vector<RouterUser>* users) const
 {
     CHECK(users);
 
@@ -81,7 +87,7 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users ORDER BY id LIMIT ? OFFSET ?";
-    SqlQuery query(db_, kSql);
+    SqlQuery query(db(), kSql);
     query.addInt64(count);
     query.addInt64(offset);
 
@@ -91,7 +97,7 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
         if (step == SqlQuery::StepResult::FAILED)
         {
             // An error reply must not carry the partial list scanned so far.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             users->clear();
             return proto::router::kErrorInternalError;
         }
@@ -106,7 +112,7 @@ std::string_view Database::userList(qint64 offset, qint64 count, std::vector<Rou
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::userCount(qint64* count) const
+std::string_view UserStore::count(qint64* count) const
 {
     CHECK(count);
 
@@ -120,10 +126,10 @@ std::string_view Database::userCount(qint64* count) const
 
     // COUNT(*) always yields exactly one row, so anything but ROW is a database error - it must
     // not pass for an empty table.
-    SqlQuery query(db_, "SELECT COUNT(*) FROM users");
+    SqlQuery query(db(), "SELECT COUNT(*) FROM users");
     if (query.next() != SqlQuery::StepResult::ROW)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -132,7 +138,7 @@ std::string_view Database::userCount(qint64* count) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addUser(const RouterUser& user)
+std::string_view UserStore::add(const RouterUser& user)
 {
     if (!isValid())
     {
@@ -146,23 +152,23 @@ std::string_view Database::addUser(const RouterUser& user)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // Checked here instead of relying on the UNIQUE constraint: the INSERT failure below cannot
     // be told apart from a real database error, so a lost create race would answer with a
     // misleading internal error.
-    SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?)");
+    SqlQuery name_check(db(), "SELECT 1 FROM users WHERE casefold(name)=casefold(?)");
     name_check.addText(user.name);
 
     const SqlQuery::StepResult name_step = name_check.next();
     if (name_step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -175,7 +181,7 @@ std::string_view Database::addUser(const RouterUser& user)
     const char kSql[] =
         "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, email, guid) "
         "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
-    SqlQuery query(db_, kSql);
+    SqlQuery query(db(), kSql);
     query.addText(user.name);
     query.addText(user.group);
     query.addBlob(user.salt);
@@ -187,13 +193,13 @@ std::string_view Database::addUser(const RouterUser& user)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -201,8 +207,7 @@ std::string_view Database::addUser(const RouterUser& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::modifyUser(const RouterUser& user, bool* password_changed,
-                                      bool* sessions_changed)
+std::string_view UserStore::modify(const RouterUser& user, bool* password_changed, bool* sessions_changed)
 {
     if (!isValid())
     {
@@ -241,10 +246,10 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     if (sessions_changed)
         *sessions_changed = false;
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -256,12 +261,12 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
     QString old_email;
     bool user_found = false;
     {
-        SqlQuery select(db_, "SELECT salt, verifier, sessions, email FROM users WHERE id=?");
+        SqlQuery select(db(), "SELECT salt, verifier, sessions, email FROM users WHERE id=?");
         select.addInt64(user.entry_id);
 
         if (!select.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -270,7 +275,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         {
             // A failed read must not pass for a missing user: the caller would report NotFound
             // for a row that is still there.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -293,16 +298,16 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 
     if (has_credentials)
     {
-        // Same reasoning as in addUser: a rename that lost a race must answer
+        // Same reasoning as in add(): a rename that lost a race must answer
         // kErrorAlreadyExists, not the internal error of the UNIQUE constraint.
-        SqlQuery name_check(db_, "SELECT 1 FROM users WHERE casefold(name)=casefold(?) AND id!=?");
+        SqlQuery name_check(db(), "SELECT 1 FROM users WHERE casefold(name)=casefold(?) AND id!=?");
         name_check.addText(user.name);
         name_check.addInt64(user.entry_id);
 
         const SqlQuery::StepResult name_step = name_check.next();
         if (name_step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -315,7 +320,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
         const char kSql[] =
             "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, email=? "
             "WHERE id=?";
-        SqlQuery query(db_, kSql);
+        SqlQuery query(db(), kSql);
         query.addText(user.name);
         query.addText(user.group);
         query.addBlob(user.salt);
@@ -327,13 +332,13 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 
         if (!query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
     else
     {
-        SqlQuery query(db_, "UPDATE users SET sessions=?, flags=?, email=? WHERE id=?");
+        SqlQuery query(db(), "UPDATE users SET sessions=?, flags=?, email=? WHERE id=?");
         query.addInt64(sessions);
         query.addInt64(user.flags);
         query.addText(email);
@@ -341,7 +346,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 
         if (!query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
@@ -355,19 +360,19 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 
     if (rotated)
     {
-        SqlQuery revoke(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
+        SqlQuery revoke(db(), "DELETE FROM client_device_tokens WHERE user_id=?");
         revoke.addInt64(user.entry_id);
 
         if (!revoke.exec())
         {
-            LOG(ERROR) << "Unable to revoke device tokens:" << db_.lastError();
+            LOG(ERROR) << "Unable to revoke device tokens:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -375,7 +380,7 @@ std::string_view Database::modifyUser(const RouterUser& user, bool* password_cha
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::removeUser(qint64 entry_id)
+std::string_view UserStore::remove(qint64 entry_id)
 {
     if (!isValid())
     {
@@ -395,43 +400,43 @@ std::string_view Database::removeUser(qint64 entry_id)
         return proto::router::kErrorAccessDenied;
     }
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // The cascade of the DELETE removes the user's workspace_access rows, which changes the
     // membership of those workspaces: a save built from a member list that still contains the
     // user must get kErrorConflict instead of re-adding it, so the revisions move together
-    // with the delete (see I3).
-    SqlQuery bump(db_,
+    // with the delete.
+    SqlQuery bump(db(),
         "UPDATE workspaces SET revision=revision+1 WHERE id IN "
         "(SELECT workspace_id FROM workspace_access WHERE user_id=?)");
     bump.addInt64(entry_id);
 
     if (!bump.exec())
     {
-        LOG(ERROR) << "Unable to update workspace revisions:" << db_.lastError();
+        LOG(ERROR) << "Unable to update workspace revisions:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery query(db_, "DELETE FROM users WHERE id=?");
+    SqlQuery query(db(), "DELETE FROM users WHERE id=?");
     query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (db_.changes() == 0)
+    if (db().changes() == 0)
         return proto::router::kErrorNotFound;
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -439,7 +444,7 @@ std::string_view Database::removeUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::findUser(const QString& username, RouterUser* user) const
+std::string_view UserStore::find(const QString& username, RouterUser* user) const
 {
     CHECK(user);
 
@@ -454,7 +459,7 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users WHERE casefold(name)=casefold(?)";
-    SqlQuery query(db_, kSql);
+    SqlQuery query(db(), kSql);
     query.addText(username);
 
     const SqlQuery::StepResult step = query.next();
@@ -463,7 +468,7 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
         // A failed read must not pass for a missing user: a caller that reports "no such name"
         // would let a duplicate through, and one that lists a single record would answer an
         // empty list for a record that is there.
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -475,7 +480,7 @@ std::string_view Database::findUser(const QString& username, RouterUser* user) c
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
+std::string_view UserStore::find(qint64 entry_id, RouterUser* user) const
 {
     CHECK(user);
 
@@ -490,14 +495,14 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users WHERE id=?";
-    SqlQuery query(db_, kSql);
+    SqlQuery query(db(), kSql);
     query.addInt64(entry_id);
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
         // See the overload above: a failed read is not a missing record.
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -509,7 +514,7 @@ std::string_view Database::findUser(qint64 entry_id, RouterUser* user) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::findUserByGuid(const QString& guid, RouterUser* user) const
+std::string_view UserStore::findByGuid(const QString& guid, RouterUser* user) const
 {
     CHECK(user);
 
@@ -524,13 +529,13 @@ std::string_view Database::findUserByGuid(const QString& guid, RouterUser* user)
     const char kSql[] =
         "SELECT id, name, \"group\", salt, verifier, sessions, flags, otp_secret, otp_counter, email, guid "
         "FROM users WHERE guid=?";
-    SqlQuery query(db_, kSql);
+    SqlQuery query(db(), kSql);
     query.addText(guid);
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -542,7 +547,7 @@ std::string_view Database::findUserByGuid(const QString& guid, RouterUser* user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setUserOtp(qint64 user_id, const QByteArray& secret, quint64 counter)
+bool UserStore::setOtp(qint64 user_id, const QByteArray& secret, quint64 counter)
 {
     if (!isValid())
     {
@@ -550,21 +555,21 @@ bool Database::setUserOtp(qint64 user_id, const QByteArray& secret, quint64 coun
         return false;
     }
 
-    SqlQuery query(db_, "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=? AND otp_secret=X''");
+    SqlQuery query(db(), "UPDATE users SET otp_secret=?, otp_counter=? WHERE id=? AND otp_secret=X''");
     query.addBlob(secret);
     query.addUInt64(counter);
     query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to set user OTP:" << db_.lastError();
+        LOG(ERROR) << "Unable to set user OTP:" << db().lastError();
         return false;
     }
-    return db_.changes() > 0;
+    return db().changes() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::resetUserOtp(qint64 user_id)
+std::string_view UserStore::resetOtp(qint64 user_id)
 {
     if (!isValid())
     {
@@ -578,48 +583,48 @@ std::string_view Database::resetUserOtp(qint64 user_id)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
     // a missing user.
-    SqlQuery exists(db_, "SELECT COUNT(*) FROM users WHERE id=?");
+    SqlQuery exists(db(), "SELECT COUNT(*) FROM users WHERE id=?");
     exists.addInt64(user_id);
 
     if (exists.next() != SqlQuery::StepResult::ROW)
     {
-        LOG(ERROR) << "Unable to check user existence:" << db_.lastError();
+        LOG(ERROR) << "Unable to check user existence:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (exists.columnInt64(0) == 0)
         return proto::router::kErrorNotFound;
 
-    SqlQuery query(db_, "UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
+    SqlQuery query(db(), "UPDATE users SET otp_secret=X'', otp_counter=0 WHERE id=?");
     query.addInt64(user_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to clear user OTP:" << db_.lastError();
+        LOG(ERROR) << "Unable to clear user OTP:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery revoke(db_, "DELETE FROM client_device_tokens WHERE user_id=?");
+    SqlQuery revoke(db(), "DELETE FROM client_device_tokens WHERE user_id=?");
     revoke.addInt64(user_id);
 
     if (!revoke.exec())
     {
-        LOG(ERROR) << "Unable to revoke client device tokens:" << db_.lastError();
+        LOG(ERROR) << "Unable to revoke client device tokens:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << db_.lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -627,7 +632,7 @@ std::string_view Database::resetUserOtp(qint64 user_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::consumeUserOtpCounter(qint64 user_id, quint64 counter)
+std::string_view UserStore::consumeOtpCounter(qint64 user_id, quint64 counter)
 {
     if (!isValid())
     {
@@ -635,18 +640,18 @@ std::string_view Database::consumeUserOtpCounter(qint64 user_id, quint64 counter
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery query(db_, "UPDATE users SET otp_counter=? WHERE id=? AND otp_counter < ?");
+    SqlQuery query(db(), "UPDATE users SET otp_counter=? WHERE id=? AND otp_counter < ?");
     query.addUInt64(counter);
     query.addInt64(user_id);
     query.addUInt64(counter);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to consume OTP counter:" << db_.lastError();
+        LOG(ERROR) << "Unable to consume OTP counter:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (db_.changes() == 0)
+    if (db().changes() == 0)
         return proto::router::kErrorNotFound;
 
     return proto::router::kErrorOk;

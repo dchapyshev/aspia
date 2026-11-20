@@ -37,17 +37,17 @@ WorkspaceStore::WorkspaceStore(Database& db)
 //--------------------------------------------------------------------------------------------------
 void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceList* out) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
@@ -59,10 +59,10 @@ void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceL
             "SELECT id, revision, name, comment FROM workspaces",
             workspace_id > 0 ? " WHERE id = ?" : ""});
 
-        SqlQuery query(sql(), sql);
+        SqlQuery query(db(), sql);
         if (!query.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             out->set_error_code(proto::router::kErrorInternalError);
             return;
         }
@@ -76,7 +76,7 @@ void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceL
             if (step == SqlQuery::StepResult::FAILED)
             {
                 // An error reply must not carry the partial list scanned so far.
-                LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+                LOG(ERROR) << "Unable to execute query:" << db().lastError();
                 out->clear_workspace();
                 out->set_error_code(proto::router::kErrorInternalError);
                 return;
@@ -105,11 +105,11 @@ void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceL
         "SELECT workspace_id, user_id FROM workspace_access",
         workspace_id > 0 ? " WHERE workspace_id = ?" : ""});
 
-    SqlQuery query(sql(), sql);
+    SqlQuery query(db(), sql);
     if (!query.isValid())
     {
         // The first loop already filled |out| - an error reply must not carry that partial list.
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         out->clear_workspace();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
@@ -124,7 +124,7 @@ void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceL
         if (step == SqlQuery::StepResult::FAILED)
         {
             // An error reply must not carry the partial list scanned so far.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             out->clear_workspace();
             out->set_error_code(proto::router::kErrorInternalError);
             return;
@@ -146,7 +146,7 @@ void WorkspaceStore::listForAdmin(qint64 workspace_id, proto::router::WorkspaceL
 //--------------------------------------------------------------------------------------------------
 void WorkspaceStore::listForUser(qint64 user_id, qint64 workspace_id, proto::router::WorkspaceList* out) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         out->set_error_code(proto::router::kErrorInternalError);
@@ -161,10 +161,10 @@ void WorkspaceStore::listForUser(qint64 user_id, qint64 workspace_id, proto::rou
         "AND workspace_access.user_id = ?",
         workspace_id > 0 ? " AND workspaces.id = ?" : ""});
 
-    SqlQuery query(sql(), sql);
+    SqlQuery query(db(), sql);
     if (!query.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
@@ -179,7 +179,7 @@ void WorkspaceStore::listForUser(qint64 user_id, qint64 workspace_id, proto::rou
         if (step == SqlQuery::StepResult::FAILED)
         {
             // An error reply must not carry the partial list scanned so far.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             out->clear_workspace();
             out->set_error_code(proto::router::kErrorInternalError);
             return;
@@ -201,7 +201,7 @@ void WorkspaceStore::listForUser(qint64 user_id, qint64 workspace_id, proto::rou
 //--------------------------------------------------------------------------------------------------
 Workspace WorkspaceStore::find(qint64 entry_id) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Workspace();
@@ -213,7 +213,7 @@ Workspace WorkspaceStore::find(qint64 entry_id) const
         return Workspace();
     }
 
-    SqlQuery query(sql(), "SELECT id, name, comment FROM workspaces WHERE id=?");
+    SqlQuery query(db(), "SELECT id, name, comment FROM workspaces WHERE id=?");
     query.addInt64(entry_id);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -234,7 +234,7 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
 
     *entry_id = -1;
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -270,19 +270,19 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
         initial_ids.insert(user_id);
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery check(sql(), "SELECT 1 FROM workspaces WHERE name=?");
+    SqlQuery check(db(), "SELECT 1 FROM workspaces WHERE name=?");
     check.addText(name);
 
     if (!check.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -291,26 +291,26 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
     {
         // A failed check must not pass for a free name: the INSERT below would then answer with
         // a misleading internal error from the UNIQUE constraint.
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (check_step == SqlQuery::StepResult::ROW)
         return proto::router::kErrorAlreadyExists;
 
-    SqlQuery insert_workspace(sql(), "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
+    SqlQuery insert_workspace(db(), "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)");
     insert_workspace.addText(name);
     insert_workspace.addText(comment);
 
     if (!insert_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    const qint64 new_id = sql().lastInsertRowId();
+    const qint64 new_id = db().lastInsertRowId();
 
-    SqlQuery insert_access(sql(),
+    SqlQuery insert_access(db(),
         "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
     for (qint64 user_id : initial_access)
@@ -325,14 +325,14 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
 
         if (!insert_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -344,7 +344,7 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
 std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
     std::string_view name, std::string_view comment, const std::vector<qint64>& desired_access)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -386,21 +386,21 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
         desired_ids.insert(user_id);
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
     // a missing workspace.
-    SqlQuery exists_check(sql(), "SELECT COUNT(*), IFNULL(MAX(revision), 0) FROM workspaces WHERE id=?");
+    SqlQuery exists_check(db(), "SELECT COUNT(*), IFNULL(MAX(revision), 0) FROM workspaces WHERE id=?");
     exists_check.addInt64(entry_id);
 
     if (exists_check.next() != SqlQuery::StepResult::ROW)
     {
-        LOG(ERROR) << "Unable to check workspace existence:" << sql().lastError();
+        LOG(ERROR) << "Unable to check workspace existence:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -417,12 +417,12 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
         return proto::router::kErrorConflict;
     }
 
-    SqlQuery name_check(sql(), "SELECT id FROM workspaces WHERE name=?");
+    SqlQuery name_check(db(), "SELECT id FROM workspaces WHERE name=?");
     name_check.addText(name);
 
     if (!name_check.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -431,14 +431,14 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
     {
         // A failed check must not pass for a free name: the UPDATE below would then answer with
         // a misleading internal error from the UNIQUE constraint.
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (name_step == SqlQuery::StepResult::ROW && name_check.columnInt64(0) != entry_id)
         return proto::router::kErrorAlreadyExists;
 
-    SqlQuery update_workspace(sql(),
+    SqlQuery update_workspace(db(),
         "UPDATE workspaces SET revision=revision+1, name=?, comment=? WHERE id=?");
     update_workspace.addText(name);
     update_workspace.addText(comment);
@@ -446,16 +446,16 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
 
     if (!update_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery select_current(sql(), "SELECT user_id FROM workspace_access WHERE workspace_id=?");
+    SqlQuery select_current(db(), "SELECT user_id FROM workspace_access WHERE workspace_id=?");
     select_current.addInt64(entry_id);
 
     if (!select_current.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -467,7 +467,7 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
         {
             // A partial set would make existing entries look new and the inserts below would
             // collide with them.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -477,7 +477,7 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
         current_ids.insert(select_current.columnInt64(0));
     }
 
-    SqlQuery delete_access(sql(), "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
+    SqlQuery delete_access(db(), "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?");
 
     for (qint64 user_id : current_ids)
     {
@@ -490,12 +490,12 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
 
         if (!delete_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
-    SqlQuery insert_access(sql(),
+    SqlQuery insert_access(db(),
         "INSERT INTO workspace_access (workspace_id, user_id) VALUES (?, ?)");
 
     for (qint64 user_id : desired_access)
@@ -513,14 +513,14 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
 
         if (!insert_access.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -530,7 +530,7 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
 //--------------------------------------------------------------------------------------------------
 std::string_view WorkspaceStore::remove(qint64 entry_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -542,49 +542,49 @@ std::string_view WorkspaceStore::remove(qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // COUNT(*) always yields exactly one row, so a failed next() is a database error and not
     // a missing workspace.
-    SqlQuery exists_check(sql(), "SELECT COUNT(*) FROM workspaces WHERE id=?");
+    SqlQuery exists_check(db(), "SELECT COUNT(*) FROM workspaces WHERE id=?");
     exists_check.addInt64(entry_id);
 
     if (exists_check.next() != SqlQuery::StepResult::ROW)
     {
-        LOG(ERROR) << "Unable to check workspace existence:" << sql().lastError();
+        LOG(ERROR) << "Unable to check workspace existence:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (exists_check.columnInt64(0) == 0)
         return proto::router::kErrorNotFound;
 
-    SqlQuery release_hosts(sql(),
+    SqlQuery release_hosts(db(),
         "UPDATE hosts SET revision=revision+1, workspace_id=0, group_id=0 WHERE workspace_id=?");
     release_hosts.addInt64(entry_id);
 
     if (!release_hosts.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery delete_workspace(sql(), "DELETE FROM workspaces WHERE id=?");
+    SqlQuery delete_workspace(db(), "DELETE FROM workspaces WHERE id=?");
     delete_workspace.addInt64(entry_id);
 
     if (!delete_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -598,20 +598,20 @@ bool WorkspaceStore::ids(std::set<qint64>* workspace_ids) const
 
     workspace_ids->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "SELECT id FROM workspaces");
+    SqlQuery query(db(), "SELECT id FROM workspaces");
 
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
 
@@ -631,13 +631,13 @@ bool WorkspaceStore::accessIdsForUser(qint64 user_id, std::set<qint64>* workspac
 
     workspace_ids->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "SELECT workspace_id FROM workspace_access WHERE user_id=?");
+    SqlQuery query(db(), "SELECT workspace_id FROM workspace_access WHERE user_id=?");
     query.addInt64(user_id);
 
     for (;;)
@@ -645,7 +645,7 @@ bool WorkspaceStore::accessIdsForUser(qint64 user_id, std::set<qint64>* workspac
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
 
@@ -664,13 +664,13 @@ std::string_view WorkspaceStore::checkAccess(qint64 user_id, qint64 workspace_id
     if (user_id <= 0 || workspace_id <= 0)
         return proto::router::kErrorAccessDenied;
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery query(sql(), "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
+    SqlQuery query(db(), "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?");
     query.addInt64(workspace_id);
     query.addInt64(user_id);
 
@@ -679,7 +679,7 @@ std::string_view WorkspaceStore::checkAccess(qint64 user_id, qint64 workspace_id
     {
         // A failed read must not pass for a denial: an authorization check has to tell "no
         // access" from "cannot tell".
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -692,19 +692,19 @@ std::string_view WorkspaceStore::checkAccess(qint64 user_id, qint64 workspace_id
 //--------------------------------------------------------------------------------------------------
 std::string_view WorkspaceStore::checkAccessUser(qint64 user_id)
 {
-    SqlQuery select(sql(), "SELECT 1 FROM users WHERE id=?");
+    SqlQuery select(db(), "SELECT 1 FROM users WHERE id=?");
     select.addInt64(user_id);
 
     if (!select.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     const SqlQuery::StepResult step = select.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 

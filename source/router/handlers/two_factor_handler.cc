@@ -23,6 +23,7 @@
 #include "base/peer/router_user.h"
 #include "proto/router_constants.h"
 #include "router/device_token_store.h"
+#include "router/user_store.h"
 
 namespace {
 
@@ -40,7 +41,7 @@ TwoFactorHandler::Result TwoFactorHandler::start(Database& database, const Reque
     Result result;
 
     RouterUser user;
-    if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
+    if (UserStore(database).find(caller.user_id, &user) != proto::router::kErrorOk)
     {
         // SRP already validated the user; reaching this branch implies the row vanished between
         // authentication and this stage (or the database stopped answering).
@@ -160,7 +161,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
         // challenge was sent: an administrator can reset the OTP or delete the user while the
         // session sits at the prompt, and the verification below must see that.
         RouterUser user;
-        if (database.findUser(caller.user_id, &user) != proto::router::kErrorOk)
+        if (UserStore(database).find(caller.user_id, &user) != proto::router::kErrorOk)
         {
             LOG(INFO) << "User" << caller.name << "is gone. Closing connection";
             result.action = Action::CLOSE;
@@ -225,7 +226,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
 
     if (enroll)
     {
-        if (!database.setUserOtp(caller.user_id, tentative_otp_secret_, matched_counter))
+        if (!UserStore(database).setOtp(caller.user_id, tentative_otp_secret_, matched_counter))
         {
             // Another session of the same user completed the enrollment meanwhile, or the record
             // is gone, or the write failed. The code itself was right, so the refusal flag stays
@@ -240,8 +241,7 @@ TwoFactorHandler::Result TwoFactorHandler::handleResponse(
     }
     else
     {
-        const std::string_view error_code =
-            database.consumeUserOtpCounter(caller.user_id, matched_counter);
+        const std::string_view error_code = UserStore(database).consumeOtpCounter(caller.user_id, matched_counter);
         if (error_code == proto::router::kErrorNotFound)
         {
             // The step was consumed by another session after this one took its snapshot (or the

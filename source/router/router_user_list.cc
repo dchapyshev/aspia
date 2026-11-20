@@ -19,7 +19,7 @@
 #include "router/router_user_list.h"
 
 #include "base/logging.h"
-#include "router/database.h"
+#include "router/user_store.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterUserList::~RouterUserList() = default;
@@ -41,7 +41,7 @@ SharedPointer<RouterUserList> RouterUserList::open()
 User RouterUserList::find(const QString& username) const
 {
     RouterUser user;
-    Database::instance().findUser(username, &user);
+    UserStore(Database::instance()).find(username, &user);
     user.sessions = RouterUser::expandSessionTypes(user.sessions);
     return user;
 }

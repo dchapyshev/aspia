@@ -163,7 +163,7 @@ protected:
         RouterTestBase::SetUp();
 
         secret_ = Totp::generateSecret();
-        ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret_, 0));
+        ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret_, 0));
 
         std::unique_ptr<RouterTestWorker> worker = std::make_unique<RouterTestWorker>(file_path_);
         worker_ = worker.get();
@@ -563,7 +563,7 @@ TEST_F(ClientWorkerStopTest, SyncChangeIsToldToTheOtherSessionsOfTheUser)
 {
     const RouterUser bob = addUser("bob", proto::router::SESSION_TYPE_OPERATOR);
     ASSERT_GT(bob.entry_id, 0);
-    ASSERT_TRUE(db_.setUserOtp(bob.entry_id, secret_, 0));
+    ASSERT_TRUE(users_.setOtp(bob.entry_id, secret_, 0));
 
     worker_->invoke([&]()
     {
@@ -680,7 +680,7 @@ TEST_F(ClientWorkerStopTest, SyncStoragesOfMissingUsersAreRemoved)
     ClientWorkerTestPeer::removeUnusedSyncStorages(db_);
     EXPECT_EQ(syncUserGuids(), kept);
 
-    ASSERT_EQ(db_.removeUser(bob.entry_id), proto::router::kErrorOk);
+    ASSERT_EQ(users_.remove(bob.entry_id), proto::router::kErrorOk);
 
     ClientWorkerTestPeer::removeUnusedSyncStorages(db_);
     EXPECT_EQ(syncUserGuids(), QStringList({ admin_.guid }));

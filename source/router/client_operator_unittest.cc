@@ -44,7 +44,7 @@ protected:
         RouterTestBase::SetUp();
 
         secret_ = Totp::generateSecret();
-        ASSERT_TRUE(db_.setUserOtp(admin_.entry_id, secret_, 0));
+        ASSERT_TRUE(users_.setOtp(admin_.entry_id, secret_, 0));
 
         std::unique_ptr<RouterTestWorker> worker = std::make_unique<RouterTestWorker>(file_path_);
         worker_ = worker.get();
@@ -236,7 +236,7 @@ protected:
         RouterUser disabled;
         disabled.entry_id = entry_id;
         disabled.flags = 0;
-        ASSERT_EQ(db.modifyUser(disabled), proto::router::kErrorOk);
+        ASSERT_EQ(UserStore(db).modify(disabled), proto::router::kErrorOk);
     }
 
     // Walks the session through the two-factor stage the way a client does.
@@ -418,7 +418,7 @@ TEST_F(ClientOperatorTest, LoginResultCarriesTheGuidOfTheUser)
         ASSERT_TRUE(message.has_login_result());
 
         RouterUser stored;
-        ASSERT_EQ(db_.findUser(admin_.entry_id, &stored), proto::router::kErrorOk);
+        ASSERT_EQ(users_.find(admin_.entry_id, &stored), proto::router::kErrorOk);
         ASSERT_FALSE(stored.guid.isEmpty());
         EXPECT_EQ(message.login_result().user_guid(), stored.guid.toStdString());
     });
@@ -576,7 +576,7 @@ TEST_F(ClientOperatorTest, BlockRemainderIsAnnouncedOnTheWire)
     ASSERT_GT(user.entry_id, 0);
 
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(user.entry_id, secret, 0));
 
     // Enough misses to impose the block, straight through the handler: the wire is what this
     // test watches, and each miss over it would cost a whole session.
@@ -617,7 +617,7 @@ TEST_F(ClientOperatorTest, DisabledUserDoesNotFinishTheStage)
     ASSERT_GT(user.entry_id, 0);
 
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(user.entry_id, secret, 0));
 
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,
                        [&](ClientOperator& client, LoopbackChannel* channel)
@@ -647,7 +647,7 @@ TEST_F(ClientOperatorTest, DisabledUserDoesNotPassWithAToken)
     ASSERT_GT(user.entry_id, 0);
 
     const QByteArray secret = Totp::generateSecret();
-    ASSERT_TRUE(db_.setUserOtp(user.entry_id, secret, 0));
+    ASSERT_TRUE(users_.setOtp(user.entry_id, secret, 0));
 
     std::string token;
     withClient<ClientOperator>(user, proto::router::SESSION_TYPE_OPERATOR,

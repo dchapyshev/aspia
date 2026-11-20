@@ -61,7 +61,7 @@ public:
     // Deletes a workspace, releases its hosts (workspace_id <- 0, group_id <- 0) and drops the
     // note each of them carried within it. Deliberately takes no base_revision: a delete is an
     // intent about the whole entity, not about a particular state of it, so it applies
-    // regardless of concurrent edits (unlike modify, see I3).
+    // regardless of concurrent edits (unlike modify).
     std::string_view remove(qint64 entry_id);
 
     // Fills |workspace_ids| with the ids of every workspace of the router. Returns false on a

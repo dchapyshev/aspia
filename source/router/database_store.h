@@ -25,14 +25,24 @@ class DatabaseStore
 {
 protected:
     explicit DatabaseStore(Database& db)
-        : db_(db)
+        : database_(db)
     {
         // Nothing
     }
 
-    SqlDatabase& sql() const { return db_.db_; }
+    SqlDatabase& db() const { return database_.db_; }
+    bool isValid() const { return database_.isValid(); }
 
-    Database& db_;
+    // Every list query has to name the page it wants. Whatever comes out of one goes into a single
+    // reply, and a reply the channel cannot carry is not sent at all but ends the session, so the
+    // size of an answer must never follow the size of the database. A request that names no page
+    // has a count of zero and is refused along with one that asks for more than the cap.
+    static bool isPageValid(qint64 offset, qint64 count, int max_count)
+    {
+        return offset >= 0 && count > 0 && count <= max_count;
+    }
+
+    Database& database_;
 };
 
 #endif // ROUTER_DATABASE_STORE_H

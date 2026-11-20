@@ -35,7 +35,7 @@ GroupStore::GroupStore(Database& db)
 //--------------------------------------------------------------------------------------------------
 void GroupStore::list(qint64 workspace_id, proto::router::GroupList* out) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         out->set_error_code(proto::router::kErrorInternalError);
@@ -52,10 +52,10 @@ void GroupStore::list(qint64 workspace_id, proto::router::GroupList* out) const
     const char kSql[] =
         "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE workspace_id=?";
-    SqlQuery query(sql(), kSql);
+    SqlQuery query(db(), kSql);
     if (!query.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         out->set_error_code(proto::router::kErrorInternalError);
         return;
     }
@@ -68,7 +68,7 @@ void GroupStore::list(qint64 workspace_id, proto::router::GroupList* out) const
         if (step == SqlQuery::StepResult::FAILED)
         {
             // An error reply must not carry the partial list scanned so far.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             out->clear_group();
             out->set_error_code(proto::router::kErrorInternalError);
             return;
@@ -95,7 +95,7 @@ std::string_view GroupStore::find(qint64 workspace_id, qint64 entry_id, Group* g
 
     *group = Group();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -110,7 +110,7 @@ std::string_view GroupStore::find(qint64 workspace_id, qint64 entry_id, Group* g
     const char kSql[] =
         "SELECT id, revision, IFNULL(parent_id, 0), name, comment FROM host_groups "
         "WHERE id=? AND workspace_id=?";
-    SqlQuery query(sql(), kSql);
+    SqlQuery query(db(), kSql);
     query.addInt64(entry_id);
     query.addInt64(workspace_id);
 
@@ -118,7 +118,7 @@ std::string_view GroupStore::find(qint64 workspace_id, qint64 entry_id, Group* g
     if (step == SqlQuery::StepResult::FAILED)
     {
         // A failed read must not pass for a missing group.
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -141,7 +141,7 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
 
     *entry_id = -1;
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -171,10 +171,10 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -182,13 +182,13 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
     // only safeguard against the API silently linking groups across workspace boundaries.
     if (parent_id != 0)
     {
-        SqlQuery parent_check(sql(), "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+        SqlQuery parent_check(db(), "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
         parent_check.addInt64(parent_id);
         parent_check.addInt64(workspace_id);
 
         if (!parent_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -198,7 +198,7 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
 
     const char kSql[] =
         "INSERT INTO host_groups (workspace_id, parent_id, name, comment) VALUES (?, ?, ?, ?)";
-    SqlQuery insert(sql(), kSql);
+    SqlQuery insert(db(), kSql);
     insert.addInt64(workspace_id);
     if (parent_id == 0)
         insert.addNull();
@@ -209,15 +209,15 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
 
     if (!insert.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    const qint64 new_id = sql().lastInsertRowId();
+    const qint64 new_id = db().lastInsertRowId();
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -229,7 +229,7 @@ std::string_view GroupStore::add(qint64 workspace_id, qint64 parent_id, std::str
 std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64 base_revision,
     qint64 new_parent_id, std::string_view name, std::string_view comment)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -254,21 +254,21 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     // Verify the group being modified exists in this workspace.
-    SqlQuery select_self(sql(), "SELECT revision FROM host_groups WHERE id=? AND workspace_id=?");
+    SqlQuery select_self(db(), "SELECT revision FROM host_groups WHERE id=? AND workspace_id=?");
     select_self.addInt64(entry_id);
     select_self.addInt64(workspace_id);
 
     if (!select_self.isValid())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -285,13 +285,13 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
     if (new_parent_id != 0)
     {
         // The new parent must exist in this workspace.
-        SqlQuery parent_check(sql(), "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
+        SqlQuery parent_check(db(), "SELECT 1 FROM host_groups WHERE id=? AND workspace_id=?");
         parent_check.addInt64(new_parent_id);
         parent_check.addInt64(workspace_id);
 
         if (!parent_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -311,13 +311,13 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
             "    SELECT g.parent_id FROM host_groups g JOIN ancestors a ON g.id = a.id "
             "      WHERE g.parent_id IS NOT NULL"
             ") SELECT 1 FROM ancestors WHERE id=? LIMIT 1";
-        SqlQuery cycle_check(sql(), kSql);
+        SqlQuery cycle_check(db(), kSql);
         cycle_check.addInt64(new_parent_id);
         cycle_check.addInt64(entry_id);
 
         if (!cycle_check.isValid())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return proto::router::kErrorInternalError;
         }
 
@@ -328,7 +328,7 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
     const char kSql[] =
         "UPDATE host_groups SET revision=revision+1, parent_id=?, name=?, comment=? "
         "WHERE id=? AND workspace_id=?";
-    SqlQuery update_self(sql(), kSql);
+    SqlQuery update_self(db(), kSql);
     if (new_parent_id == 0)
         update_self.addNull();
     else
@@ -340,13 +340,13 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
 
     if (!update_self.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -356,7 +356,7 @@ std::string_view GroupStore::modify(qint64 workspace_id, qint64 entry_id, qint64
 //--------------------------------------------------------------------------------------------------
 std::string_view GroupStore::remove(qint64 workspace_id, qint64 entry_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return proto::router::kErrorInternalError;
@@ -368,10 +368,10 @@ std::string_view GroupStore::remove(qint64 workspace_id, qint64 entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
@@ -384,7 +384,7 @@ std::string_view GroupStore::remove(qint64 workspace_id, qint64 entry_id)
         "    WHERE child.workspace_id=?"
         ") UPDATE hosts SET revision=revision+1, group_id=0 WHERE workspace_id=? "
         "AND group_id IN (SELECT id FROM deleted_groups)";
-    SqlQuery release_hosts(sql(), kReleaseHostsSql);
+    SqlQuery release_hosts(db(), kReleaseHostsSql);
     release_hosts.addInt64(entry_id);
     release_hosts.addInt64(workspace_id);
     release_hosts.addInt64(workspace_id);
@@ -392,26 +392,26 @@ std::string_view GroupStore::remove(qint64 workspace_id, qint64 entry_id)
 
     if (!release_hosts.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    SqlQuery delete_group(sql(), "DELETE FROM host_groups WHERE id=? AND workspace_id=?");
+    SqlQuery delete_group(db(), "DELETE FROM host_groups WHERE id=? AND workspace_id=?");
     delete_group.addInt64(entry_id);
     delete_group.addInt64(workspace_id);
 
     if (!delete_group.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 
-    if (sql().changes() == 0)
+    if (db().changes() == 0)
         return proto::router::kErrorNotFound;
 
     if (!transaction.commit())
     {
-        LOG(ERROR) << "Unable to commit transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to commit transaction:" << db().lastError();
         return proto::router::kErrorInternalError;
     }
 

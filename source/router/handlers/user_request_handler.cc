@@ -27,6 +27,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "router/device_token_store.h"
+#include "router/user_store.h"
 #include "router/handlers/two_factor_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -53,7 +54,7 @@ void handleAdd(Database& database, const proto::router::User& user, Result* resu
         return;
     }
 
-    const std::string_view error_code = database.addUser(new_user);
+    const std::string_view error_code = UserStore(database).add(new_user);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -80,7 +81,7 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
     RouterUser new_user = RouterUser::parseFrom(user);
 
     // A request with empty credentials changes only the flags of the record; the stored credentials
-    // and the name are kept (see Database::modifyUser), so the fields it does not write are not
+    // and the name are kept (see UserStore::modify), so the fields it does not write are not
     // validated.
     const bool has_credentials = !new_user.salt.isEmpty() || !new_user.verifier.isEmpty();
     if ((has_credentials && !new_user.isValid()) || !hasValidEmail(new_user))
@@ -91,11 +92,10 @@ void handleModify(Database& database, const proto::router::User& user, Result* r
     }
 
     // The user update and the token revocation of a password rotation happen in one transaction
-    // inside modifyUser, which decides authoritatively whether the rotation happened at all.
+    // inside UserStore::modify, which decides authoritatively whether the rotation happened at all.
     bool password_changed = false;
     bool sessions_changed = false;
-    const std::string_view error_code =
-        database.modifyUser(new_user, &password_changed, &sessions_changed);
+    const std::string_view error_code = UserStore(database).modify(new_user, &password_changed, &sessions_changed);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -123,7 +123,7 @@ void handleDelete(Database& database, const proto::router::User& user, Result* r
 
     LOG(INFO) << "User remove request:" << entry_id;
 
-    const std::string_view error_code = database.removeUser(entry_id);
+    const std::string_view error_code = UserStore(database).remove(entry_id);
     result->error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
@@ -153,7 +153,7 @@ void handleResetOtp(Database& database, const RequestCaller& caller, qint64 user
         return;
     }
 
-    const std::string_view error_code = database.resetUserOtp(user_id);
+    const std::string_view error_code = UserStore(database).resetOtp(user_id);
     if (error_code != proto::router::kErrorOk)
     {
         result->error_code = error_code;
@@ -296,11 +296,13 @@ void handleUserList(Database& database, const proto::router::UserListRequest& re
         return;
     }
 
+    UserStore store(database);
+
     if (entry_id != 0 || !name.empty())
     {
         RouterUser user;
         const std::string_view error_code = entry_id != 0 ?
-            database.findUser(entry_id, &user) : database.findUser(QString::fromStdString(name), &user);
+            store.find(entry_id, &user) : store.find(QString::fromStdString(name), &user);
 
         // A lookup asks whether the record is there, so a miss is an empty list and not an error.
         // total_count stays unset, because a lookup says nothing about the size of the list.
@@ -319,7 +321,7 @@ void handleUserList(Database& database, const proto::router::UserListRequest& re
     // A zero count from a failed query would make the client truncate its pagination while the
     // page itself arrives non-empty, so a count failure fails the whole request.
     qint64 total_count = 0;
-    const std::string_view count_code = database.userCount(&total_count);
+    const std::string_view count_code = store.count(&total_count);
     if (count_code != proto::router::kErrorOk)
     {
         out->set_error_code(count_code);
@@ -327,7 +329,7 @@ void handleUserList(Database& database, const proto::router::UserListRequest& re
     }
 
     std::vector<RouterUser> users;
-    const std::string_view list_code = database.userList(request.offset(), request.count(), &users);
+    const std::string_view list_code = store.list(request.offset(), request.count(), &users);
     if (list_code != proto::router::kErrorOk)
     {
         out->set_error_code(list_code);
@@ -406,12 +408,14 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
 {
     RequestResult result;
 
-    // Read-modify-write outside a transaction: the window between this findUser and the modifyUser
-    // below is closed only by every users/workspaces write going through the single ClientWorker
-    // thread. If client sessions are ever spread over several workers, this must move inside one
+    UserStore store(database);
+
+    // Read-modify-write outside a transaction: the window between this find and the modify below
+    // is closed only by every users/workspaces write going through the single ClientWorker thread.
+    // If client sessions are ever spread over several workers, this must move inside one
     // transaction.
     RouterUser user;
-    const std::string_view find_error_code = database.findUser(caller.user_id, &user);
+    const std::string_view find_error_code = store.find(caller.user_id, &user);
     if (find_error_code != proto::router::kErrorOk)
     {
         LOG(WARNING) << "Failed to read authenticated user (user_id:" << caller.user_id
@@ -432,8 +436,8 @@ RequestResult handleChangePassword(Database& database, const RequestCaller& call
     }
 
     // Only the password-derived fields differ here (the rest were loaded from the database), so
-    // reusing modifyUser writes back identical values.
-    const std::string_view error_code = database.modifyUser(user);
+    // reusing modify writes back identical values.
+    const std::string_view error_code = store.modify(user);
     result.error_code = error_code;
 
     if (error_code != proto::router::kErrorOk)
