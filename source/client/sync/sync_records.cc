@@ -128,7 +128,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
         if (revision == 0)
             continue;
 
-        if (!Traits::confirmSent(transaction, sent_records[i].guid, revision, sent_records[i].sync_dirty))
+        if (!transaction.confirmSentRecord(Traits::kType, sent_records[i].guid, revision, sent_records[i].sync_dirty))
             return Result::FAILED;
 
         ++stored_count;
@@ -136,7 +136,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
 
     if (stored_count != 0 && storage_revision_ >= 0 && result.revision() == storage_revision_ + stored_count)
     {
-        if (!Traits::setReceivedRevision(transaction, result.revision()))
+        if (!transaction.setReceivedRevision(Traits::kType, result.revision()))
             return Result::FAILED;
 
         LOG(INFO) << "Sent records of type" << Traits::kType << "are not to be received, revision:"
@@ -230,11 +230,11 @@ SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::rou
                 stored = Traits::storeUnknownData(transaction, received);
 
             if (stored)
-                stored = Traits::setSyncRevision(transaction, guid, record.revision());
+                stored = transaction.setRecordSyncRevision(Traits::kType, guid, record.revision());
         }
         else if (record.deleted())
         {
-            stored = Traits::erase(transaction, guid);
+            stored = transaction.eraseRecord(Traits::kType, guid);
         }
         else
         {
@@ -246,7 +246,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::rou
             return Result::FAILED;
     }
 
-    if (!Traits::setReceivedRevision(transaction, received_revision))
+    if (!transaction.setReceivedRevision(Traits::kType, received_revision))
         return Result::FAILED;
 
     if (!transaction.commit())

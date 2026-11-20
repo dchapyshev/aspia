@@ -31,13 +31,6 @@ Database::ReadResult SyncCredentialTraits::readUnsynced(const Database& db, QLis
 
 //--------------------------------------------------------------------------------------------------
 // static
-qint64 SyncCredentialTraits::receivedRevision(const Database& db)
-{
-    return db.receivedCredentialsRevision();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
 std::optional<QByteArray> SyncCredentialTraits::seal(const SecureByteArray& key, const Config& config)
 {
     proto::router::SyncCredential content;
@@ -117,34 +110,4 @@ bool SyncCredentialTraits::storeReceived(
 bool SyncCredentialTraits::storeUnknownData(Database::SyncTransaction& transaction, const Config& config)
 {
     return transaction.setCredentialUnknownData(config.guid(), config.unknownData());
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::erase(Database::SyncTransaction& transaction, const QString& guid)
-{
-    return transaction.eraseCredential(guid);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::setSyncRevision(
-    Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision)
-{
-    return transaction.setCredentialSyncRevision(guid, sync_revision);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::confirmSent(
-    Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision, qint64 sync_dirty)
-{
-    return transaction.confirmSentCredential(guid, sync_revision, sync_dirty);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::setReceivedRevision(Database::SyncTransaction& transaction, qint64 revision)
-{
-    return transaction.setReceivedCredentialsRevision(revision);
 }

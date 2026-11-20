@@ -246,7 +246,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
         !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
-        !setReceivedCredentialsRevision(0) || !setReceivedProfilesRevision(0))
+        !clearReceivedRevisions())
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;

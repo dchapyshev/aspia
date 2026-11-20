@@ -247,7 +247,7 @@ TEST_F(SyncProfilesTest, NewProfileReachesTheOtherDevice)
     EXPECT_EQ(received.udpMethods(), profile.udpMethods());
     EXPECT_EQ(serialize(received.desktopConfig()), serialize(profile.desktopConfig()));
     EXPECT_TRUE(unsyncedProfiles(phone_).isEmpty());
-    EXPECT_EQ(phone_.receivedProfilesRevision(), list.record(0).revision());
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), list.record(0).revision());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ TEST_F(SyncProfilesTest, DefaultProfileReceivedAsRemovedStaysOnTheDevice)
 
     ProfileConfig default_profile;
     ASSERT_EQ(phone_.findProfileByGuid(ProfileConfig::kDefaultGuid, &default_profile), Database::FindResult::FOUND);
-    EXPECT_EQ(phone_.receivedProfilesRevision(), 5);
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 5);
 
     default_profile = phone_.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_DIRECT);
@@ -364,7 +364,7 @@ TEST_F(SyncProfilesTest, ReceivedProfileThatDoesNotOpenLoses)
     receiveRecords(phone_sync_, list, 0);
 
     EXPECT_EQ(storedProfile(phone_, guid).name(), QString("office"));
-    EXPECT_EQ(phone_.receivedProfilesRevision(), 6);
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 6);
 
     ProfileConfig unnamed;
     EXPECT_EQ(phone_.findProfileByGuid(kGuid, &unnamed), Database::FindResult::NOT_FOUND);

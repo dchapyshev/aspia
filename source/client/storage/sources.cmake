@@ -32,6 +32,7 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_profiles.cc
     database_router.cc
     database_settings.cc
+    database_sync.cc
     instance_settings.cc
     instance_settings.h
     master_password.cc

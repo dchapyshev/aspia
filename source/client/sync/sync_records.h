@@ -47,7 +47,7 @@ public:
     SyncRecordsOf(Database& db, const QByteArray& storage_id, const SecureByteArray& key);
 
     proto::router::SyncDataType type() const final { return Traits::kType; }
-    qint64 receivedRevision() const final { return Traits::receivedRevision(db_); }
+    qint64 receivedRevision() const final { return db_.receivedRevision(Traits::kType); }
     Result readUnsyncedRecords(proto::router::SyncRecordRequest* request) final;
     Result confirmSentRecords(const proto::router::SyncRecordResult& result) final;
     Result storeReceivedRecords(const proto::router::SyncRecordList& list) final;

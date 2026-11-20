@@ -46,13 +46,6 @@ Database::ReadResult SyncProfileTraits::readUnsynced(const Database& db, QList<U
 
 //--------------------------------------------------------------------------------------------------
 // static
-qint64 SyncProfileTraits::receivedRevision(const Database& db)
-{
-    return db.receivedProfilesRevision();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
 std::optional<QByteArray> SyncProfileTraits::seal(const SecureByteArray& key, const Config& config)
 {
     proto::router::SyncProfile content = syncContent(config);
@@ -132,34 +125,4 @@ bool SyncProfileTraits::storeReceived(
 bool SyncProfileTraits::storeUnknownData(Database::SyncTransaction& transaction, const Config& config)
 {
     return transaction.setProfileUnknownData(config.guid(), config.unknownData());
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::erase(Database::SyncTransaction& transaction, const QString& guid)
-{
-    return transaction.eraseProfile(guid);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::setSyncRevision(
-    Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision)
-{
-    return transaction.setProfileSyncRevision(guid, sync_revision);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::confirmSent(
-    Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision, qint64 sync_dirty)
-{
-    return transaction.confirmSentProfile(guid, sync_revision, sync_dirty);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::setReceivedRevision(Database::SyncTransaction& transaction, qint64 revision)
-{
-    return transaction.setReceivedProfilesRevision(revision);
 }

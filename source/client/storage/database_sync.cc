@@ -1,0 +1,519 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "client/storage/database.h"
+
+#include <QDateTime>
+
+#include "base/logging.h"
+#include "base/sql/sql_query.h"
+#include "base/sql/sql_transaction.h"
+
+namespace {
+
+struct SyncTable
+{
+    proto::router::SyncDataType type;
+    const char* name;
+    const char* received_revision_setting;
+};
+
+const SyncTable kSyncTables[] =
+{
+    { proto::router::SYNC_DATA_TYPE_CREDENTIALS, "credentials", "received_credentials_revision" },
+    { proto::router::SYNC_DATA_TYPE_PROFILES, "profiles", "received_profiles_revision" }
+};
+
+//--------------------------------------------------------------------------------------------------
+const SyncTable* findSyncTable(proto::router::SyncDataType type)
+{
+    for (const SyncTable& table : kSyncTables)
+    {
+        if (table.type == type)
+            return &table;
+    }
+
+    LOG(ERROR) << "Unknown type of the synchronized records:" << type;
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string tableQuery(const SyncTable& table, const char* query)
+{
+    return QString(query).arg(table.name).toStdString();
+}
+
+} // namespace
+
+//--------------------------------------------------------------------------------------------------
+Database::SyncTransaction::SyncTransaction(Database& db)
+    : db_(db)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::SyncResult Database::SyncTransaction::begin(const QByteArray& storage_id)
+{
+    transaction_.emplace(db_.db_);
+
+    if (!transaction_->begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        transaction_.reset();
+        return SyncResult::FAILED;
+    }
+
+    RouterConfig router;
+    const FindResult found = db_.routerConfig(&router);
+    if (found != FindResult::FOUND && found != FindResult::NOT_FOUND)
+    {
+        LOG(ERROR) << "Unable to read the router";
+        transaction_.reset();
+        return SyncResult::FAILED;
+    }
+
+    if (storage_id.isEmpty() || found == FindResult::NOT_FOUND || router.syncStorageId() != storage_id)
+    {
+        LOG(WARNING) << "The device is not attached to the storage";
+        transaction_.reset();
+        return SyncResult::DETACHED;
+    }
+
+    return SyncResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::commit()
+{
+    return transaction_.has_value() && transaction_->commit();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (!credential.isValid() || credential.guid().isEmpty() || sync_revision <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(db, "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_revision) "
+                       "VALUES (NULL, ?, ?, ?, ?, ?, ?) "
+                       "ON CONFLICT(guid) DO UPDATE SET type=excluded.type, name=excluded.name, "
+                       "data=excluded.data, modify_time=excluded.modify_time, "
+                       "sync_revision=excluded.sync_revision, sync_dirty=0, deleted=0 "
+                       "WHERE credentials.sync_revision!=excluded.sync_revision");
+    query.addInt64(static_cast<int>(credential.type()));
+    query.addText(credential.displayName());
+    query.addBlob(*encrypted_data);
+    query.addText(credential.guid());
+    query.addInt64(credential.modifyTime());
+    query.addInt64(sync_revision);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setCredentialUnknownData(const QString& guid, const QByteArray& unknown_data)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery row(db, "SELECT data FROM credentials WHERE guid=? AND deleted=0");
+    row.addText(guid);
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        else
+            LOG(ERROR) << "Credential with guid" << guid << "not found";
+        return false;
+    }
+
+    CredentialConfig credential;
+    credential.setGuid(guid);
+
+    if (!credential.setEncryptedData(row.columnBlob(0)))
+    {
+        LOG(ERROR) << "Unable to read encrypted data of credential with guid" << guid;
+        return false;
+    }
+
+    credential.setUnknownData(unknown_data);
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+    {
+        LOG(ERROR) << "Unable to seal credential with guid" << guid;
+        return false;
+    }
+
+    SqlQuery query(db, "UPDATE credentials SET data=? WHERE guid=?");
+    query.addBlob(*encrypted_data);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    if (!profile.isValid() || profile.guid().isEmpty() || sync_revision <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery query(db, "INSERT INTO profiles (id, name, data, guid, modify_time, sync_revision) "
+                       "VALUES (NULL, ?, ?, ?, ?, ?) "
+                       "ON CONFLICT(guid) DO UPDATE SET name=excluded.name, data=excluded.data, "
+                       "modify_time=excluded.modify_time, sync_revision=excluded.sync_revision, sync_dirty=0, "
+                       "deleted=0 WHERE profiles.sync_revision!=excluded.sync_revision");
+    query.addText(profile.name());
+    query.addBlob(profile.serializedData());
+    query.addText(profile.guid());
+    query.addInt64(profile.modifyTime());
+    query.addInt64(sync_revision);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery row(db, "SELECT data FROM profiles WHERE guid=? AND deleted=0");
+    row.addText(guid);
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        else
+            LOG(ERROR) << "Profile with guid" << guid << "not found";
+        return false;
+    }
+
+    ProfileConfig profile;
+    if (!profile.setSerializedData(row.columnBlob(0)))
+    {
+        LOG(ERROR) << "Unable to read data of profile with guid" << guid;
+        return false;
+    }
+
+    profile.setUnknownData(unknown_data);
+
+    SqlQuery query(db, "UPDATE profiles SET data=? WHERE guid=?");
+    query.addBlob(profile.serializedData());
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QString& guid)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    const SyncTable* table = findSyncTable(type);
+    if (!table)
+        return false;
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery query(db, tableQuery(*table, "DELETE FROM %1 WHERE guid=?"));
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setRecordSyncRevision(
+    proto::router::SyncDataType type, const QString& guid, qint64 sync_revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    const SyncTable* table = findSyncTable(type);
+    if (!table)
+        return false;
+
+    SqlDatabase& db = db_.db_;
+
+    SqlQuery query(db, tableQuery(*table, "UPDATE %1 SET sync_revision=? WHERE guid=?"));
+    query.addInt64(sync_revision);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::confirmSentRecord(
+    proto::router::SyncDataType type, const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    const SyncTable* table = findSyncTable(type);
+    if (!table)
+        return false;
+
+    SqlDatabase& db = db_.db_;
+
+    if (guid.isEmpty() || sync_revision <= 0 || sync_dirty < 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery update_query(db, tableQuery(*table, "UPDATE %1 SET sync_revision=?, sync_dirty=sync_dirty-? "
+                                                 "WHERE guid=?"));
+    update_query.addInt64(sync_revision);
+    update_query.addInt64(sync_dirty);
+    update_query.addText(guid);
+
+    if (!update_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    if (db.changes() != 0)
+    {
+        SqlQuery erase_query(db, tableQuery(*table, "DELETE FROM %1 WHERE guid=? AND deleted!=0 AND sync_dirty=0"));
+        erase_query.addText(guid);
+
+        if (!erase_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+    else
+    {
+        SqlQuery mark_query(db, tableQuery(*table, "INSERT INTO %1 (id, guid, modify_time, sync_revision, "
+                                                   "sync_dirty, deleted) VALUES (NULL, ?, ?, ?, 1, 1)"));
+        mark_query.addText(guid);
+        mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+        mark_query.addInt64(sync_revision);
+
+        if (!mark_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db.lastError();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::setReceivedRevision(proto::router::SyncDataType type, qint64 revision)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    return db_.setReceivedRevision(type, revision);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::SyncTransaction::isActive() const
+{
+    return transaction_.has_value() && transaction_->isActive();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Database::receivedRevision(proto::router::SyncDataType type) const
+{
+    const SyncTable* table = findSyncTable(type);
+    if (!table)
+        return 0;
+
+    return readSetting(table->received_revision_setting).toLongLong();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::resetSyncState()
+{
+    CHECK(db_.isTransactionActive());
+
+    if (!db_.exec("DELETE FROM credentials WHERE deleted!=0") ||
+        !db_.exec("UPDATE credentials SET sync_revision=0, sync_dirty=1") ||
+        !db_.exec("DELETE FROM profiles WHERE deleted!=0"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    SqlQuery profiles_query(db_, "UPDATE profiles SET sync_revision=0, sync_dirty=(guid<>? OR modify_time<>0)");
+    profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!profiles_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return clearReceivedRevisions();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::discardSyncData()
+{
+    CHECK(db_.isTransactionActive());
+
+    if (!db_.exec("UPDATE credentials SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Credentials discarded:" << db_.changes();
+
+    SqlQuery profiles_query(db_, "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1 "
+                                 "WHERE guid<>?");
+    profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!profiles_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Profiles discarded:" << db_.changes();
+
+    SqlQuery default_query(db_, "UPDATE profiles SET sync_revision=0, sync_dirty=0 WHERE guid=?");
+    default_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
+
+    if (!default_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        return false;
+    }
+
+    return clearReceivedRevisions();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setReceivedRevision(proto::router::SyncDataType type, qint64 revision)
+{
+    CHECK(db_.isTransactionActive());
+
+    const SyncTable* table = findSyncTable(type);
+    if (!table)
+        return false;
+
+    return writeSetting(table->received_revision_setting, QString::number(revision));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::clearReceivedRevisions()
+{
+    for (const SyncTable& table : kSyncTables)
+    {
+        if (!setReceivedRevision(table.type, 0))
+            return false;
+    }
+
+    return true;
+}

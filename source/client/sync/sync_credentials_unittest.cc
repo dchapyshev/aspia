@@ -262,7 +262,7 @@ TEST_F(SyncCredentialsTest, NewRecordReachesTheOtherDevice)
     EXPECT_LE(received.modifyTime(), QDateTime::currentSecsSinceEpoch() - 100);
 
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
-    EXPECT_EQ(phone_.receivedCredentialsRevision(), list.record(0).revision());
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), list.record(0).revision());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -535,7 +535,7 @@ TEST_F(SyncCredentialsTest, ReceivedRecordThatDoesNotOpenLoses)
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
-    EXPECT_EQ(phone_.receivedCredentialsRevision(), 6);
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 6);
 
     QList<CredentialConfig> credentials;
     ASSERT_EQ(phone_.credentialList(&credentials), Database::ReadResult::OK);
@@ -710,5 +710,5 @@ TEST_F(SyncCredentialsTest, PageThatFailsHalfwayLeavesNothing)
     QList<CredentialConfig> credentials;
     ASSERT_EQ(phone_.credentialList(&credentials), Database::ReadResult::OK);
     EXPECT_TRUE(credentials.isEmpty());
-    EXPECT_EQ(phone_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 }

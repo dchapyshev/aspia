@@ -503,29 +503,33 @@ protected:
     bool eraseCredential(const QString& guid)
     {
         Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE && transaction.eraseCredential(guid) &&
-               transaction.commit();
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.eraseRecord(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid) && transaction.commit();
     }
 
     bool setCredentialSyncRevision(const QString& guid, qint64 sync_revision)
     {
         Database::SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.setCredentialSyncRevision(guid, sync_revision) && transaction.commit();
+               transaction.setRecordSyncRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid, sync_revision) &&
+               transaction.commit();
     }
 
     bool confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
     {
         Database::SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.confirmSentCredential(guid, sync_revision, sync_dirty) && transaction.commit();
+               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid, sync_revision,
+                                             sync_dirty) &&
+               transaction.commit();
     }
 
     bool setReceivedCredentialsRevision(qint64 revision)
     {
         Database::SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.setReceivedCredentialsRevision(revision) && transaction.commit();
+               transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, revision) &&
+               transaction.commit();
     }
 
     qint64 addProfile(const QString& name)
@@ -565,8 +569,8 @@ protected:
     bool eraseProfile(const QString& guid)
     {
         Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE && transaction.eraseProfile(guid) &&
-               transaction.commit();
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.eraseRecord(proto::router::SYNC_DATA_TYPE_PROFILES, guid) && transaction.commit();
     }
 
     bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
@@ -580,14 +584,16 @@ protected:
     {
         Database::SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.confirmSentProfile(guid, sync_revision, sync_dirty) && transaction.commit();
+               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_PROFILES, guid, sync_revision, sync_dirty) &&
+               transaction.commit();
     }
 
     bool setReceivedProfilesRevision(qint64 revision)
     {
         Database::SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.setReceivedProfilesRevision(revision) && transaction.commit();
+               transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES, revision) &&
+               transaction.commit();
     }
 
     QList<HostId> outdatedRouterHosts()
@@ -1759,7 +1765,7 @@ TEST_F(DatabaseTest, SyncStorageIsKeptWhenTheAccountIsEdited)
     EXPECT_EQ(stored->syncStorageKey(), key);
 
     EXPECT_EQ(credentialRowCount(), 2);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 12);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
 
     const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1815,7 +1821,7 @@ TEST_F(DatabaseTest, SyncTurnedOffAndOnAgainKeepsTheGuidOfTheUser)
     EXPECT_FALSE(stored->isSyncStorageResetPending());
 
     EXPECT_EQ(credentialRowCount(), 1);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1929,7 +1935,7 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
 
     EXPECT_EQ(credentialRowCount(), 1);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1969,23 +1975,23 @@ TEST_F(DatabaseTest, SyncChangesAreRefusedForAnotherStorage)
     Database::SyncTransaction transaction(db_);
     EXPECT_EQ(transaction.begin(Random::byteArray(16)), Database::SyncResult::DETACHED);
     EXPECT_EQ(transaction.begin(QByteArray()), Database::SyncResult::DETACHED);
-    EXPECT_FALSE(transaction.setReceivedCredentialsRevision(12));
+    EXPECT_FALSE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
     EXPECT_FALSE(transaction.commit());
 
     {
         Database::SyncTransaction dropped(db_);
         ASSERT_EQ(dropped.begin(storage_id), Database::SyncResult::DONE);
-        ASSERT_TRUE(dropped.setReceivedCredentialsRevision(12));
+        ASSERT_TRUE(dropped.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
     }
 
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     ASSERT_EQ(transaction.begin(storage_id), Database::SyncResult::DONE);
-    ASSERT_TRUE(transaction.setReceivedCredentialsRevision(12));
+    ASSERT_TRUE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
     ASSERT_TRUE(transaction.commit());
-    EXPECT_FALSE(transaction.setReceivedCredentialsRevision(13));
+    EXPECT_FALSE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 13));
 
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 12);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4225,17 +4231,17 @@ TEST_F(DatabaseTest, ReceivedRevisionIsKeptUntilABatchReplacesTheRecords)
 {
     attachSyncStorage();
 
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
-    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
     ASSERT_TRUE(setReceivedProfilesRevision(14));
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 12);
-    EXPECT_EQ(db_.receivedProfilesRevision(), 14);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 14);
 
     ASSERT_TRUE(db_.import({}, {}, {}, {}, {}, {}));
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
-    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4274,7 +4280,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     for (qint64 credential_id : { kept_id, edited_id, removed_id, new_id })
         EXPECT_TRUE(isCredentialMarkedDeleted(credential_id));
 
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     ASSERT_TRUE(setReceivedCredentialsRevision(4));
 
@@ -4282,7 +4288,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, key, true), Database::SyncResult::DONE);
 
     EXPECT_EQ(credentialRowCount(), 4);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 4);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 4);
 
     const std::optional<RouterConfig> stored = findRouter(db_);
     ASSERT_TRUE(stored.has_value());
@@ -4313,7 +4319,7 @@ TEST_F(DatabaseTest, AnotherStorageNotMadeByAResetKeepsTheDataOfTheDevice)
 
     EXPECT_EQ(credentialList().size(), 2);
     EXPECT_EQ(credentialRowCount(), 2);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
@@ -4473,7 +4479,7 @@ TEST_F(DatabaseTest, DeviceWithAPendingResetKeepsItsData)
 
     EXPECT_EQ(credentialList().size(), 2);
     EXPECT_EQ(credentialRowCount(), 2);
-    EXPECT_EQ(db_.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
@@ -4929,13 +4935,10 @@ TEST_F(DatabaseTest, ErasedProfileLeavesNoRow)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The default profile stays whatever the router or the user asks.
-TEST_F(DatabaseTest, DefaultProfileIsNeverErased)
+// The default profile stays whatever the user asks.
+TEST_F(DatabaseTest, DefaultProfileIsNeverRemoved)
 {
-    attachSyncStorage();
-
     const ProfileConfig profile = db_.defaultProfile();
-    EXPECT_FALSE(eraseProfile(profile.guid()));
     EXPECT_FALSE(db_.removeProfile(profile.id()));
 
     EXPECT_EQ(db_.defaultProfile().id(), profile.id());
@@ -5027,7 +5030,7 @@ TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
     EXPECT_TRUE(isProfileMarkedDeleted(new_id));
     EXPECT_EQ(db_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
-    EXPECT_EQ(db_.receivedProfilesRevision(), 0);
+    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 }
 
 //--------------------------------------------------------------------------------------------------

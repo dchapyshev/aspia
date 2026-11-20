@@ -31,6 +31,7 @@
 #include "base/sql/sql_transaction.h"
 #include "client/config.h"
 #include "client/storage/auto_backup.h"
+#include "proto/router_sync.h"
 
 class Database
 {
@@ -122,18 +123,15 @@ public:
         bool commit();
 
         bool storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision);
-        bool eraseCredential(const QString& guid);
-        bool setCredentialSyncRevision(const QString& guid, qint64 sync_revision);
         bool setCredentialUnknownData(const QString& guid, const QByteArray& unknown_data);
-        bool confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty);
-        bool setReceivedCredentialsRevision(qint64 revision);
-
         bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision);
-        bool eraseProfile(const QString& guid);
-        bool setProfileSyncRevision(const QString& guid, qint64 sync_revision);
         bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data);
-        bool confirmSentProfile(const QString& guid, qint64 sync_revision, qint64 sync_dirty);
-        bool setReceivedProfilesRevision(qint64 revision);
+
+        bool eraseRecord(proto::router::SyncDataType type, const QString& guid);
+        bool setRecordSyncRevision(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision);
+        bool confirmSentRecord(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision,
+                               qint64 sync_dirty);
+        bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
 
     private:
         bool isActive() const;
@@ -143,6 +141,8 @@ public:
 
         Q_DISABLE_COPY_MOVE(SyncTransaction)
     };
+
+    qint64 receivedRevision(proto::router::SyncDataType type) const;
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
@@ -173,7 +173,6 @@ public:
     FindResult findCredential(qint64 credential_id, CredentialConfig* credential) const;
     FindResult findCredentialByGuid(const QString& guid, CredentialConfig* credential) const;
     ReadResult unsyncedCredentials(QList<UnsyncedCredential>* credentials) const;
-    qint64 receivedCredentialsRevision() const;
 
     // Connection profiles.
     struct UnsyncedProfile
@@ -194,7 +193,6 @@ public:
     ProfileConfig defaultProfile() const;
     ProfileConfig hostProfile(const HostConfig& host) const;
     ReadResult unsyncedProfiles(QList<UnsyncedProfile>* profiles) const;
-    qint64 receivedProfilesRevision() const;
 
     bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
@@ -286,8 +284,8 @@ private:
     bool clearRouter();
     bool resetSyncState();
     bool discardSyncData();
-    bool setReceivedCredentialsRevision(qint64 revision);
-    bool setReceivedProfilesRevision(qint64 revision);
+    bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
+    bool clearReceivedRevisions();
 
     mutable SqlDatabase db_;
 };

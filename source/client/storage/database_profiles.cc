@@ -28,8 +28,6 @@
 
 namespace {
 
-const char kSettingReceivedProfilesRevision[] = "received_profiles_revision";
-
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult readProfile(const SqlQuery& query, ProfileConfig* profile)
 {
@@ -419,12 +417,6 @@ Database::ReadResult Database::unsyncedProfiles(QList<UnsyncedProfile>* profiles
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Database::receivedProfilesRevision() const
-{
-    return readSetting(kSettingReceivedProfilesRevision).toLongLong();
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Database::ensureDefaultProfile()
 {
     {
@@ -461,11 +453,4 @@ bool Database::ensureDefaultProfile()
 
     LOG(INFO) << "Default profile created";
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setReceivedProfilesRevision(qint64 revision)
-{
-    CHECK(db_.isTransactionActive());
-    return writeSetting(kSettingReceivedProfilesRevision, QString::number(revision));
 }

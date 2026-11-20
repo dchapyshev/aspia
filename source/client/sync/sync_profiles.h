@@ -31,7 +31,6 @@ struct SyncProfileTraits
     static const Config& config(const Unsynced& unsynced) { return unsynced.profile; }
     static bool isReadable(const Unsynced& unsynced) { return !unsynced.damaged && unsynced.profile.isValid(); }
     static Database::ReadResult readUnsynced(const Database& db, QList<Unsynced>* unsynced);
-    static qint64 receivedRevision(const Database& db);
 
     static std::optional<QByteArray> seal(const SecureByteArray& key, const Config& config);
     static bool openReceived(const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
@@ -39,11 +38,6 @@ struct SyncProfileTraits
     static bool storeReceived(const Database& db, Database::SyncTransaction& transaction, Config config,
                               qint64 sync_revision);
     static bool storeUnknownData(Database::SyncTransaction& transaction, const Config& config);
-    static bool erase(Database::SyncTransaction& transaction, const QString& guid);
-    static bool setSyncRevision(Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision);
-    static bool confirmSent(Database::SyncTransaction& transaction, const QString& guid, qint64 sync_revision,
-                            qint64 sync_dirty);
-    static bool setReceivedRevision(Database::SyncTransaction& transaction, qint64 revision);
 };
 
 extern template class SyncRecordsOf<SyncProfileTraits>;

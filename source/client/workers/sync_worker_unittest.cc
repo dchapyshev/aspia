@@ -573,7 +573,7 @@ TEST_F(SyncWorkerTest, NewRecordGoesToTheRouterAndToTheOtherDevice)
 
     EXPECT_EQ(storedUsername(phone_db_, guid), QString("user"));
     EXPECT_TRUE(unsyncedCredentials(phone_db_).isEmpty());
-    EXPECT_EQ(phone_db_.receivedCredentialsRevision(), 1);
+    EXPECT_EQ(phone_db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -595,7 +595,7 @@ TEST_F(SyncWorkerTest, RecordOfTheOtherDeviceIsReceivedWhenTheRouterTellsOfIt)
     EXPECT_EQ(record_request_count_, 0);
     EXPECT_EQ(storedUsername(db, guid), QString("user"));
     EXPECT_TRUE(unsyncedCredentials(db).isEmpty());
-    EXPECT_EQ(db.receivedCredentialsRevision(), 1);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -635,7 +635,7 @@ TEST_F(SyncWorkerTest, SentRecordIsNotReceivedBack)
     worker_.onSessionStarted();
 
     ASSERT_EQ(record_request_count_, 1);
-    EXPECT_EQ(db.receivedCredentialsRevision(), 1);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 1);
 
     worker_.onStartRecordExchange();
 
@@ -661,12 +661,12 @@ TEST_F(SyncWorkerTest, RecordTheOtherDeviceStoredMeanwhileIsStillReceived)
     worker_.onSessionStarted();
 
     ASSERT_EQ(record_request_count_, 1);
-    EXPECT_EQ(db.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     worker_.onStartRecordExchange();
 
     EXPECT_EQ(storedUsername(db, guid), QString("phone-user"));
-    EXPECT_EQ(db.receivedCredentialsRevision(), 2);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 2);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -737,7 +737,7 @@ TEST_F(SyncWorkerTest, RecordsAreReceivedPageByPage)
     QList<CredentialConfig> credentials;
     ASSERT_EQ(db.credentialList(&credentials), Database::ReadResult::OK);
     EXPECT_EQ(credentials.size(), 5);
-    EXPECT_EQ(db.receivedCredentialsRevision(), 5);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 5);
     EXPECT_TRUE(unsyncedCredentials(db).isEmpty());
 }
 
@@ -1386,7 +1386,7 @@ TEST_F(SyncWorkerTest, AnswerThatComesAfterSyncIsTurnedOffChangesNothing)
     EXPECT_EQ(list_request_count_, 1);
     EXPECT_EQ(record_request_count_, 0);
     EXPECT_TRUE(storedUsername(db, guid).isEmpty());
-    EXPECT_EQ(db.receivedCredentialsRevision(), 0);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
     EXPECT_TRUE(storedRouter().syncStorageId().isEmpty());
 
     ASSERT_EQ(events_.size(), 1);
@@ -1954,7 +1954,7 @@ TEST_F(SyncWorkerTest, ProfileGoesToTheRouterAndToTheOtherDevice)
     receivePhoneProfiles();
 
     EXPECT_EQ(storedProfileName(phone_db_, guid), QString("office"));
-    EXPECT_EQ(phone_db_.receivedProfilesRevision(), 1);
+    EXPECT_EQ(phone_db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1970,7 +1970,7 @@ TEST_F(SyncWorkerTest, ProfileOfTheOtherDeviceIsReceivedAndAnnounced)
     sendPhoneProfiles();
 
     EXPECT_EQ(storedProfileName(db, guid), QString("office"));
-    EXPECT_EQ(db.receivedProfilesRevision(), 1);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 1);
     EXPECT_EQ(profiles_changed_count_, 1);
     EXPECT_EQ(credentials_changed_count_, 0);
 }
@@ -1985,8 +1985,8 @@ TEST_F(SyncWorkerTest, SentProfileIsNotReceivedBack)
 
     worker_.onSessionStarted();
 
-    EXPECT_EQ(db.receivedCredentialsRevision(), 1);
-    EXPECT_EQ(db.receivedProfilesRevision(), 2);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 1);
+    EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 2);
 
     worker_.onStartRecordExchange();
 
