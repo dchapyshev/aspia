@@ -37,7 +37,7 @@ struct SyncProfileTraits
     static bool hasSameContent(const Config& first, const Config& second);
     static bool storeReceived(const Database& db, Database::SyncTransaction& transaction, Config config,
                               qint64 sync_revision);
-    static bool storeUnknownData(Database::SyncTransaction& transaction, const Config& config);
+    static bool storeUnknownData(const Database& db, Database::SyncTransaction& transaction, const Config& config);
 };
 
 extern template class SyncRecordsOf<SyncProfileTraits>;

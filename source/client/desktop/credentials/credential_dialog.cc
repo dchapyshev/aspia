@@ -30,7 +30,7 @@
 #include "base/peer/user.h"
 #include "client/desktop/credentials/ui_credential_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/desktop/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -161,11 +161,11 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
     credential.setUsername(ui->edit_username->text());
     credential.setPassword(ui->edit_password->password());
 
-    Database& db = Database::instance();
+    CredentialStore store;
 
     if (credential_id_ == -1)
     {
-        if (!db.addCredential(credential))
+        if (!store.add(credential))
         {
             MsgBox::warning(this, tr("Unable to add credentials"));
             LOG(INFO) << "Unable to add credentials to database";
@@ -176,7 +176,7 @@ void CredentialDialog::onButtonBoxClicked(QAbstractButton* button)
     }
     else
     {
-        if (!db.modifyCredential(credential))
+        if (!store.modify(credential))
         {
             MsgBox::warning(this, tr("Unable to modify credentials"));
             LOG(INFO) << "Unable to modify credentials in database";
@@ -205,7 +205,7 @@ void CredentialDialog::onLoadData()
         return;
 
     CredentialConfig credential;
-    const Database::FindResult found = Database::instance().findCredential(credential_id_, &credential);
+    const Database::FindResult found = CredentialStore().find(credential_id_, &credential);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to find credentials with id" << credential_id_;

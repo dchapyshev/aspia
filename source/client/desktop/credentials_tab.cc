@@ -32,7 +32,7 @@
 #include "client/desktop/credentials/credential_import_dialog.h"
 #include "client/desktop/credentials/credential_list_model.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/desktop/msg_box.h"
 
 namespace {
@@ -212,7 +212,7 @@ void CredentialsTab::onDeleteAction()
         return;
     }
 
-    if (!Database::instance().removeCredential(credential_id))
+    if (!CredentialStore().remove(credential_id))
     {
         MsgBox::warning(this, tr("Unable to delete credentials."));
         return;
@@ -255,7 +255,7 @@ void CredentialsTab::onContextMenu(const QPoint& pos)
 void CredentialsTab::reload(qint64 credential_id)
 {
     QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+    const Database::ReadResult result = CredentialStore().list(&credentials);
 
     if (result == Database::ReadResult::FAILED)
     {

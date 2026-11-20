@@ -35,7 +35,7 @@
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "client/storage/user_settings.h"
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -270,7 +270,7 @@ protected:
         EXPECT_EQ(direct->groupId(), groups.front().id());
 
         CredentialConfig credential;
-        ASSERT_EQ(db.findCredential(3, &credential), Database::FindResult::FOUND);
+        ASSERT_EQ(CredentialStore(db).find(3, &credential), Database::FindResult::FOUND);
         EXPECT_EQ(credential.username(), QString("shared-user"));
 
         RouterConfig router;

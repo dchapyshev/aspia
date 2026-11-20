@@ -23,6 +23,7 @@
 
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/credential_store.h"
 
 namespace {
 
@@ -406,7 +407,7 @@ Database::FindResult Database::findLocalHost(qint64 entry_id, LocalHostConfig* h
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id) const
+std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(qint64 entry_id)
 {
     LocalHostConfig host;
     if (findLocalHost(entry_id, &host) != FindResult::FOUND)
@@ -416,7 +417,7 @@ std::optional<std::pair<QString, SecureString>> Database::localHostCredentials(q
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    const FindResult found = findCredential(host.credentialId(), &credential);
+    const FindResult found = CredentialStore(*this).find(host.credentialId(), &credential);
     if (found == FindResult::NOT_FOUND)
         return std::make_pair(host.username(), host.password());
 

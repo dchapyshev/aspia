@@ -32,7 +32,7 @@
 #include "client/android/credential_export_widget.h"
 #include "client/android/credential_import_widget.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/android/icon_button.h"
 #include "common/android/menu.h"
 #include "common/android/tree_widget.h"
@@ -139,7 +139,7 @@ void CredentialsWidget::onReload()
     const QIcon unread_icon = GuiApplication::svgIcon(":/img/key-corrupted.svg");
 
     QList<CredentialConfig> credentials;
-    const Database::ReadResult result = Database::instance().credentialList(&credentials);
+    const Database::ReadResult result = CredentialStore().list(&credentials);
     if (result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read the list of credentials:" << result;
 

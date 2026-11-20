@@ -27,7 +27,7 @@
 #include "client/android/credential_selection_list.h"
 #include "client/router/router_controller.h"
 #include "client/storage/credential_file.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
 #include "common/android/icon_button.h"
@@ -169,14 +169,14 @@ void CredentialImportWidget::onOpenClicked()
         return first.displayName().localeAwareCompare(second.displayName()) < 0;
     });
 
-    Database& db = Database::instance();
+    CredentialStore store;
     QList<CredentialSelectionList::Item> items;
 
     for (const CredentialConfig& credential : std::as_const(credentials))
     {
         CredentialConfig existing;
         const bool exists =
-            db.findCredentialByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
+            store.findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
 
         CredentialSelectionList::Item item;
         item.icon = credential.type() == CredentialConfig::Type::OS
@@ -200,7 +200,7 @@ void CredentialImportWidget::onOpenClicked()
 //--------------------------------------------------------------------------------------------------
 void CredentialImportWidget::onImportClicked()
 {
-    Database& db = Database::instance();
+    CredentialStore store;
 
     int added = 0;
     int replaced = 0;
@@ -210,13 +210,13 @@ void CredentialImportWidget::onImportClicked()
         CredentialConfig credential = credentials_[index];
 
         CredentialConfig existing;
-        const Database::FindResult found = db.findCredentialByGuid(credential.guid(), &existing);
+        const Database::FindResult found = store.findByGuid(credential.guid(), &existing);
 
         bool written = false;
 
         if (found == Database::FindResult::NOT_FOUND)
         {
-            written = db.addCredential(credential);
+            written = store.add(credential);
             if (written)
                 ++added;
         }
@@ -224,7 +224,7 @@ void CredentialImportWidget::onImportClicked()
         {
             credential.setId(existing.id());
 
-            written = db.modifyCredential(credential);
+            written = store.modify(credential);
             if (written)
                 ++replaced;
         }

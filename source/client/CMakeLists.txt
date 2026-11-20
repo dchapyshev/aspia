@@ -83,7 +83,9 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/auto_backup_unittest.cc
     storage/backup_unittest.cc
     storage/credential_file_unittest.cc
+    storage/credential_store_unittest.cc
     storage/database_migration_unittest.cc
+    storage/database_test_base.h
     storage/database_unittest.cc
     storage/user_settings_unittest.cc
     sync/sync_credentials_unittest.cc

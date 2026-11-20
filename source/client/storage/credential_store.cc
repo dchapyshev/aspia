@@ -16,14 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 
 #include <QDateTime>
 #include <QUuid>
 
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
-#include "base/sql/sql_transaction.h"
 
 namespace {
 
@@ -48,19 +47,26 @@ Database::ReadResult readCredential(const SqlQuery& query, CredentialConfig* cre
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult Database::credentialList(
+CredentialStore::CredentialStore(Database& db)
+    : DatabaseStore(db)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::ReadResult CredentialStore::list(
     QList<CredentialConfig>* credentials, std::optional<CredentialConfig::Type> type) const
 {
     CHECK(credentials);
     credentials->clear();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return ReadResult::FAILED;
+        return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, type.has_value() ?
+    SqlQuery query(sql(), type.has_value() ?
         "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE deleted=0 AND type=? "
         "ORDER BY casefold(name)" :
         "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE deleted=0 "
@@ -68,7 +74,7 @@ Database::ReadResult Database::credentialList(
     if (type.has_value())
         query.addInt64(static_cast<qint64>(*type));
 
-    ReadResult result = ReadResult::OK;
+    Database::ReadResult result = Database::ReadResult::OK;
 
     for (;;)
     {
@@ -77,15 +83,15 @@ Database::ReadResult Database::credentialList(
         {
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return ReadResult::FAILED;
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
 
         CredentialConfig credential;
-        if (readCredential(query, &credential) != ReadResult::OK)
-            result = ReadResult::INCOMPLETE;
+        if (readCredential(query, &credential) != Database::ReadResult::OK)
+            result = Database::ReadResult::INCOMPLETE;
 
         credentials->append(credential);
     }
@@ -94,9 +100,9 @@ Database::ReadResult Database::credentialList(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addCredential(CredentialConfig& credential)
+bool CredentialStore::add(CredentialConfig& credential)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -118,9 +124,9 @@ bool Database::addCredential(CredentialConfig& credential)
     const qint64 modify_time = QDateTime::currentSecsSinceEpoch();
 
     {
-        SqlQuery restore_query(db_, "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, "
-                                    "sync_dirty=sync_dirty+1, deleted=0 WHERE guid=? AND deleted!=0 "
-                                    "RETURNING id");
+        SqlQuery restore_query(sql(), "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, "
+                                      "sync_dirty=sync_dirty+1, deleted=0 WHERE guid=? AND deleted!=0 "
+                                      "RETURNING id");
         restore_query.addInt64(static_cast<int>(credential.type()));
         restore_query.addText(credential.displayName());
         restore_query.addBlob(*encrypted_data);
@@ -130,7 +136,7 @@ bool Database::addCredential(CredentialConfig& credential)
         const SqlQuery::StepResult step = restore_query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
             return false;
         }
 
@@ -141,7 +147,7 @@ bool Database::addCredential(CredentialConfig& credential)
 
             if (restore_query.next() != SqlQuery::StepResult::DONE)
             {
-                LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+                LOG(ERROR) << "Unable to execute query:" << sql().lastError();
                 return false;
             }
 
@@ -149,8 +155,8 @@ bool Database::addCredential(CredentialConfig& credential)
         }
     }
 
-    SqlQuery query(db_, "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_dirty) "
-                        "VALUES (NULL, ?, ?, ?, ?, ?, 1)");
+    SqlQuery query(sql(), "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_dirty) "
+                          "VALUES (NULL, ?, ?, ?, ?, ?, 1)");
     query.addInt64(static_cast<int>(credential.type()));
     query.addText(credential.displayName());
     query.addBlob(*encrypted_data);
@@ -159,19 +165,19 @@ bool Database::addCredential(CredentialConfig& credential)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
-    credential.setId(db_.lastInsertRowId());
+    credential.setId(sql().lastInsertRowId());
     credential.setModifyTime(modify_time);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyCredential(const CredentialConfig& credential)
+bool CredentialStore::modify(const CredentialConfig& credential)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -183,21 +189,21 @@ bool Database::modifyCredential(const CredentialConfig& credential)
         return false;
     }
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(sql());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
         return false;
     }
 
-    SqlQuery row(db_, "SELECT guid, data FROM credentials WHERE id=? AND deleted=0");
+    SqlQuery row(sql(), "SELECT guid, data FROM credentials WHERE id=? AND deleted=0");
     row.addInt64(credential.id());
 
     const SqlQuery::StepResult step = row.next();
     if (step != SqlQuery::StepResult::ROW)
     {
         if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         else
             LOG(ERROR) << "Credential" << credential.id() << "not found";
         return false;
@@ -217,8 +223,8 @@ bool Database::modifyCredential(const CredentialConfig& credential)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db_, "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, "
-                        "sync_dirty=sync_dirty+1 WHERE id=?");
+    SqlQuery query(sql(), "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, "
+                          "sync_dirty=sync_dirty+1 WHERE id=?");
     query.addInt64(static_cast<int>(credential.type()));
     query.addText(credential.displayName());
     query.addBlob(*encrypted_data);
@@ -227,7 +233,7 @@ bool Database::modifyCredential(const CredentialConfig& credential)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
@@ -235,39 +241,39 @@ bool Database::modifyCredential(const CredentialConfig& credential)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::removeCredential(qint64 credential_id)
+bool CredentialStore::remove(qint64 credential_id)
 {
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlTransaction transaction(db_);
+    SqlTransaction transaction(sql());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
         return false;
     }
 
-    SqlQuery remove_query(db_, "DELETE FROM credentials WHERE id=? AND sync_revision=0");
+    SqlQuery remove_query(sql(), "DELETE FROM credentials WHERE id=? AND sync_revision=0");
     remove_query.addInt64(credential_id);
 
     if (!remove_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
-    SqlQuery mark_query(db_, "UPDATE credentials SET name='', data=X'', modify_time=?, "
-                             "sync_dirty=sync_dirty+1, deleted=1 "
-                             "WHERE id=? AND sync_revision!=0 AND deleted=0");
+    SqlQuery mark_query(sql(), "UPDATE credentials SET name='', data=X'', modify_time=?, "
+                               "sync_dirty=sync_dirty+1, deleted=1 "
+                               "WHERE id=? AND sync_revision!=0 AND deleted=0");
     mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
     mark_query.addInt64(credential_id);
 
     if (!mark_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
         return false;
     }
 
@@ -275,108 +281,108 @@ bool Database::removeCredential(qint64 credential_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findCredential(qint64 credential_id, CredentialConfig* credential) const
+Database::FindResult CredentialStore::find(qint64 credential_id, CredentialConfig* credential) const
 {
     CHECK(credential);
     *credential = CredentialConfig();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return FindResult::FAILED;
+        return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, type, name, data, guid, modify_time FROM credentials "
-                        "WHERE id=? AND deleted=0");
+    SqlQuery query(sql(), "SELECT id, type, name, data, guid, modify_time FROM credentials "
+                          "WHERE id=? AND deleted=0");
     query.addInt64(credential_id);
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return FindResult::FAILED;
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        return Database::FindResult::FAILED;
     }
 
     if (step == SqlQuery::StepResult::DONE)
-        return FindResult::NOT_FOUND;
+        return Database::FindResult::NOT_FOUND;
 
-    if (readCredential(query, credential) != ReadResult::OK)
+    if (readCredential(query, credential) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the data of credentials" << credential_id;
-        return FindResult::UNREADABLE;
+        return Database::FindResult::UNREADABLE;
     }
 
-    return FindResult::FOUND;
+    return Database::FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::FindResult Database::findCredentialByGuid(const QString& guid, CredentialConfig* credential) const
+Database::FindResult CredentialStore::findByGuid(const QString& guid, CredentialConfig* credential) const
 {
     CHECK(credential);
     *credential = CredentialConfig();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return FindResult::FAILED;
+        return Database::FindResult::FAILED;
     }
 
     // No record carries an empty identifier, so there is nothing to look for.
     if (guid.isEmpty())
-        return FindResult::NOT_FOUND;
+        return Database::FindResult::NOT_FOUND;
 
-    SqlQuery query(db_, "SELECT id, type, name, data, guid, modify_time FROM credentials "
-                        "WHERE guid=? AND deleted=0");
+    SqlQuery query(sql(), "SELECT id, type, name, data, guid, modify_time FROM credentials "
+                          "WHERE guid=? AND deleted=0");
     query.addText(guid);
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-        return FindResult::FAILED;
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        return Database::FindResult::FAILED;
     }
 
     if (step == SqlQuery::StepResult::DONE)
-        return FindResult::NOT_FOUND;
+        return Database::FindResult::NOT_FOUND;
 
-    if (readCredential(query, credential) != ReadResult::OK)
+    if (readCredential(query, credential) != Database::ReadResult::OK)
     {
         LOG(ERROR) << "Unable to read the data of credentials with guid" << guid;
-        return FindResult::UNREADABLE;
+        return Database::FindResult::UNREADABLE;
     }
 
-    return FindResult::FOUND;
+    return Database::FindResult::FOUND;
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult Database::unsyncedCredentials(QList<UnsyncedCredential>* credentials) const
+Database::ReadResult CredentialStore::unsynced(QList<Unsynced>* credentials) const
 {
     CHECK(credentials);
     credentials->clear();
 
-    if (!isValid())
+    if (!db_.isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return ReadResult::FAILED;
+        return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(db_, "SELECT id, type, name, data, guid, modify_time, sync_revision, sync_dirty, deleted "
-                        "FROM credentials WHERE sync_dirty!=0");
+    SqlQuery query(sql(), "SELECT id, type, name, data, guid, modify_time, sync_revision, sync_dirty, deleted "
+                          "FROM credentials WHERE sync_dirty!=0");
 
-    ReadResult result = ReadResult::OK;
+    Database::ReadResult result = Database::ReadResult::OK;
 
     for (;;)
     {
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << db_.lastError();
-            return ReadResult::FAILED;
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
             break;
 
-        UnsyncedCredential& unsynced = credentials->emplaceBack();
+        Unsynced& unsynced = credentials->emplaceBack();
         unsynced.deleted = query.columnInt64(8) != 0;
         unsynced.sync_revision = query.columnInt64(6);
         unsynced.sync_dirty = query.columnInt64(7);
@@ -387,11 +393,107 @@ Database::ReadResult Database::unsyncedCredentials(QList<UnsyncedCredential>* cr
             unsynced.credential.setGuid(query.columnText(4));
             unsynced.credential.setModifyTime(query.columnInt64(5));
         }
-        else if (readCredential(query, &unsynced.credential) != ReadResult::OK)
+        else if (readCredential(query, &unsynced.credential) != Database::ReadResult::OK)
         {
-            result = ReadResult::INCOMPLETE;
+            result = Database::ReadResult::INCOMPLETE;
         }
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialStore::storeReceived(
+    Database::SyncTransaction& transaction, const CredentialConfig& credential, qint64 sync_revision)
+{
+    if (!transaction.isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    if (!credential.isValid() || credential.guid().isEmpty() || sync_revision <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    SqlQuery query(sql(), "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_revision) "
+                          "VALUES (NULL, ?, ?, ?, ?, ?, ?) "
+                          "ON CONFLICT(guid) DO UPDATE SET type=excluded.type, name=excluded.name, "
+                          "data=excluded.data, modify_time=excluded.modify_time, "
+                          "sync_revision=excluded.sync_revision, sync_dirty=0, deleted=0 "
+                          "WHERE credentials.sync_revision!=excluded.sync_revision");
+    query.addInt64(static_cast<int>(credential.type()));
+    query.addText(credential.displayName());
+    query.addBlob(*encrypted_data);
+    query.addText(credential.guid());
+    query.addInt64(credential.modifyTime());
+    query.addInt64(sync_revision);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialStore::setUnknownData(
+    Database::SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
+{
+    if (!transaction.isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlQuery row(sql(), "SELECT data FROM credentials WHERE guid=? AND deleted=0");
+    row.addText(guid);
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        else
+            LOG(ERROR) << "Credential with guid" << guid << "not found";
+        return false;
+    }
+
+    CredentialConfig credential;
+    credential.setGuid(guid);
+
+    if (!credential.setEncryptedData(row.columnBlob(0)))
+    {
+        LOG(ERROR) << "Unable to read encrypted data of credential with guid" << guid;
+        return false;
+    }
+
+    credential.setUnknownData(unknown_data);
+
+    std::optional<QByteArray> encrypted_data = credential.encryptedData();
+    if (!encrypted_data.has_value())
+    {
+        LOG(ERROR) << "Unable to seal credential with guid" << guid;
+        return false;
+    }
+
+    SqlQuery query(sql(), "UPDATE credentials SET data=? WHERE guid=?");
+    query.addBlob(*encrypted_data);
+    query.addText(guid);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        return false;
+    }
+
+    return true;
 }

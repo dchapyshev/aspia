@@ -23,15 +23,17 @@ collect_sources(SOURCE_CLIENT_STORAGE
     backup.h
     credential_file.cc
     credential_file.h
+    credential_store.cc
+    credential_store.h
     database.cc
     database.h
-    database_credentials.cc
     database_local_hosts.cc
     database_migration.cc
     database_migration.h
     database_profiles.cc
     database_router.cc
     database_settings.cc
+    database_store.h
     database_sync.cc
     instance_settings.cc
     instance_settings.h

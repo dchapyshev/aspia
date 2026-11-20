@@ -33,7 +33,7 @@
 #include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "base/peer/host_id.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "client/storage/master_password.h"
 #include "proto/router.h"
 #include "proto/storage.h"
@@ -186,7 +186,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
 
     const Database::ReadResult read_results[] =
     {
-        db.credentialList(&credentials),
+        CredentialStore(db).list(&credentials),
         db.allLocalHosts(&hosts),
         db.allRouterHosts(&router_hosts),
         db.profileList(&profiles)

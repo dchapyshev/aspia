@@ -27,7 +27,7 @@
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/controls.h"
@@ -125,7 +125,7 @@ void CredentialEditor::prepareForAdd()
 bool CredentialEditor::prepareForEdit(qint64 credential_id)
 {
     CredentialConfig credential;
-    const Database::FindResult found = Database::instance().findCredential(credential_id, &credential);
+    const Database::FindResult found = CredentialStore().find(credential_id, &credential);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Credentials not found:" << credential_id;
@@ -207,10 +207,10 @@ void CredentialEditor::onSaveClicked()
     credential.setUsername(edit_username_->text());
     credential.setPassword(SecureString(edit_password_->text()));
 
-    Database& db = Database::instance();
+    CredentialStore store;
 
     const bool saved = (credential_id_ < 0) ?
-        db.addCredential(credential) : db.modifyCredential(credential);
+        store.add(credential) : store.modify(credential);
     if (!saved)
     {
         showError(tr("Failed to save the credentials."));
@@ -230,7 +230,7 @@ void CredentialEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeCredential(credential_id_))
+    if (!CredentialStore().remove(credential_id_))
     {
         showError(tr("Failed to delete the credentials."));
         return;

@@ -35,6 +35,7 @@
 #include "client/config.h"
 #include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/credential_store.h"
 #include "client/storage/user_settings.h"
 
 // The dialog offers the records of the database of the test thread and hears of their changes
@@ -60,7 +61,7 @@ protected:
         credential.setUsername(username);
         credential.setPassword(SecureString(password));
 
-        EXPECT_TRUE(Database::instance().addCredential(credential));
+        EXPECT_TRUE(CredentialStore().add(credential));
         return credential.id();
     }
 
@@ -509,7 +510,7 @@ TEST_F(AuthorizationDialogTest, ChosenRecordRemovedOnAnotherDeviceIsNotReplacedB
     combo->setCurrentIndex(combo->findData(QVariant::fromValue(second_id)));
     ASSERT_EQ(dialog.credentialId(), second_id);
 
-    ASSERT_TRUE(Database::instance().removeCredential(second_id));
+    ASSERT_TRUE(CredentialStore().remove(second_id));
     emit controller_.sig_credentialsChanged();
 
     EXPECT_FALSE(saved->isChecked());

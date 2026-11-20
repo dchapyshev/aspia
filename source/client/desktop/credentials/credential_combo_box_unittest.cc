@@ -28,6 +28,7 @@
 #include "base/sql/sql_query.h"
 #include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/credential_store.h"
 
 // The combo box reads the records from the database of the test thread and listens to the
 // controller, which stands here without a worker and says of a change only when a test tells it to.
@@ -53,7 +54,7 @@ protected:
         credential.setUsername("user");
         credential.setPassword(SecureString(QString("secret")));
 
-        EXPECT_TRUE(Database::instance().addCredential(credential));
+        EXPECT_TRUE(CredentialStore().add(credential));
         return credential.id();
     }
 
@@ -158,7 +159,7 @@ TEST_F(CredentialComboBoxTest, ChoiceIsEmptyOnceTheRecordIsGone)
     combo.setCurrentCredentialId(second_id);
     ASSERT_EQ(combo.currentCredentialId(), second_id);
 
-    ASSERT_TRUE(Database::instance().removeCredential(second_id));
+    ASSERT_TRUE(CredentialStore().remove(second_id));
     ASSERT_TRUE(combo.onReload());
 
     EXPECT_EQ(combo.count(), 1);

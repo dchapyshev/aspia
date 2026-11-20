@@ -27,7 +27,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/android/credential_selection_list.h"
 #include "client/storage/credential_file.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "client/storage/master_password.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -104,7 +104,7 @@ void CredentialExportWidget::prepare()
 {
     clear();
 
-    if (Database::instance().credentialList(&credentials_) == Database::ReadResult::FAILED)
+    if (CredentialStore().list(&credentials_) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
         showError(tr("Failed to read the credentials."));

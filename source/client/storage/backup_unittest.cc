@@ -23,19 +23,13 @@
 #include <QTemporaryDir>
 #include <QUuid>
 
-#include <gtest/gtest.h>
-
 #include <functional>
 
 #include "base/serialization.h"
-#include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
-#include "base/crypto/random.h"
-#include "base/crypto/secure_byte_array.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/host_id.h"
-#include "base/sql/sql_database.h"
-#include "client/storage/database.h"
+#include "client/storage/database_test_base.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -54,51 +48,6 @@ std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_
     }
 
     return group;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db)
-{
-    RouterConfig router;
-    const Database::FindResult result = db.routerConfig(&router);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return router;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<CredentialConfig> findCredential(const Database& db, qint64 credential_id)
-{
-    CredentialConfig credential;
-    const Database::FindResult result = db.findCredential(credential_id, &credential);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return credential;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const QString& guid)
-{
-    CredentialConfig credential;
-    const Database::FindResult result = db.findCredentialByGuid(guid, &credential);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return credential;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -211,7 +160,7 @@ protected:
         credential.setUsername(username);
         credential.setPassword(SecureString(password));
 
-        EXPECT_TRUE(db.addCredential(credential));
+        EXPECT_TRUE(CredentialStore(db).add(credential));
         return credential.id();
     }
 
@@ -252,7 +201,7 @@ protected:
     static QList<CredentialConfig> credentialList(Database& db)
     {
         QList<CredentialConfig> credentials;
-        EXPECT_EQ(db.credentialList(&credentials), Database::ReadResult::OK);
+        EXPECT_EQ(CredentialStore(db).list(&credentials), Database::ReadResult::OK);
         return credentials;
     }
 
@@ -1147,7 +1096,7 @@ TEST_F(BackupTest, OsCredentialKeepsItsTypeThroughTheFile)
     credential.setDisplayName("workstation");
     credential.setUsername("DOMAIN\\user");
     credential.setPassword(SecureString(QString("secret")));
-    ASSERT_TRUE(source_.addCredential(credential));
+    ASSERT_TRUE(CredentialStore(source_).add(credential));
 
     const std::optional<CredentialConfig> original = findCredential(source_, credential.id());
     ASSERT_TRUE(original.has_value());
@@ -1239,7 +1188,7 @@ TEST_F(BackupTest, HostsKeepTheirOsCredentialsThroughTheFile)
     os.setDisplayName("workstation");
     os.setUsername("DOMAIN\\user");
     os.setPassword(SecureString(QString("secret")));
-    ASSERT_TRUE(source_.addCredential(os));
+    ASSERT_TRUE(CredentialStore(source_).add(os));
 
     addRouter(source_, "router.example.com");
 
@@ -1395,7 +1344,7 @@ TEST_F(BackupTest, RemovedCredentialsTakeTheirLinksOutOfTheFile)
         ASSERT_TRUE(raw.exec("UPDATE credentials SET sync_revision=7, sync_dirty=0"));
     }
 
-    ASSERT_TRUE(source_.removeCredential(credential_id));
+    ASSERT_TRUE(CredentialStore(source_).remove(credential_id));
 
     ASSERT_EQ(exportBook(), Backup::Result::SUCCESS);
     ASSERT_EQ(importBook(), Backup::Result::SUCCESS);

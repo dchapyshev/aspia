@@ -122,7 +122,8 @@ bool SyncProfileTraits::storeReceived(
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SyncProfileTraits::storeUnknownData(Database::SyncTransaction& transaction, const Config& config)
+bool SyncProfileTraits::storeUnknownData(
+    const Database&, Database::SyncTransaction& transaction, const Config& config)
 {
     return transaction.setProfileUnknownData(config.guid(), config.unknownData());
 }

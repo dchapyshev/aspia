@@ -21,20 +21,13 @@
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
-#include <QTemporaryDir>
 #include <QThread>
 
-#include <gtest/gtest.h>
-
 #include "base/serialization.h"
-#include "base/crypto/data_cryptor.h"
 #include "base/crypto/os_crypt.h"
-#include "base/crypto/random.h"
-#include "base/crypto/secure_byte_array.h"
 #include "base/net/udp_channel.h"
-#include "base/sql/sql_database.h"
-#include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/database_test_base.h"
 #include "client/storage/master_password.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
@@ -77,51 +70,6 @@ std::optional<LocalGroupConfig> findLocalGroup(const Database& db, qint64 group_
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
-std::optional<RouterConfig> findRouter(const Database& db)
-{
-    RouterConfig router;
-    const Database::FindResult result = db.routerConfig(&router);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return router;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<CredentialConfig> findCredential(const Database& db, qint64 credential_id)
-{
-    CredentialConfig credential;
-    const Database::FindResult result = db.findCredential(credential_id, &credential);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return credential;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
-std::optional<CredentialConfig> findCredentialByGuid(const Database& db, const QString& guid)
-{
-    CredentialConfig credential;
-    const Database::FindResult result = db.findCredentialByGuid(guid, &credential);
-    if (result != Database::FindResult::FOUND)
-    {
-        EXPECT_EQ(result, Database::FindResult::NOT_FOUND);
-        return std::nullopt;
-    }
-
-    return credential;
-}
-
-//--------------------------------------------------------------------------------------------------
-// The record of the base, when it was read and the base has one.
 std::optional<RouterHostConfig> findRouterHost(const Database& db, HostId host_id)
 {
     RouterHostConfig host;
@@ -135,41 +83,11 @@ std::optional<RouterHostConfig> findRouterHost(const Database& db, HostId host_i
     return host;
 }
 
-//--------------------------------------------------------------------------------------------------
-Database::ReencryptResult reencrypt(
-    Database& db, const SecureByteArray& key, const QByteArray& salt, const QByteArray& verifier)
-{
-    Database::Reencryption reencryption(db);
-
-    const Database::ReencryptResult begun = reencryption.begin();
-    if (begun != Database::ReencryptResult::DONE)
-        return begun;
-
-    DataCryptor::instance().setKey(key);
-
-    if (!reencryption.commit(salt, verifier, 1))
-        return Database::ReencryptResult::FAILED;
-
-    return Database::ReencryptResult::DONE;
-}
-
 } // namespace
 
-class DatabaseTest : public testing::Test
+class DatabaseTest : public DatabaseTestBase
 {
 protected:
-    void SetUp() override
-    {
-        // A record of the address book keeps its text encrypted with a key of the process, which
-        // the application sets once the master password is entered.
-        DataCryptor::instance().setKey(SecureByteArray(Random::byteArray(32)));
-
-        ASSERT_TRUE(dir_.isValid());
-
-        file_path_ = dir_.filePath("client.db3");
-        ASSERT_TRUE(db_.open(file_path_));
-    }
-
     // Writes a check time the public API cannot produce, since it always stamps the current one.
     bool setRouterHostCheckTime(HostId host_id, qint64 check_time)
     {
@@ -184,145 +102,8 @@ protected:
         return query.exec();
     }
 
-    // The moment the row |id| of |table| was last edited, which the public API hands out for the
-    // local hosts only.
-    qint64 modifyTime(const QString& table, const QString& key, qint64 id)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return -1;
-
-        const std::string sql =
-            QString("SELECT modify_time FROM %1 WHERE %2=?").arg(table, key).toStdString();
-
-        SqlQuery query(raw, sql);
-        query.addInt64(id);
-
-        if (query.next() != SqlQuery::StepResult::ROW)
-            return -1;
-
-        return query.columnInt64(0);
-    }
-
-    // Writes a moment the public API cannot produce, since it always stamps the current one.
-    bool setModifyTime(const QString& table, const QString& key, qint64 id, qint64 modify_time)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        const std::string sql =
-            QString("UPDATE %1 SET modify_time=? WHERE %2=?").arg(table, key).toStdString();
-
-        SqlQuery query(raw, sql);
-        query.addInt64(modify_time);
-        query.addInt64(id);
-
-        return query.exec();
-    }
-
-    // Marks a record of credentials as one the router holds at |revision| with no changes since,
-    // which only an exchange with the router does.
-    bool markCredentialSynced(qint64 credential_id, qint64 revision)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        SqlQuery query(raw, "UPDATE credentials SET sync_revision=?, sync_dirty=0 WHERE id=?");
-        query.addInt64(revision);
-        query.addInt64(credential_id);
-
-        return query.exec();
-    }
-
-    // The rows of the credentials, the ones marked as deleted, which the public API skips, included.
-    qint64 credentialRowCount()
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return -1;
-
-        SqlQuery query(raw, "SELECT COUNT(*) FROM credentials");
-        if (query.next() != SqlQuery::StepResult::ROW)
-            return -1;
-
-        return query.columnInt64(0);
-    }
-
-    // True when the row of the record is in place, marked as deleted, with its name and its data
-    // wiped.
-    bool isCredentialMarkedDeleted(qint64 credential_id)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        SqlQuery query(raw, "SELECT COUNT(*) FROM credentials WHERE id=? AND deleted=1 AND name='' AND data=X''");
-        query.addInt64(credential_id);
-
-        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
-    }
-
-    // Marks a profile as one the router holds at |revision| with no changes since.
-    bool markProfileSynced(qint64 profile_id, qint64 revision)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        SqlQuery query(raw, "UPDATE profiles SET sync_revision=?, sync_dirty=0 WHERE id=?");
-        query.addInt64(revision);
-        query.addInt64(profile_id);
-
-        return query.exec();
-    }
-
-    // The rows of the profiles, the default one and the ones marked as deleted included.
-    qint64 profileRowCount()
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return -1;
-
-        SqlQuery query(raw, "SELECT COUNT(*) FROM profiles");
-        if (query.next() != SqlQuery::StepResult::ROW)
-            return -1;
-
-        return query.columnInt64(0);
-    }
-
-    // True when the row of the profile is in place, marked as deleted, with its name and its data wiped.
-    bool isProfileMarkedDeleted(qint64 profile_id)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        SqlQuery query(raw, "SELECT COUNT(*) FROM profiles WHERE id=? AND deleted=1 AND name='' AND data=X''");
-        query.addInt64(profile_id);
-
-        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
-    }
-
-    // Spoils the sealed text of a record the way a damaged database or one of another installation
-    // has it: the row is in place, its data does not open.
-    bool corruptRecordData(const QString& table, qint64 id)
-    {
-        SqlDatabase raw;
-        if (!raw.open(file_path_))
-            return false;
-
-        const std::string sql =
-            QString("UPDATE %1 SET data=X'00' WHERE id=?").arg(table).toStdString();
-
-        SqlQuery query(raw, sql);
-        query.addInt64(id);
-
-        return query.exec();
-    }
-
-    // The same for the router, which is kept among the settings.
+    // Spoils the sealed text of the router the way corruptRecordData() does for a record of a table. The
+    // router is kept among the settings.
     bool corruptRouterData()
     {
         SqlDatabase raw;
@@ -364,17 +145,6 @@ protected:
 
         EXPECT_TRUE(db_.addLocalHost(host));
         return host.id();
-    }
-
-    void addRouter(bool sync_enabled = false)
-    {
-        RouterConfig router;
-        router.setAddress("router.example.com");
-        router.setUsername("router-user");
-        router.setPassword(SecureString("router-secret"));
-        router.setSyncEnabled(sync_enabled);
-
-        EXPECT_TRUE(db_.setRouterConfig(router));
     }
 
     RouterHostConfig routerHost(HostId host_id, const QString& username, const QString& password)
@@ -444,60 +214,6 @@ protected:
         QList<RouterHostConfig> hosts;
         EXPECT_EQ(db_.allRouterHosts(&hosts), Database::ReadResult::OK);
         return hosts;
-    }
-
-    CredentialConfig credential(const QString& name, const QString& username,
-                                const QString& password)
-    {
-        CredentialConfig config;
-        config.setDisplayName(name);
-        config.setUsername(username);
-        config.setPassword(SecureString(password));
-        return config;
-    }
-
-    qint64 addCredential(const QString& name, const QString& username, const QString& password)
-    {
-        CredentialConfig config = credential(name, username, password);
-        EXPECT_TRUE(db_.addCredential(config));
-        return config.id();
-    }
-
-    QList<CredentialConfig> credentialList()
-    {
-        QList<CredentialConfig> credentials;
-        EXPECT_EQ(db_.credentialList(&credentials), Database::ReadResult::OK);
-        return credentials;
-    }
-
-    QList<Database::UnsyncedCredential> unsyncedCredentials()
-    {
-        QList<Database::UnsyncedCredential> credentials;
-        EXPECT_EQ(db_.unsyncedCredentials(&credentials), Database::ReadResult::OK);
-        return credentials;
-    }
-
-    // The synchronization changes the records in a transaction of the storage the device is
-    // attached to, so a test that plays the synchronization attaches the device first.
-    void attachSyncStorage()
-    {
-        addRouter(true);
-
-        const SecureByteArray key(Random::byteArray(32));
-        ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), key, false), Database::SyncResult::DONE);
-    }
-
-    QByteArray syncStorageId()
-    {
-        const std::optional<RouterConfig> router = findRouter(db_);
-        return router.has_value() ? router->syncStorageId() : QByteArray();
-    }
-
-    bool storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision)
-    {
-        Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.storeReceivedCredential(credential, sync_revision) && transaction.commit();
     }
 
     bool eraseCredential(const QString& guid)
@@ -602,12 +318,6 @@ protected:
         EXPECT_TRUE(db_.outdatedRouterHosts(&hosts));
         return hosts;
     }
-
-    Database db_;
-    QString file_path_;
-
-private:
-    QTemporaryDir dir_;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -850,24 +560,6 @@ TEST_F(DatabaseTest, ReencryptionKeepsTheMomentARecordWasEdited)
     ASSERT_EQ(reencrypt(db_, DataCryptor::instance().key(), "salt", "verifier"), Database::ReencryptResult::DONE);
 
     EXPECT_EQ(findLocalHost(db_, entry_id)->modifyTime(), modify_time);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Every write of a credential stamps the moment it was edited, the first one included.
-TEST_F(DatabaseTest, EditMarksTheMomentACredentialChanged)
-{
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-
-    const qint64 credential_id = addCredential("name", "user", "secret");
-    EXPECT_GE(modifyTime("credentials", "id", credential_id), start_time);
-
-    ASSERT_TRUE(setModifyTime("credentials", "id", credential_id, 1));
-
-    CredentialConfig edited = credential("renamed", "user", "secret");
-    edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-
-    EXPECT_GE(modifyTime("credentials", "id", credential_id), start_time);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1425,49 +1117,6 @@ TEST_F(DatabaseTest, RouterHostThatDoesNotOpenIsNotTakenForAMissingOne)
 }
 
 //--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, CredentialThatDoesNotOpenLeavesTheListIncomplete)
-{
-    const qint64 broken_id = addCredential("office", "user", "secret");
-    addCredential("home", "user", "secret");
-
-    ASSERT_TRUE(corruptRecordData("credentials", broken_id));
-
-    // The record that did not open is in the list all the same: without it the user would have
-    // no way to reach the row, and the result says the list is not whole.
-    QList<CredentialConfig> credentials;
-    EXPECT_EQ(db_.credentialList(&credentials), Database::ReadResult::INCOMPLETE);
-    ASSERT_EQ(credentials.size(), 2);
-
-    const CredentialConfig& broken = credentials.front().id() == broken_id ?
-        credentials.front() : credentials.back();
-    const CredentialConfig& readable = credentials.front().id() == broken_id ?
-        credentials.back() : credentials.front();
-
-    EXPECT_EQ(broken.displayName(), QString("office"));
-    EXPECT_TRUE(broken.username().isEmpty());
-    EXPECT_EQ(readable.displayName(), QString("home"));
-    EXPECT_EQ(readable.username(), QString("user"));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Credentials come by name whatever order they were added in, and the case of a letter does not
-// move them.
-TEST_F(DatabaseTest, CredentialsAreListedByName)
-{
-    addCredential("office", "user", "secret");
-    addCredential("Home", "user", "secret");
-    addCredential(QString::fromUtf8("Склад"), "user", "secret");
-    addCredential("backup", "user", "secret");
-
-    const QList<CredentialConfig> credentials = credentialList();
-    ASSERT_EQ(credentials.size(), 4);
-    EXPECT_EQ(credentials[0].displayName(), "backup");
-    EXPECT_EQ(credentials[1].displayName(), "Home");
-    EXPECT_EQ(credentials[2].displayName(), "office");
-    EXPECT_EQ(credentials[3].displayName(), QString::fromUtf8("Склад"));
-}
-
-//--------------------------------------------------------------------------------------------------
 // A list that was not read at all must not pass for a book without records.
 TEST_F(DatabaseTest, ListOfAClosedDatabaseFails)
 {
@@ -1478,7 +1127,7 @@ TEST_F(DatabaseTest, ListOfAClosedDatabaseFails)
     EXPECT_TRUE(hosts.isEmpty());
 
     QList<CredentialConfig> credentials;
-    EXPECT_EQ(closed.credentialList(&credentials), Database::ReadResult::FAILED);
+    EXPECT_EQ(CredentialStore(closed).list(&credentials), Database::ReadResult::FAILED);
     EXPECT_TRUE(credentials.isEmpty());
 }
 
@@ -1525,14 +1174,14 @@ TEST_F(DatabaseTest, SearchThatFoundNothingLeavesTheOutputEmpty)
     ASSERT_TRUE(credential_record.has_value());
 
     CredentialConfig credential;
-    ASSERT_EQ(db_.findCredential(credential_id, &credential), Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findCredential(credential_id + 1000, &credential), Database::FindResult::NOT_FOUND);
+    ASSERT_EQ(credentials_.find(credential_id, &credential), Database::FindResult::FOUND);
+    EXPECT_EQ(credentials_.find(credential_id + 1000, &credential), Database::FindResult::NOT_FOUND);
     EXPECT_EQ(credential.id(), -1);
     EXPECT_TRUE(credential.displayName().isEmpty());
 
-    ASSERT_EQ(db_.findCredentialByGuid(credential_record->guid(), &credential),
+    ASSERT_EQ(credentials_.findByGuid(credential_record->guid(), &credential),
               Database::FindResult::FOUND);
-    EXPECT_EQ(db_.findCredentialByGuid("no-such-guid", &credential),
+    EXPECT_EQ(credentials_.findByGuid("no-such-guid", &credential),
               Database::FindResult::NOT_FOUND);
     EXPECT_EQ(credential.id(), -1);
     EXPECT_TRUE(credential.displayName().isEmpty());
@@ -1590,10 +1239,10 @@ TEST_F(DatabaseTest, SearchOfARecordThatDoesNotOpenKeepsWhatWasRead)
     EXPECT_TRUE(router_host.username().isEmpty());
 
     CredentialConfig credential;
-    ASSERT_EQ(db_.findCredential(readable_credential_id, &credential), Database::FindResult::FOUND);
+    ASSERT_EQ(credentials_.find(readable_credential_id, &credential), Database::FindResult::FOUND);
     ASSERT_FALSE(credential.username().isEmpty());
 
-    EXPECT_EQ(db_.findCredential(broken_credential_id, &credential), Database::FindResult::UNREADABLE);
+    EXPECT_EQ(credentials_.find(broken_credential_id, &credential), Database::FindResult::UNREADABLE);
     EXPECT_EQ(credential.id(), broken_credential_id);
     EXPECT_EQ(credential.displayName(), QString("office"));
     EXPECT_TRUE(credential.username().isEmpty());
@@ -1745,9 +1394,9 @@ TEST_F(DatabaseTest, SyncStorageIsKeptWhenTheAccountIsEdited)
     const SecureByteArray key(Random::byteArray(32));
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, key, false), Database::SyncResult::DONE);
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     std::optional<RouterConfig> router = findRouter(db_);
@@ -1764,10 +1413,10 @@ TEST_F(DatabaseTest, SyncStorageIsKeptWhenTheAccountIsEdited)
     EXPECT_EQ(stored->syncStorageId(), storage_id);
     EXPECT_EQ(stored->syncStorageKey(), key);
 
-    EXPECT_EQ(credentialRowCount(), 2);
+    EXPECT_EQ(rowCount("credentials"), 2);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_TRUE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].sync_revision, 8);
@@ -1793,9 +1442,9 @@ TEST_F(DatabaseTest, SyncTurnedOffAndOnAgainKeepsTheGuidOfTheUser)
     ASSERT_EQ(db_.setSyncStorage(*router, storage_id, key, false), Database::SyncResult::DONE);
     ASSERT_TRUE(db_.setSyncStorageResetPending(*router));
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     ASSERT_TRUE(db_.setRouterConfig(*router));
@@ -1805,7 +1454,7 @@ TEST_F(DatabaseTest, SyncTurnedOffAndOnAgainKeepsTheGuidOfTheUser)
     EXPECT_EQ(stored->syncStorageId(), storage_id);
     EXPECT_EQ(stored->syncStorageKey(), key);
     EXPECT_TRUE(stored->isSyncStorageResetPending());
-    EXPECT_EQ(credentialRowCount(), 2);
+    EXPECT_EQ(rowCount("credentials"), 2);
 
     RouterConfig turned_off = *router;
     turned_off.setUserGuid(QString());
@@ -1820,10 +1469,10 @@ TEST_F(DatabaseTest, SyncTurnedOffAndOnAgainKeepsTheGuidOfTheUser)
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
     EXPECT_FALSE(stored->isSyncStorageResetPending());
 
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 0);
 
@@ -1917,9 +1566,9 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)),
                                  false), Database::SyncResult::DONE);
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     std::optional<RouterConfig> router = findRouter(db_);
@@ -1934,10 +1583,10 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
     EXPECT_TRUE(stored->syncStorageId().isEmpty());
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
 
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 0);
 }
@@ -2710,201 +2359,6 @@ TEST_F(DatabaseTest, BatchWithARecordThatCannotBeWrittenLeavesNothingBehind)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A credential is named by its guid everywhere it is referred to, so every one gets a guid the
-// moment it is added, and no two share one.
-TEST_F(DatabaseTest, CredentialGetsAGuidOfItsOwn)
-{
-    const qint64 first = addCredential("first", "user", "secret");
-    const qint64 second = addCredential("second", "user", "secret");
-
-    const std::optional<CredentialConfig> stored = findCredential(db_, first);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_FALSE(stored->guid().isEmpty());
-
-    const std::optional<CredentialConfig> other = findCredential(db_, second);
-    ASSERT_TRUE(other.has_value());
-    EXPECT_NE(stored->guid(), other->guid());
-
-    CredentialConfig copy = credential("copy", "user", "secret");
-    copy.setGuid(stored->guid());
-    EXPECT_FALSE(db_.addCredential(copy));
-
-    EXPECT_EQ(credentialList().size(), 2);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The pair goes to the database as one sealed column. What comes back out has to be what went in.
-TEST_F(DatabaseTest, CredentialSurvivesARoundTrip)
-{
-    const qint64 credential_id = addCredential("office", "user", "secret");
-
-    const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->id(), credential_id);
-    EXPECT_EQ(stored->type(), CredentialConfig::Type::ASPIA);
-    EXPECT_EQ(stored->displayName(), QString("office"));
-    EXPECT_EQ(stored->username(), QString("user"));
-    EXPECT_EQ(stored->password().toString(), QString("secret"));
-
-    // The guid names the same record wherever it is referred to.
-    const std::optional<CredentialConfig> by_guid = findCredentialByGuid(db_, stored->guid());
-    ASSERT_TRUE(by_guid.has_value());
-    EXPECT_EQ(by_guid->id(), credential_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-TEST_F(DatabaseTest, OsCredentialKeepsItsType)
-{
-    CredentialConfig added = credential("workstation", "DOMAIN\\user", "secret");
-    added.setType(CredentialConfig::Type::OS);
-    ASSERT_TRUE(db_.addCredential(added));
-
-    std::optional<CredentialConfig> stored = findCredential(db_, added.id());
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->type(), CredentialConfig::Type::OS);
-    EXPECT_EQ(stored->username(), QString("DOMAIN\\user"));
-
-    CredentialConfig edited = credential("renamed", "DOMAIN\\other-user", "other-secret");
-    edited.setId(added.id());
-    edited.setType(CredentialConfig::Type::OS);
-    EXPECT_TRUE(db_.modifyCredential(edited));
-
-    stored = findCredential(db_, added.id());
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->type(), CredentialConfig::Type::OS);
-    EXPECT_EQ(stored->displayName(), QString("renamed"));
-    EXPECT_EQ(stored->username(), QString("DOMAIN\\other-user"));
-
-    const QList<CredentialConfig> credentials = credentialList();
-    ASSERT_EQ(credentials.size(), 1);
-    EXPECT_EQ(credentials[0].type(), CredentialConfig::Type::OS);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A list asked for one type holds only the records of that type, still by name.
-TEST_F(DatabaseTest, CredentialsAreListedByType)
-{
-    addCredential("office", "user", "secret");
-
-    CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
-    os.setType(CredentialConfig::Type::OS);
-    ASSERT_TRUE(db_.addCredential(os));
-
-    addCredential("backup", "user", "secret");
-
-    QList<CredentialConfig> credentials;
-    EXPECT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::ASPIA), Database::ReadResult::OK);
-    ASSERT_EQ(credentials.size(), 2);
-    EXPECT_EQ(credentials[0].displayName(), "backup");
-    EXPECT_EQ(credentials[1].displayName(), "office");
-
-    EXPECT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
-    ASSERT_EQ(credentials.size(), 1);
-    EXPECT_EQ(credentials[0].displayName(), "workstation");
-
-    EXPECT_EQ(credentialList().size(), 3);
-}
-
-//--------------------------------------------------------------------------------------------------
-// An edit changes the name and the pair and keeps the guid, since the records referring to it would
-// stop resolving otherwise. A record that was never added has no row to edit, and removing takes
-// the row out.
-TEST_F(DatabaseTest, CredentialIsEditedAndRemoved)
-{
-    const qint64 credential_id = addCredential("office", "user", "secret");
-
-    const std::optional<CredentialConfig> before = findCredential(db_, credential_id);
-    ASSERT_TRUE(before.has_value());
-
-    // What the editor hands over: the fields of the form and the id, the guid is what the record
-    // already has.
-    CredentialConfig edited = credential("renamed", "other-user", "other-secret");
-    edited.setId(credential_id);
-    edited.setGuid(before->guid());
-    EXPECT_TRUE(db_.modifyCredential(edited));
-
-    CredentialConfig unknown = credential("unknown", "user", "secret");
-    unknown.setId(credential_id + 1);
-    EXPECT_FALSE(db_.modifyCredential(unknown));
-
-    const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->guid(), before->guid());
-    EXPECT_EQ(stored->displayName(), QString("renamed"));
-    EXPECT_EQ(stored->username(), QString("other-user"));
-    EXPECT_EQ(stored->password().toString(), QString("other-secret"));
-    EXPECT_EQ(credentialList().size(), 1);
-
-    ASSERT_TRUE(db_.removeCredential(credential_id));
-    EXPECT_FALSE(findCredential(db_, credential_id).has_value());
-    EXPECT_TRUE(credentialList().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The guid names the record from the moment it is added and is what its column is sealed for. An
-// edit changes neither: whatever guid the editor hands over, or none, the column is sealed for the
-// guid of the row, and the record opens after the edit as it did before.
-TEST_F(DatabaseTest, EditedCredentialStaysSealedForItsOwnGuid)
-{
-    const qint64 credential_id = addCredential("office", "user", "secret");
-
-    const std::optional<CredentialConfig> before = findCredential(db_, credential_id);
-    ASSERT_TRUE(before.has_value());
-
-    CredentialConfig edited = credential("renamed", "other-user", "other-secret");
-    edited.setId(credential_id);
-    EXPECT_TRUE(db_.modifyCredential(edited));
-
-    std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->guid(), before->guid());
-    EXPECT_EQ(stored->username(), QString("other-user"));
-
-    edited.setGuid("not-the-guid-of-the-row");
-    EXPECT_TRUE(db_.modifyCredential(edited));
-
-    stored = findCredential(db_, credential_id);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->guid(), before->guid());
-    EXPECT_EQ(stored->username(), QString("other-user"));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Every column of the table opens with the same key, so a column is sealed for its guid and does
-// not open under another one.
-TEST_F(DatabaseTest, CredentialDoesNotOpenForAnotherGuid)
-{
-    CredentialConfig config = credential("office", "user", "secret");
-    config.setGuid("first");
-
-    std::optional<QByteArray> sealed = config.encryptedData();
-    ASSERT_TRUE(sealed.has_value());
-
-    CredentialConfig other;
-    other.setGuid("second");
-
-    EXPECT_FALSE(other.setEncryptedData(*sealed));
-    EXPECT_TRUE(other.username().isEmpty());
-    EXPECT_TRUE(other.password().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A credential is a name and a whole pair. A record missing any of the three is not stored.
-TEST_F(DatabaseTest, CredentialWithoutANameOrHalfItsPairIsNotStored)
-{
-    CredentialConfig nameless = credential(QString(), "user", "secret");
-    EXPECT_FALSE(db_.addCredential(nameless));
-
-    CredentialConfig without_password = credential("office", "user", QString());
-    EXPECT_FALSE(db_.addCredential(without_password));
-
-    CredentialConfig without_user = credential("office", QString(), "secret");
-    EXPECT_FALSE(db_.addCredential(without_user));
-
-    EXPECT_TRUE(credentialList().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
 // What comes back out of a profile has to be what went in, and every profile gets a guid of its own.
 TEST_F(DatabaseTest, ProfileSurvivesARoundTrip)
 {
@@ -3114,7 +2568,7 @@ TEST_F(DatabaseTest, RouterHostRowOutlivesItsCredentials)
 
     CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
     os.setType(CredentialConfig::Type::OS);
-    ASSERT_TRUE(db_.addCredential(os));
+    ASSERT_TRUE(credentials_.add(os));
 
     RouterHostConfig host = routerHost(100500, "own-user", "own-secret");
     host.setCredentialId(credential_id);
@@ -3149,7 +2603,7 @@ TEST_F(DatabaseTest, EmptiedRouterHostRowIsGone)
 
     CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
     os.setType(CredentialConfig::Type::OS);
-    ASSERT_TRUE(db_.addCredential(os));
+    ASSERT_TRUE(credentials_.add(os));
 
     addRouterHost(100500, "user", "secret");
     ASSERT_TRUE(db_.modifyRouterHost(routerHost(100500, QString(), QString())));
@@ -3165,7 +2619,7 @@ TEST_F(DatabaseTest, EmptiedRouterHostRowIsGone)
 
     addRouterHost(100502, "user", "secret");
     ASSERT_TRUE(db_.setRouterHostOsCredentialId(100502, os.id()));
-    ASSERT_TRUE(db_.removeCredential(os.id()));
+    ASSERT_TRUE(credentials_.remove(os.id()));
 
     const std::optional<RouterHostConfig> stored = findRouterHost(db_, 100502);
     ASSERT_TRUE(stored.has_value());
@@ -3356,7 +2810,7 @@ TEST_F(DatabaseTest, LocalHostLinksItsCredentials)
     other.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addLocalHost(other));
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
     EXPECT_EQ(findLocalHost(db_, other.id())->credentialId(), 0);
 }
 
@@ -3375,7 +2829,7 @@ TEST_F(DatabaseTest, RouterHostLinksItsCredentials)
     ASSERT_TRUE(stored.has_value());
     EXPECT_EQ(stored->credentialId(), credential_id);
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
     EXPECT_EQ(findRouterHost(db_, 100500)->credentialId(), 0);
 }
 
@@ -3441,7 +2895,7 @@ TEST_F(DatabaseTest, HostsKeepTheOsCredentialsLastChosenForThem)
 {
     CredentialConfig os = credential("workstation", "DOMAIN\\user", "secret");
     os.setType(CredentialConfig::Type::OS);
-    ASSERT_TRUE(db_.addCredential(os));
+    ASSERT_TRUE(credentials_.add(os));
 
     LocalHostConfig host;
     host.setName("host");
@@ -3469,7 +2923,7 @@ TEST_F(DatabaseTest, HostsKeepTheOsCredentialsLastChosenForThem)
     ASSERT_TRUE(db_.setRouterHostOsCredentialId(100501, os.id()));
     EXPECT_EQ(allRouterHosts().size(), 1);
 
-    ASSERT_TRUE(db_.removeCredential(os.id()));
+    ASSERT_TRUE(credentials_.remove(os.id()));
     EXPECT_EQ(findLocalHost(db_, host.id())->osCredentialId(), 0);
     EXPECT_EQ(findRouterHost(db_, 100500)->osCredentialId(), 0);
 }
@@ -3502,7 +2956,7 @@ TEST_F(DatabaseTest, BatchLinksHostsToTheirOsCredentials)
     ASSERT_TRUE(db_.import(router, {}, { host }, { router_host }, { aspia, os }, {}));
 
     QList<CredentialConfig> credentials;
-    ASSERT_EQ(db_.credentialList(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
+    ASSERT_EQ(credentials_.list(&credentials, CredentialConfig::Type::OS), Database::ReadResult::OK);
     ASSERT_EQ(credentials.size(), 1);
 
     const QList<LocalHostConfig> hosts = allLocalHosts();
@@ -3563,7 +3017,7 @@ TEST_F(DatabaseTest, LocalHostIsEnteredWithTheCredentialsItRefersToOrItsOwnPair)
 
     EXPECT_FALSE(db_.localHostCredentials(bare.id() + 1).has_value());
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
 
     credentials = db_.localHostCredentials(linked.id());
     ASSERT_TRUE(credentials.has_value());
@@ -3628,7 +3082,7 @@ TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
     local_host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addLocalHost(local_host));
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
 
     EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
 
@@ -3651,43 +3105,6 @@ TEST_F(DatabaseTest, RemovedRecordLeavesTheHostsThatReferredToIt)
 }
 
 //--------------------------------------------------------------------------------------------------
-// What the router has to be told is kept with the record itself: that it has never held the
-// record, and how many times the record was edited since the last exchange. A change of the master
-// password is not an edit.
-TEST_F(DatabaseTest, NewAndEditedCredentialsAreUnsynced)
-{
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-    const qint64 credential_id = addCredential("office", "user", "secret");
-
-    QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].credential.id(), credential_id);
-    EXPECT_EQ(unsynced[0].credential.username(), QString("user"));
-    EXPECT_FALSE(unsynced[0].deleted);
-    EXPECT_GE(unsynced[0].credential.modifyTime(), start_time);
-    EXPECT_EQ(unsynced[0].sync_revision, 0);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
-
-    ASSERT_EQ(reencrypt(db_, DataCryptor::instance().key(), "salt", "verifier"), Database::ReencryptResult::DONE);
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
-
-    CredentialConfig edited = credential("office", "other-user", "other-secret");
-    edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-    ASSERT_TRUE(db_.modifyCredential(edited));
-
-    unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].credential.username(), QString("other-user"));
-    EXPECT_FALSE(unsynced[0].deleted);
-    EXPECT_EQ(unsynced[0].sync_revision, 7);
-    EXPECT_EQ(unsynced[0].sync_dirty, 2);
-}
-
-//--------------------------------------------------------------------------------------------------
 // The router learns of a removal from the device, so a removed record it holds keeps its row until
 // then. The row is marked as deleted and wiped, and nothing but the exchange sees it. The hosts
 // that referred to the record keep their links, which lead to no record, and are entered with
@@ -3702,8 +3119,8 @@ TEST_F(DatabaseTest, RemovedCredentialTheRouterHoldsKeepsARowMarkedAsDeleted)
     const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
-    ASSERT_TRUE(markCredentialSynced(other_id, 8));
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
+    ASSERT_TRUE(markSynced("credentials", other_id, 8));
     ASSERT_TRUE(setModifyTime("credentials", "id", credential_id, 1));
 
     RouterHostConfig link_only = routerHost(100500, QString(), QString());
@@ -3726,7 +3143,7 @@ TEST_F(DatabaseTest, RemovedCredentialTheRouterHoldsKeepsARowMarkedAsDeleted)
     ASSERT_TRUE(db_.setLocalHostOsCredentialId(other_host_id, credential_id));
 
     const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
 
     EXPECT_FALSE(findCredential(db_, credential_id).has_value());
     EXPECT_FALSE(findCredentialByGuid(db_, stored->guid()).has_value());
@@ -3735,9 +3152,9 @@ TEST_F(DatabaseTest, RemovedCredentialTheRouterHoldsKeepsARowMarkedAsDeleted)
     ASSERT_EQ(credentials.size(), 1);
     EXPECT_EQ(credentials[0].id(), other_id);
 
-    EXPECT_TRUE(isCredentialMarkedDeleted(credential_id));
+    EXPECT_TRUE(isMarkedDeleted("credentials", credential_id));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_TRUE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].credential.id(), credential_id);
@@ -3775,30 +3192,13 @@ TEST_F(DatabaseTest, RemovedCredentialTheRouterHoldsKeepsARowMarkedAsDeleted)
     // The record is no longer there to be edited, and removing it once more changes nothing.
     CredentialConfig edited = credential("office", "user", "secret");
     edited.setId(credential_id);
-    EXPECT_FALSE(db_.modifyCredential(edited));
+    EXPECT_FALSE(credentials_.modify(edited));
 
-    EXPECT_TRUE(db_.removeCredential(credential_id));
+    EXPECT_TRUE(credentials_.remove(credential_id));
     EXPECT_EQ(unsyncedCredentials().value(0).sync_dirty, 1);
 
     EXPECT_EQ(reencrypt(db_, DataCryptor::instance().key(), QByteArray(32, 's'), QByteArray(32, 'v')),
               Database::ReencryptResult::DONE);
-}
-
-//--------------------------------------------------------------------------------------------------
-// There is nothing to tell the router of a record it has never held, so such a record is gone the
-// moment it is removed.
-TEST_F(DatabaseTest, RemovedCredentialTheRouterNeverHeldIsGoneAtOnce)
-{
-    const qint64 credential_id = addCredential("office", "user", "secret");
-
-    CredentialConfig edited = credential("renamed", "user", "secret");
-    edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-
-    ASSERT_TRUE(db_.removeCredential(credential_id));
-
-    EXPECT_EQ(credentialRowCount(), 0);
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3821,14 +3221,14 @@ TEST_F(DatabaseTest, CredentialThatComesBackTakesTheRowOfTheRemovedOne)
     const qint64 host_id = addHost("host", group);
     ASSERT_TRUE(db_.setLocalHostOsCredentialId(host_id, credential_id));
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
-    ASSERT_TRUE(db_.removeCredential(credential_id));
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
+    ASSERT_TRUE(credentials_.remove(credential_id));
 
     CredentialConfig restored = credential("office", "other-user", "other-secret");
     restored.setGuid(stored->guid());
-    ASSERT_TRUE(db_.addCredential(restored));
+    ASSERT_TRUE(credentials_.add(restored));
     EXPECT_EQ(restored.id(), credential_id);
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
 
     const std::optional<std::pair<QString, SecureString>> entered = db_.routerHostCredentials(100500);
     ASSERT_TRUE(entered.has_value());
@@ -3845,7 +3245,7 @@ TEST_F(DatabaseTest, CredentialThatComesBackTakesTheRowOfTheRemovedOne)
     EXPECT_EQ(by_guid->username(), QString("other-user"));
     EXPECT_EQ(by_guid->password().toString(), QString("other-secret"));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_FALSE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].sync_revision, 7);
@@ -3913,7 +3313,7 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
         ASSERT_TRUE(earlier.open(file_path));
 
         QList<CredentialConfig> credentials;
-        ASSERT_EQ(earlier.credentialList(&credentials), Database::ReadResult::OK);
+        ASSERT_EQ(CredentialStore(earlier).list(&credentials), Database::ReadResult::OK);
         ASSERT_EQ(credentials.size(), 1);
         EXPECT_EQ(credentials[0].username(), QString("user"));
 
@@ -3947,55 +3347,13 @@ TEST_F(DatabaseTest, BatchLeavesNoRemovedCredentialsBehind)
 {
     const qint64 credential_id = addCredential("office", "user", "secret");
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
-    ASSERT_TRUE(db_.removeCredential(credential_id));
-    ASSERT_EQ(credentialRowCount(), 1);
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    ASSERT_EQ(rowCount("credentials"), 1);
 
     ASSERT_TRUE(db_.import({}, {}, {}, {}, {}, {}));
 
-    EXPECT_EQ(credentialRowCount(), 0);
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record received from the router is stored the way the router holds it: under its guid, with
-// its revision and with nothing left to send. A newer revision replaces the record in its row, and
-// the revision the row already has changes nothing.
-TEST_F(DatabaseTest, ReceivedCredentialIsStoredWithTheRevisionOfTheRouter)
-{
-    attachSyncStorage();
-
-    const QString guid = "11111111-1111-1111-1111-111111111111";
-
-    CredentialConfig received = credential("office", "user", "secret");
-    received.setGuid(guid);
-    received.setModifyTime(1000);
-    ASSERT_TRUE(storeReceivedCredential(received, 12));
-
-    std::optional<CredentialConfig> stored = findCredentialByGuid(db_, guid);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->username(), QString("user"));
-    EXPECT_EQ(stored->modifyTime(), 1000);
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
-
-    const qint64 credential_id = stored->id();
-
-    CredentialConfig newer = credential("renamed", "other-user", "other-secret");
-    newer.setGuid(guid);
-    newer.setModifyTime(2000);
-    ASSERT_TRUE(storeReceivedCredential(newer, 13));
-
-    CredentialConfig repeated = credential("repeated", "repeated-user", "repeated-secret");
-    repeated.setGuid(guid);
-    ASSERT_TRUE(storeReceivedCredential(repeated, 13));
-
-    stored = findCredentialByGuid(db_, guid);
-    ASSERT_TRUE(stored.has_value());
-    EXPECT_EQ(stored->id(), credential_id);
-    EXPECT_EQ(stored->displayName(), QString("renamed"));
-    EXPECT_EQ(stored->username(), QString("other-user"));
-    EXPECT_EQ(stored->modifyTime(), 2000);
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 0);
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
 }
 
@@ -4017,11 +3375,11 @@ TEST_F(DatabaseTest, ReceivedCredentialReplacesTheLocalChangeAndTheRemovedRecord
     host.setCredentialId(credential_id);
     ASSERT_TRUE(db_.addLocalHost(host));
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
 
     CredentialConfig edited = credential("office", "local-user", "local-secret");
     edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
+    ASSERT_TRUE(credentials_.modify(edited));
     ASSERT_EQ(unsyncedCredentials().size(), 1);
 
     CredentialConfig received = credential("office", "router-user", "router-secret");
@@ -4031,13 +3389,13 @@ TEST_F(DatabaseTest, ReceivedCredentialReplacesTheLocalChangeAndTheRemovedRecord
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
     EXPECT_EQ(findCredential(db_, credential_id)->username(), QString("router-user"));
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
-    ASSERT_TRUE(isCredentialMarkedDeleted(credential_id));
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    ASSERT_TRUE(isMarkedDeleted("credentials", credential_id));
 
     ASSERT_TRUE(storeReceivedCredential(received, 10));
 
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
 
     const std::optional<std::pair<QString, SecureString>> entered = db_.localHostCredentials(host.id());
     ASSERT_TRUE(entered.has_value());
@@ -4065,20 +3423,20 @@ TEST_F(DatabaseTest, ErasedCredentialLeavesNoRow)
     host.setCredentialId(edited_id);
     ASSERT_TRUE(db_.addLocalHost(host));
 
-    ASSERT_TRUE(markCredentialSynced(edited_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
+    ASSERT_TRUE(markSynced("credentials", edited_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
 
     CredentialConfig edited = credential("edited", "other-user", "other-secret");
     edited.setId(edited_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(credentials_.modify(edited));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_EQ(unsyncedCredentials().size(), 2);
 
     ASSERT_TRUE(eraseCredential(edited_guid));
     ASSERT_TRUE(eraseCredential(removed_guid));
     EXPECT_TRUE(eraseCredential(removed_guid));
 
-    EXPECT_EQ(credentialRowCount(), 0);
+    EXPECT_EQ(rowCount("credentials"), 0);
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
     EXPECT_EQ(findLocalHost(db_, host.id())->credentialId(), 0);
 }
@@ -4093,15 +3451,15 @@ TEST_F(DatabaseTest, LocalChangeThatWinsIsBasedOnTheReceivedRevision)
     const qint64 credential_id = addCredential("office", "user", "secret");
     const QString guid = findCredential(db_, credential_id)->guid();
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
 
     CredentialConfig edited = credential("office", "local-user", "local-secret");
     edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
+    ASSERT_TRUE(credentials_.modify(edited));
 
     ASSERT_TRUE(setCredentialSyncRevision(guid, 9));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].credential.username(), QString("local-user"));
     EXPECT_EQ(unsynced[0].sync_revision, 9);
@@ -4117,7 +3475,7 @@ TEST_F(DatabaseTest, CredentialNeverSentThatWinsStaysUnsynced)
     const qint64 credential_id = addCredential("office", "user", "secret");
     const QString guid = findCredential(db_, credential_id)->guid();
 
-    QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 0);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
@@ -4146,18 +3504,18 @@ TEST_F(DatabaseTest, ConfirmedCredentialIsSentAgainOnlyWhenEditedMeanwhile)
 
     CredentialConfig edited = credential("office", "other-user", "other-secret");
     edited.setId(credential_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-    ASSERT_TRUE(db_.modifyCredential(edited));
+    ASSERT_TRUE(credentials_.modify(edited));
+    ASSERT_TRUE(credentials_.modify(edited));
 
-    const QList<Database::UnsyncedCredential> sent = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> sent = unsyncedCredentials();
     ASSERT_EQ(sent.size(), 1);
     EXPECT_EQ(sent[0].sync_revision, 12);
     EXPECT_EQ(sent[0].sync_dirty, 2);
 
-    ASSERT_TRUE(db_.modifyCredential(edited));
+    ASSERT_TRUE(credentials_.modify(edited));
     ASSERT_TRUE(confirmSentCredential(guid, 13, sent[0].sync_dirty));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 13);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
@@ -4175,21 +3533,21 @@ TEST_F(DatabaseTest, ConfirmedRemovalErasesTheRowUnlessTheRecordCameBack)
     const QString gone_guid = findCredential(db_, gone_id)->guid();
     const QString back_guid = findCredential(db_, back_id)->guid();
 
-    ASSERT_TRUE(markCredentialSynced(gone_id, 7));
-    ASSERT_TRUE(markCredentialSynced(back_id, 8));
-    ASSERT_TRUE(db_.removeCredential(gone_id));
-    ASSERT_TRUE(db_.removeCredential(back_id));
+    ASSERT_TRUE(markSynced("credentials", gone_id, 7));
+    ASSERT_TRUE(markSynced("credentials", back_id, 8));
+    ASSERT_TRUE(credentials_.remove(gone_id));
+    ASSERT_TRUE(credentials_.remove(back_id));
 
     CredentialConfig restored = credential("back", "user", "secret");
     restored.setGuid(back_guid);
-    ASSERT_TRUE(db_.addCredential(restored));
+    ASSERT_TRUE(credentials_.add(restored));
 
     ASSERT_TRUE(confirmSentCredential(gone_guid, 9, 1));
     ASSERT_TRUE(confirmSentCredential(back_guid, 10, 1));
 
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_FALSE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].credential.guid(), back_guid);
@@ -4207,15 +3565,15 @@ TEST_F(DatabaseTest, CredentialRemovedOnItsWayToTheRouterIsRemovedThereToo)
     const qint64 credential_id = addCredential("office", "user", "secret");
     const QString guid = findCredential(db_, credential_id)->guid();
 
-    ASSERT_TRUE(db_.removeCredential(credential_id));
-    ASSERT_EQ(credentialRowCount(), 0);
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    ASSERT_EQ(rowCount("credentials"), 0);
 
     const qint64 start_time = QDateTime::currentSecsSinceEpoch();
     ASSERT_TRUE(confirmSentCredential(guid, 12, 1));
 
     EXPECT_TRUE(credentialList().isEmpty());
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_TRUE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].credential.guid(), guid);
@@ -4260,14 +3618,14 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     const qint64 removed_id = addCredential("removed", "user", "secret");
     const qint64 new_id = addCredential("new", "user", "secret");
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(edited_id, 8));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 9));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", edited_id, 8));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 9));
 
     CredentialConfig edited = credential("edited", "other-user", "other-secret");
     edited.setId(edited_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(credentials_.modify(edited));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     const QByteArray storage_id = Random::byteArray(16);
@@ -4275,10 +3633,10 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
               Database::SyncResult::DONE);
 
     EXPECT_TRUE(credentialList().isEmpty());
-    EXPECT_EQ(credentialRowCount(), 4);
+    EXPECT_EQ(rowCount("credentials"), 4);
 
     for (qint64 credential_id : { kept_id, edited_id, removed_id, new_id })
-        EXPECT_TRUE(isCredentialMarkedDeleted(credential_id));
+        EXPECT_TRUE(isMarkedDeleted("credentials", credential_id));
 
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
@@ -4287,7 +3645,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     const SecureByteArray key(Random::byteArray(32));
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, key, true), Database::SyncResult::DONE);
 
-    EXPECT_EQ(credentialRowCount(), 4);
+    EXPECT_EQ(rowCount("credentials"), 4);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 4);
 
     const std::optional<RouterConfig> stored = findRouter(db_);
@@ -4309,22 +3667,22 @@ TEST_F(DatabaseTest, AnotherStorageNotMadeByAResetKeepsTheDataOfTheDevice)
     const qint64 removed_id = addCredential("removed", "user", "secret");
     addCredential("new", "user", "secret");
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)),
                                  false), Database::SyncResult::DONE);
 
     EXPECT_EQ(credentialList().size(), 2);
-    EXPECT_EQ(credentialRowCount(), 2);
+    EXPECT_EQ(rowCount("credentials"), 2);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
 
-    for (const Database::UnsyncedCredential& item : unsynced)
+    for (const CredentialStore::Unsynced& item : unsynced)
     {
         EXPECT_FALSE(item.deleted);
         EXPECT_EQ(item.sync_revision, 0);
@@ -4344,9 +3702,9 @@ TEST_F(DatabaseTest, DiscardedCredentialsAreNotSent)
     const qint64 removed_id = addCredential("removed", "user", "secret");
     addCredential("new", "user", "secret");
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 8));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 8));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_EQ(unsyncedCredentials().size(), 2);
 
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), Random::byteArray(16), SecureByteArray(Random::byteArray(32)), true),
@@ -4356,7 +3714,7 @@ TEST_F(DatabaseTest, DiscardedCredentialsAreNotSent)
 
     const qint64 added_id = addCredential("added", "user", "secret");
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].credential.id(), added_id);
     EXPECT_FALSE(unsynced[0].deleted);
@@ -4378,7 +3736,7 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
     const std::optional<CredentialConfig> stored = findCredential(db_, credential_id);
     ASSERT_TRUE(stored.has_value());
 
-    ASSERT_TRUE(markCredentialSynced(credential_id, 7));
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
 
     RouterHostConfig link_only = routerHost(100500, QString(), QString());
     link_only.setCredentialId(credential_id);
@@ -4400,7 +3758,7 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
     received.setGuid(stored->guid());
     ASSERT_TRUE(storeReceivedCredential(received, 3));
 
-    EXPECT_EQ(credentialRowCount(), 1);
+    EXPECT_EQ(rowCount("credentials"), 1);
 
     const std::optional<CredentialConfig> by_guid = findCredentialByGuid(db_, stored->guid());
     ASSERT_TRUE(by_guid.has_value());
@@ -4434,10 +3792,10 @@ TEST_F(DatabaseTest, FirstStorageKeepsTheDataOfTheDevice)
 
     EXPECT_EQ(credentialList().size(), 2);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
 
-    for (const Database::UnsyncedCredential& item : unsynced)
+    for (const CredentialStore::Unsynced& item : unsynced)
     {
         EXPECT_FALSE(item.deleted);
         EXPECT_EQ(item.sync_revision, 0);
@@ -4458,14 +3816,14 @@ TEST_F(DatabaseTest, DeviceWithAPendingResetKeepsItsData)
     const qint64 edited_id = addCredential("edited", "user", "secret");
     const qint64 removed_id = addCredential("removed", "user", "secret");
 
-    ASSERT_TRUE(markCredentialSynced(kept_id, 7));
-    ASSERT_TRUE(markCredentialSynced(edited_id, 8));
-    ASSERT_TRUE(markCredentialSynced(removed_id, 9));
+    ASSERT_TRUE(markSynced("credentials", kept_id, 7));
+    ASSERT_TRUE(markSynced("credentials", edited_id, 8));
+    ASSERT_TRUE(markSynced("credentials", removed_id, 9));
 
     CredentialConfig edited = credential("edited", "other-user", "other-secret");
     edited.setId(edited_id);
-    ASSERT_TRUE(db_.modifyCredential(edited));
-    ASSERT_TRUE(db_.removeCredential(removed_id));
+    ASSERT_TRUE(credentials_.modify(edited));
+    ASSERT_TRUE(credentials_.remove(removed_id));
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
 
     ASSERT_TRUE(db_.setSyncStorageResetPending(*findRouter(db_)));
@@ -4478,13 +3836,13 @@ TEST_F(DatabaseTest, DeviceWithAPendingResetKeepsItsData)
               Database::SyncResult::DONE);
 
     EXPECT_EQ(credentialList().size(), 2);
-    EXPECT_EQ(credentialRowCount(), 2);
+    EXPECT_EQ(rowCount("credentials"), 2);
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
 
-    for (const Database::UnsyncedCredential& item : unsynced)
+    for (const CredentialStore::Unsynced& item : unsynced)
     {
         EXPECT_FALSE(item.deleted);
         EXPECT_EQ(item.sync_revision, 0);
@@ -4623,7 +3981,7 @@ TEST_F(DatabaseTest, ImportKeepsSyncOnWithAPendingReset)
     EXPECT_TRUE(stored->syncStorageId().isEmpty());
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials();
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 0);
     EXPECT_FALSE(unsynced[0].deleted);
@@ -4729,7 +4087,7 @@ TEST_F(DatabaseTest, NewAndEditedProfilesAreUnsynced)
     EXPECT_EQ(unsynced[0].sync_revision, 0);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
 
-    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
 
     ProfileConfig edited;
@@ -4766,7 +4124,7 @@ TEST_F(DatabaseTest, EditedDefaultProfileIsSentToTheStorage)
     ProfileConfig profile = db_.defaultProfile();
     profile.setUdpMethods(UDP_METHOD_DIRECT);
     ASSERT_TRUE(db_.modifyProfile(profile));
-    ASSERT_TRUE(markProfileSynced(profile.id(), 7));
+    ASSERT_TRUE(markSynced("profiles", profile.id(), 7));
 
     attachSyncStorage();
 
@@ -4786,7 +4144,7 @@ TEST_F(DatabaseTest, RemovedProfileTheRouterHoldsKeepsARowMarkedAsDeleted)
 
     ProfileConfig stored;
     ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
-    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
 
     LocalHostConfig host;
     host.setName("host");
@@ -4800,7 +4158,7 @@ TEST_F(DatabaseTest, RemovedProfileTheRouterHoldsKeepsARowMarkedAsDeleted)
     ProfileConfig removed;
     EXPECT_EQ(db_.findProfile(profile_id, &removed), Database::FindResult::NOT_FOUND);
     EXPECT_TRUE(profileList().isEmpty());
-    EXPECT_TRUE(isProfileMarkedDeleted(profile_id));
+    EXPECT_TRUE(isMarkedDeleted("profiles", profile_id));
 
     const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles();
     ASSERT_EQ(unsynced.size(), 1);
@@ -4826,7 +4184,7 @@ TEST_F(DatabaseTest, RemovedProfileTheRouterNeverHeldIsGoneAtOnce)
     const qint64 profile_id = addProfile("office");
     ASSERT_TRUE(db_.removeProfile(profile_id));
 
-    EXPECT_EQ(profileRowCount(), 1);
+    EXPECT_EQ(rowCount("profiles"), 1);
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
 }
 
@@ -4865,7 +4223,7 @@ TEST_F(DatabaseTest, ReceivedProfileIsStoredWithTheRevisionOfTheRouter)
 
     ProfileConfig local;
     ASSERT_EQ(db_.findProfile(profile_id, &local), Database::FindResult::FOUND);
-    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
 
     LocalHostConfig host;
     host.setName("host");
@@ -4900,7 +4258,7 @@ TEST_F(DatabaseTest, ReceivedProfileIsStoredWithTheRevisionOfTheRouter)
 
     EXPECT_EQ(db_.hostProfile(HostConfig::forLocalHost(host)).id(), profile_id);
     EXPECT_EQ(profileList().size(), 2);
-    EXPECT_EQ(profileRowCount(), 3);
+    EXPECT_EQ(rowCount("profiles"), 3);
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
 }
 
@@ -4914,7 +4272,7 @@ TEST_F(DatabaseTest, ErasedProfileLeavesNoRow)
 
     ProfileConfig stored;
     ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
-    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
 
     LocalHostConfig host;
     host.setName("host");
@@ -4929,7 +4287,7 @@ TEST_F(DatabaseTest, ErasedProfileLeavesNoRow)
     ASSERT_TRUE(eraseProfile(stored.guid()));
     EXPECT_TRUE(eraseProfile(stored.guid()));
 
-    EXPECT_EQ(profileRowCount(), 1);
+    EXPECT_EQ(rowCount("profiles"), 1);
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
     EXPECT_EQ(findLocalHost(db_, host.id())->profileId(), 0);
 }
@@ -4942,7 +4300,7 @@ TEST_F(DatabaseTest, DefaultProfileIsNeverRemoved)
     EXPECT_FALSE(db_.removeProfile(profile.id()));
 
     EXPECT_EQ(db_.defaultProfile().id(), profile.id());
-    EXPECT_EQ(profileRowCount(), 1);
+    EXPECT_EQ(rowCount("profiles"), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4989,7 +4347,7 @@ TEST_F(DatabaseTest, ProfileRemovedOnItsWayToTheRouterIsRemovedThereToo)
     ASSERT_EQ(db_.findProfile(profile_id, &stored), Database::FindResult::FOUND);
 
     ASSERT_TRUE(db_.removeProfile(profile_id));
-    ASSERT_EQ(profileRowCount(), 1);
+    ASSERT_EQ(rowCount("profiles"), 1);
 
     const qint64 start_time = QDateTime::currentSecsSinceEpoch();
     ASSERT_TRUE(confirmSentProfile(stored.guid(), 12, 1));
@@ -5015,7 +4373,7 @@ TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
 
     const qint64 kept_id = addProfile("kept");
     const qint64 new_id = addProfile("new");
-    ASSERT_TRUE(markProfileSynced(kept_id, 7));
+    ASSERT_TRUE(markSynced("profiles", kept_id, 7));
 
     ProfileConfig default_profile = db_.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_DIRECT);
@@ -5026,8 +4384,8 @@ TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
               Database::SyncResult::DONE);
 
     EXPECT_TRUE(profileList().isEmpty());
-    EXPECT_TRUE(isProfileMarkedDeleted(kept_id));
-    EXPECT_TRUE(isProfileMarkedDeleted(new_id));
+    EXPECT_TRUE(isMarkedDeleted("profiles", kept_id));
+    EXPECT_TRUE(isMarkedDeleted("profiles", new_id));
     EXPECT_EQ(db_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
     EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
@@ -5055,9 +4413,9 @@ TEST_F(DatabaseTest, ProfileIsFoundByItsGuid)
 
     EXPECT_EQ(db_.findProfileByGuid(QString(), &found), Database::FindResult::NOT_FOUND);
 
-    ASSERT_TRUE(markProfileSynced(profile_id, 7));
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
     ASSERT_TRUE(db_.removeProfile(profile_id));
-    ASSERT_TRUE(isProfileMarkedDeleted(profile_id));
+    ASSERT_TRUE(isMarkedDeleted("profiles", profile_id));
     EXPECT_EQ(db_.findProfileByGuid(added.guid(), &found), Database::FindResult::NOT_FOUND);
 }
 
@@ -5100,7 +4458,7 @@ TEST_F(DatabaseTest, MasterPasswordChangeIsRefusedWhenALinkedRouterHostDoesNotOp
     credential.setDisplayName("office");
     credential.setUsername("user");
     credential.setPassword(SecureString("secret"));
-    ASSERT_TRUE(db.addCredential(credential));
+    ASSERT_TRUE(CredentialStore(db).add(credential));
 
     RouterHostConfig host = routerHost(100500, "own-user", "own-secret");
     host.setCredentialId(credential.id());

@@ -227,7 +227,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::rou
             stored = true;
 
             if (readable && !record.deleted() && local && !local->deleted && Traits::isReadable(*local))
-                stored = Traits::storeUnknownData(transaction, received);
+                stored = Traits::storeUnknownData(db_, transaction, received);
 
             if (stored)
                 stored = transaction.setRecordSyncRevision(Traits::kType, guid, record.revision());

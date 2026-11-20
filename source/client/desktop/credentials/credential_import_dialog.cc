@@ -27,7 +27,7 @@
 #include "client/desktop/credentials/ui_credential_import_dialog.h"
 #include "client/router/router_controller.h"
 #include "client/storage/credential_file.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "common/desktop/msg_box.h"
 
 namespace {
@@ -146,7 +146,7 @@ void CredentialImportDialog::onOpenButtonPressed()
     QTreeWidgetItem* aspia_group = add_group(":/img/keys.svg", tr("Aspia Credentials"));
     QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
 
-    Database& db = Database::instance();
+    CredentialStore store;
 
     for (int i = 0; i < credentials.size(); ++i)
     {
@@ -154,7 +154,7 @@ void CredentialImportDialog::onOpenButtonPressed()
 
         CredentialConfig existing;
         const bool exists =
-            db.findCredentialByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
+            store.findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
 
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setIcon(COLUMN_NAME, QIcon(exists ? ":/img/key-warning.svg" : ":/img/key-normal.svg"));
@@ -210,7 +210,7 @@ void CredentialImportDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Import credentials";
 
-    Database& db = Database::instance();
+    CredentialStore store;
 
     int added = 0;
     int replaced = 0;
@@ -218,13 +218,13 @@ void CredentialImportDialog::onButtonBoxClicked(QAbstractButton* button)
     for (CredentialConfig credential : checkedCredentials())
     {
         CredentialConfig existing;
-        const Database::FindResult found = db.findCredentialByGuid(credential.guid(), &existing);
+        const Database::FindResult found = store.findByGuid(credential.guid(), &existing);
 
         bool written = false;
 
         if (found == Database::FindResult::NOT_FOUND)
         {
-            written = db.addCredential(credential);
+            written = store.add(credential);
             if (written)
                 ++added;
         }
@@ -232,7 +232,7 @@ void CredentialImportDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             credential.setId(existing.id());
 
-            written = db.modifyCredential(credential);
+            written = store.modify(credential);
             if (written)
                 ++replaced;
         }

@@ -21,7 +21,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 
 //--------------------------------------------------------------------------------------------------
 CredentialComboBox::CredentialComboBox(QWidget* parent)
@@ -76,7 +76,7 @@ const CredentialConfig* CredentialComboBox::currentCredential() const
 bool CredentialComboBox::onReload()
 {
     QList<CredentialConfig> credentials;
-    if (Database::instance().credentialList(&credentials, type_) == Database::ReadResult::FAILED)
+    if (CredentialStore().list(&credentials, type_) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
         return false;

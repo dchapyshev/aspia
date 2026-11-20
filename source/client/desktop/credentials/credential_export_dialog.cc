@@ -29,7 +29,7 @@
 #include "client/desktop/file_dialog.h"
 #include "client/desktop/credentials/ui_credential_export_dialog.h"
 #include "client/storage/credential_file.h"
-#include "client/storage/database.h"
+#include "client/storage/credential_store.h"
 #include "client/storage/master_password.h"
 #include "common/desktop/msg_box.h"
 
@@ -163,7 +163,7 @@ void CredentialExportDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void CredentialExportDialog::onLoadData()
 {
-    if (Database::instance().credentialList(&credentials_) == Database::ReadResult::FAILED)
+    if (CredentialStore().list(&credentials_) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of credentials";
         MsgBox::warning(this, tr("Failed to read the credentials."));

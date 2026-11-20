@@ -24,9 +24,9 @@
 
 //--------------------------------------------------------------------------------------------------
 // static
-Database::ReadResult SyncCredentialTraits::readUnsynced(const Database& db, QList<Unsynced>* unsynced)
+Database::ReadResult SyncCredentialTraits::readUnsynced(Database& db, QList<Unsynced>* unsynced)
 {
-    return db.unsyncedCredentials(unsynced);
+    return CredentialStore(db).unsynced(unsynced);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -100,14 +100,15 @@ bool SyncCredentialTraits::hasSameContent(const Config& first, const Config& sec
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncCredentialTraits::storeReceived(
-    const Database&, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
+    Database& db, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
 {
-    return transaction.storeReceivedCredential(config, sync_revision);
+    return CredentialStore(db).storeReceived(transaction, config, sync_revision);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SyncCredentialTraits::storeUnknownData(Database::SyncTransaction& transaction, const Config& config)
+bool SyncCredentialTraits::storeUnknownData(
+    Database& db, Database::SyncTransaction& transaction, const Config& config)
 {
-    return transaction.setCredentialUnknownData(config.guid(), config.unknownData());
+    return CredentialStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

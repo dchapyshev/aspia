@@ -70,40 +70,40 @@ protected:
         credential.setUsername(username);
         credential.setPassword(SecureString(QString("secret")));
 
-        EXPECT_TRUE(db.addCredential(credential));
+        EXPECT_TRUE(CredentialStore(db).add(credential));
         return credential;
     }
 
     static void modifyCredential(Database& db, const QString& guid, const QString& username)
     {
         CredentialConfig credential;
-        ASSERT_EQ(db.findCredentialByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
 
         credential.setUsername(username);
-        ASSERT_TRUE(db.modifyCredential(credential));
+        ASSERT_TRUE(CredentialStore(db).modify(credential));
     }
 
     static void removeCredential(Database& db, const QString& guid)
     {
         CredentialConfig credential;
-        ASSERT_EQ(db.findCredentialByGuid(guid, &credential), Database::FindResult::FOUND);
-        ASSERT_TRUE(db.removeCredential(credential.id()));
+        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_TRUE(CredentialStore(db).remove(credential.id()));
     }
 
     // The name of the user of the record, or an empty string when the device has no such record.
-    static QString storedUsername(const Database& db, const QString& guid)
+    static QString storedUsername(Database& db, const QString& guid)
     {
         CredentialConfig credential;
-        if (db.findCredentialByGuid(guid, &credential) != Database::FindResult::FOUND)
+        if (CredentialStore(db).findByGuid(guid, &credential) != Database::FindResult::FOUND)
             return QString();
 
         return credential.username();
     }
 
-    static QList<Database::UnsyncedCredential> unsyncedCredentials(const Database& db)
+    static QList<CredentialStore::Unsynced> unsyncedCredentials(Database& db)
     {
-        QList<Database::UnsyncedCredential> credentials;
-        EXPECT_EQ(db.unsyncedCredentials(&credentials), Database::ReadResult::OK);
+        QList<CredentialStore::Unsynced> credentials;
+        EXPECT_EQ(CredentialStore(db).unsynced(&credentials), Database::ReadResult::OK);
         return credentials;
     }
 
@@ -253,7 +253,7 @@ TEST_F(SyncCredentialsTest, NewRecordReachesTheOtherDevice)
     receiveRecords(phone_sync_, list, 100);
 
     CredentialConfig received;
-    ASSERT_EQ(phone_.findCredentialByGuid(credential.guid(), &received), Database::FindResult::FOUND);
+    ASSERT_EQ(CredentialStore(phone_).findByGuid(credential.guid(), &received), Database::FindResult::FOUND);
     EXPECT_EQ(received.type(), credential.type());
     EXPECT_EQ(received.displayName(), credential.displayName());
     EXPECT_EQ(received.username(), credential.username());
@@ -312,7 +312,7 @@ TEST_F(SyncCredentialsTest, YoungerChangeWins)
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("phone-user"));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(phone_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, revision_);
 
@@ -336,13 +336,13 @@ TEST_F(SyncCredentialsTest, RecordNeverSentThatWinsIsSent)
     local.setDisplayName("office");
     local.setUsername("phone-user");
     local.setPassword(SecureString(QString("secret")));
-    ASSERT_TRUE(phone_.addCredential(local));
+    ASSERT_TRUE(CredentialStore(phone_).add(local));
 
     receiveRecords(phone_sync_, list, 30);
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("phone-user"));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(phone_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, revision_);
 
@@ -400,7 +400,7 @@ TEST_F(SyncCredentialsTest, ReceivedChangeMeetsALocalRemoval)
     EXPECT_EQ(storedUsername(phone_, restored_guid), QString("laptop-user"));
     EXPECT_TRUE(storedUsername(phone_, removed_guid).isEmpty());
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(phone_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_TRUE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].credential.guid(), removed_guid);
@@ -448,7 +448,7 @@ TEST_F(SyncCredentialsTest, OwnRecordThatComesBackDoesNotReplaceALaterChange)
 
     EXPECT_EQ(storedUsername(laptop_, guid), QString("later-user"));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(laptop_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 1);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
@@ -495,7 +495,7 @@ TEST_F(SyncCredentialsTest, RecordTheRouterDidNotStoreStaysUnsynced)
     result.add_record_revision(0);
     ASSERT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::Result::DONE);
 
-    QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(laptop_);
+    QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 1);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
@@ -538,12 +538,12 @@ TEST_F(SyncCredentialsTest, ReceivedRecordThatDoesNotOpenLoses)
     EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 6);
 
     QList<CredentialConfig> credentials;
-    ASSERT_EQ(phone_.credentialList(&credentials), Database::ReadResult::OK);
+    ASSERT_EQ(CredentialStore(phone_).list(&credentials), Database::ReadResult::OK);
     EXPECT_EQ(credentials.size(), 1);
 
     modifyCredential(phone_, guid, "phone-user");
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(phone_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 5);
 }
@@ -581,7 +581,7 @@ TEST_F(SyncCredentialsTest, DamagedLocalRecordLosesToAnOlderRemoval)
     receiveRecords(phone_sync_, list, 25);
 
     QList<CredentialConfig> credentials;
-    EXPECT_EQ(phone_.credentialList(&credentials), Database::ReadResult::OK);
+    EXPECT_EQ(CredentialStore(phone_).list(&credentials), Database::ReadResult::OK);
     EXPECT_TRUE(credentials.isEmpty());
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
 }
@@ -626,7 +626,7 @@ TEST_F(SyncCredentialsTest, FieldUnknownToTheDeviceIsTakenFromAReceivedRecordTha
 
     EXPECT_EQ(storedUsername(laptop_, kGuid), QString("laptop-user"));
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(laptop_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 2);
 
@@ -657,7 +657,7 @@ TEST_F(SyncCredentialsTest, OversizedRecordIsNotSentAndTheRestAre)
     oversized.setUsername("user");
     oversized.setPassword(
         SecureString(QString(static_cast<qsizetype>(proto::router::kMaxSyncRecordDataSize), QChar('x'))));
-    ASSERT_TRUE(laptop_.addCredential(oversized));
+    ASSERT_TRUE(CredentialStore(laptop_).add(oversized));
 
     const QString guid = addCredential(laptop_, "user").guid();
 
@@ -665,7 +665,7 @@ TEST_F(SyncCredentialsTest, OversizedRecordIsNotSentAndTheRestAre)
     ASSERT_EQ(list.record_size(), 1);
     EXPECT_EQ(list.record(0).id(), guid.toStdString());
 
-    const QList<Database::UnsyncedCredential> unsynced = unsyncedCredentials(laptop_);
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].credential.guid(), oversized.guid());
 }
@@ -708,7 +708,7 @@ TEST_F(SyncCredentialsTest, PageThatFailsHalfwayLeavesNothing)
     EXPECT_EQ(phone_sync_.storeReceivedRecords(list), SyncCredentials::Result::FAILED);
 
     QList<CredentialConfig> credentials;
-    ASSERT_EQ(phone_.credentialList(&credentials), Database::ReadResult::OK);
+    ASSERT_EQ(CredentialStore(phone_).list(&credentials), Database::ReadResult::OK);
     EXPECT_TRUE(credentials.isEmpty());
     EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 }

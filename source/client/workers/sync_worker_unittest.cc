@@ -467,33 +467,33 @@ protected:
         credential.setUsername(username);
         credential.setPassword(SecureString(QString("secret")));
 
-        EXPECT_TRUE(db.addCredential(credential));
+        EXPECT_TRUE(CredentialStore(db).add(credential));
         return credential;
     }
 
     static void modifyCredential(Database& db, const QString& guid, const QString& username)
     {
         CredentialConfig credential;
-        ASSERT_EQ(db.findCredentialByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
 
         credential.setUsername(username);
-        ASSERT_TRUE(db.modifyCredential(credential));
+        ASSERT_TRUE(CredentialStore(db).modify(credential));
     }
 
     // The name of the user of the record, or an empty string when the device has no such record.
-    static QString storedUsername(const Database& db, const QString& guid)
+    static QString storedUsername(Database& db, const QString& guid)
     {
         CredentialConfig credential;
-        if (db.findCredentialByGuid(guid, &credential) != Database::FindResult::FOUND)
+        if (CredentialStore(db).findByGuid(guid, &credential) != Database::FindResult::FOUND)
             return QString();
 
         return credential.username();
     }
 
-    static QList<Database::UnsyncedCredential> unsyncedCredentials(const Database& db)
+    static QList<CredentialStore::Unsynced> unsyncedCredentials(Database& db)
     {
-        QList<Database::UnsyncedCredential> credentials;
-        EXPECT_EQ(db.unsyncedCredentials(&credentials), Database::ReadResult::OK);
+        QList<CredentialStore::Unsynced> credentials;
+        EXPECT_EQ(CredentialStore(db).unsynced(&credentials), Database::ReadResult::OK);
         return credentials;
     }
 
@@ -735,7 +735,7 @@ TEST_F(SyncWorkerTest, RecordsAreReceivedPageByPage)
     EXPECT_EQ(record_request_count_, 0);
 
     QList<CredentialConfig> credentials;
-    ASSERT_EQ(db.credentialList(&credentials), Database::ReadResult::OK);
+    ASSERT_EQ(CredentialStore(db).list(&credentials), Database::ReadResult::OK);
     EXPECT_EQ(credentials.size(), 5);
     EXPECT_EQ(db.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 5);
     EXPECT_TRUE(unsyncedCredentials(db).isEmpty());

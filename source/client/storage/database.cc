@@ -28,6 +28,7 @@
 #include "base/files/base_paths.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "client/storage/credential_store.h"
 
 namespace {
 
@@ -260,7 +261,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
         CredentialConfig config = credential;
         config.setId(-1);
 
-        if (!addCredential(config))
+        if (!CredentialStore(*this).add(config))
             return false;
 
         credential_ids.insert(credential.id(), config.id());
@@ -400,7 +401,7 @@ Database::ReencryptResult Database::Reencryption::begin()
     {
         db_.allLocalHosts(&local_hosts_),
         db_.allRouterHosts(&router_hosts_),
-        db_.credentialList(&credentials_),
+        CredentialStore(db_).list(&credentials_),
         db_.proxyConfig(&proxy_)
     };
 

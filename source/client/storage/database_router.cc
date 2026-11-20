@@ -24,6 +24,7 @@
 #include "base/peer/host_id.h"
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
+#include "client/storage/credential_store.h"
 #include "proto/router.h"
 
 namespace {
@@ -464,7 +465,7 @@ Database::FindResult Database::findRouterHost(HostId host_id, RouterHostConfig* 
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(HostId host_id) const
+std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(HostId host_id)
 {
     RouterHostConfig host;
     if (findRouterHost(host_id, &host) != FindResult::FOUND)
@@ -474,7 +475,7 @@ std::optional<std::pair<QString, SecureString>> Database::routerHostCredentials(
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    const FindResult found = findCredential(host.credentialId(), &credential);
+    const FindResult found = CredentialStore(*this).find(host.credentialId(), &credential);
     if (found == FindResult::NOT_FOUND)
         return std::make_pair(host.username(), host.password());
 

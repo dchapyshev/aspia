@@ -93,7 +93,7 @@ public:
     bool setLocalHostConnectTime(qint64 entry_id, qint64 connect_time);
     bool setLocalHostOsCredentialId(qint64 entry_id, qint64 credential_id);
     FindResult findLocalHost(qint64 entry_id, LocalHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id) const;
+    std::optional<std::pair<QString, SecureString>> localHostCredentials(qint64 entry_id);
 
     // Local Search.
     ReadResult searchLocalHosts(const QString& query, QList<LocalHostConfig>* hosts) const;
@@ -122,8 +122,6 @@ public:
         SyncResult begin(const QByteArray& storage_id);
         bool commit();
 
-        bool storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision);
-        bool setCredentialUnknownData(const QString& guid, const QByteArray& unknown_data);
         bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision);
         bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data);
 
@@ -133,9 +131,9 @@ public:
                                qint64 sync_dirty);
         bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
 
-    private:
         bool isActive() const;
 
+    private:
         Database& db_;
         std::optional<SqlTransaction> transaction_;
 
@@ -150,29 +148,11 @@ public:
     bool modifyRouterHost(const RouterHostConfig& host);
     bool removeRouterHost(HostId host_id);
     FindResult findRouterHost(HostId host_id, RouterHostConfig* host) const;
-    std::optional<std::pair<QString, SecureString>> routerHostCredentials(HostId host_id) const;
+    std::optional<std::pair<QString, SecureString>> routerHostCredentials(HostId host_id);
     bool outdatedRouterHosts(QList<HostId>* hosts) const;
     bool updateRouterHostCheckTime(HostId host_id);
     bool setRouterHostOsCredentialId(HostId host_id, qint64 credential_id);
     bool setRouterHostProfileId(HostId host_id, qint64 profile_id);
-
-    // Credentials.
-    struct UnsyncedCredential
-    {
-        CredentialConfig credential;
-        bool deleted = false;
-        qint64 sync_revision = 0;
-        qint64 sync_dirty = 0;
-    };
-
-    ReadResult credentialList(QList<CredentialConfig>* credentials,
-        std::optional<CredentialConfig::Type> type = std::nullopt) const;
-    bool addCredential(CredentialConfig& credential);
-    bool modifyCredential(const CredentialConfig& credential);
-    bool removeCredential(qint64 credential_id);
-    FindResult findCredential(qint64 credential_id, CredentialConfig* credential) const;
-    FindResult findCredentialByGuid(const QString& guid, CredentialConfig* credential) const;
-    ReadResult unsyncedCredentials(QList<UnsyncedCredential>* credentials) const;
 
     // Connection profiles.
     struct UnsyncedProfile
@@ -264,6 +244,7 @@ public:
 
 private:
     friend class DatabaseMigration;
+    friend class DatabaseStore;
     friend class DatabaseTestPeer;
 
     static void setDirectoryPathForTesting(const QString& dir_path);
