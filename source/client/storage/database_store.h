@@ -31,6 +31,8 @@ protected:
     }
 
     SqlDatabase& sql() const { return db_.db_; }
+    QString readSetting(const QString& name) const { return db_.readSetting(name); }
+    bool writeSetting(const QString& name, const QString& value) { return db_.writeSetting(name, value); }
 
     Database& db_;
 };

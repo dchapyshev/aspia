@@ -21,6 +21,8 @@
 
 #include "client/storage/database_store.h"
 
+class SyncTransaction;
+
 class ProfileStore final : public DatabaseStore
 {
 public:
@@ -46,10 +48,8 @@ public:
     Database::ReadResult unsynced(QList<Unsynced>* profiles) const;
     bool ensureDefaultProfile();
 
-    bool storeReceived(Database::SyncTransaction& transaction, const ProfileConfig& profile,
-                       qint64 sync_revision);
-    bool setUnknownData(Database::SyncTransaction& transaction, const QString& guid,
-                        const QByteArray& unknown_data);
+    bool storeReceived(SyncTransaction& transaction, const ProfileConfig& profile, qint64 sync_revision);
+    bool setUnknownData(SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data);
 };
 
 #endif // CLIENT_STORAGE_PROFILE_STORE_H

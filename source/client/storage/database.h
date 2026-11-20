@@ -31,7 +31,6 @@
 #include "base/sql/sql_transaction.h"
 #include "client/config.h"
 #include "client/storage/auto_backup.h"
-#include "proto/router_sync.h"
 
 class Database
 {
@@ -113,31 +112,6 @@ public:
     SyncResult setSyncStorage(const RouterConfig& router, const QByteArray& storage_id,
         const SecureByteArray& key, bool reset);
     bool setSyncStorageResetPending(const RouterConfig& router);
-
-    class SyncTransaction final
-    {
-    public:
-        explicit SyncTransaction(Database& db);
-
-        SyncResult begin(const QByteArray& storage_id);
-        bool commit();
-
-        bool eraseRecord(proto::router::SyncDataType type, const QString& guid);
-        bool setRecordSyncRevision(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision);
-        bool confirmSentRecord(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision,
-                               qint64 sync_dirty);
-        bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
-
-        bool isActive() const;
-
-    private:
-        Database& db_;
-        std::optional<SqlTransaction> transaction_;
-
-        Q_DISABLE_COPY_MOVE(SyncTransaction)
-    };
-
-    qint64 receivedRevision(proto::router::SyncDataType type) const;
 
     // Router Hosts.
     ReadResult allRouterHosts(QList<RouterHostConfig>* hosts) const;
@@ -239,10 +213,6 @@ private:
     bool writeSetting(const QString& name, const QString& value);
     bool writeRouter(const RouterConfig& router);
     bool clearRouter();
-    bool resetSyncState();
-    bool discardSyncData();
-    bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
-    bool clearReceivedRevisions();
 
     mutable SqlDatabase db_;
 };

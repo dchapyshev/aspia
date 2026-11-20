@@ -36,9 +36,8 @@ struct SyncCredentialTraits
     static std::optional<QByteArray> seal(const SecureByteArray& key, const Config& config);
     static bool openReceived(const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
     static bool hasSameContent(const Config& first, const Config& second);
-    static bool storeReceived(Database& db, Database::SyncTransaction& transaction, Config config,
-                              qint64 sync_revision);
-    static bool storeUnknownData(Database& db, Database::SyncTransaction& transaction, const Config& config);
+    static bool storeReceived(Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision);
+    static bool storeUnknownData(Database& db, SyncTransaction& transaction, const Config& config);
 };
 
 extern template class SyncRecordsOf<SyncCredentialTraits>;

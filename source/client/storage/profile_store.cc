@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/sync_store.h"
 
 namespace {
 
@@ -463,7 +464,7 @@ bool ProfileStore::ensureDefaultProfile()
 
 //--------------------------------------------------------------------------------------------------
 bool ProfileStore::storeReceived(
-    Database::SyncTransaction& transaction, const ProfileConfig& profile, qint64 sync_revision)
+    SyncTransaction& transaction, const ProfileConfig& profile, qint64 sync_revision)
 {
     if (!transaction.isActive())
     {
@@ -499,7 +500,7 @@ bool ProfileStore::storeReceived(
 
 //--------------------------------------------------------------------------------------------------
 bool ProfileStore::setUnknownData(
-    Database::SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
+    SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
 {
     if (!transaction.isActive())
     {

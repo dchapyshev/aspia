@@ -23,8 +23,7 @@
 #include <QString>
 
 #include "base/crypto/secure_byte_array.h"
-#include "client/storage/database.h"
-#include "proto/router_sync.h"
+#include "client/storage/sync_store.h"
 
 class SyncRecords
 {
@@ -47,7 +46,7 @@ public:
     SyncRecordsOf(Database& db, const QByteArray& storage_id, const SecureByteArray& key);
 
     proto::router::SyncDataType type() const final { return Traits::kType; }
-    qint64 receivedRevision() const final { return db_.receivedRevision(Traits::kType); }
+    qint64 receivedRevision() const final { return SyncStore(db_).receivedRevision(Traits::kType); }
     Result readUnsyncedRecords(proto::router::SyncRecordRequest* request) final;
     Result confirmSentRecords(const proto::router::SyncRecordResult& result) final;
     Result storeReceivedRecords(const proto::router::SyncRecordList& list) final;

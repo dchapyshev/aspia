@@ -33,13 +33,14 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_router.cc
     database_settings.cc
     database_store.h
-    database_sync.cc
     instance_settings.cc
     instance_settings.h
     master_password.cc
     master_password.h
     profile_store.cc
     profile_store.h
+    sync_store.cc
+    sync_store.h
     system_settings.cc
     system_settings.h
     user_settings.cc

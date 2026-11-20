@@ -45,7 +45,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::readUnsyncedRecords(proto::router::Sy
     request->clear_record();
     sent_records_.clear();
 
-    Database::SyncTransaction transaction(db_);
+    SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
         return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;
@@ -115,7 +115,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
         return Result::INVALID_ANSWER;
     }
 
-    Database::SyncTransaction transaction(db_);
+    SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
         return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;
@@ -162,7 +162,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::rou
     if (list.record().empty())
         return Result::DONE;
 
-    Database::SyncTransaction transaction(db_);
+    SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
         return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;

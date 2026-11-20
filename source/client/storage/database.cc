@@ -30,6 +30,7 @@
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/sync_store.h"
 
 namespace {
 
@@ -248,7 +249,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (!db_.exec("DELETE FROM local_groups") || !clearRouter() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
         !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
-        !clearReceivedRevisions())
+        !SyncStore(*this).clearReceivedRevisions())
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;

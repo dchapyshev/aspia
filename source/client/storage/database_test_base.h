@@ -29,6 +29,7 @@
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
 #include "client/storage/profile_store.h"
+#include "client/storage/sync_store.h"
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
@@ -275,7 +276,7 @@ protected:
 
     bool storeReceivedCredential(const CredentialConfig& credential, qint64 sync_revision)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                credentials_.storeReceived(transaction, credential, sync_revision) && transaction.commit();
     }
@@ -309,14 +310,14 @@ protected:
 
     bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                profiles_.storeReceived(transaction, profile, sync_revision) && transaction.commit();
     }
 
     bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                profiles_.setUnknownData(transaction, guid, unknown_data) && transaction.commit();
     }
@@ -324,6 +325,7 @@ protected:
     Database db_;
     CredentialStore credentials_{ db_ };
     ProfileStore profiles_{ db_ };
+    SyncStore sync_store_{ db_ };
     QString file_path_;
 
 private:

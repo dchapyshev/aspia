@@ -23,6 +23,7 @@
 
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
+#include "client/storage/sync_store.h"
 
 namespace {
 
@@ -404,7 +405,7 @@ Database::ReadResult CredentialStore::unsynced(QList<Unsynced>* credentials) con
 
 //--------------------------------------------------------------------------------------------------
 bool CredentialStore::storeReceived(
-    Database::SyncTransaction& transaction, const CredentialConfig& credential, qint64 sync_revision)
+    SyncTransaction& transaction, const CredentialConfig& credential, qint64 sync_revision)
 {
     if (!transaction.isActive())
     {
@@ -446,7 +447,7 @@ bool CredentialStore::storeReceived(
 
 //--------------------------------------------------------------------------------------------------
 bool CredentialStore::setUnknownData(
-    Database::SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
+    SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
 {
     if (!transaction.isActive())
     {

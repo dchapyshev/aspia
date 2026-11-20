@@ -21,6 +21,8 @@
 
 #include "client/storage/database_store.h"
 
+class SyncTransaction;
+
 class CredentialStore final : public DatabaseStore
 {
 public:
@@ -43,10 +45,8 @@ public:
     Database::FindResult findByGuid(const QString& guid, CredentialConfig* credential) const;
     Database::ReadResult unsynced(QList<Unsynced>* credentials) const;
 
-    bool storeReceived(Database::SyncTransaction& transaction, const CredentialConfig& credential,
-                       qint64 sync_revision);
-    bool setUnknownData(Database::SyncTransaction& transaction, const QString& guid,
-                        const QByteArray& unknown_data);
+    bool storeReceived(SyncTransaction& transaction, const CredentialConfig& credential, qint64 sync_revision);
+    bool setUnknownData(SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data);
 };
 
 #endif // CLIENT_STORAGE_CREDENTIAL_STORE_H

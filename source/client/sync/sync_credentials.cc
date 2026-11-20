@@ -100,7 +100,7 @@ bool SyncCredentialTraits::hasSameContent(const Config& first, const Config& sec
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncCredentialTraits::storeReceived(
-    Database& db, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
+    Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision)
 {
     return CredentialStore(db).storeReceived(transaction, config, sync_revision);
 }
@@ -108,7 +108,7 @@ bool SyncCredentialTraits::storeReceived(
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncCredentialTraits::storeUnknownData(
-    Database& db, Database::SyncTransaction& transaction, const Config& config)
+    Database& db, SyncTransaction& transaction, const Config& config)
 {
     return CredentialStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

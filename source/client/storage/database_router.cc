@@ -25,6 +25,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/sync_store.h"
 #include "proto/router.h"
 
 namespace {
@@ -147,7 +148,7 @@ bool Database::setRouterConfig(const RouterConfig& router)
         {
             LOG(INFO) << "The device is detached from the storage" << stored.syncStorageId().toHex();
 
-            if (!resetSyncState())
+            if (!SyncStore(*this).reset())
             {
                 LOG(ERROR) << "Unable to detach the records from the storage";
                 return false;
@@ -209,7 +210,8 @@ Database::SyncResult Database::setSyncStorage(
                   << "reset:" << reset << "reset pending:" << stored.isSyncStorageResetPending()
                   << "discard:" << discard;
 
-        if (!(discard ? discardSyncData() : resetSyncState()))
+        SyncStore sync_store(*this);
+        if (!(discard ? sync_store.discard() : sync_store.reset()))
         {
             LOG(ERROR) << "Unable to prepare the records for another storage";
             return SyncResult::FAILED;

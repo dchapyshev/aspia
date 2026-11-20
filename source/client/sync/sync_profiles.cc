@@ -98,7 +98,7 @@ bool SyncProfileTraits::hasSameContent(const Config& first, const Config& second
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncProfileTraits::storeReceived(
-    Database& db, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
+    Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision)
 {
     ProfileStore store(db);
 
@@ -125,7 +125,7 @@ bool SyncProfileTraits::storeReceived(
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncProfileTraits::storeUnknownData(
-    Database& db, Database::SyncTransaction& transaction, const Config& config)
+    Database& db, SyncTransaction& transaction, const Config& config)
 {
     return ProfileStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

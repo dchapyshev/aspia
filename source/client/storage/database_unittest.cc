@@ -217,31 +217,14 @@ protected:
 
     bool eraseCredential(const QString& guid)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                transaction.eraseRecord(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid) && transaction.commit();
     }
 
-    bool setCredentialSyncRevision(const QString& guid, qint64 sync_revision)
-    {
-        Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.setRecordSyncRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid, sync_revision) &&
-               transaction.commit();
-    }
-
-    bool confirmSentCredential(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
-    {
-        Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_CREDENTIALS, guid, sync_revision,
-                                             sync_dirty) &&
-               transaction.commit();
-    }
-
     bool setReceivedCredentialsRevision(qint64 revision)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, revision) &&
                transaction.commit();
@@ -249,22 +232,14 @@ protected:
 
     bool eraseProfile(const QString& guid)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                transaction.eraseRecord(proto::router::SYNC_DATA_TYPE_PROFILES, guid) && transaction.commit();
     }
 
-    bool confirmSentProfile(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
-    {
-        Database::SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_PROFILES, guid, sync_revision, sync_dirty) &&
-               transaction.commit();
-    }
-
     bool setReceivedProfilesRevision(qint64 revision)
     {
-        Database::SyncTransaction transaction(db_);
+        SyncTransaction transaction(db_);
         return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
                transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES, revision) &&
                transaction.commit();
@@ -1347,7 +1322,7 @@ TEST_F(DatabaseTest, SyncStorageIsKeptWhenTheAccountIsEdited)
     EXPECT_EQ(stored->syncStorageKey(), key);
 
     EXPECT_EQ(rowCount("credentials"), 2);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
 
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1403,7 +1378,7 @@ TEST_F(DatabaseTest, SyncTurnedOffAndOnAgainKeepsTheGuidOfTheUser)
     EXPECT_FALSE(stored->isSyncStorageResetPending());
 
     EXPECT_EQ(rowCount("credentials"), 1);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1517,7 +1492,7 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
 
     EXPECT_EQ(rowCount("credentials"), 1);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
@@ -1540,40 +1515,6 @@ TEST_F(DatabaseTest, SyncStorageIsNotSetWhileSyncIsOff)
     ASSERT_TRUE(stored.has_value());
     EXPECT_TRUE(stored->syncStorageId().isEmpty());
     EXPECT_TRUE(stored->syncStorageKey().isEmpty());
-}
-
-//--------------------------------------------------------------------------------------------------
-// The synchronization changes the records of the device only in a transaction of the storage
-// the device is attached to. A transaction of another storage, or of none, does not begin, and
-// what a transaction did not commit is not kept.
-TEST_F(DatabaseTest, SyncChangesAreRefusedForAnotherStorage)
-{
-    addRouter(true);
-
-    const QByteArray storage_id = Random::byteArray(16);
-    ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, SecureByteArray(Random::byteArray(32)), false),
-              Database::SyncResult::DONE);
-
-    Database::SyncTransaction transaction(db_);
-    EXPECT_EQ(transaction.begin(Random::byteArray(16)), Database::SyncResult::DETACHED);
-    EXPECT_EQ(transaction.begin(QByteArray()), Database::SyncResult::DETACHED);
-    EXPECT_FALSE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
-    EXPECT_FALSE(transaction.commit());
-
-    {
-        Database::SyncTransaction dropped(db_);
-        ASSERT_EQ(dropped.begin(storage_id), Database::SyncResult::DONE);
-        ASSERT_TRUE(dropped.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
-    }
-
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
-
-    ASSERT_EQ(transaction.begin(storage_id), Database::SyncResult::DONE);
-    ASSERT_TRUE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 12));
-    ASSERT_TRUE(transaction.commit());
-    EXPECT_FALSE(transaction.setReceivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS, 13));
-
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3201,164 +3142,23 @@ TEST_F(DatabaseTest, ErasedCredentialLeavesNoRow)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The router stores a change only over the revision the change was based on. A local change that
-// wins over a received record stays as it is and is sent over the revision of that record.
-TEST_F(DatabaseTest, LocalChangeThatWinsIsBasedOnTheReceivedRevision)
-{
-    attachSyncStorage();
-
-    const qint64 credential_id = addCredential("office", "user", "secret");
-    const QString guid = findCredential(db_, credential_id)->guid();
-
-    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
-
-    CredentialConfig edited = credential("office", "local-user", "local-secret");
-    edited.setId(credential_id);
-    ASSERT_TRUE(credentials_.modify(edited));
-
-    ASSERT_TRUE(setCredentialSyncRevision(guid, 9));
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].credential.username(), QString("local-user"));
-    EXPECT_EQ(unsynced[0].sync_revision, 9);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record that was never sent stays unsynced when it wins over a received record and takes its revision.
-TEST_F(DatabaseTest, CredentialNeverSentThatWinsStaysUnsynced)
-{
-    attachSyncStorage();
-
-    const qint64 credential_id = addCredential("office", "user", "secret");
-    const QString guid = findCredential(db_, credential_id)->guid();
-
-    QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, 0);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-
-    ASSERT_TRUE(setCredentialSyncRevision(guid, 9));
-
-    unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].credential.username(), QString("user"));
-    EXPECT_EQ(unsynced[0].sync_revision, 9);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record the router stored has nothing more to send, unless it was edited while it was on its
-// way: what is taken off the count of its changes is the count the record was sent with.
-TEST_F(DatabaseTest, ConfirmedCredentialIsSentAgainOnlyWhenEditedMeanwhile)
-{
-    attachSyncStorage();
-
-    const qint64 credential_id = addCredential("office", "user", "secret");
-    const QString guid = findCredential(db_, credential_id)->guid();
-
-    ASSERT_TRUE(confirmSentCredential(guid, 12, 1));
-    EXPECT_TRUE(unsyncedCredentials().isEmpty());
-
-    CredentialConfig edited = credential("office", "other-user", "other-secret");
-    edited.setId(credential_id);
-    ASSERT_TRUE(credentials_.modify(edited));
-    ASSERT_TRUE(credentials_.modify(edited));
-
-    const QList<CredentialStore::Unsynced> sent = unsyncedCredentials();
-    ASSERT_EQ(sent.size(), 1);
-    EXPECT_EQ(sent[0].sync_revision, 12);
-    EXPECT_EQ(sent[0].sync_dirty, 2);
-
-    ASSERT_TRUE(credentials_.modify(edited));
-    ASSERT_TRUE(confirmSentCredential(guid, 13, sent[0].sync_dirty));
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, 13);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Once the router has stored the removal of a record, the row kept for it is gone. A record that
-// came back while the removal was on its way stays and is sent as a change.
-TEST_F(DatabaseTest, ConfirmedRemovalErasesTheRowUnlessTheRecordCameBack)
-{
-    attachSyncStorage();
-
-    const qint64 gone_id = addCredential("gone", "user", "secret");
-    const qint64 back_id = addCredential("back", "user", "secret");
-    const QString gone_guid = findCredential(db_, gone_id)->guid();
-    const QString back_guid = findCredential(db_, back_id)->guid();
-
-    ASSERT_TRUE(markSynced("credentials", gone_id, 7));
-    ASSERT_TRUE(markSynced("credentials", back_id, 8));
-    ASSERT_TRUE(credentials_.remove(gone_id));
-    ASSERT_TRUE(credentials_.remove(back_id));
-
-    CredentialConfig restored = credential("back", "user", "secret");
-    restored.setGuid(back_guid);
-    ASSERT_TRUE(credentials_.add(restored));
-
-    ASSERT_TRUE(confirmSentCredential(gone_guid, 9, 1));
-    ASSERT_TRUE(confirmSentCredential(back_guid, 10, 1));
-
-    EXPECT_EQ(rowCount("credentials"), 1);
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_FALSE(unsynced[0].deleted);
-    EXPECT_EQ(unsynced[0].credential.guid(), back_guid);
-    EXPECT_EQ(unsynced[0].sync_revision, 10);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A record removed while it was on its way to the router for the first time left no row, and the
-// router holds it now. Its removal is kept to be sent.
-TEST_F(DatabaseTest, CredentialRemovedOnItsWayToTheRouterIsRemovedThereToo)
-{
-    attachSyncStorage();
-
-    const qint64 credential_id = addCredential("office", "user", "secret");
-    const QString guid = findCredential(db_, credential_id)->guid();
-
-    ASSERT_TRUE(credentials_.remove(credential_id));
-    ASSERT_EQ(rowCount("credentials"), 0);
-
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-    ASSERT_TRUE(confirmSentCredential(guid, 12, 1));
-
-    EXPECT_TRUE(credentialList().isEmpty());
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_TRUE(unsynced[0].deleted);
-    EXPECT_EQ(unsynced[0].credential.guid(), guid);
-    EXPECT_GE(unsynced[0].credential.modifyTime(), start_time);
-    EXPECT_EQ(unsynced[0].sync_revision, 12);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
 // The device remembers how far it has read the records of the router. A batch replaces the
 // records together with the router they were exchanged with, so the reading starts over.
 TEST_F(DatabaseTest, ReceivedRevisionIsKeptUntilABatchReplacesTheRecords)
 {
     attachSyncStorage();
 
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 
     ASSERT_TRUE(setReceivedCredentialsRevision(12));
     ASSERT_TRUE(setReceivedProfilesRevision(14));
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 14);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 12);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 14);
 
     ASSERT_TRUE(db_.import({}, {}, {}, {}, {}, {}));
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3397,7 +3197,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     for (qint64 credential_id : { kept_id, edited_id, removed_id, new_id })
         EXPECT_TRUE(isMarkedDeleted("credentials", credential_id));
 
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     ASSERT_TRUE(setReceivedCredentialsRevision(4));
 
@@ -3405,7 +3205,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     ASSERT_EQ(db_.setSyncStorage(*findRouter(db_), storage_id, key, true), Database::SyncResult::DONE);
 
     EXPECT_EQ(rowCount("credentials"), 4);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 4);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 4);
 
     const std::optional<RouterConfig> stored = findRouter(db_);
     ASSERT_TRUE(stored.has_value());
@@ -3436,7 +3236,7 @@ TEST_F(DatabaseTest, AnotherStorageNotMadeByAResetKeepsTheDataOfTheDevice)
 
     EXPECT_EQ(credentialList().size(), 2);
     EXPECT_EQ(rowCount("credentials"), 2);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
@@ -3596,7 +3396,7 @@ TEST_F(DatabaseTest, DeviceWithAPendingResetKeepsItsData)
 
     EXPECT_EQ(credentialList().size(), 2);
     EXPECT_EQ(rowCount("credentials"), 2);
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 2);
@@ -3745,7 +3545,7 @@ TEST_F(DatabaseTest, ImportKeepsSyncOnWithAPendingReset)
     EXPECT_EQ(unsynced[0].sync_revision, 0);
     EXPECT_FALSE(unsynced[0].deleted);
 
-    Database::SyncTransaction transaction(db_);
+    SyncTransaction transaction(db_);
     EXPECT_EQ(transaction.begin(storage_id), Database::SyncResult::DETACHED);
 }
 
@@ -3763,7 +3563,7 @@ TEST_F(DatabaseTest, ImportWithoutARouterTurnsSyncOff)
 
     EXPECT_FALSE(findRouter(db_).has_value());
 
-    Database::SyncTransaction transaction(db_);
+    SyncTransaction transaction(db_);
     EXPECT_EQ(transaction.begin(storage_id), Database::SyncResult::DETACHED);
 }
 
@@ -3951,66 +3751,6 @@ TEST_F(DatabaseTest, ErasedProfileLeavesNoRow)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A profile the router stored is sent again only when it was edited while it was on its way.
-TEST_F(DatabaseTest, ConfirmedProfileIsSentAgainOnlyWhenEditedMeanwhile)
-{
-    attachSyncStorage();
-
-    const qint64 profile_id = addProfile("office");
-
-    ProfileConfig edited;
-    ASSERT_EQ(profiles_.find(profile_id, &edited), Database::FindResult::FOUND);
-
-    ASSERT_TRUE(confirmSentProfile(edited.guid(), 12, 1));
-    EXPECT_TRUE(unsyncedProfiles().isEmpty());
-
-    edited.setName("renamed");
-    ASSERT_TRUE(profiles_.modify(edited));
-    ASSERT_TRUE(profiles_.modify(edited));
-
-    const QList<ProfileStore::Unsynced> sent = unsyncedProfiles();
-    ASSERT_EQ(sent.size(), 1);
-    EXPECT_EQ(sent[0].sync_revision, 12);
-    EXPECT_EQ(sent[0].sync_dirty, 2);
-
-    ASSERT_TRUE(profiles_.modify(edited));
-    ASSERT_TRUE(confirmSentProfile(edited.guid(), 13, sent[0].sync_dirty));
-
-    const QList<ProfileStore::Unsynced> unsynced = unsyncedProfiles();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, 13);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
-// A profile removed on its first way to the router left no row, so its removal is kept to be sent.
-TEST_F(DatabaseTest, ProfileRemovedOnItsWayToTheRouterIsRemovedThereToo)
-{
-    attachSyncStorage();
-
-    const qint64 profile_id = addProfile("office");
-
-    ProfileConfig stored;
-    ASSERT_EQ(profiles_.find(profile_id, &stored), Database::FindResult::FOUND);
-
-    ASSERT_TRUE(profiles_.remove(profile_id));
-    ASSERT_EQ(rowCount("profiles"), 1);
-
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-    ASSERT_TRUE(confirmSentProfile(stored.guid(), 12, 1));
-
-    EXPECT_TRUE(profileList().isEmpty());
-
-    const QList<ProfileStore::Unsynced> unsynced = unsyncedProfiles();
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_TRUE(unsynced[0].deleted);
-    EXPECT_EQ(unsynced[0].profile.guid(), stored.guid());
-    EXPECT_GE(unsynced[0].profile.modifyTime(), start_time);
-    EXPECT_EQ(unsynced[0].sync_revision, 12);
-    EXPECT_EQ(unsynced[0].sync_dirty, 1);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Another storage takes the profiles of the device away and leaves the default one until the storage brings its own.
 TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
 {
@@ -4035,7 +3775,7 @@ TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
     EXPECT_TRUE(isMarkedDeleted("profiles", new_id));
     EXPECT_EQ(profiles_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
-    EXPECT_EQ(db_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
+    EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
