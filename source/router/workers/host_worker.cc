@@ -27,8 +27,8 @@
 #include "base/net/tcp_server.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
-#include "router/database.h"
 #include "router/host.h"
+#include "router/host_store.h"
 #include "router/settings.h"
 #include "router/shared_hosts.h"
 #include "router/workers/client_worker.h"
@@ -214,7 +214,7 @@ void HostWorker::onTimer(TimePoint now)
 
     Database& database = Database::instance();
     if (database.isValid())
-        database.pruneExpiredHostRemovals();
+        HostStore(database).pruneExpiredRemovals();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -397,7 +397,7 @@ HostWorker::RemoveHostResult HostWorker::doRemoveHost(HostId host_id)
         return result;
     }
 
-    if (!database.scheduleHostRemoval(host_id))
+    if (!HostStore(database).scheduleRemoval(host_id))
     {
         LOG(ERROR) << "Failed to schedule host removal for host_id:" << host_id;
         return result;
@@ -460,7 +460,7 @@ std::string_view HostWorker::doApproveHost(HostId host_id)
         return proto::router::kErrorInternalError;
     }
 
-    if (!database.addHost(host->keyHash(), host->hardwareId()))
+    if (!HostStore(database).add(host->keyHash(), host->hardwareId()))
     {
         LOG(ERROR) << "Failed to persist approved host_id:" << host_id;
         return proto::router::kErrorInternalError;

@@ -28,7 +28,7 @@ protected:
     HostId hostIdByKey(std::string_view key_hash, std::string_view* error_code = nullptr)
     {
         HostId host_id = kInvalidHostId;
-        const std::string_view code = db_.hostId(key_hash, &host_id);
+        const std::string_view code = hosts_.findByKey(key_hash, &host_id);
         if (error_code)
             *error_code = code;
         return host_id;
@@ -44,7 +44,7 @@ protected:
     qint64 hostCount()
     {
         qint64 count = 0;
-        if (db_.hostCount(proto::router::HostFilter(), &count) != proto::router::kErrorOk)
+        if (hosts_.count(proto::router::HostFilter(), &count) != proto::router::kErrorOk)
             return -1;
         return count;
     }
@@ -55,7 +55,7 @@ protected:
 // the same dialable id.
 TEST_F(HostLifecycleTest, ApprovalCreatesADurableIdentity)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
 
     std::string_view error_code;
     const HostId host_id = hostIdByKey("key-1", &error_code);
@@ -71,16 +71,16 @@ TEST_F(HostLifecycleTest, ApprovalCreatesADurableIdentity)
 // could never reach.
 TEST_F(HostLifecycleTest, SecondApprovalOfTheSameKeyIsRefused)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
-    EXPECT_FALSE(db_.addHost("key-1", "hwid-2"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
+    EXPECT_FALSE(hosts_.add("key-1", "hwid-2"));
     EXPECT_EQ(hostCount(), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(HostLifecycleTest, ApprovalRequiresKeyAndHardwareId)
 {
-    EXPECT_FALSE(db_.addHost(std::string_view(), "hwid-1"));
-    EXPECT_FALSE(db_.addHost("key-1", std::string_view()));
+    EXPECT_FALSE(hosts_.add(std::string_view(), "hwid-1"));
+    EXPECT_FALSE(hosts_.add("key-1", std::string_view()));
     EXPECT_EQ(hostCount(), 0);
 }
 
@@ -102,13 +102,13 @@ TEST_F(HostLifecycleTest, UnknownKeyIsNotFound)
 // temporary range would collide with a session id of an unapproved host.
 TEST_F(HostLifecycleTest, PermanentIdsNeverEnterTheTemporaryRange)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
 
     // The next AUTOINCREMENT value would be the first temporary id.
     ASSERT_TRUE(execRaw(QString("UPDATE sqlite_sequence SET seq=%1 WHERE name='hosts'")
                             .arg(kMinTempHostId - 1)));
 
-    EXPECT_FALSE(db_.addHost("key-2", "hwid-2"));
+    EXPECT_FALSE(hosts_.add("key-2", "hwid-2"));
     EXPECT_EQ(hostCount(), 1);
 }
 
@@ -117,12 +117,11 @@ TEST_F(HostLifecycleTest, PermanentIdsNeverEnterTheTemporaryRange)
 // administrator has named it, no reconnection may overwrite that.
 TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
-                                   "3.0.0", "Windows", "192.168.1.10"));
+    ASSERT_TRUE(hosts_.updateInfo(host_id, "hwid-1", "COMPUTER", "x86_64", "3.0.0", "Windows", "192.168.1.10"));
 
     proto::router::Host stored = findHost(host_id);
     EXPECT_EQ(stored.display_name(), "COMPUTER");
@@ -131,12 +130,11 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
     EXPECT_EQ(stored.address(), "192.168.1.10");
     EXPECT_GT(stored.last_connect(), 0);
 
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), 0, 0, "Accounting",
-                             std::string_view()),
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), 0, 0, "Accounting",
+                            std::string_view()),
               proto::router::kErrorOk);
 
-    ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64",
-                                   "3.0.1", "Windows", "192.168.1.11"));
+    ASSERT_TRUE(hosts_.updateInfo(host_id, "hwid-1", "RENAMED-BY-OS", "x86_64", "3.0.1", "Windows", "192.168.1.11"));
 
     stored = findHost(host_id);
     EXPECT_EQ(stored.display_name(), "Accounting");
@@ -149,10 +147,8 @@ TEST_F(HostLifecycleTest, TelemetrySeedsTheLabelOnlyWhileItIsEmpty)
 // would hide that from the session.
 TEST_F(HostLifecycleTest, TelemetryOfAMissingHostFails)
 {
-    EXPECT_FALSE(db_.updateHostInfo(HostId(12345), "hwid", "COMPUTER", "x86_64",
-                                    "3.0.0", "Windows", "127.0.0.1"));
-    EXPECT_FALSE(db_.updateHostInfo(kInvalidHostId, "hwid", "COMPUTER", "x86_64",
-                                    "3.0.0", "Windows", "127.0.0.1"));
+    EXPECT_FALSE(hosts_.updateInfo(HostId(12345), "hwid", "COMPUTER", "x86_64", "3.0.0", "Windows", "127.0.0.1"));
+    EXPECT_FALSE(hosts_.updateInfo(kInvalidHostId, "hwid", "COMPUTER", "x86_64", "3.0.0", "Windows", "127.0.0.1"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,16 +156,16 @@ TEST_F(HostLifecycleTest, TelemetryOfAMissingHostFails)
 // must still be recognised when it reconnects, so that it can be told to uninstall itself.
 TEST_F(HostLifecycleTest, ScheduledRemovalHidesTheHostButKeepsItsId)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_EQ(hostCount(), 1);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
 
     EXPECT_EQ(hostCount(), 0);
     EXPECT_EQ(findHost(host_id).host_id(), 0u);
-    EXPECT_TRUE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_TRUE(hosts_.hasPendingRemoval(host_id));
 
     std::string_view error_code;
     EXPECT_EQ(hostIdByKey("key-1", &error_code), host_id);
@@ -181,13 +177,13 @@ TEST_F(HostLifecycleTest, ScheduledRemovalHidesTheHostButKeepsItsId)
 // over as an unapproved host.
 TEST_F(HostLifecycleTest, FinalizationDropsTheIdentity)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
 
-    ASSERT_TRUE(db_.finalizeHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.finalizeRemoval(host_id));
 
-    EXPECT_FALSE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_FALSE(hosts_.hasPendingRemoval(host_id));
 
     std::string_view error_code;
     EXPECT_EQ(hostIdByKey("key-1", &error_code), kInvalidHostId);
@@ -195,14 +191,14 @@ TEST_F(HostLifecycleTest, FinalizationDropsTheIdentity)
 
     // A duplicate acknowledgement (or another session that finalized first) is not a failure: the
     // desired end state is already there.
-    EXPECT_TRUE(db_.finalizeHostRemoval(host_id));
+    EXPECT_TRUE(hosts_.finalizeRemoval(host_id));
 }
 
 //--------------------------------------------------------------------------------------------------
 TEST_F(HostLifecycleTest, RemovalOfAnUnknownHostFails)
 {
-    EXPECT_FALSE(db_.scheduleHostRemoval(HostId(12345)));
-    EXPECT_FALSE(db_.scheduleHostRemoval(kInvalidHostId));
+    EXPECT_FALSE(hosts_.scheduleRemoval(HostId(12345)));
+    EXPECT_FALSE(hosts_.scheduleRemoval(kInvalidHostId));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -210,19 +206,19 @@ TEST_F(HostLifecycleTest, RemovalOfAnUnknownHostFails)
 // must not be blocked by the stale row of the first one, or the host would become un-removable.
 TEST_F(HostLifecycleTest, RemovalAfterReapprovalReplacesTheStaleRow)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId first_id = hostIdByKey("key-1");
-    ASSERT_TRUE(db_.scheduleHostRemoval(first_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(first_id));
 
     // Approved again under a new identity while the old removal is still pending.
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId second_id = hostIdByKey("key-1");
     EXPECT_NE(second_id, first_id);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(second_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(second_id));
 
-    EXPECT_TRUE(db_.hasPendingHostRemoval(second_id));
-    EXPECT_FALSE(db_.hasPendingHostRemoval(first_id));
+    EXPECT_TRUE(hosts_.hasPendingRemoval(second_id));
+    EXPECT_FALSE(hosts_.hasPendingRemoval(first_id));
     EXPECT_EQ(hostCount(), 0);
 }
 
@@ -231,14 +227,14 @@ TEST_F(HostLifecycleTest, RemovalAfterReapprovalReplacesTheStaleRow)
 // must not resurrect a record that no longer exists.
 TEST_F(HostLifecycleTest, RemovedHostCannotBeClaimed)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
     const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
 
     EXPECT_EQ(moveHost(host_id, workspace_id), proto::router::kErrorNotFound);
 }
@@ -248,15 +244,14 @@ TEST_F(HostLifecycleTest, RemovedHostCannotBeClaimed)
 // carried inside the workspace, but the host keeps its id and its telemetry.
 TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
-    ASSERT_TRUE(db_.updateHostInfo(host_id, "hwid-1", "COMPUTER", "x86_64",
-                                   "3.0.0", "Windows", "192.168.1.10"));
+    ASSERT_TRUE(hosts_.updateInfo(host_id, "hwid-1", "COMPUTER", "x86_64", "3.0.0", "Windows", "192.168.1.10"));
 
     const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, 0,
-                             "Accounting", "comment"),
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), workspace_id, 0,
+                            "Accounting", "comment"),
               proto::router::kErrorOk);
 
     ASSERT_EQ(workspaces_.remove(workspace_id), proto::router::kErrorOk);
@@ -274,18 +269,18 @@ TEST_F(HostLifecycleTest, WorkspaceReleaseKeepsTheIdentity)
 // record is dropped, and with it the id. The machine behind it has to be approved anew.
 TEST_F(HostLifecycleTest, UnacknowledgedRemovalExpires)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
-    ASSERT_TRUE(db_.hasPendingHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
+    ASSERT_TRUE(hosts_.hasPendingRemoval(host_id));
 
     // One day past the grace period.
     ASSERT_TRUE(ageRemoval(host_id, 181));
 
-    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
-    EXPECT_FALSE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_TRUE(hosts_.pruneExpiredRemovals());
+    EXPECT_FALSE(hosts_.hasPendingRemoval(host_id));
 
     // The key means nothing to the router any more.
     std::string_view error_code;
@@ -298,15 +293,15 @@ TEST_F(HostLifecycleTest, UnacknowledgedRemovalExpires)
 // months switched off is still told to remove itself when it returns.
 TEST_F(HostLifecycleTest, RemovalInsideTheGracePeriodIsKept)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
     const HostId host_id = hostIdByKey("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
     ASSERT_TRUE(ageRemoval(host_id, 179));
 
-    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
-    EXPECT_TRUE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_TRUE(hosts_.pruneExpiredRemovals());
+    EXPECT_TRUE(hosts_.hasPendingRemoval(host_id));
     EXPECT_EQ(hostIdByKey("key-1"), host_id);
 }
 
@@ -314,21 +309,21 @@ TEST_F(HostLifecycleTest, RemovalInsideTheGracePeriodIsKept)
 // The sweep takes the expired ones and leaves the rest alone.
 TEST_F(HostLifecycleTest, SweepTakesOnlyTheExpiredRemovals)
 {
-    ASSERT_TRUE(db_.addHost("key-1", "hwid-1"));
-    ASSERT_TRUE(db_.addHost("key-2", "hwid-2"));
+    ASSERT_TRUE(hosts_.add("key-1", "hwid-1"));
+    ASSERT_TRUE(hosts_.add("key-2", "hwid-2"));
 
     const HostId expired_id = hostIdByKey("key-1");
     const HostId fresh_id = hostIdByKey("key-2");
     ASSERT_NE(expired_id, kInvalidHostId);
     ASSERT_NE(fresh_id, kInvalidHostId);
 
-    ASSERT_TRUE(db_.scheduleHostRemoval(expired_id));
-    ASSERT_TRUE(db_.scheduleHostRemoval(fresh_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(expired_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(fresh_id));
     ASSERT_TRUE(ageRemoval(expired_id, 200));
 
-    EXPECT_TRUE(db_.pruneExpiredHostRemovals());
+    EXPECT_TRUE(hosts_.pruneExpiredRemovals());
 
-    EXPECT_FALSE(db_.hasPendingHostRemoval(expired_id));
-    EXPECT_TRUE(db_.hasPendingHostRemoval(fresh_id));
+    EXPECT_FALSE(hosts_.hasPendingRemoval(expired_id));
+    EXPECT_TRUE(hosts_.hasPendingRemoval(fresh_id));
     EXPECT_EQ(countRaw("SELECT COUNT(*) FROM hosts_remove"), 1);
 }

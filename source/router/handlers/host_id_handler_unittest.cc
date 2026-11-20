@@ -66,11 +66,11 @@ protected:
     HostId approveHost(std::string_view key)
     {
         const QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, key);
-        if (!db_.addHost(key_hash, "hwid-1"))
+        if (!hosts_.add(key_hash, "hwid-1"))
             return kInvalidHostId;
 
         HostId host_id = kInvalidHostId;
-        if (db_.hostId(key_hash, &host_id) != proto::router::kErrorOk)
+        if (hosts_.findByKey(key_hash, &host_id) != proto::router::kErrorOk)
             return kInvalidHostId;
         return host_id;
     }
@@ -78,7 +78,7 @@ protected:
     qint64 hostCount()
     {
         qint64 count = 0;
-        if (db_.hostCount(proto::router::HostFilter(), &count) != proto::router::kErrorOk)
+        if (hosts_.count(proto::router::HostFilter(), &count) != proto::router::kErrorOk)
             return -1;
         return count;
     }
@@ -248,7 +248,7 @@ TEST_F(HostIdHandlerTest, ApprovedHostGetsItsStoredTelemetry)
 {
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_TRUE(db_.updateHostTelemetry(host_id, "{\"version\":1}"));
+    ASSERT_TRUE(hosts_.updateTelemetry(host_id, "{\"version\":1}"));
 
     const HostIdResult result = handle(existingIdRequest("key-1"));
 
@@ -278,7 +278,7 @@ TEST_F(HostIdHandlerTest, HostScheduledForRemovalIsToldToUninstall)
 {
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
 
     const HostIdResult result = handle(existingIdRequest("key-1"));
 
@@ -289,7 +289,7 @@ TEST_F(HostIdHandlerTest, HostScheduledForRemovalIsToldToUninstall)
 
     // Nothing was resurrected in the hosts table by the connection.
     EXPECT_EQ(hostCount(), 0);
-    EXPECT_TRUE(db_.hasPendingHostRemoval(host_id));
+    EXPECT_TRUE(hosts_.hasPendingRemoval(host_id));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,8 +300,8 @@ TEST_F(HostIdHandlerTest, ReconnectionKeepsTheAdministratorsLabel)
     const HostId host_id = approveHost("key-1");
     ASSERT_NE(host_id, kInvalidHostId);
     ASSERT_EQ(handle(existingIdRequest("key-1")).error_code, proto::router::kErrorOk);
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), 0, 0, "Accounting",
-                             std::string_view()),
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), 0, 0, "Accounting",
+                            std::string_view()),
               proto::router::kErrorOk);
 
     peer_.computer_name = "RENAMED-BY-OS";

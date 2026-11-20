@@ -29,7 +29,6 @@ list(APPEND SOURCE_ROUTER_CORE
     client_operator.h
     database.cc
     database.h
-    database_hosts.cc
     database_store.h
     device_token_store.cc
     device_token_store.h
@@ -41,6 +40,8 @@ list(APPEND SOURCE_ROUTER_CORE
     group_store.h
     host.cc
     host.h
+    host_store.cc
+    host_store.h
     migration_utils.cc
     migration_utils.h
     relay.cc
@@ -74,6 +75,7 @@ list(APPEND SOURCE_ROUTER_TESTS
     device_token_store_unittest.cc
     email_queue_unittest.cc
     host_lifecycle_unittest.cc
+    host_store_unittest.cc
     host_unittest.cc
     loopback_channel.h
     relay_unittest.cc

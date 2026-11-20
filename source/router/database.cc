@@ -399,13 +399,6 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-bool Database::isPageValid(qint64 offset, qint64 count, int max_count)
-{
-    return offset >= 0 && count > 0 && count <= max_count;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool Database::openDatabase()
 {
     const QString file_path = filePath();

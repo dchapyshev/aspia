@@ -19,6 +19,9 @@
 #ifndef ROUTER_WORKSPACE_STORE_H
 #define ROUTER_WORKSPACE_STORE_H
 
+#include <set>
+#include <vector>
+
 #include "router/database_store.h"
 #include "router/workspace.h"
 
@@ -44,8 +47,8 @@ public:
 
     // The initial access list holds the user_ids of the members of the workspace; an entry for a
     // user that is gone is rejected (kErrorConflict - the sender refetches, see checkAccessUser).
-    // The hosts of a workspace are claimed one by one (see modifyHost), so a creation never
-    // touches them.
+    // The hosts of a workspace are claimed one by one (see HostStore::modify), so a creation
+    // never touches them.
     std::string_view add(std::string_view name, std::string_view comment,
         const std::vector<qint64>& initial_access, qint64* entry_id);
 

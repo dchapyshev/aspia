@@ -19,6 +19,9 @@
 #ifndef ROUTER_USER_STORE_H
 #define ROUTER_USER_STORE_H
 
+#include <vector>
+
+#include "base/peer/router_user.h"
 #include "router/database_store.h"
 
 class UserStore final : public DatabaseStore

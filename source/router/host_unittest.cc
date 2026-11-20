@@ -303,7 +303,7 @@ TEST_F(HostTest, StoredTelemetryIsNotWrittenAgainOnReconnect)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_TRUE(db_.updateHostTelemetry(host_id, kFirstTelemetry));
+    ASSERT_TRUE(hosts_.updateTelemetry(host_id, kFirstTelemetry));
 
     withHost([&](Host& host, LoopbackChannel* channel)
     {
@@ -326,7 +326,7 @@ TEST_F(HostTest, HostWithPendingRemovalIsToldBeforeItsIdIsReported)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
 
     withHost([this, host_id](Host& host, LoopbackChannel* channel)
     {
@@ -362,7 +362,7 @@ TEST_F(HostTest, RemovalIsFinalizedWhenTheHostGoesAway)
 {
     const HostId host_id = addHost(toStdString(keyHash(kHostKey)));
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_TRUE(db_.scheduleHostRemoval(host_id));
+    ASSERT_TRUE(hosts_.scheduleRemoval(host_id));
     ASSERT_TRUE(hasPendingRemoval(host_id));
 
     withHost([](Host& host, LoopbackChannel* channel)

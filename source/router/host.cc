@@ -27,7 +27,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "proto/router_peer.h"
-#include "router/database.h"
+#include "router/host_store.h"
 #include "router/handlers/host_id_handler.h"
 #include "router/workers/client_worker.h"
 
@@ -101,7 +101,7 @@ Host::~Host()
     {
         if (database_.isValid())
         {
-            if (!database_.finalizeHostRemoval(host_id_))
+            if (!HostStore(database_).finalizeRemoval(host_id_))
                 CLOG(WARNING) << "Failed to finalize removal for host_id:" << host_id_;
         }
         else
@@ -330,7 +330,7 @@ void Host::readHostTelemetry(const proto::router::HostTelemetry& host_telemetry,
         return;
     }
 
-    if (!database_.updateHostTelemetry(host_id_, telemetry))
+    if (!HostStore(database_).updateTelemetry(host_id_, telemetry))
     {
         CLOG(WARNING) << "Failed to update telemetry for host_id:" << host_id_;
         return;

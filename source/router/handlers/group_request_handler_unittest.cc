@@ -366,8 +366,8 @@ TEST_F(GroupRequestHandlerTest, DeleteDropsSubtreeAndDetachesHosts)
     const qint64 child_id = addGroup(workspace_id_, parent_id, "child");
     ASSERT_GT(child_id, 0);
 
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id_, child_id,
-                             "host", std::string_view()),
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), workspace_id_, child_id,
+                            "host", std::string_view()),
               proto::router::kErrorOk);
 
     proto::router::GroupRequest request =

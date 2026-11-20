@@ -25,6 +25,7 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_sync.h"
+#include "router/host_store.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
 #include "router/user_store.h"
@@ -478,7 +479,7 @@ void ClientOperator::readCheckHostStatus(const proto::router::CheckHostStatus& c
     }
     else
     {
-        const std::string_view error_code = database_.checkHostEntry(check_host_status.host_id());
+        const std::string_view error_code = HostStore(database_).checkEntry(check_host_status.host_id());
         host_status->set_error_code(error_code == proto::router::kErrorOk ?
                                     proto::router::kErrorHostOffline : error_code);
     }

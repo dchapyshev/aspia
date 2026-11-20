@@ -27,6 +27,7 @@
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
 #include "router/group_store.h"
+#include "router/host_store.h"
 #include "router/workspace_store.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
@@ -55,10 +56,12 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
         return result;
     }
 
+    HostStore store(database);
+
     // "Not found" and "could not read" are different answers - a database error must not be
     // reported as a missing host.
     qint64 workspace_id = 0;
-    const std::string_view workspace_code = database.hostWorkspaceId(host_id, &workspace_id);
+    const std::string_view workspace_code = store.workspaceId(host_id, &workspace_id);
     if (workspace_code != proto::router::kErrorOk)
     {
         LOG(ERROR) << "Unable to resolve workspace of host" << host_id;
@@ -130,7 +133,7 @@ RequestResult handleHostRequest(Database& database, const RequestCaller& caller,
         }
     }
 
-    const std::string_view error_code = database.modifyHost(
+    const std::string_view error_code = store.modify(
         host_id, host.revision(), target_workspace_id, group_id, host.display_name(), host.comment());
     if (error_code != proto::router::kErrorOk)
     {
@@ -197,12 +200,14 @@ void handleHostList(Database& database, const RequestCaller& caller,
         }
     }
 
+    HostStore store(database);
+
     // A zero count from a failed query would make the client truncate its pagination while the
     // list itself arrives non-empty - so a count failure fails the whole request.
     qint64 total_count = 0;
     const std::string_view count_code = mode == proto::router::HostListRequest::MODE_ALL
-        ? database.hostCount(request.filter(), &total_count)
-        : database.hostCount(workspace_id, group_id, &total_count);
+        ? store.count(request.filter(), &total_count)
+        : store.count(workspace_id, group_id, &total_count);
     if (count_code != proto::router::kErrorOk)
     {
         out->set_error_code(count_code);
@@ -212,12 +217,12 @@ void handleHostList(Database& database, const RequestCaller& caller,
     out->set_total_count(total_count);
 
     if (mode == proto::router::HostListRequest::MODE_ALL)
-        database.hosts(request.filter(), request.offset(), request.count(), out);
+        store.list(request.filter(), request.offset(), request.count(), out);
     else
-        database.hosts(workspace_id, group_id, request.offset(), request.count(), out);
+        store.list(workspace_id, group_id, request.offset(), request.count(), out);
 
-    // hosts() drops the partial list from an error reply; the count computed up front must not
-    // survive it either.
+    // HostStore::list() drops the partial list from an error reply; the count computed up front
+    // must not survive it either.
     if (out->error_code() != proto::router::kErrorOk)
         out->clear_total_count();
 }
@@ -243,5 +248,5 @@ void handleHostSearch(Database& database, const RequestCaller& caller,
         return;
     }
 
-    database.searchHosts(request.query(), workspace_ids, request.offset(), request.count(), out);
+    HostStore(database).search(request.query(), workspace_ids, request.offset(), request.count(), out);
 }

@@ -19,6 +19,8 @@
 #ifndef ROUTER_DEVICE_TOKEN_STORE_H
 #define ROUTER_DEVICE_TOKEN_STORE_H
 
+#include <vector>
+
 #include "router/database_store.h"
 
 // Metadata for a client device token returned to admin callers. Intentionally omits the token

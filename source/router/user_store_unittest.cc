@@ -18,6 +18,8 @@
 
 #include "router/user_store.h"
 
+#include <QUuid>
+
 #include "router/router_test_base.h"
 
 class UserStoreTest : public RouterTestBase

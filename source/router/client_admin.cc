@@ -26,7 +26,7 @@
 #include "proto/router_host.h"
 #include "router/access_log.h"
 #include "router/client_operator.h"
-#include "router/database.h"
+#include "router/host_store.h"
 #include "router/handlers/user_request_handler.h"
 #include "router/handlers/workspace_request_handler.h"
 #include "router/workers/client_worker.h"
@@ -273,7 +273,7 @@ void ClientAdmin::doHostTelemetryRequest(const proto::router::HostTelemetryReque
     result->set_host_id(request.host_id());
 
     std::string telemetry;
-    result->set_error_code(database().hostTelemetry(request.host_id(), &telemetry));
+    result->set_error_code(HostStore(database()).telemetry(request.host_id(), &telemetry));
     result->set_json(std::move(telemetry));
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));

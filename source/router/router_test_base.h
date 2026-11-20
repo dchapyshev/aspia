@@ -38,6 +38,7 @@
 #include "router/access_log.h"
 #include "router/device_token_store.h"
 #include "router/group_store.h"
+#include "router/host_store.h"
 #include "router/sync_storage.h"
 #include "router/user_store.h"
 #include "router/workspace_store.h"
@@ -135,18 +136,17 @@ protected:
     std::string_view moveHost(HostId host_id, qint64 workspace_id, qint64 group_id = 0)
     {
         const proto::router::Host host = findHost(host_id);
-        return db_.modifyHost(host_id, host.revision(), workspace_id, group_id,
-                              host.display_name(), host.comment());
+        return hosts_.modify(host_id, host.revision(), workspace_id, group_id, host.display_name(), host.comment());
     }
 
     // An approved host, as the host worker creates it at first connection.
     HostId addHost(std::string_view key_hash)
     {
-        if (!db_.addHost(key_hash, "hwid"))
+        if (!hosts_.add(key_hash, "hwid"))
             return kInvalidHostId;
 
         HostId host_id = kInvalidHostId;
-        if (db_.hostId(key_hash, &host_id) != proto::router::kErrorOk)
+        if (hosts_.findByKey(key_hash, &host_id) != proto::router::kErrorOk)
             return kInvalidHostId;
         return host_id;
     }
@@ -154,7 +154,7 @@ protected:
     proto::router::Host findHost(HostId host_id)
     {
         proto::router::HostList list;
-        db_.hosts(proto::router::HostFilter(), 0, proto::router::kMaxHostPageSize, &list);
+        hosts_.list(proto::router::HostFilter(), 0, proto::router::kMaxHostPageSize, &list);
 
         for (int i = 0; i < list.host_size(); ++i)
         {
@@ -198,6 +198,7 @@ protected:
     Database db_;
     DeviceTokenStore device_tokens_{ db_ };
     GroupStore groups_{ db_ };
+    HostStore hosts_{ db_ };
     UserStore users_{ db_ };
     WorkspaceStore workspaces_{ db_ };
     QString access_log_file_path_;

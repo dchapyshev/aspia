@@ -440,8 +440,8 @@ protected:
         if (host_id == kInvalidHostId)
             return kInvalidHostId;
 
-        if (db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, group_id,
-                           display_name, std::string_view()) != proto::router::kErrorOk)
+        if (hosts_.modify(host_id, findHost(host_id).revision(), workspace_id, group_id,
+                          display_name, std::string_view()) != proto::router::kErrorOk)
         {
             return kInvalidHostId;
         }
@@ -473,7 +473,7 @@ protected:
     bool setHostInfo(HostId host_id, std::string_view cpu_arch, std::string_view version,
                      std::string_view os_name, std::string_view address)
     {
-        return db_.updateHostInfo(host_id, "hwid", "computer", cpu_arch, version, os_name, address);
+        return hosts_.updateInfo(host_id, "hwid", "computer", cpu_arch, version, os_name, address);
     }
 
     proto::router::HostList filteredHostList(const proto::router::HostFilter& filter)
@@ -948,8 +948,8 @@ TEST_F(HostListTest, SearchMatchesComment)
 {
     const HostId host_id = addHost("hash-1");
     ASSERT_NE(host_id, kInvalidHostId);
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id_, 0, "Office",
-                             "Second Floor"), proto::router::kErrorOk);
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), workspace_id_, 0, "Office",
+                            "Second Floor"), proto::router::kErrorOk);
 
     const proto::router::HostSearchResult result = searchHosts("second");
     ASSERT_EQ(result.error_code(), proto::router::kErrorOk);

@@ -22,7 +22,7 @@
 #include "base/crypto/generic_hash.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
-#include "router/database.h"
+#include "router/host_store.h"
 #include "router/workers/client_worker.h"
 
 namespace {
@@ -111,8 +111,10 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
 
     const QByteArray key_hash = GenericHash::hash(GenericHash::Type::BLAKE2b512, request.key());
 
+    HostStore store(database);
+
     HostId host_id = kInvalidHostId;
-    const std::string_view error_code = database.hostId(key_hash, &host_id);
+    const std::string_view error_code = store.findByKey(key_hash, &host_id);
 
     if (error_code != proto::router::kErrorOk && error_code != proto::router::kErrorNotFound)
     {
@@ -135,20 +137,20 @@ HostIdResult handleHostIdRequest(Database& database, const proto::router::HostId
 
     // A host whose removal is scheduled is told to uninstall itself instead of being welcomed
     // back: its connect metadata is not stored, the record is on its way out.
-    if (database.hasPendingHostRemoval(host_id))
+    if (store.hasPendingRemoval(host_id))
     {
         LOG(INFO) << "Host" << host_id << "has pending removal, sending remove command";
         result.removal_pending = true;
         return result;
     }
 
-    if (!database.updateHostInfo(host_id, result.hardware_id, peer.computer_name,
-                                 peer.architecture, peer.version, peer.os_name, peer.address))
+    if (!store.updateInfo(host_id, result.hardware_id, peer.computer_name,
+                          peer.architecture, peer.version, peer.os_name, peer.address))
     {
         LOG(WARNING) << "Failed to update host info for host_id:" << host_id;
     }
 
-    if (database.hostTelemetry(host_id, &result.telemetry) != proto::router::kErrorOk)
+    if (store.telemetry(host_id, &result.telemetry) != proto::router::kErrorOk)
         LOG(WARNING) << "Failed to read telemetry for host_id:" << host_id;
 
     return result;

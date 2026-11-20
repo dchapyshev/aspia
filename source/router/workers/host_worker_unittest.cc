@@ -38,7 +38,7 @@
 #include "proto/router.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
-#include "router/database.h"
+#include "router/host_store.h"
 #include "router/router_test_worker.h"
 #include "router/settings.h"
 #include "router/shared_hosts.h"
@@ -161,8 +161,10 @@ protected:
 
         // The host is already approved, so it presents its key and gets its permanent id.
         ASSERT_TRUE(database_.open(db_path_));
-        ASSERT_TRUE(database_.addHost(keyHash(kHostKey), kHardwareId));
-        ASSERT_EQ(database_.hostId(keyHash(kHostKey), &host_id_), proto::router::kErrorOk);
+
+        HostStore store(database_);
+        ASSERT_TRUE(store.add(keyHash(kHostKey), kHardwareId));
+        ASSERT_EQ(store.findByKey(keyHash(kHostKey), &host_id_), proto::router::kErrorOk);
 
         std::unique_ptr<RouterTestWorker> peer_worker = std::make_unique<RouterTestWorker>(db_path_);
         peer_worker_ = peer_worker.get();

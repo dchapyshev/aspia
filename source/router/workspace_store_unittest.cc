@@ -113,8 +113,8 @@ TEST_F(WorkspaceStoreTest, RemoveWorkspaceReleasesHostsAndAccess)
 
     const qint64 workspace_id = addWorkspace("alpha");
     ASSERT_GT(workspace_id, 0);
-    ASSERT_EQ(db_.modifyHost(host_id, findHost(host_id).revision(), workspace_id, 0, "display",
-                             "note"),
+    ASSERT_EQ(hosts_.modify(host_id, findHost(host_id).revision(), workspace_id, 0, "display",
+                            "note"),
               proto::router::kErrorOk);
 
     ASSERT_EQ(workspaces_.remove(workspace_id), proto::router::kErrorOk);
