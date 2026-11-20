@@ -30,10 +30,10 @@ UnlockStore::UnlockStore(Database& db)
 //--------------------------------------------------------------------------------------------------
 bool UnlockStore::isMasterPasswordSet() const
 {
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql().lastError();
+        LOG(ERROR) << "Unable to start transaction:" << db().lastError();
         return false;
     }
 

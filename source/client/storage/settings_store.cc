@@ -121,19 +121,19 @@ bool SettingsStore::setLockTimeout(Minutes timeout)
 //--------------------------------------------------------------------------------------------------
 Database::ReadResult SettingsStore::proxyConfig(ProxyConfig* proxy) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT value FROM settings WHERE name=?");
+    SqlQuery query(db(), "SELECT value FROM settings WHERE name=?");
     query.addText(std::string_view(kSettingProxy));
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return Database::ReadResult::FAILED;
     }
 

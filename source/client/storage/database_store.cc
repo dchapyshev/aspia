@@ -24,13 +24,13 @@
 //--------------------------------------------------------------------------------------------------
 QString DatabaseStore::readSetting(const QString& name) const
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return QString();
     }
 
-    SqlQuery query(sql(), "SELECT value FROM settings WHERE name=?");
+    SqlQuery query(db(), "SELECT value FROM settings WHERE name=?");
     query.addText(name);
 
     if (query.next() != SqlQuery::StepResult::ROW)
@@ -42,19 +42,19 @@ QString DatabaseStore::readSetting(const QString& name) const
 //--------------------------------------------------------------------------------------------------
 bool DatabaseStore::writeSetting(const QString& name, const QString& value)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
+    SqlQuery query(db(), "INSERT OR REPLACE INTO settings (name, value) VALUES (?, ?)");
     query.addText(name);
     query.addText(value);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 

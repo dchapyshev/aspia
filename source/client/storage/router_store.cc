@@ -59,26 +59,26 @@ Database::FindResult RouterStore::find(RouterConfig* router) const
     CHECK(router);
     *router = RouterConfig();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT value FROM settings WHERE name=?");
+    SqlQuery query(db(), "SELECT value FROM settings WHERE name=?");
     query.addText(std::string_view(kSettingRouter));
 
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return Database::FindResult::FAILED;
     }
 
     if (step == SqlQuery::StepResult::DONE)
         return Database::FindResult::NOT_FOUND;
 
-    router->setGuid(db_.guid());
+    router->setGuid(database_.guid());
 
     if (readRouter(query, router) != Database::ReadResult::OK)
     {
@@ -92,7 +92,7 @@ Database::FindResult RouterStore::find(RouterConfig* router) const
 //--------------------------------------------------------------------------------------------------
 bool RouterStore::save(const RouterConfig& router)
 {
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
@@ -124,7 +124,7 @@ bool RouterStore::save(const RouterConfig& router)
         {
             LOG(INFO) << "The device is detached from the storage" << stored.syncStorageId().toHex();
 
-            if (!SyncStore(db_).reset())
+            if (!SyncStore(database_).reset())
             {
                 LOG(ERROR) << "Unable to detach the records from the storage";
                 return false;
@@ -142,7 +142,7 @@ bool RouterStore::save(const RouterConfig& router)
 Database::SyncResult RouterStore::setSyncStorage(
     const RouterConfig& router, const QByteArray& storage_id, const SecureByteArray& key, bool reset)
 {
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
@@ -186,7 +186,7 @@ Database::SyncResult RouterStore::setSyncStorage(
                   << "reset:" << reset << "reset pending:" << stored.isSyncStorageResetPending()
                   << "discard:" << discard;
 
-        SyncStore sync_store(db_);
+        SyncStore sync_store(database_);
         if (!(discard ? sync_store.discard() : sync_store.reset()))
         {
             LOG(ERROR) << "Unable to prepare the records for another storage";
@@ -223,7 +223,7 @@ Database::SyncResult RouterStore::setSyncStorage(
 //--------------------------------------------------------------------------------------------------
 bool RouterStore::setSyncStorageResetPending(const RouterConfig& router)
 {
-    SqlTransaction transaction(sql());
+    SqlTransaction transaction(db());
     if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
         LOG(ERROR) << "Unable to begin transaction";
@@ -284,12 +284,12 @@ bool RouterStore::writeConfig(const RouterConfig& router)
 //--------------------------------------------------------------------------------------------------
 bool RouterStore::clearConfig()
 {
-    SqlQuery query(sql(), "DELETE FROM settings WHERE name=?");
+    SqlQuery query(db(), "DELETE FROM settings WHERE name=?");
     query.addText(std::string_view(kSettingRouter));
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 

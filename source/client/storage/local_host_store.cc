@@ -66,13 +66,13 @@ Database::ReadResult LocalHostStore::list(qint64 group_id, QList<LocalHostConfig
     CHECK(hosts);
     hosts->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
+    SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                           "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
@@ -87,7 +87,7 @@ Database::ReadResult LocalHostStore::list(qint64 group_id, QList<LocalHostConfig
         {
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -109,13 +109,13 @@ Database::ReadResult LocalHostStore::all(QList<LocalHostConfig>* hosts) const
     CHECK(hosts);
     hosts->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
+    SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                           "FROM local_hosts");
@@ -129,7 +129,7 @@ Database::ReadResult LocalHostStore::all(QList<LocalHostConfig>* hosts) const
         {
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -148,7 +148,7 @@ Database::ReadResult LocalHostStore::all(QList<LocalHostConfig>* hosts) const
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::add(LocalHostConfig& host)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -172,7 +172,7 @@ bool LocalHostStore::add(LocalHostConfig& host)
     if (host.guid().isEmpty())
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
-    SqlQuery query(sql(), "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
+    SqlQuery query(db(), "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
                           "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id) "
                           "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
                           "NULLIF(?, 0))");
@@ -190,18 +190,18 @@ bool LocalHostStore::add(LocalHostConfig& host)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    host.setId(sql().lastInsertRowId());
+    host.setId(db().lastInsertRowId());
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::modify(LocalHostConfig& host)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -219,7 +219,7 @@ bool LocalHostStore::modify(LocalHostConfig& host)
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
-    SqlQuery query(sql(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), name=?, comment=?, "
+    SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), name=?, comment=?, "
                           "data=?, modify_time=?, credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0) "
                           "WHERE id=?");
     query.addInt64(host.groupId());
@@ -233,7 +233,7 @@ bool LocalHostStore::modify(LocalHostConfig& host)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -243,24 +243,24 @@ bool LocalHostStore::modify(LocalHostConfig& host)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::move(qint64 entry_id, qint64 new_group_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), modify_time=? WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), modify_time=? WHERE id=?");
     query.addInt64(new_group_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    if (sql().changes() == 0)
+    if (db().changes() == 0)
     {
         LOG(ERROR) << "Local host" << entry_id << "not found";
         return false;
@@ -272,18 +272,18 @@ bool LocalHostStore::move(qint64 entry_id, qint64 new_group_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::remove(qint64 entry_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "DELETE FROM local_hosts WHERE id=?");
+    SqlQuery query(db(), "DELETE FROM local_hosts WHERE id=?");
     query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -293,19 +293,19 @@ bool LocalHostStore::remove(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::setConnectTime(qint64 entry_id, qint64 connect_time)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE local_hosts SET connect_time=? WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET connect_time=? WHERE id=?");
     query.addInt64(connect_time);
     query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -315,19 +315,19 @@ bool LocalHostStore::setConnectTime(qint64 entry_id, qint64 connect_time)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostStore::setOsCredentialId(qint64 entry_id, qint64 credential_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE local_hosts SET os_credential_id=NULLIF(?, 0) WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET os_credential_id=NULLIF(?, 0) WHERE id=?");
     query.addInt64(credential_id);
     query.addInt64(entry_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -340,13 +340,13 @@ Database::FindResult LocalHostStore::find(qint64 entry_id, LocalHostConfig* host
     CHECK(host);
     *host = LocalHostConfig();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
+    SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                           "FROM local_hosts WHERE id=?");
@@ -355,7 +355,7 @@ Database::FindResult LocalHostStore::find(qint64 entry_id, LocalHostConfig* host
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return Database::FindResult::FAILED;
     }
 
@@ -382,7 +382,7 @@ std::optional<std::pair<QString, SecureString>> LocalHostStore::credentials(qint
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    const Database::FindResult found = CredentialStore(db_).find(host.credentialId(), &credential);
+    const Database::FindResult found = CredentialStore(database_).find(host.credentialId(), &credential);
     if (found == Database::FindResult::NOT_FOUND)
         return std::make_pair(host.username(), host.password());
 
@@ -398,13 +398,13 @@ Database::ReadResult LocalHostStore::search(const QString& query_text, QList<Loc
     CHECK(hosts);
     hosts->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
+    SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
                           "FROM local_hosts ORDER BY casefold(name)");
@@ -416,7 +416,7 @@ Database::ReadResult LocalHostStore::search(const QString& query_text, QList<Loc
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)

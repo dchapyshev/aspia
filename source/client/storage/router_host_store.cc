@@ -66,13 +66,13 @@ Database::ReadResult RouterHostStore::list(QList<RouterHostConfig>* hosts) const
     CHECK(hosts);
     hosts->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+    SqlQuery query(db(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0) "
                           "FROM router_hosts WHERE deleted=0");
 
@@ -85,7 +85,7 @@ Database::ReadResult RouterHostStore::list(QList<RouterHostConfig>* hosts) const
         {
             // A failed step must not pass for the end of the rows: a caller may treat what is
             // missing from the list as deleted.
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return Database::ReadResult::FAILED;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -104,7 +104,7 @@ Database::ReadResult RouterHostStore::list(QList<RouterHostConfig>* hosts) const
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::add(const RouterHostConfig& host)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -121,7 +121,7 @@ bool RouterHostStore::add(const RouterHostConfig& host)
         return false;
 
     {
-        SqlQuery restore_query(sql(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), "
+        SqlQuery restore_query(db(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), "
                                       "os_credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), modify_time=?, "
                                       "deleted=0 WHERE host_id=? AND deleted!=0");
         restore_query.addBlob(*encrypted_data);
@@ -133,15 +133,15 @@ bool RouterHostStore::add(const RouterHostConfig& host)
 
         if (!restore_query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
 
-        if (sql().changes() != 0)
+        if (db().changes() != 0)
             return true;
     }
 
-    SqlQuery query(sql(),
+    SqlQuery query(db(),
         "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id, modify_time) "
         "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0), ?)");
     query.addUInt64(host.hostId());
@@ -153,7 +153,7 @@ bool RouterHostStore::add(const RouterHostConfig& host)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -163,7 +163,7 @@ bool RouterHostStore::add(const RouterHostConfig& host)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::modify(const RouterHostConfig& host)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -179,7 +179,7 @@ bool RouterHostStore::modify(const RouterHostConfig& host)
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), modify_time=? "
+    SqlQuery query(db(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), modify_time=? "
                           "WHERE host_id=? AND deleted=0");
     query.addBlob(*encrypted_data);
     query.addInt64(host.credentialId());
@@ -188,12 +188,12 @@ bool RouterHostStore::modify(const RouterHostConfig& host)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
     // An update of a row that is not there changes nothing and reports no error of its own.
-    if (sql().changes() == 0)
+    if (db().changes() == 0)
     {
         LOG(ERROR) << "Credentials of router host" << host.hostId() << "not found";
         return false;
@@ -205,19 +205,19 @@ bool RouterHostStore::modify(const RouterHostConfig& host)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::remove(HostId host_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET data=X'', credential_id=NULL, os_credential_id=NULL, "
+    SqlQuery query(db(), "UPDATE router_hosts SET data=X'', credential_id=NULL, os_credential_id=NULL, "
                           "profile_id=NULL WHERE host_id=? AND deleted=0");
     query.addUInt64(host_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -230,13 +230,13 @@ Database::FindResult RouterHostStore::find(HostId host_id, RouterHostConfig* hos
     CHECK(host);
     *host = RouterHostConfig();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(sql(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
+    SqlQuery query(db(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0) "
                           "FROM router_hosts WHERE host_id=? AND deleted=0");
     query.addUInt64(host_id);
@@ -244,7 +244,7 @@ Database::FindResult RouterHostStore::find(HostId host_id, RouterHostConfig* hos
     const SqlQuery::StepResult step = query.next();
     if (step == SqlQuery::StepResult::FAILED)
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return Database::FindResult::FAILED;
     }
 
@@ -271,7 +271,7 @@ std::optional<std::pair<QString, SecureString>> RouterHostStore::credentials(Hos
         return std::make_pair(host.username(), host.password());
 
     CredentialConfig credential;
-    const Database::FindResult found = CredentialStore(db_).find(host.credentialId(), &credential);
+    const Database::FindResult found = CredentialStore(database_).find(host.credentialId(), &credential);
     if (found == Database::FindResult::NOT_FOUND)
         return std::make_pair(host.username(), host.password());
 
@@ -287,7 +287,7 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
     CHECK(hosts);
     hosts->clear();
 
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -295,7 +295,7 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
 
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
     // returning to the same rows.
-    SqlQuery query(sql(), "SELECT host_id FROM router_hosts WHERE check_time<? AND deleted=0 "
+    SqlQuery query(db(), "SELECT host_id FROM router_hosts WHERE check_time<? AND deleted=0 "
                           "ORDER BY check_time LIMIT ?");
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
     query.addInt64(kMaxRouterHostsToCheck);
@@ -305,7 +305,7 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
         const SqlQuery::StepResult step = query.next();
         if (step == SqlQuery::StepResult::FAILED)
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
         if (step == SqlQuery::StepResult::DONE)
@@ -320,24 +320,24 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::updateCheckTime(HostId host_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET check_time=? WHERE host_id=? AND deleted=0");
+    SqlQuery query(db(), "UPDATE router_hosts SET check_time=? WHERE host_id=? AND deleted=0");
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
     // An update of a row that is not there changes nothing and reports no error of its own.
-    if (sql().changes() == 0)
+    if (db().changes() == 0)
     {
         LOG(ERROR) << "Credentials of router host" << host_id << "not found";
         return false;
@@ -349,13 +349,13 @@ bool RouterHostStore::updateCheckTime(HostId host_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::setOsCredentialId(HostId host_id, qint64 credential_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery query(sql(), "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=? "
+    SqlQuery query(db(), "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=? "
                           "WHERE host_id=? AND deleted=0");
     query.addInt64(credential_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
@@ -363,7 +363,7 @@ bool RouterHostStore::setOsCredentialId(HostId host_id, qint64 credential_id)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -373,7 +373,7 @@ bool RouterHostStore::setOsCredentialId(HostId host_id, qint64 credential_id)
 //--------------------------------------------------------------------------------------------------
 bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
 {
-    if (!db_.isValid())
+    if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
         return false;
@@ -381,13 +381,13 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
 
     if (profile_id <= 0)
     {
-        SqlQuery query(sql(), "UPDATE router_hosts SET profile_id=NULL, modify_time=? WHERE host_id=? AND deleted=0");
+        SqlQuery query(db(), "UPDATE router_hosts SET profile_id=NULL, modify_time=? WHERE host_id=? AND deleted=0");
         query.addInt64(QDateTime::currentSecsSinceEpoch());
         query.addUInt64(host_id);
 
         if (!query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
 
@@ -400,7 +400,7 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
         return false;
     }
 
-    SqlQuery query(sql(),
+    SqlQuery query(db(),
         "INSERT INTO router_hosts (host_id, profile_id, modify_time) VALUES (?, ?, ?) "
         "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id, modify_time=excluded.modify_time, "
         "deleted=0");
@@ -410,7 +410,7 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 

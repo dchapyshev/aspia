@@ -43,16 +43,17 @@ public:
 
 protected:
     explicit DatabaseStore(Database& db)
-        : db_(db)
+        : database_(db)
     {
         // Nothing
     }
 
-    SqlDatabase& sql() const { return db_.db_; }
+    SqlDatabase& db() const { return database_.db_; }
+    bool isValid() const { return database_.isValid(); }
     QString readSetting(const QString& name) const;
     bool writeSetting(const QString& name, const QString& value);
 
-    Database& db_;
+    Database& database_;
 };
 
 #endif // CLIENT_STORAGE_DATABASE_STORE_H

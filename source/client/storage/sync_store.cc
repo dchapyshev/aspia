@@ -70,7 +70,7 @@ SyncTransaction::SyncTransaction(Database& db)
 //--------------------------------------------------------------------------------------------------
 Database::SyncResult SyncTransaction::begin(const QByteArray& storage_id)
 {
-    transaction_.emplace(sql());
+    transaction_.emplace(db());
 
     if (!transaction_->begin(SqlTransaction::Mode::IMMEDIATE))
     {
@@ -80,7 +80,7 @@ Database::SyncResult SyncTransaction::begin(const QByteArray& storage_id)
     }
 
     RouterConfig router;
-    const Database::FindResult found = RouterStore(db_).find(&router);
+    const Database::FindResult found = RouterStore(database_).find(&router);
     if (found != Database::FindResult::FOUND && found != Database::FindResult::NOT_FOUND)
     {
         LOG(ERROR) << "Unable to read the router";
@@ -117,12 +117,12 @@ bool SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QStrin
     if (!table)
         return false;
 
-    SqlQuery query(sql(), tableQuery(*table, "DELETE FROM %1 WHERE guid=?"));
+    SqlQuery query(db(), tableQuery(*table, "DELETE FROM %1 WHERE guid=?"));
     query.addText(guid);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -143,13 +143,13 @@ bool SyncTransaction::setRecordSyncRevision(
     if (!table)
         return false;
 
-    SqlQuery query(sql(), tableQuery(*table, "UPDATE %1 SET sync_revision=? WHERE guid=?"));
+    SqlQuery query(db(), tableQuery(*table, "UPDATE %1 SET sync_revision=? WHERE guid=?"));
     query.addInt64(sync_revision);
     query.addText(guid);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -176,7 +176,7 @@ bool SyncTransaction::confirmSentRecord(
         return false;
     }
 
-    SqlQuery update_query(sql(), tableQuery(*table, "UPDATE %1 SET sync_revision=?, sync_dirty=sync_dirty-? "
+    SqlQuery update_query(db(), tableQuery(*table, "UPDATE %1 SET sync_revision=?, sync_dirty=sync_dirty-? "
                                                     "WHERE guid=?"));
     update_query.addInt64(sync_revision);
     update_query.addInt64(sync_dirty);
@@ -184,24 +184,24 @@ bool SyncTransaction::confirmSentRecord(
 
     if (!update_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    if (sql().changes() != 0)
+    if (db().changes() != 0)
     {
-        SqlQuery erase_query(sql(), tableQuery(*table, "DELETE FROM %1 WHERE guid=? AND deleted!=0 AND sync_dirty=0"));
+        SqlQuery erase_query(db(), tableQuery(*table, "DELETE FROM %1 WHERE guid=? AND deleted!=0 AND sync_dirty=0"));
         erase_query.addText(guid);
 
         if (!erase_query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
     }
     else
     {
-        SqlQuery mark_query(sql(), tableQuery(*table, "INSERT INTO %1 (id, guid, modify_time, sync_revision, "
+        SqlQuery mark_query(db(), tableQuery(*table, "INSERT INTO %1 (id, guid, modify_time, sync_revision, "
                                                       "sync_dirty, deleted) VALUES (NULL, ?, ?, ?, 1, 1)"));
         mark_query.addText(guid);
         mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
@@ -209,7 +209,7 @@ bool SyncTransaction::confirmSentRecord(
 
         if (!mark_query.exec())
         {
-            LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
             return false;
         }
     }
@@ -226,7 +226,7 @@ bool SyncTransaction::setReceivedRevision(proto::router::SyncDataType type, qint
         return false;
     }
 
-    return SyncStore(db_).setReceivedRevision(type, revision);
+    return SyncStore(database_).setReceivedRevision(type, revision);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,22 +255,22 @@ qint64 SyncStore::receivedRevision(proto::router::SyncDataType type) const
 //--------------------------------------------------------------------------------------------------
 bool SyncStore::reset()
 {
-    CHECK(sql().isTransactionActive());
+    CHECK(db().isTransactionActive());
 
-    if (!sql().exec("DELETE FROM credentials WHERE deleted!=0") ||
-        !sql().exec("UPDATE credentials SET sync_revision=0, sync_dirty=1") ||
-        !sql().exec("DELETE FROM profiles WHERE deleted!=0"))
+    if (!db().exec("DELETE FROM credentials WHERE deleted!=0") ||
+        !db().exec("UPDATE credentials SET sync_revision=0, sync_dirty=1") ||
+        !db().exec("DELETE FROM profiles WHERE deleted!=0"))
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    SqlQuery profiles_query(sql(), "UPDATE profiles SET sync_revision=0, sync_dirty=(guid<>? OR modify_time<>0)");
+    SqlQuery profiles_query(db(), "UPDATE profiles SET sync_revision=0, sync_dirty=(guid<>? OR modify_time<>0)");
     profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
     if (!profiles_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -280,34 +280,34 @@ bool SyncStore::reset()
 //--------------------------------------------------------------------------------------------------
 bool SyncStore::discard()
 {
-    CHECK(sql().isTransactionActive());
+    CHECK(db().isTransactionActive());
 
-    if (!sql().exec("UPDATE credentials SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1"))
+    if (!db().exec("UPDATE credentials SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1"))
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    LOG(INFO) << "Credentials discarded:" << sql().changes();
+    LOG(INFO) << "Credentials discarded:" << db().changes();
 
-    SqlQuery profiles_query(sql(), "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1 "
+    SqlQuery profiles_query(db(), "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1 "
                                    "WHERE guid<>?");
     profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
     if (!profiles_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
-    LOG(INFO) << "Profiles discarded:" << sql().changes();
+    LOG(INFO) << "Profiles discarded:" << db().changes();
 
-    SqlQuery default_query(sql(), "UPDATE profiles SET sync_revision=0, sync_dirty=0 WHERE guid=?");
+    SqlQuery default_query(db(), "UPDATE profiles SET sync_revision=0, sync_dirty=0 WHERE guid=?");
     default_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
     if (!default_query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << sql().lastError();
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
@@ -329,7 +329,7 @@ bool SyncStore::clearReceivedRevisions()
 //--------------------------------------------------------------------------------------------------
 bool SyncStore::setReceivedRevision(proto::router::SyncDataType type, qint64 revision)
 {
-    CHECK(sql().isTransactionActive());
+    CHECK(db().isTransactionActive());
 
     const SyncTable* table = findSyncTable(type);
     if (!table)
