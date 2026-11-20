@@ -40,7 +40,7 @@
 #include "router/migration_utils.h"
 #include "router/service.h"
 #include "router/settings.h"
-#include "router/user_store.h"
+#include "router/storage/user_store.h"
 #include "router/workers/client_worker.h"
 #include "router/workers/email_worker.h"
 #include "router/workers/host_worker.h"

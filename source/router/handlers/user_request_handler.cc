@@ -26,9 +26,9 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/device_token_store.h"
-#include "router/user_store.h"
 #include "router/handlers/two_factor_handler.h"
+#include "router/storage/device_token_store.h"
+#include "router/storage/user_store.h"
 #include "router/workers/client_worker.h"
 
 namespace {

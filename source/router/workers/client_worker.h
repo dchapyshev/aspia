@@ -26,7 +26,7 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/threading/worker.h"
-#include "router/access_log.h"
+#include "router/storage/access_log.h"
 
 namespace proto::router {
 class ClientListRequest;

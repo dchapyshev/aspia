@@ -38,8 +38,8 @@
 #include "router/client_operator.h"
 #include "router/router_user_list.h"
 #include "router/settings.h"
-#include "router/sync_storage.h"
-#include "router/user_store.h"
+#include "router/storage/sync_storage.h"
+#include "router/storage/user_store.h"
 #include "router/workers/host_worker.h"
 #include "router/workers/relay_worker.h"
 

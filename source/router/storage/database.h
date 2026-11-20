@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_DATABASE_H
-#define ROUTER_DATABASE_H
+#ifndef ROUTER_STORAGE_DATABASE_H
+#define ROUTER_STORAGE_DATABASE_H
 
 #include "base/sql/sql_database.h"
 
@@ -53,4 +53,4 @@ private:
     Q_DISABLE_COPY_MOVE(Database)
 };
 
-#endif // ROUTER_DATABASE_H
+#endif // ROUTER_STORAGE_DATABASE_H

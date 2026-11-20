@@ -38,10 +38,10 @@
 #include "proto/router.h"
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
-#include "router/host_store.h"
 #include "router/router_test_worker.h"
 #include "router/settings.h"
 #include "router/shared_hosts.h"
+#include "router/storage/host_store.h"
 
 namespace {
 

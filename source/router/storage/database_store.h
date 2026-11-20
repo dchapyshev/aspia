@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_DATABASE_STORE_H
-#define ROUTER_DATABASE_STORE_H
+#ifndef ROUTER_STORAGE_DATABASE_STORE_H
+#define ROUTER_STORAGE_DATABASE_STORE_H
 
-#include "router/database.h"
+#include "router/storage/database.h"
 
 class DatabaseStore
 {
@@ -45,4 +45,4 @@ protected:
     Database& database_;
 };
 
-#endif // ROUTER_DATABASE_STORE_H
+#endif // ROUTER_STORAGE_DATABASE_STORE_H

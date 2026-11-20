@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_HOST_STORE_H
-#define ROUTER_HOST_STORE_H
+#ifndef ROUTER_STORAGE_HOST_STORE_H
+#define ROUTER_STORAGE_HOST_STORE_H
 
 #include <set>
 
 #include "base/peer/host_id.h"
-#include "router/database_store.h"
+#include "router/storage/database_store.h"
 
 namespace proto::router {
 class HostFilter;
@@ -118,4 +118,4 @@ public:
     bool pruneExpiredRemovals();
 };
 
-#endif // ROUTER_HOST_STORE_H
+#endif // ROUTER_STORAGE_HOST_STORE_H

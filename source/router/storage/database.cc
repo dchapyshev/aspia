@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/database.h"
+#include "router/storage/database.h"
 
 #include <QDir>
 #include <QFileInfo>

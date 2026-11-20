@@ -23,8 +23,8 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
-#include "router/group_store.h"
 #include "router/handlers/workspace_request_handler.h"
+#include "router/storage/group_store.h"
 #include "router/workers/client_worker.h"
 
 //--------------------------------------------------------------------------------------------------

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SYNC_STORAGE_H
-#define ROUTER_SYNC_STORAGE_H
+#ifndef ROUTER_STORAGE_SYNC_STORAGE_H
+#define ROUTER_STORAGE_SYNC_STORAGE_H
 
 #include <QStringList>
 
@@ -63,4 +63,4 @@ private:
     Q_DISABLE_COPY_MOVE(SyncStorage)
 };
 
-#endif // ROUTER_SYNC_STORAGE_H
+#endif // ROUTER_STORAGE_SYNC_STORAGE_H

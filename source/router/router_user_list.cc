@@ -19,7 +19,7 @@
 #include "router/router_user_list.h"
 
 #include "base/logging.h"
-#include "router/user_store.h"
+#include "router/storage/user_store.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterUserList::~RouterUserList() = default;

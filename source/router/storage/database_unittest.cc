@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/database.h"
+#include "router/storage/database.h"
 
 #include <gtest/gtest.h>
 
@@ -30,7 +30,7 @@
 #include "base/sql/sql_query.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
-#include "router/user_store.h"
+#include "router/storage/user_store.h"
 
 namespace {
 

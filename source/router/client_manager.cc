@@ -24,9 +24,9 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "proto/router_manager.h"
-#include "router/database.h"
 #include "router/handlers/group_request_handler.h"
 #include "router/handlers/host_request_handler.h"
+#include "router/storage/database.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientManager::ClientManager(Database& database, AccessLog& access_log, TcpChannel* channel, QObject* parent)

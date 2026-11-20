@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/user_store.h"
+#include "router/storage/user_store.h"
 
 #include <QUuid>
 

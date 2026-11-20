@@ -25,9 +25,9 @@
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "router/sync_storage.h"
 #include "router/handlers/request_caller.h"
 #include "router/handlers/two_factor_handler.h"
+#include "router/storage/sync_storage.h"
 
 class AccessLog;
 class Database;

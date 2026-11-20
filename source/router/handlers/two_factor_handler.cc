@@ -22,8 +22,8 @@
 #include "base/crypto/totp.h"
 #include "base/peer/router_user.h"
 #include "proto/router_constants.h"
-#include "router/device_token_store.h"
-#include "router/user_store.h"
+#include "router/storage/device_token_store.h"
+#include "router/storage/user_store.h"
 
 namespace {
 

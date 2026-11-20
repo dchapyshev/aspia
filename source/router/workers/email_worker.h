@@ -29,7 +29,7 @@
 #include "base/net/curl_util.h"
 #include "base/threading/worker.h"
 #include "router/email_messages.h"
-#include "router/email_queue.h"
+#include "router/storage/email_queue.h"
 
 class QSocketNotifier;
 

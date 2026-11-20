@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_DEVICE_TOKEN_STORE_H
-#define ROUTER_DEVICE_TOKEN_STORE_H
+#ifndef ROUTER_STORAGE_DEVICE_TOKEN_STORE_H
+#define ROUTER_STORAGE_DEVICE_TOKEN_STORE_H
 
 #include <vector>
 
-#include "router/database_store.h"
+#include "router/storage/database_store.h"
 
 // Metadata for a client device token returned to admin callers. Intentionally omits the token
 // hash and any other material that could identify the token outside the router.
@@ -75,4 +75,4 @@ public:
     std::string_view list(qint64 user_id, std::vector<DeviceToken>* tokens) const;
 };
 
-#endif // ROUTER_DEVICE_TOKEN_STORE_H
+#endif // ROUTER_STORAGE_DEVICE_TOKEN_STORE_H

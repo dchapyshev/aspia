@@ -34,8 +34,8 @@
 #include "router/loopback_channel.h"
 #include "router/router_test_base.h"
 #include "router/router_test_worker.h"
-#include "router/sync_storage.h"
 #include "router/handlers/two_factor_handler.h"
+#include "router/storage/sync_storage.h"
 
 namespace {
 

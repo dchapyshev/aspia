@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_GROUP_STORE_H
-#define ROUTER_GROUP_STORE_H
+#ifndef ROUTER_STORAGE_GROUP_STORE_H
+#define ROUTER_STORAGE_GROUP_STORE_H
 
-#include "router/database_store.h"
+#include "router/storage/database_store.h"
 
 namespace proto::router {
 class GroupList;
@@ -73,4 +73,4 @@ public:
     std::string_view remove(qint64 workspace_id, qint64 entry_id);
 };
 
-#endif // ROUTER_GROUP_STORE_H
+#endif // ROUTER_STORAGE_GROUP_STORE_H

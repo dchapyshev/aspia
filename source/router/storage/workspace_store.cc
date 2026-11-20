@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/workspace_store.h"
+#include "router/storage/workspace_store.h"
 
 #include <unordered_map>
 

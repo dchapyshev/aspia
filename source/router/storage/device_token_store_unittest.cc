@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/device_token_store.h"
+#include "router/storage/device_token_store.h"
 
 #include "router/router_test_base.h"
 

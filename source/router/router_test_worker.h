@@ -28,8 +28,8 @@
 
 #include "base/logging.h"
 #include "base/threading/worker.h"
-#include "router/access_log.h"
-#include "router/database.h"
+#include "router/storage/access_log.h"
+#include "router/storage/database.h"
 
 // A real worker thread of the router: it carries the database connection of its own thread and the
 // clock that drives the channels created in it. What is put under test is created, driven and

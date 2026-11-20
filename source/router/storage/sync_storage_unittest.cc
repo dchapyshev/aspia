@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/sync_storage.h"
+#include "router/storage/sync_storage.h"
 
 #include <QFile>
 #include <QTemporaryDir>

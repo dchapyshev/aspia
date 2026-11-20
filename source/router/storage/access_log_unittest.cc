@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/access_log.h"
+#include "router/storage/access_log.h"
 
 #include <QTemporaryDir>
 

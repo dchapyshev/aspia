@@ -19,29 +19,16 @@
 # The implementation lives in a static library so both the router binary and the unit tests
 # link the same objects; the executable itself is only the entry point.
 list(APPEND SOURCE_ROUTER_CORE
-    access_log.cc
-    access_log.h
     client_admin.cc
     client_admin.h
     client_manager.cc
     client_manager.h
     client_operator.cc
     client_operator.h
-    database.cc
-    database.h
-    database_store.h
-    device_token_store.cc
-    device_token_store.h
     email_messages.cc
     email_messages.h
-    email_queue.cc
-    email_queue.h
-    group_store.cc
-    group_store.h
     host.cc
     host.h
-    host_store.cc
-    host_store.h
     migration_utils.cc
     migration_utils.h
     relay.cc
@@ -55,27 +42,14 @@ list(APPEND SOURCE_ROUTER_CORE
     shared_hosts.cc
     shared_hosts.h
     shared_key_pool.cc
-    shared_key_pool.h
-    sync_storage.cc
-    sync_storage.h
-    user_store.cc
-    user_store.h
-    workspace.cc
-    workspace.h
-    workspace_store.cc
-    workspace_store.h)
+    shared_key_pool.h)
 
 list(APPEND SOURCE_ROUTER
     main.cc)
 
 list(APPEND SOURCE_ROUTER_TESTS
-    access_log_unittest.cc
     client_operator_unittest.cc
-    database_unittest.cc
-    device_token_store_unittest.cc
-    email_queue_unittest.cc
     host_lifecycle_unittest.cc
-    host_store_unittest.cc
     host_unittest.cc
     loopback_channel.h
     relay_unittest.cc
@@ -83,12 +57,10 @@ list(APPEND SOURCE_ROUTER_TESTS
     router_test_worker.h
     settings_unittest.cc
     shared_state_unittest.cc
-    sync_storage_unittest.cc
-    tests_main.cc
-    user_store_unittest.cc
-    workspace_store_unittest.cc)
+    tests_main.cc)
 
 include(handlers/sources.cmake)
+include(storage/sources.cmake)
 include(workers/sources.cmake)
 
 if (WIN32)
@@ -97,6 +69,7 @@ endif()
 
 source_group("" FILES ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER} ${SOURCE_ROUTER_TESTS})
 source_group(handlers FILES ${SOURCE_ROUTER_HANDLERS} ${SOURCE_ROUTER_HANDLERS_TESTS})
+source_group(storage FILES ${SOURCE_ROUTER_STORAGE} ${SOURCE_ROUTER_STORAGE_TESTS})
 source_group(workers FILES ${SOURCE_ROUTER_WORKERS} ${SOURCE_ROUTER_WORKERS_TESTS})
 
 if (WIN32)
@@ -113,7 +86,7 @@ if (APPLE)
 endif()
 
 add_library(aspia_router_core STATIC ${SOURCE_ROUTER_CORE} ${SOURCE_ROUTER_HANDLERS}
-    ${SOURCE_ROUTER_WORKERS})
+    ${SOURCE_ROUTER_STORAGE} ${SOURCE_ROUTER_WORKERS})
 
 target_link_libraries(aspia_router_core
     aspia_base
@@ -142,7 +115,7 @@ set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router PROPERTY AUTORCC ON)
 
 add_executable(aspia_router_tests ${SOURCE_ROUTER_TESTS} ${SOURCE_ROUTER_HANDLERS_TESTS}
-    ${SOURCE_ROUTER_WORKERS_TESTS})
+    ${SOURCE_ROUTER_STORAGE_TESTS} ${SOURCE_ROUTER_WORKERS_TESTS})
 
 target_link_libraries(aspia_router_tests
     aspia_router_core

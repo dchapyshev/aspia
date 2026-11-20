@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_WORKSPACE_STORE_H
-#define ROUTER_WORKSPACE_STORE_H
+#ifndef ROUTER_STORAGE_WORKSPACE_STORE_H
+#define ROUTER_STORAGE_WORKSPACE_STORE_H
 
 #include <set>
 #include <vector>
 
-#include "router/database_store.h"
-#include "router/workspace.h"
+#include "router/storage/database_store.h"
+#include "router/storage/workspace.h"
 
 namespace proto::router {
 class WorkspaceList;
@@ -87,4 +87,4 @@ private:
     std::string_view checkAccessUser(qint64 user_id);
 };
 
-#endif // ROUTER_WORKSPACE_STORE_H
+#endif // ROUTER_STORAGE_WORKSPACE_STORE_H

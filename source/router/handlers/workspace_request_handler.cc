@@ -25,7 +25,7 @@
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
-#include "router/workspace_store.h"
+#include "router/storage/workspace_store.h"
 #include "router/workers/client_worker.h"
 
 namespace {

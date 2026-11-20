@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_ACCESS_LOG_H
-#define ROUTER_ACCESS_LOG_H
+#ifndef ROUTER_STORAGE_ACCESS_LOG_H
+#define ROUTER_STORAGE_ACCESS_LOG_H
 
 #include "base/peer/host_id.h"
 #include "base/sql/sql_database.h"
@@ -67,4 +67,4 @@ private:
     Q_DISABLE_COPY_MOVE(AccessLog)
 };
 
-#endif // ROUTER_ACCESS_LOG_H
+#endif // ROUTER_STORAGE_ACCESS_LOG_H

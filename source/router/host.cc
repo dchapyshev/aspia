@@ -27,8 +27,8 @@
 #include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "proto/router_peer.h"
-#include "router/host_store.h"
 #include "router/handlers/host_id_handler.h"
+#include "router/storage/host_store.h"
 #include "router/workers/client_worker.h"
 
 namespace {

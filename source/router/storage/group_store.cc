@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/group_store.h"
+#include "router/storage/group_store.h"
 
 #include "base/logging.h"
 #include "base/string_util.h"

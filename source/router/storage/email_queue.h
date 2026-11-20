@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_EMAIL_QUEUE_H
-#define ROUTER_EMAIL_QUEUE_H
+#ifndef ROUTER_STORAGE_EMAIL_QUEUE_H
+#define ROUTER_STORAGE_EMAIL_QUEUE_H
 
 #include "base/sql/sql_database.h"
 
@@ -56,4 +56,4 @@ private:
     Q_DISABLE_COPY_MOVE(EmailQueue)
 };
 
-#endif // ROUTER_EMAIL_QUEUE_H
+#endif // ROUTER_STORAGE_EMAIL_QUEUE_H

@@ -16,13 +16,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_USER_STORE_H
-#define ROUTER_USER_STORE_H
+#ifndef ROUTER_STORAGE_USER_STORE_H
+#define ROUTER_STORAGE_USER_STORE_H
 
 #include <vector>
 
 #include "base/peer/router_user.h"
-#include "router/database_store.h"
+#include "router/storage/database_store.h"
 
 class UserStore final : public DatabaseStore
 {
@@ -79,4 +79,4 @@ public:
     std::string_view consumeOtpCounter(qint64 user_id, quint64 counter);
 };
 
-#endif // ROUTER_USER_STORE_H
+#endif // ROUTER_STORAGE_USER_STORE_H

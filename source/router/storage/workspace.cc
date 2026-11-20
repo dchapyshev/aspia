@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/workspace.h"
+#include "router/storage/workspace.h"
 
 #include "base/string_util.h"
 #include "proto/router_constants.h"

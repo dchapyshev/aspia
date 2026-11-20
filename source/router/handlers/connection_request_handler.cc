@@ -22,9 +22,9 @@
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
 #include "proto/router_constants.h"
-#include "router/access_log.h"
 #include "router/shared_hosts.h"
 #include "router/shared_key_pool.h"
+#include "router/storage/access_log.h"
 
 //--------------------------------------------------------------------------------------------------
 ConnectionRequestResult handleConnectionRequest(

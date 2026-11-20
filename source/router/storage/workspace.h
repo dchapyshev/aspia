@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_WORKSPACE_H
-#define ROUTER_WORKSPACE_H
+#ifndef ROUTER_STORAGE_WORKSPACE_H
+#define ROUTER_STORAGE_WORKSPACE_H
 
 #include <QtTypes>
 
@@ -47,4 +47,4 @@ public:
     std::string comment;
 };
 
-#endif // ROUTER_WORKSPACE_H
+#endif // ROUTER_STORAGE_WORKSPACE_H

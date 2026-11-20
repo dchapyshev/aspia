@@ -35,14 +35,14 @@
 #include "proto/router_constants.h"
 #include "base/sql/sql_database.h"
 #include "base/sql/sql_query.h"
-#include "router/access_log.h"
-#include "router/device_token_store.h"
-#include "router/group_store.h"
-#include "router/host_store.h"
-#include "router/sync_storage.h"
-#include "router/user_store.h"
-#include "router/workspace_store.h"
 #include "router/handlers/request_caller.h"
+#include "router/storage/access_log.h"
+#include "router/storage/device_token_store.h"
+#include "router/storage/group_store.h"
+#include "router/storage/host_store.h"
+#include "router/storage/sync_storage.h"
+#include "router/storage/user_store.h"
+#include "router/storage/workspace_store.h"
 
 // Shared fixture for the request handlers: an isolated database in a temporary directory, starting
 // from the state --create-config leaves behind (the built-in administrator with id 1), plus the
