@@ -211,7 +211,7 @@ protected:
         profile.setName(name);
         profile.setDesktopConfig(defaultDesktopConfig());
 
-        EXPECT_TRUE(db.addProfile(profile));
+        EXPECT_TRUE(ProfileStore(db).add(profile));
         return profile.id();
     }
 
@@ -219,7 +219,7 @@ protected:
     static QList<ProfileConfig> profileList(Database& db)
     {
         QList<ProfileConfig> profiles;
-        EXPECT_EQ(db.profileList(&profiles), Database::ReadResult::OK);
+        EXPECT_EQ(ProfileStore(db).list(&profiles), Database::ReadResult::OK);
         EXPECT_TRUE(!profiles.isEmpty() && profiles.front().isDefault());
         profiles.removeFirst();
         return profiles;
@@ -1367,15 +1367,17 @@ TEST_F(BackupTest, ProfileKeepsItsParametersThroughTheFile)
     desktop_config.set_record_sessions(true);
     desktop_config.set_recording_path("/records");
 
+    ProfileStore source_store(source_);
+
     ProfileConfig profile;
     profile.setName("office");
     profile.setUdpMethods(0);
     profile.setDesktopConfig(desktop_config);
-    ASSERT_TRUE(source_.addProfile(profile));
+    ASSERT_TRUE(source_store.add(profile));
 
-    ProfileConfig default_profile = source_.defaultProfile();
+    ProfileConfig default_profile = source_store.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_DIRECT);
-    ASSERT_TRUE(source_.modifyProfile(default_profile));
+    ASSERT_TRUE(source_store.modify(default_profile));
 
     Backup::Report exported;
     ASSERT_EQ(exportBook(&exported), Backup::Result::SUCCESS);
@@ -1393,7 +1395,7 @@ TEST_F(BackupTest, ProfileKeepsItsParametersThroughTheFile)
     EXPECT_EQ(profiles.front().udpMethods(), 0u);
     EXPECT_EQ(serialize(profiles.front().desktopConfig()), serialize(desktop_config));
 
-    EXPECT_EQ(target_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    EXPECT_EQ(ProfileStore(target_).defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1417,17 +1419,19 @@ TEST_F(BackupTest, FileWithoutADefaultProfileLeavesTheBuiltInOne)
         ASSERT_EQ(data->profiles_size(), 1);
     });
 
-    ProfileConfig default_profile = target_.defaultProfile();
+    ProfileStore store(target_);
+
+    ProfileConfig default_profile = store.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_UPNP);
-    ASSERT_TRUE(target_.modifyProfile(default_profile));
+    ASSERT_TRUE(store.modify(default_profile));
     addProfile(target_, "home");
 
     Backup::Report imported;
     ASSERT_EQ(importBook(&imported), Backup::Result::SUCCESS);
     EXPECT_EQ(imported.profiles, 1);
 
-    EXPECT_GT(target_.defaultProfile().id(), 0);
-    EXPECT_EQ(target_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
+    EXPECT_GT(store.defaultProfile().id(), 0);
+    EXPECT_EQ(store.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_ALL));
 
     const QList<ProfileConfig> profiles = profileList(target_);
     ASSERT_EQ(profiles.size(), 1);

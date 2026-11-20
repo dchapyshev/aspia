@@ -21,7 +21,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 
 //--------------------------------------------------------------------------------------------------
 ProfileComboBox::ProfileComboBox(QWidget* parent)
@@ -51,7 +51,7 @@ void ProfileComboBox::setCurrentProfileId(qint64 profile_id)
 bool ProfileComboBox::onReload()
 {
     QList<ProfileConfig> profiles;
-    const Database::ReadResult result = Database::instance().profileList(&profiles);
+    const Database::ReadResult result = ProfileStore().list(&profiles);
     if (result == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the list of profiles";

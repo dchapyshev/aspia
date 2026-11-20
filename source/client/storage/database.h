@@ -122,9 +122,6 @@ public:
         SyncResult begin(const QByteArray& storage_id);
         bool commit();
 
-        bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision);
-        bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data);
-
         bool eraseRecord(proto::router::SyncDataType type, const QString& guid);
         bool setRecordSyncRevision(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision);
         bool confirmSentRecord(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision,
@@ -153,26 +150,6 @@ public:
     bool updateRouterHostCheckTime(HostId host_id);
     bool setRouterHostOsCredentialId(HostId host_id, qint64 credential_id);
     bool setRouterHostProfileId(HostId host_id, qint64 profile_id);
-
-    // Connection profiles.
-    struct UnsyncedProfile
-    {
-        ProfileConfig profile;
-        bool deleted = false;
-        bool damaged = false;
-        qint64 sync_revision = 0;
-        qint64 sync_dirty = 0;
-    };
-
-    ReadResult profileList(QList<ProfileConfig>* profiles) const;
-    bool addProfile(ProfileConfig& profile);
-    bool modifyProfile(const ProfileConfig& profile);
-    bool removeProfile(qint64 profile_id);
-    FindResult findProfile(qint64 profile_id, ProfileConfig* profile) const;
-    FindResult findProfileByGuid(const QString& guid, ProfileConfig* profile) const;
-    ProfileConfig defaultProfile() const;
-    ProfileConfig hostProfile(const HostConfig& host) const;
-    ReadResult unsyncedProfiles(QList<UnsyncedProfile>* profiles) const;
 
     bool import(const std::optional<RouterConfig>& router,
                 const QList<LocalGroupConfig>& local_groups,
@@ -260,7 +237,6 @@ private:
 
     QString readSetting(const QString& name, bool* found = nullptr) const;
     bool writeSetting(const QString& name, const QString& value);
-    bool ensureDefaultProfile();
     bool writeRouter(const RouterConfig& router);
     bool clearRouter();
     bool resetSyncState();

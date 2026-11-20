@@ -42,7 +42,7 @@
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
 #include "client/desktop/file_dialog.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -263,7 +263,7 @@ void DesktopWindow::applySettings()
 
     const bool had_preferred_size = !desktop_config_.disable_preferred_size();
 
-    const ProfileConfig profile = Database::instance().hostProfile(sessionState()->host());
+    const ProfileConfig profile = ProfileStore().hostProfile(sessionState()->host());
     sessionState()->setProfile(profile);
 
     desktop_config_ = profile.desktopConfig();

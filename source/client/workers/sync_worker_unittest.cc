@@ -473,11 +473,13 @@ protected:
 
     static void modifyCredential(Database& db, const QString& guid, const QString& username)
     {
+        CredentialStore store(db);
+
         CredentialConfig credential;
-        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_EQ(store.findByGuid(guid, &credential), Database::FindResult::FOUND);
 
         credential.setUsername(username);
-        ASSERT_TRUE(CredentialStore(db).modify(credential));
+        ASSERT_TRUE(store.modify(credential));
     }
 
     // The name of the user of the record, or an empty string when the device has no such record.
@@ -504,15 +506,15 @@ protected:
         profile.setDesktopConfig(defaultDesktopConfig());
         profile.setUdpMethods(UDP_METHOD_ALL);
 
-        EXPECT_TRUE(db.addProfile(profile));
+        EXPECT_TRUE(ProfileStore(db).add(profile));
         return profile;
     }
 
     // The name of the profile, or an empty string when the device has no such profile.
-    static QString storedProfileName(const Database& db, const QString& guid)
+    static QString storedProfileName(Database& db, const QString& guid)
     {
         ProfileConfig profile;
-        if (db.findProfileByGuid(guid, &profile) != Database::FindResult::FOUND)
+        if (ProfileStore(db).findByGuid(guid, &profile) != Database::FindResult::FOUND)
             return QString();
 
         return profile.name();

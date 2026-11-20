@@ -25,8 +25,10 @@
 
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/random.h"
+#include "base/net/udp_channel.h"
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/profile_store.h"
 
 //--------------------------------------------------------------------------------------------------
 // The record of the base, when it was read and the base has one.
@@ -278,8 +280,50 @@ protected:
                credentials_.storeReceived(transaction, credential, sync_revision) && transaction.commit();
     }
 
+    qint64 addProfile(const QString& name)
+    {
+        ProfileConfig config;
+        config.setName(name);
+        config.setDesktopConfig(defaultDesktopConfig());
+        config.setUdpMethods(UDP_METHOD_ALL);
+        EXPECT_TRUE(profiles_.add(config));
+        return config.id();
+    }
+
+    // The profiles the user made, the default one left out.
+    QList<ProfileConfig> profileList()
+    {
+        QList<ProfileConfig> profiles;
+        EXPECT_EQ(profiles_.list(&profiles), Database::ReadResult::OK);
+        EXPECT_TRUE(!profiles.isEmpty() && profiles.front().isDefault());
+        profiles.removeFirst();
+        return profiles;
+    }
+
+    QList<ProfileStore::Unsynced> unsyncedProfiles()
+    {
+        QList<ProfileStore::Unsynced> profiles;
+        EXPECT_EQ(profiles_.unsynced(&profiles), Database::ReadResult::OK);
+        return profiles;
+    }
+
+    bool storeReceivedProfile(const ProfileConfig& profile, qint64 sync_revision)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               profiles_.storeReceived(transaction, profile, sync_revision) && transaction.commit();
+    }
+
+    bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
+    {
+        Database::SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               profiles_.setUnknownData(transaction, guid, unknown_data) && transaction.commit();
+    }
+
     Database db_;
     CredentialStore credentials_{ db_ };
+    ProfileStore profiles_{ db_ };
     QString file_path_;
 
 private:

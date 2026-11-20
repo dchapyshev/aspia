@@ -24,7 +24,7 @@
 #include "base/net/udp_channel.h"
 #include "client/config.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "common/android/button.h"
 #include "common/android/combo_box.h"
 #include "common/android/controls.h"
@@ -131,9 +131,7 @@ ProfileEditor::~ProfileEditor() = default;
 //--------------------------------------------------------------------------------------------------
 void ProfileEditor::prepareForAdd()
 {
-    Database& db = Database::instance();
-
-    const ProfileConfig default_profile = db.defaultProfile();
+    const ProfileConfig default_profile = ProfileStore().defaultProfile();
 
     profile_id_ = -1;
     desktop_config_ = default_profile.desktopConfig();
@@ -151,11 +149,11 @@ void ProfileEditor::prepareForAdd()
 //--------------------------------------------------------------------------------------------------
 bool ProfileEditor::prepareForEdit(qint64 profile_id)
 {
-    Database& db = Database::instance();
+    ProfileStore store;
 
     if (profile_id <= 0)
     {
-        const ProfileConfig default_profile = db.defaultProfile();
+        const ProfileConfig default_profile = store.defaultProfile();
 
         profile_id_ = 0;
         desktop_config_ = default_profile.desktopConfig();
@@ -170,7 +168,7 @@ bool ProfileEditor::prepareForEdit(qint64 profile_id)
     }
 
     ProfileConfig profile;
-    const Database::FindResult found = db.findProfile(profile_id, &profile);
+    const Database::FindResult found = store.find(profile_id, &profile);
     if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Profile not found:" << profile_id;
@@ -202,7 +200,7 @@ bool ProfileEditor::prepareForEdit(qint64 profile_id)
 //--------------------------------------------------------------------------------------------------
 void ProfileEditor::onSaveClicked()
 {
-    Database& db = Database::instance();
+    ProfileStore store;
 
     ProfileConfig profile;
     profile.setId(profile_id_);
@@ -227,7 +225,7 @@ void ProfileEditor::onSaveClicked()
         }
 
         QList<ProfileConfig> profiles;
-        db.profileList(&profiles);
+        store.list(&profiles);
 
         bool exists = name.compare(tr("Default"), Qt::CaseInsensitive) == 0;
         for (const ProfileConfig& other : std::as_const(profiles))
@@ -278,15 +276,15 @@ void ProfileEditor::onSaveClicked()
     bool saved = false;
     if (profile_id_ == 0)
     {
-        ProfileConfig default_profile = db.defaultProfile();
+        ProfileConfig default_profile = store.defaultProfile();
         default_profile.setDesktopConfig(desktop_config_);
         default_profile.setUdpMethods(udp_methods);
-        saved = db.modifyProfile(default_profile);
+        saved = store.modify(default_profile);
     }
     else if (profile_id_ < 0)
-        saved = db.addProfile(profile);
+        saved = store.add(profile);
     else
-        saved = db.modifyProfile(profile);
+        saved = store.modify(profile);
 
     if (!saved)
     {
@@ -307,7 +305,7 @@ void ProfileEditor::onDeleteClicked()
         return;
     }
 
-    if (!Database::instance().removeProfile(profile_id_))
+    if (!ProfileStore().remove(profile_id_))
     {
         showError(tr("Failed to delete the profile."));
         return;

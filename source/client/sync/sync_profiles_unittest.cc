@@ -68,41 +68,45 @@ protected:
         profile.setDesktopConfig(defaultDesktopConfig());
         profile.setUdpMethods(UDP_METHOD_ALL);
 
-        EXPECT_TRUE(db.addProfile(profile));
+        EXPECT_TRUE(ProfileStore(db).add(profile));
         return profile;
     }
 
-    static ProfileConfig storedProfile(const Database& db, const QString& guid)
+    static ProfileConfig storedProfile(Database& db, const QString& guid)
     {
         ProfileConfig profile;
-        EXPECT_EQ(db.findProfileByGuid(guid, &profile), Database::FindResult::FOUND);
+        EXPECT_EQ(ProfileStore(db).findByGuid(guid, &profile), Database::FindResult::FOUND);
         return profile;
     }
 
     static void renameProfile(Database& db, const QString& guid, const QString& name)
     {
+        ProfileStore store(db);
+
         ProfileConfig profile;
-        ASSERT_EQ(db.findProfileByGuid(guid, &profile), Database::FindResult::FOUND);
+        ASSERT_EQ(store.findByGuid(guid, &profile), Database::FindResult::FOUND);
 
         profile.setName(name);
-        ASSERT_TRUE(db.modifyProfile(profile));
+        ASSERT_TRUE(store.modify(profile));
     }
 
     static void setRecordingPath(Database& db, const QString& guid, const char* path)
     {
+        ProfileStore store(db);
+
         ProfileConfig profile;
-        ASSERT_EQ(db.findProfileByGuid(guid, &profile), Database::FindResult::FOUND);
+        ASSERT_EQ(store.findByGuid(guid, &profile), Database::FindResult::FOUND);
 
         proto::control::Config desktop_config = profile.desktopConfig();
         desktop_config.set_recording_path(path);
         profile.setDesktopConfig(desktop_config);
-        ASSERT_TRUE(db.modifyProfile(profile));
+        ASSERT_TRUE(store.modify(profile));
     }
 
-    static QList<Database::UnsyncedProfile> unsyncedProfiles(const Database& db)
+    static QList<ProfileStore::Unsynced> unsyncedProfiles(Database& db)
     {
-        QList<Database::UnsyncedProfile> profiles;
-        EXPECT_NE(db.unsyncedProfiles(&profiles), Database::ReadResult::FAILED);
+        QList<ProfileStore::Unsynced> profiles;
+        EXPECT_NE(ProfileStore(db).unsynced(&profiles), Database::ReadResult::FAILED);
         return profiles;
     }
 
@@ -260,9 +264,11 @@ TEST_F(SyncProfilesTest, UntouchedDefaultProfileIsNotSent)
 // An edited default profile replaces the untouched one of the other device, which has a single default profile still.
 TEST_F(SyncProfilesTest, EditedDefaultProfileReplacesTheUntouchedOne)
 {
-    ProfileConfig default_profile = laptop_.defaultProfile();
+    ProfileStore laptop_store(laptop_);
+
+    ProfileConfig default_profile = laptop_store.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_DIRECT);
-    ASSERT_TRUE(laptop_.modifyProfile(default_profile));
+    ASSERT_TRUE(laptop_store.modify(default_profile));
 
     const proto::router::SyncRecordList list = sendRecords(laptop_sync_);
     ASSERT_EQ(list.record_size(), 1);
@@ -270,10 +276,12 @@ TEST_F(SyncProfilesTest, EditedDefaultProfileReplacesTheUntouchedOne)
 
     receiveRecords(phone_sync_, list, 0);
 
-    EXPECT_EQ(phone_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
+    ProfileStore phone_store(phone_);
+
+    EXPECT_EQ(phone_store.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
 
     QList<ProfileConfig> profiles;
-    ASSERT_EQ(phone_.profileList(&profiles), Database::ReadResult::OK);
+    ASSERT_EQ(phone_store.list(&profiles), Database::ReadResult::OK);
     EXPECT_EQ(profiles.size(), 1);
 }
 
@@ -301,7 +309,7 @@ TEST_F(SyncProfilesTest, RecordingPathStaysOnTheDevice)
 TEST_F(SyncProfilesTest, RemovalReachesTheOtherDevice)
 {
     const QString guid = addSharedProfile();
-    ASSERT_TRUE(laptop_.removeProfile(storedProfile(laptop_, guid).id()));
+    ASSERT_TRUE(ProfileStore(laptop_).remove(storedProfile(laptop_, guid).id()));
 
     proto::router::SyncRecordRequest request;
     ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
@@ -313,7 +321,7 @@ TEST_F(SyncProfilesTest, RemovalReachesTheOtherDevice)
     receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
 
     ProfileConfig removed;
-    EXPECT_EQ(phone_.findProfileByGuid(guid, &removed), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(ProfileStore(phone_).findByGuid(guid, &removed), Database::FindResult::NOT_FOUND);
     EXPECT_TRUE(unsyncedProfiles(laptop_).isEmpty());
     EXPECT_TRUE(unsyncedProfiles(phone_).isEmpty());
 }
@@ -332,15 +340,17 @@ TEST_F(SyncProfilesTest, DefaultProfileReceivedAsRemovedStaysOnTheDevice)
 
     receiveRecords(phone_sync_, list, 0);
 
+    ProfileStore store(phone_);
+
     ProfileConfig default_profile;
-    ASSERT_EQ(phone_.findProfileByGuid(ProfileConfig::kDefaultGuid, &default_profile), Database::FindResult::FOUND);
+    ASSERT_EQ(store.findByGuid(ProfileConfig::kDefaultGuid, &default_profile), Database::FindResult::FOUND);
     EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 5);
 
-    default_profile = phone_.defaultProfile();
+    default_profile = store.defaultProfile();
     default_profile.setUdpMethods(UDP_METHOD_DIRECT);
-    ASSERT_TRUE(phone_.modifyProfile(default_profile));
+    ASSERT_TRUE(store.modify(default_profile));
 
-    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles(phone_);
+    const QList<ProfileStore::Unsynced> unsynced = unsyncedProfiles(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 5);
 }
@@ -367,7 +377,7 @@ TEST_F(SyncProfilesTest, ReceivedProfileThatDoesNotOpenLoses)
     EXPECT_EQ(phone_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 6);
 
     ProfileConfig unnamed;
-    EXPECT_EQ(phone_.findProfileByGuid(kGuid, &unnamed), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(ProfileStore(phone_).findByGuid(kGuid, &unnamed), Database::FindResult::NOT_FOUND);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -393,7 +403,7 @@ TEST_F(SyncProfilesTest, YoungerChangeWins)
 
     EXPECT_EQ(storedProfile(phone_, guid).name(), QString("phone"));
 
-    const QList<Database::UnsyncedProfile> unsynced = unsyncedProfiles(phone_);
+    const QList<ProfileStore::Unsynced> unsynced = unsyncedProfiles(phone_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, revision_);
 }

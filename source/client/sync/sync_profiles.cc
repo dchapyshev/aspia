@@ -39,9 +39,9 @@ proto::router::SyncProfile syncContent(const ProfileConfig& profile)
 
 //--------------------------------------------------------------------------------------------------
 // static
-Database::ReadResult SyncProfileTraits::readUnsynced(const Database& db, QList<Unsynced>* unsynced)
+Database::ReadResult SyncProfileTraits::readUnsynced(Database& db, QList<Unsynced>* unsynced)
 {
-    return db.unsyncedProfiles(unsynced);
+    return ProfileStore(db).unsynced(unsynced);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -98,10 +98,12 @@ bool SyncProfileTraits::hasSameContent(const Config& first, const Config& second
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncProfileTraits::storeReceived(
-    const Database& db, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
+    Database& db, Database::SyncTransaction& transaction, Config config, qint64 sync_revision)
 {
+    ProfileStore store(db);
+
     ProfileConfig local;
-    const Database::FindResult found = db.findProfileByGuid(config.guid(), &local);
+    const Database::FindResult found = store.findByGuid(config.guid(), &local);
     if (found == Database::FindResult::FAILED)
     {
         LOG(ERROR) << "Unable to read profile" << config.guid();
@@ -117,13 +119,13 @@ bool SyncProfileTraits::storeReceived(
 
     config.setDesktopConfig(desktop_config);
 
-    return transaction.storeReceivedProfile(config, sync_revision);
+    return store.storeReceived(transaction, config, sync_revision);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool SyncProfileTraits::storeUnknownData(
-    const Database&, Database::SyncTransaction& transaction, const Config& config)
+    Database& db, Database::SyncTransaction& transaction, const Config& config)
 {
-    return transaction.setProfileUnknownData(config.guid(), config.unknownData());
+    return ProfileStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

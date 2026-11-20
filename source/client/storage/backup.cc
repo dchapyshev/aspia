@@ -35,6 +35,7 @@
 #include "base/peer/host_id.h"
 #include "client/storage/credential_store.h"
 #include "client/storage/master_password.h"
+#include "client/storage/profile_store.h"
 #include "proto/router.h"
 #include "proto/storage.h"
 
@@ -189,7 +190,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
         CredentialStore(db).list(&credentials),
         db.allLocalHosts(&hosts),
         db.allRouterHosts(&router_hosts),
-        db.profileList(&profiles)
+        ProfileStore(db).list(&profiles)
     };
 
     if (!db.allLocalGroups(&groups))

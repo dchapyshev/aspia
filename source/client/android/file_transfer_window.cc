@@ -31,7 +31,7 @@
 #include "client/android/file_panel_widget.h"
 #include "client/android/file_progress_sheet.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "client/workers/file_worker.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
@@ -259,7 +259,7 @@ void FileTransferWindow::start()
 
     Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, db.hostProfile(host_), proto::peer::SESSION_TYPE_FILE_TRANSFER, db.displayName());
+        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_FILE_TRANSFER, db.displayName());
 
     setStatusText(tr("Connecting..."));
 

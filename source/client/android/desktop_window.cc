@@ -34,7 +34,7 @@
 #include "client/android/key_bar.h"
 #include "client/android/statistics_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "client/workers/audio_worker.h"
 #include "client/workers/network_worker.h"
 #include "client/workers/video_worker.h"
@@ -503,7 +503,7 @@ void DesktopWindow::start()
 
     Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, db.hostProfile(host_), proto::peer::SESSION_TYPE_DESKTOP, db.displayName());
+        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_DESKTOP, db.displayName());
 
     setStatusText(tr("Connecting..."));
 

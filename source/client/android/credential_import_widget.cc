@@ -169,14 +169,13 @@ void CredentialImportWidget::onOpenClicked()
         return first.displayName().localeAwareCompare(second.displayName()) < 0;
     });
 
-    CredentialStore store;
     QList<CredentialSelectionList::Item> items;
 
     for (const CredentialConfig& credential : std::as_const(credentials))
     {
         CredentialConfig existing;
         const bool exists =
-            store.findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
+            CredentialStore().findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
 
         CredentialSelectionList::Item item;
         item.icon = credential.type() == CredentialConfig::Type::OS

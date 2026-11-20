@@ -76,18 +76,22 @@ protected:
 
     static void modifyCredential(Database& db, const QString& guid, const QString& username)
     {
+        CredentialStore store(db);
+
         CredentialConfig credential;
-        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_EQ(store.findByGuid(guid, &credential), Database::FindResult::FOUND);
 
         credential.setUsername(username);
-        ASSERT_TRUE(CredentialStore(db).modify(credential));
+        ASSERT_TRUE(store.modify(credential));
     }
 
     static void removeCredential(Database& db, const QString& guid)
     {
+        CredentialStore store(db);
+
         CredentialConfig credential;
-        ASSERT_EQ(CredentialStore(db).findByGuid(guid, &credential), Database::FindResult::FOUND);
-        ASSERT_TRUE(CredentialStore(db).remove(credential.id()));
+        ASSERT_EQ(store.findByGuid(guid, &credential), Database::FindResult::FOUND);
+        ASSERT_TRUE(store.remove(credential.id()));
     }
 
     // The name of the user of the record, or an empty string when the device has no such record.

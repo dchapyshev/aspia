@@ -53,8 +53,8 @@
 #include "client/desktop/ui_settings_tab.h"
 #include "client/desktop/update_server_dialog.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
 #include "client/storage/master_password.h"
+#include "client/storage/profile_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/credentials_dialog.h"
@@ -687,7 +687,7 @@ void SettingsTab::onAddProfile()
     ProfileConfig profile = profileFromUi();
     profile.setName(name);
 
-    if (!Database::instance().addProfile(profile))
+    if (!ProfileStore().add(profile))
     {
         MsgBox::warning(this, tr("Unable to add profile."));
         return;
@@ -706,10 +706,10 @@ void SettingsTab::onRenameProfile()
     if (profile_id <= 0)
         return;
 
-    Database& db = Database::instance();
+    ProfileStore store;
 
     ProfileConfig profile;
-    if (db.findProfile(profile_id, &profile) != Database::FindResult::FOUND)
+    if (store.find(profile_id, &profile) != Database::FindResult::FOUND)
     {
         MsgBox::warning(this, tr("Failed to read the profile."));
         return;
@@ -721,7 +721,7 @@ void SettingsTab::onRenameProfile()
 
     profile.setName(name);
 
-    if (!db.modifyProfile(profile))
+    if (!store.modify(profile))
     {
         MsgBox::warning(this, tr("Unable to rename profile."));
         return;
@@ -747,7 +747,7 @@ void SettingsTab::onDeleteProfile()
         return;
     }
 
-    if (!Database::instance().removeProfile(profile_id))
+    if (!ProfileStore().remove(profile_id))
     {
         MsgBox::warning(this, tr("Unable to delete profile."));
         return;
@@ -1232,7 +1232,7 @@ void SettingsTab::showRouterError(QLineEdit* edit, const QString& message)
 void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
 {
     QList<ProfileConfig> profiles;
-    if (Database::instance().profileList(&profiles) == Database::ReadResult::FAILED && warn)
+    if (ProfileStore().list(&profiles) == Database::ReadResult::FAILED && warn)
         MsgBox::warning(this, tr("Failed to read the list of profiles."));
 
     {
@@ -1258,7 +1258,7 @@ void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::showProfile(bool warn)
 {
-    Database& db = Database::instance();
+    ProfileStore store;
     const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
 
     proto::control::Config desktop_config;
@@ -1266,14 +1266,14 @@ void SettingsTab::showProfile(bool warn)
 
     if (profile_id <= 0)
     {
-        const ProfileConfig profile = db.defaultProfile();
+        const ProfileConfig profile = store.defaultProfile();
         desktop_config = profile.desktopConfig();
         udp_methods = profile.udpMethods();
     }
     else
     {
         ProfileConfig profile;
-        const Database::FindResult result = db.findProfile(profile_id, &profile);
+        const Database::FindResult result = store.find(profile_id, &profile);
         if (result == Database::FindResult::FOUND)
         {
             desktop_config = profile.desktopConfig();
@@ -1436,14 +1436,14 @@ QString SettingsTab::askProfileName(const QString& title, const QString& name, q
 //--------------------------------------------------------------------------------------------------
 void SettingsTab::saveProfile()
 {
-    Database& db = Database::instance();
+    ProfileStore store;
     const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
 
     ProfileConfig profile = profileFromUi();
 
     if (profile_id <= 0)
     {
-        ProfileConfig default_profile = db.defaultProfile();
+        ProfileConfig default_profile = store.defaultProfile();
         default_profile.setDesktopConfig(profile.desktopConfig());
         default_profile.setUdpMethods(profile.udpMethods());
         profile = default_profile;
@@ -1454,7 +1454,7 @@ void SettingsTab::saveProfile()
         profile.setName(ui->combo_profile->currentText());
     }
 
-    if (!db.modifyProfile(profile))
+    if (!store.modify(profile))
     {
         MsgBox::warning(this, tr("Unable to save profile."));
         return;

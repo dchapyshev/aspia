@@ -26,6 +26,7 @@
 #include "base/crypto/random.h"
 #include "client/router/router_controller.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/profile_store.h"
 
 class ProfileComboBoxTest : public testing::Test
 {
@@ -45,7 +46,7 @@ protected:
         ProfileConfig profile;
         profile.setName(name);
 
-        EXPECT_TRUE(Database::instance().addProfile(profile));
+        EXPECT_TRUE(ProfileStore().add(profile));
         return profile.id();
     }
 
@@ -102,7 +103,7 @@ TEST_F(ProfileComboBoxTest, ChoiceFallsBackToDefaultOnceTheProfileIsGone)
     combo.setCurrentProfileId(second_id);
     ASSERT_EQ(combo.currentProfileId(), second_id);
 
-    ASSERT_TRUE(Database::instance().removeProfile(second_id));
+    ASSERT_TRUE(ProfileStore().remove(second_id));
     ASSERT_TRUE(combo.onReload());
 
     EXPECT_EQ(combo.count(), 2);

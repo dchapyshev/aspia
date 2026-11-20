@@ -146,15 +146,13 @@ void CredentialImportDialog::onOpenButtonPressed()
     QTreeWidgetItem* aspia_group = add_group(":/img/keys.svg", tr("Aspia Credentials"));
     QTreeWidgetItem* os_group = add_group(":/img/key-os.svg", tr("OS Credentials"));
 
-    CredentialStore store;
-
     for (int i = 0; i < credentials.size(); ++i)
     {
         const CredentialConfig& credential = credentials[i];
 
         CredentialConfig existing;
         const bool exists =
-            store.findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
+            CredentialStore().findByGuid(credential.guid(), &existing) != Database::FindResult::NOT_FOUND;
 
         QTreeWidgetItem* item = new QTreeWidgetItem();
         item->setIcon(COLUMN_NAME, QIcon(exists ? ":/img/key-warning.svg" : ":/img/key-normal.svg"));

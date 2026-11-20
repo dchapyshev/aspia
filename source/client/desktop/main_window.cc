@@ -53,8 +53,8 @@
 #include "client/desktop/sys_info/system_info_window.h"
 #include "client/desktop/terminal/terminal_window.h"
 #include "client/mcp/mcp_worker.h"
-#include "client/storage/database.h"
 #include "client/storage/instance_settings.h"
+#include "client/storage/profile_store.h"
 #include "client/storage/system_settings.h"
 #include "client/storage/user_settings.h"
 #include "client/workers/update_worker.h"
@@ -669,7 +669,7 @@ void MainWindow::onConnect(const HostConfig& host, proto::peer::SessionType sess
     bool detached = (parent_tab && parent_tab->tabType() == Tab::Type::SESSION) ?
         parent_tab->isDetached() : !ui->action_sessions_in_tabs->isChecked();
 
-    const ProfileConfig profile = Database::instance().hostProfile(host);
+    const ProfileConfig profile = ProfileStore().hostProfile(host);
     ClientWindow* client_window = nullptr;
 
     switch (session_type)

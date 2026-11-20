@@ -19,25 +19,26 @@
 #ifndef CLIENT_SYNC_SYNC_PROFILES_H
 #define CLIENT_SYNC_SYNC_PROFILES_H
 
+#include "client/storage/profile_store.h"
 #include "client/sync/sync_records.h"
 
 struct SyncProfileTraits
 {
     using Config = ProfileConfig;
-    using Unsynced = Database::UnsyncedProfile;
+    using Unsynced = ProfileStore::Unsynced;
 
     static constexpr proto::router::SyncDataType kType = proto::router::SYNC_DATA_TYPE_PROFILES;
 
     static const Config& config(const Unsynced& unsynced) { return unsynced.profile; }
     static bool isReadable(const Unsynced& unsynced) { return !unsynced.damaged && unsynced.profile.isValid(); }
-    static Database::ReadResult readUnsynced(const Database& db, QList<Unsynced>* unsynced);
+    static Database::ReadResult readUnsynced(Database& db, QList<Unsynced>* unsynced);
 
     static std::optional<QByteArray> seal(const SecureByteArray& key, const Config& config);
     static bool openReceived(const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
     static bool hasSameContent(const Config& first, const Config& second);
-    static bool storeReceived(const Database& db, Database::SyncTransaction& transaction, Config config,
+    static bool storeReceived(Database& db, Database::SyncTransaction& transaction, Config config,
                               qint64 sync_revision);
-    static bool storeUnknownData(const Database& db, Database::SyncTransaction& transaction, const Config& config);
+    static bool storeUnknownData(Database& db, Database::SyncTransaction& transaction, const Config& config);
 };
 
 extern template class SyncRecordsOf<SyncProfileTraits>;

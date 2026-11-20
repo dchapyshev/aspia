@@ -30,7 +30,6 @@ collect_sources(SOURCE_CLIENT_STORAGE
     database_local_hosts.cc
     database_migration.cc
     database_migration.h
-    database_profiles.cc
     database_router.cc
     database_settings.cc
     database_store.h
@@ -39,6 +38,8 @@ collect_sources(SOURCE_CLIENT_STORAGE
     instance_settings.h
     master_password.cc
     master_password.h
+    profile_store.cc
+    profile_store.h
     system_settings.cc
     system_settings.h
     user_settings.cc

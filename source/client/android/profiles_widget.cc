@@ -27,7 +27,7 @@
 #include "client/config.h"
 #include "client/android/profile_editor.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "common/android/icon_button.h"
 #include "common/android/tree_widget.h"
 
@@ -94,7 +94,7 @@ void ProfilesWidget::reload()
     const QIcon icon = GuiApplication::svgIcon(":/img/dashboard-layout.svg");
 
     QList<ProfileConfig> profiles;
-    const Database::ReadResult result = Database::instance().profileList(&profiles);
+    const Database::ReadResult result = ProfileStore().list(&profiles);
     if (result != Database::ReadResult::OK)
         LOG(ERROR) << "Unable to read the list of profiles:" << result;
 

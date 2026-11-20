@@ -29,6 +29,7 @@
 #include "base/sql/sql_query.h"
 #include "base/sql/sql_transaction.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/profile_store.h"
 
 namespace {
 
@@ -183,7 +184,7 @@ bool Database::open(const QString& file_path)
         }
     }
 
-    if (!createTables(db_) || !migrateTables(db_) || !ensureDefaultProfile())
+    if (!createTables(db_) || !migrateTables(db_) || !ProfileStore(*this).ensureDefaultProfile())
     {
         db_.close();
         return false;
@@ -267,19 +268,21 @@ bool Database::import(const std::optional<RouterConfig>& router,
         credential_ids.insert(credential.id(), config.id());
     }
 
+    ProfileStore profile_store(*this);
+
     QHash<qint64, qint64> profile_ids;
     for (const ProfileConfig& profile : profiles)
     {
         ProfileConfig config = profile;
         config.setId(-1);
 
-        if (!addProfile(config))
+        if (!profile_store.add(config))
             return false;
 
         profile_ids.insert(profile.id(), config.id());
     }
 
-    if (!ensureDefaultProfile())
+    if (!profile_store.ensureDefaultProfile())
         return false;
 
     if (router)

@@ -46,7 +46,7 @@
 #include "client/session_state.h"
 #include "client/android/chat_view.h"
 #include "client/router/router_controller.h"
-#include "client/storage/database.h"
+#include "client/storage/profile_store.h"
 #include "client/workers/network_worker.h"
 #include "common/android/app_bar.h"
 #include "common/android/icon_button.h"
@@ -459,7 +459,7 @@ void ChatWindow::start()
 
     Database& db = Database::instance();
     session_state_ = std::make_shared<SessionState>(
-        host_, db.hostProfile(host_), proto::peer::SESSION_TYPE_CHAT, db.displayName());
+        host_, ProfileStore().hostProfile(host_), proto::peer::SESSION_TYPE_CHAT, db.displayName());
 
     history_id_ = chatHistoryId(*session_state_);
     loadHistory();
