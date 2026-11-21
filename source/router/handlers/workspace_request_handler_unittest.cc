@@ -117,7 +117,7 @@ TEST_F(WorkspaceRequestHandlerTest, AddTrimsNameAndRejectsDuplicate)
 //--------------------------------------------------------------------------------------------------
 // The comment is read back in the workspace list, and a reply larger than the message limit of the
 // channel is not sent but ends the session instead, so it is bounded on the way in. The name is
-// already bounded by Workspace::isValidName.
+// already bounded by the name check of WorkspaceStore.
 TEST_F(WorkspaceRequestHandlerTest, OversizedCommentIsRejected)
 {
     proto::router::WorkspaceRequest request =

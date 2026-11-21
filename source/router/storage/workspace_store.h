@@ -23,11 +23,17 @@
 #include <vector>
 
 #include "router/storage/database_store.h"
-#include "router/storage/workspace.h"
 
 namespace proto::router {
 class WorkspaceList;
 } // namespace proto::router
+
+struct Workspace
+{
+    qint64 entry_id = 0;
+    std::string name;
+    std::string comment;
+};
 
 class WorkspaceStore final : public DatabaseStore
 {

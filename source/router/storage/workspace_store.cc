@@ -27,6 +27,19 @@
 #include "proto/router_client.h"
 #include "proto/router_constants.h"
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+// Validates a UTF-8 name. Non-empty after trimming and within the bound the protocol sets for
+// the name of an entry.
+bool isValidName(std::string_view name)
+{
+    const std::string_view trimmed = strTrimmed(name);
+    return !trimmed.empty() && strLength(trimmed) <= proto::router::kMaxEntryNameLength;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 WorkspaceStore::WorkspaceStore(Database& db)
     : DatabaseStore(db)
@@ -240,7 +253,7 @@ std::string_view WorkspaceStore::add(std::string_view name, std::string_view com
         return proto::router::kErrorInternalError;
     }
 
-    if (!Workspace::isValidName(name))
+    if (!isValidName(name))
     {
         LOG(ERROR) << "Invalid workspace name:" << name;
         return proto::router::kErrorInvalidData;
@@ -356,7 +369,7 @@ std::string_view WorkspaceStore::modify(qint64 entry_id, qint64 base_revision,
         return proto::router::kErrorInvalidData;
     }
 
-    if (!Workspace::isValidName(name))
+    if (!isValidName(name))
     {
         LOG(ERROR) << "Invalid workspace name:" << name;
         return proto::router::kErrorInvalidData;

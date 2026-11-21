@@ -34,8 +34,6 @@ collect_sources(SOURCE_ROUTER_STORAGE
     sync_storage.h
     user_store.cc
     user_store.h
-    workspace.cc
-    workspace.h
     workspace_store.cc
     workspace_store.h)
 
