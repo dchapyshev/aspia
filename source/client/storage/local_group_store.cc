@@ -267,12 +267,59 @@ bool LocalGroupStore::remove(qint64 group_id)
         return false;
     }
 
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    std::vector<qint64> removed_group_ids = { group_id };
+
+    for (size_t i = 0; i < removed_group_ids.size(); ++i)
+    {
+        SqlQuery children_query(db(), "SELECT id FROM local_groups WHERE parent_id=?");
+        children_query.addInt64(removed_group_ids[i]);
+
+        for (;;)
+        {
+            const SqlQuery::StepResult step = children_query.next();
+            if (step == SqlQuery::StepResult::FAILED)
+            {
+                LOG(ERROR) << "Unable to execute query:" << db().lastError();
+                return false;
+            }
+            if (step == SqlQuery::StepResult::DONE)
+                break;
+
+            removed_group_ids.emplace_back(children_query.columnInt64(0));
+        }
+    }
+
+    for (qint64 removed_group_id : removed_group_ids)
+    {
+        SqlQuery hosts_query(db(), "DELETE FROM local_hosts WHERE group_id=?");
+        hosts_query.addInt64(removed_group_id);
+
+        if (!hosts_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+
     SqlQuery query(db(), "DELETE FROM local_groups WHERE id=?");
     query.addInt64(group_id);
 
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
         return false;
     }
 

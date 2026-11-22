@@ -18,7 +18,6 @@
 
 #include "client/sync/sync_profiles.h"
 
-#include <QDateTime>
 #include <QTemporaryDir>
 
 #include <gtest/gtest.h>
@@ -112,30 +111,21 @@ protected:
         return profiles;
     }
 
-    void rawExec(const QString& file_name, const char* sql, const QString& guid, qint64 value = 0)
+    void rawExec(const QString& file_name, const char* sql, const QString& guid)
     {
         SqlDatabase raw;
         ASSERT_TRUE(raw.open(dir_.filePath(file_name)));
 
         SqlQuery query(raw, sql);
-        if (value != 0)
-            query.addInt64(value);
         query.addText(guid);
         ASSERT_TRUE(query.exec());
-    }
-
-    // Makes the last change of the profile |age| seconds old.
-    void setLocalAge(const QString& file_name, const QString& guid, qint64 age)
-    {
-        rawExec(file_name, "UPDATE profiles SET modify_time=? WHERE guid=?", guid,
-                QDateTime::currentSecsSinceEpoch() - age);
     }
 
     // Stands for the router: stores what the device has to send and returns the stored records.
     proto::router::SyncRecordList sendRecords(SyncProfiles& sync)
     {
         proto::router::SyncRecordRequest request;
-        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
+        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncProfiles::SyncResult::DONE);
 
         proto::router::SyncRecordResult result;
         proto::router::SyncRecordList list;
@@ -149,19 +139,17 @@ protected:
             result.add_record_revision(revision_);
         }
 
-        EXPECT_EQ(sync.confirmSentRecords(result), SyncProfiles::Result::DONE);
+        EXPECT_EQ(sync.confirmSentRecords(result), SyncProfiles::SyncResult::DONE);
         return list;
     }
 
-    // Hands the records to the device as stored by the router |age| seconds ago.
-    static void receiveRecords(SyncProfiles& sync, proto::router::SyncRecordList list, qint64 age)
+    // Hands the records to the device as stored by the router.
+    static void receiveRecords(SyncProfiles& sync, proto::router::SyncRecordList list)
     {
-        list.set_current_time(kRouterTime);
-
         for (proto::router::SyncRecord& record : *list.mutable_record())
-            record.set_time(kRouterTime - age);
+            record.set_time(kRouterTime);
 
-        ASSERT_EQ(sync.storeReceivedRecords(list), SyncProfiles::Result::DONE);
+        ASSERT_EQ(sync.storeReceivedRecords(list), SyncProfiles::SyncResult::DONE);
     }
 
     // A record a newer version of the client has made: it carries |unknown_field|, a field this
@@ -191,7 +179,7 @@ protected:
     proto::router::SyncProfile sentContent(SyncProfiles& sync, const QString& guid)
     {
         proto::router::SyncRecordRequest request;
-        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
+        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncProfiles::SyncResult::DONE);
         EXPECT_EQ(request.record_size(), 1);
 
         proto::router::SyncProfile content;
@@ -210,7 +198,7 @@ protected:
     QString addSharedProfile()
     {
         const QString guid = addProfile(laptop_, "office").guid();
-        receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
+        receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
         EXPECT_EQ(storedProfile(phone_, guid).name(), QString("office"));
         return guid;
@@ -234,7 +222,7 @@ TEST_F(SyncProfilesTest, NewProfileReachesTheOtherDevice)
     const ProfileConfig profile = addProfile(laptop_, "office");
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
     EXPECT_EQ(request.record(0).revision(), 0);
     EXPECT_EQ(request.record(0).type(), proto::router::SYNC_DATA_TYPE_PROFILES);
@@ -246,7 +234,7 @@ TEST_F(SyncProfilesTest, NewProfileReachesTheOtherDevice)
     ASSERT_EQ(list.record_size(), 1);
     EXPECT_TRUE(unsyncedProfiles(laptop_).isEmpty());
 
-    receiveRecords(phone_sync_, list, 0);
+    receiveRecords(phone_sync_, list);
 
     const ProfileConfig received = storedProfile(phone_, profile.guid());
     EXPECT_EQ(received.name(), QString("office"));
@@ -276,7 +264,7 @@ TEST_F(SyncProfilesTest, EditedDefaultProfileReplacesTheUntouchedOne)
     ASSERT_EQ(list.record_size(), 1);
     EXPECT_EQ(list.record(0).id(), std::string(ProfileConfig::kDefaultGuid));
 
-    receiveRecords(phone_sync_, list, 0);
+    receiveRecords(phone_sync_, list);
 
     ProfileStore phone_store(phone_);
 
@@ -296,11 +284,11 @@ TEST_F(SyncProfilesTest, RecordingPathStaysOnTheDevice)
     setRecordingPath(phone_, guid, "D:/phone");
     EXPECT_TRUE(sentContent(phone_sync_, guid).desktop().recording_path().empty());
 
-    receiveRecords(laptop_sync_, sendRecords(phone_sync_), 0);
+    receiveRecords(laptop_sync_, sendRecords(phone_sync_));
     EXPECT_TRUE(storedProfile(laptop_, guid).desktopConfig().recording_path().empty());
 
     renameProfile(laptop_, guid, "renamed");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     const ProfileConfig received = storedProfile(phone_, guid);
     EXPECT_EQ(received.name(), QString("renamed"));
@@ -314,13 +302,13 @@ TEST_F(SyncProfilesTest, RemovalReachesTheOtherDevice)
     ASSERT_TRUE(ProfileStore(laptop_).remove(storedProfile(laptop_, guid).id()));
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
     EXPECT_EQ(request.record(0).revision(), 1);
     EXPECT_TRUE(request.record(0).deleted());
     EXPECT_TRUE(request.record(0).data().empty());
 
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     ProfileConfig removed;
     EXPECT_EQ(ProfileStore(phone_).findByGuid(guid, &removed), Database::FindResult::NOT_FOUND);
@@ -340,7 +328,7 @@ TEST_F(SyncProfilesTest, DefaultProfileReceivedAsRemovedStaysOnTheDevice)
     removed->set_id(ProfileConfig::kDefaultGuid);
     removed->set_deleted(true);
 
-    receiveRecords(phone_sync_, list, 0);
+    receiveRecords(phone_sync_, list);
 
     ProfileStore store(phone_);
 
@@ -373,7 +361,7 @@ TEST_F(SyncProfilesTest, ReceivedProfileThatDoesNotOpenLoses)
 
     *list.add_record() = newerRecord(kGuid, 6, "", std::string());
 
-    receiveRecords(phone_sync_, list, 0);
+    receiveRecords(phone_sync_, list);
 
     EXPECT_EQ(storedProfile(phone_, guid).name(), QString("office"));
     EXPECT_EQ(SyncStore(phone_).receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 6);
@@ -383,31 +371,18 @@ TEST_F(SyncProfilesTest, ReceivedProfileThatDoesNotOpenLoses)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Both devices renamed the profile, and the younger change wins.
-TEST_F(SyncProfilesTest, YoungerChangeWins)
+// Both devices renamed the profile. The name the router holds replaces the one of the device that
+// came second, and that one is not sent.
+TEST_F(SyncProfilesTest, LocalChangeGivesWayToTheRouter)
 {
     const QString guid = addSharedProfile();
 
     renameProfile(phone_, guid, "phone");
-    setLocalAge("phone.db3", guid, 30);
-
     renameProfile(laptop_, guid, "laptop");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     EXPECT_EQ(storedProfile(phone_, guid).name(), QString("laptop"));
     EXPECT_TRUE(unsyncedProfiles(phone_).isEmpty());
-
-    renameProfile(phone_, guid, "phone");
-    setLocalAge("phone.db3", guid, 20);
-
-    renameProfile(laptop_, guid, "other-laptop");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
-
-    EXPECT_EQ(storedProfile(phone_, guid).name(), QString("phone"));
-
-    const QList<ProfileStore::Unsynced> unsynced = unsyncedProfiles(phone_);
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, revision_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -418,7 +393,7 @@ TEST_F(SyncProfilesTest, FieldUnknownToTheDeviceComesBackWithItsChange)
 
     proto::router::SyncRecordList list;
     *list.add_record() = newerRecord(kGuid, 1, "office", kUnknownField);
-    receiveRecords(laptop_sync_, list, 0);
+    receiveRecords(laptop_sync_, list);
     ASSERT_EQ(storedProfile(laptop_, kGuid).name(), QString("office"));
 
     renameProfile(laptop_, kGuid, "renamed");
@@ -436,6 +411,6 @@ TEST_F(SyncProfilesTest, DamagedProfileIsNotSent)
     rawExec("laptop.db3", "UPDATE profiles SET data=X'00' WHERE guid=?", guid);
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncProfiles::SyncResult::DONE);
     EXPECT_EQ(request.record_size(), 0);
 }

@@ -24,6 +24,7 @@
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
 #include "client/sync/sync_profiles.h"
+#include "client/sync/sync_router_hosts.h"
 #include "client/workers/router_worker.h"
 #include "proto/router.h"
 #include "proto/router_constants.h"
@@ -238,6 +239,7 @@ void SyncWorker::startReceivingRecords()
     records_.clear();
     records_.push_back(std::make_unique<SyncCredentials>(db, storage_id_, key_));
     records_.push_back(std::make_unique<SyncProfiles>(db, storage_id_, key_));
+    records_.push_back(std::make_unique<SyncRouterHosts>(db, storage_id_, key_));
     repeat_requested_ = false;
 
     exchangeRecords(0);
@@ -284,18 +286,18 @@ void SyncWorker::abortRecordExchange()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SyncWorker::announceFailure(SyncRecords::Result result)
+void SyncWorker::announceFailure(SyncRecords::SyncResult result)
 {
-    if (result == SyncRecords::Result::DETACHED)
+    if (result == SyncRecords::SyncResult::DETACHED)
     {
         LOG(INFO) << "The device has left the synchronization meanwhile";
     }
-    else if (result == SyncRecords::Result::INVALID_ANSWER)
+    else if (result == SyncRecords::SyncResult::INVALID_ANSWER)
     {
         LOG(ERROR) << "The router returned an invalid answer";
         emit sig_event(Event::INVALID_ROUTER_ANSWER, QString());
     }
-    else if (result == SyncRecords::Result::FAILED)
+    else if (result == SyncRecords::SyncResult::FAILED)
     {
         LOG(ERROR) << "The device failed to keep the synchronization data";
         emit sig_event(Event::DEVICE_ERROR, QString());
@@ -425,8 +427,8 @@ void SyncWorker::sendRecordRequest()
     proto::router::SyncToRouter message;
 
     proto::router::SyncRecordRequest* request = message.mutable_record_request();
-    const SyncRecords::Result read = records_[records_index_]->readUnsyncedRecords(request);
-    if (read != SyncRecords::Result::DONE)
+    const SyncRecords::SyncResult read = records_[records_index_]->readUnsyncedRecords(request);
+    if (read != SyncRecords::SyncResult::DONE)
     {
         LOG(INFO) << "The records to send are not read";
         announceFailure(read);
@@ -634,8 +636,8 @@ void SyncWorker::readRecordList(const proto::router::SyncRecordList& list)
     SyncRecords& records = *records_[records_index_];
     const qint64 revision = records.receivedRevision();
 
-    const SyncRecords::Result stored = records.storeReceivedRecords(list);
-    if (stored != SyncRecords::Result::DONE)
+    const SyncRecords::SyncResult stored = records.storeReceivedRecords(list);
+    if (stored != SyncRecords::SyncResult::DONE)
     {
         LOG(INFO) << "The received records are not stored";
         announceFailure(stored);
@@ -686,12 +688,17 @@ void SyncWorker::readRecordResult(const proto::router::SyncRecordResult& result)
     {
         LOG(ERROR) << "The router did not store the records:" << result.error_code();
         emit sig_event(Event::ROUTER_ERROR, QString::fromStdString(result.error_code()));
+
+        const SyncRecords::SyncResult discarded = records_[records_index_]->discardSentRecords();
+        if (discarded != SyncRecords::SyncResult::DONE)
+            announceFailure(discarded);
+
         abortRecordExchange();
         return;
     }
 
-    const SyncRecords::Result confirmed = records_[records_index_]->confirmSentRecords(result);
-    if (confirmed != SyncRecords::Result::DONE)
+    const SyncRecords::SyncResult confirmed = records_[records_index_]->confirmSentRecords(result);
+    if (confirmed != SyncRecords::SyncResult::DONE)
     {
         LOG(INFO) << "The sent records are not confirmed";
         announceFailure(confirmed);

@@ -56,6 +56,8 @@ list(APPEND SOURCE_CLIENT
     main.cc)
 
 list(APPEND SOURCE_CLIENT_TESTS
+    ../router/storage/sync_storage.cc
+    ../router/storage/sync_storage.h
     config_unittest.cc
     desktop/authorization_dialog_unittest.cc
     desktop/credentials/credential_combo_box_unittest.cc
@@ -67,6 +69,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/local_host_list_model_unittest.cc
     desktop/management/profile_combo_box_unittest.cc
     desktop/management/relay_list_model_unittest.cc
+    desktop/management/router_host_dialog_unittest.cc
     desktop/management/router_status_widget_unittest.cc
     desktop/management/router_user_dialog_unittest.cc
     desktop/management/search_result_model_unittest.cc
@@ -98,7 +101,9 @@ list(APPEND SOURCE_CLIENT_TESTS
     sync/sync_credentials_unittest.cc
     sync/sync_crypto_unittest.cc
     sync/sync_profiles_unittest.cc
+    sync/sync_router_hosts_unittest.cc
     tests_main.cc
+    workers/sync_exchange_unittest.cc
     workers/sync_worker_unittest.cc
     workers/video_worker_unittest.cc)
 

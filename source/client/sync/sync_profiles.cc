@@ -46,7 +46,8 @@ Database::ReadResult SyncProfileTraits::readUnsynced(Database& db, QList<Unsynce
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::optional<QByteArray> SyncProfileTraits::seal(const SecureByteArray& key, const Config& config)
+std::optional<QByteArray> SyncProfileTraits::seal(
+    Database& /* db */, const SecureByteArray& key, const Config& config)
 {
     proto::router::SyncProfile content = syncContent(config);
 
@@ -58,26 +59,26 @@ std::optional<QByteArray> SyncProfileTraits::seal(const SecureByteArray& key, co
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SyncProfileTraits::openReceived(
-    const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config)
+SyncRecords::OpenResult SyncProfileTraits::openReceived(
+    Database& /* db */, const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config)
 {
     if (record.deleted())
     {
         if (record.id() != ProfileConfig::kDefaultGuid)
-            return true;
+            return SyncRecords::OpenResult::OPENED;
 
         LOG(ERROR) << "The storage holds the default profile as removed";
-        return false;
+        return SyncRecords::OpenResult::UNREADABLE;
     }
 
     const std::optional<QByteArray> decrypted = SyncCrypto::decryptRecord(
         key, kType, record.id(), QByteArray::fromStdString(record.data()));
     if (!decrypted.has_value())
-        return false;
+        return SyncRecords::OpenResult::UNREADABLE;
 
     proto::router::SyncProfile content;
     if (!parse(*decrypted, &content))
-        return false;
+        return SyncRecords::OpenResult::UNREADABLE;
 
     config->setGuid(QString::fromStdString(record.id()));
     config->setName(QString::fromStdString(content.name()));
@@ -85,14 +86,10 @@ bool SyncProfileTraits::openReceived(
     config->setDesktopConfig(content.desktop());
     config->setUnknownData(QByteArray::fromStdString(content.unknown_fields()));
 
-    return config->isValid();
-}
+    if (!config->isValid())
+        return SyncRecords::OpenResult::UNREADABLE;
 
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::hasSameContent(const Config& first, const Config& second)
-{
-    return serialize(syncContent(first)) == serialize(syncContent(second));
+    return SyncRecords::OpenResult::OPENED;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,12 +117,4 @@ bool SyncProfileTraits::storeReceived(
     config.setDesktopConfig(desktop_config);
 
     return store.storeReceived(transaction, config, sync_revision);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncProfileTraits::storeUnknownData(
-    Database& db, SyncTransaction& transaction, const Config& config)
-{
-    return ProfileStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

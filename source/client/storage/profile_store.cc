@@ -311,6 +311,64 @@ Database::FindResult ProfileStore::findByGuid(const QString& guid, ProfileConfig
 }
 
 //--------------------------------------------------------------------------------------------------
+Database::FindResult ProfileStore::findRowIdByGuid(const QString& guid, qint64* profile_id) const
+{
+    CHECK(profile_id);
+    *profile_id = 0;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Database::FindResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT id FROM profiles WHERE guid=?");
+    query.addText(guid);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return Database::FindResult::FAILED;
+    }
+
+    if (step == SqlQuery::StepResult::DONE)
+        return Database::FindResult::NOT_FOUND;
+
+    *profile_id = query.columnInt64(0);
+    return Database::FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::FindResult ProfileStore::findGuidByRowId(qint64 profile_id, QString* guid) const
+{
+    CHECK(guid);
+    guid->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Database::FindResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT guid FROM profiles WHERE id=?");
+    query.addInt64(profile_id);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return Database::FindResult::FAILED;
+    }
+
+    if (step == SqlQuery::StepResult::DONE)
+        return Database::FindResult::NOT_FOUND;
+
+    *guid = query.columnText(0);
+    return Database::FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
 ProfileConfig ProfileStore::defaultProfile() const
 {
     ProfileConfig profile;
@@ -501,39 +559,18 @@ bool ProfileStore::storeReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ProfileStore::setUnknownData(
-    SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
+bool ProfileStore::addEmptyRow(const QString& guid, qint64* profile_id)
 {
-    if (!transaction.isActive())
+    CHECK(profile_id);
+    *profile_id = 0;
+
+    if (!isValid())
     {
-        LOG(ERROR) << "The transaction is not active";
+        LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery row(db(), "SELECT data FROM profiles WHERE guid=? AND deleted=0");
-    row.addText(guid);
-
-    const SqlQuery::StepResult step = row.next();
-    if (step != SqlQuery::StepResult::ROW)
-    {
-        if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db().lastError();
-        else
-            LOG(ERROR) << "Profile with guid" << guid << "not found";
-        return false;
-    }
-
-    ProfileConfig profile;
-    if (!profile.setSerializedData(row.columnBlob(0)))
-    {
-        LOG(ERROR) << "Unable to read data of profile with guid" << guid;
-        return false;
-    }
-
-    profile.setUnknownData(unknown_data);
-
-    SqlQuery query(db(), "UPDATE profiles SET data=? WHERE guid=?");
-    query.addBlob(profile.serializedData());
+    SqlQuery query(db(), "INSERT INTO profiles (id, guid, deleted) VALUES (NULL, ?, 1)");
     query.addText(guid);
 
     if (!query.exec())
@@ -542,5 +579,6 @@ bool ProfileStore::setUnknownData(
         return false;
     }
 
+    *profile_id = db().lastInsertRowId();
     return true;
 }

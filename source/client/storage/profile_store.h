@@ -43,13 +43,15 @@ public:
     bool remove(qint64 profile_id);
     Database::FindResult find(qint64 profile_id, ProfileConfig* profile) const;
     Database::FindResult findByGuid(const QString& guid, ProfileConfig* profile) const;
+    Database::FindResult findRowIdByGuid(const QString& guid, qint64* profile_id) const;
+    Database::FindResult findGuidByRowId(qint64 profile_id, QString* guid) const;
     ProfileConfig defaultProfile() const;
     ProfileConfig hostProfile(const HostConfig& host) const;
     Database::ReadResult unsynced(QList<Unsynced>* profiles) const;
     bool ensureDefaultProfile();
 
     bool storeReceived(SyncTransaction& transaction, const ProfileConfig& profile, qint64 sync_revision);
-    bool setUnknownData(SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data);
+    bool addEmptyRow(const QString& guid, qint64* profile_id);
 };
 
 #endif // CLIENT_STORAGE_PROFILE_STORE_H

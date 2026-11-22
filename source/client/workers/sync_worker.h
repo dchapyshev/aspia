@@ -84,7 +84,7 @@ private:
     void exchangeRecords(size_t index);
     void finishRecordExchange();
     void abortRecordExchange();
-    void announceFailure(SyncRecords::Result result);
+    void announceFailure(SyncRecords::SyncResult result);
     void scheduleRecordExchange();
     void scheduleRouterReading();
     void attachStorage(bool reset);

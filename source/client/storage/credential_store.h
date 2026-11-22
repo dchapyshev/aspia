@@ -43,10 +43,12 @@ public:
     bool remove(qint64 credential_id);
     Database::FindResult find(qint64 credential_id, CredentialConfig* credential) const;
     Database::FindResult findByGuid(const QString& guid, CredentialConfig* credential) const;
+    Database::FindResult findRowIdByGuid(const QString& guid, qint64* credential_id) const;
+    Database::FindResult findGuidByRowId(qint64 credential_id, QString* guid) const;
     Database::ReadResult unsynced(QList<Unsynced>* credentials) const;
 
     bool storeReceived(SyncTransaction& transaction, const CredentialConfig& credential, qint64 sync_revision);
-    bool setUnknownData(SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data);
+    bool addEmptyRow(const QString& guid, qint64* credential_id);
 };
 
 #endif // CLIENT_STORAGE_CREDENTIAL_STORE_H

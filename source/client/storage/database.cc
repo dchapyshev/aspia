@@ -343,7 +343,7 @@ bool Database::import(const std::optional<RouterConfig>& router,
     if (!db_.exec("DELETE FROM local_groups") || !router_store.clearConfig() ||
         !db_.exec("DELETE FROM router_hosts") || !db_.exec("DELETE FROM local_hosts") ||
         !db_.exec("DELETE FROM credentials") || !db_.exec("DELETE FROM profiles") ||
-        !SyncStore(*this).clearReceivedRevisions())
+        !db_.exec("DELETE FROM sync_sent_records") || !SyncStore(*this).clearReceivedRevisions())
     {
         LOG(ERROR) << "Unable to clear the address book:" << db_.lastError();
         return false;
@@ -676,6 +676,17 @@ bool Database::createTables(SqlDatabase& db)
                  "END"))
     {
         LOG(ERROR) << "Unable to create router_hosts_drop_empty trigger:" << db.lastError();
+        return false;
+    }
+
+    if (!db.exec("CREATE TABLE IF NOT EXISTS \"sync_sent_records\" ("
+                 "\"type\" INTEGER NOT NULL,"
+                 "\"id\" TEXT NOT NULL,"
+                 "\"data_hash\" BLOB NOT NULL,"
+                 "\"sync_dirty\" INTEGER NOT NULL,"
+                 "PRIMARY KEY(\"type\", \"id\", \"data_hash\"))"))
+    {
+        LOG(ERROR) << "Unable to create sync_sent_records table:" << db.lastError();
         return false;
     }
 

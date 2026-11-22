@@ -367,13 +367,6 @@ protected:
                profiles_.storeReceived(transaction, profile, sync_revision) && transaction.commit();
     }
 
-    bool setProfileUnknownData(const QString& guid, const QByteArray& unknown_data)
-    {
-        SyncTransaction transaction(db_);
-        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
-               profiles_.setUnknownData(transaction, guid, unknown_data) && transaction.commit();
-    }
-
     // Writes a check time the public API cannot produce, since it always stamps the current one.
     bool setRouterHostCheckTime(HostId host_id, qint64 check_time)
     {
@@ -428,6 +421,20 @@ protected:
         QList<HostId> hosts;
         EXPECT_TRUE(router_hosts_.outdated(&hosts));
         return hosts;
+    }
+
+    QList<RouterHostStore::Unsynced> unsyncedRouterHosts()
+    {
+        QList<RouterHostStore::Unsynced> hosts;
+        EXPECT_EQ(router_hosts_.unsynced(&hosts), Database::ReadResult::OK);
+        return hosts;
+    }
+
+    bool storeReceivedRouterHost(const RouterHostConfig& host, qint64 sync_revision)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               router_hosts_.storeReceived(transaction, host, sync_revision) && transaction.commit();
     }
 
     qint64 addGroup(const QString& name, qint64 parent_id)

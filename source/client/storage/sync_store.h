@@ -30,11 +30,17 @@ public:
     Database::SyncResult begin(const QByteArray& storage_id);
     bool commit();
 
-    bool eraseRecord(proto::router::SyncDataType type, const QString& guid);
-    bool setRecordSyncRevision(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision);
-    bool confirmSentRecord(proto::router::SyncDataType type, const QString& guid, qint64 sync_revision,
+    bool eraseRecord(proto::router::SyncDataType type, const QString& record_id);
+    bool setRecordSyncRevision(proto::router::SyncDataType type, const QString& record_id, qint64 sync_revision);
+    bool confirmSentRecord(proto::router::SyncDataType type, const QString& record_id, qint64 sync_revision,
                            qint64 sync_dirty);
     bool setReceivedRevision(proto::router::SyncDataType type, qint64 revision);
+    bool storeSentRecord(proto::router::SyncDataType type, const QString& record_id, const QByteArray& data_hash,
+                         qint64 sync_dirty);
+    Database::FindResult findSentRecord(proto::router::SyncDataType type, const QString& record_id,
+                                        const QByteArray& data_hash, qint64* sync_dirty) const;
+    bool eraseSentRecord(proto::router::SyncDataType type, const QString& record_id, const QByteArray& data_hash);
+    bool eraseAllSentRecords(proto::router::SyncDataType type, const QString& record_id);
 
     bool isActive() const;
 

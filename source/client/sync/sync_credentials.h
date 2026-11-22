@@ -30,14 +30,14 @@ struct SyncCredentialTraits
     static constexpr proto::router::SyncDataType kType = proto::router::SYNC_DATA_TYPE_CREDENTIALS;
 
     static const Config& config(const Unsynced& unsynced) { return unsynced.credential; }
+    static QString recordId(const Config& config) { return config.guid(); }
     static bool isReadable(const Unsynced& unsynced) { return unsynced.credential.isValid(); }
     static Database::ReadResult readUnsynced(Database& db, QList<Unsynced>* unsynced);
 
-    static std::optional<QByteArray> seal(const SecureByteArray& key, const Config& config);
-    static bool openReceived(const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
-    static bool hasSameContent(const Config& first, const Config& second);
+    static std::optional<QByteArray> seal(Database& db, const SecureByteArray& key, const Config& config);
+    static SyncRecords::OpenResult openReceived(
+        Database& db, const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
     static bool storeReceived(Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision);
-    static bool storeUnknownData(Database& db, SyncTransaction& transaction, const Config& config);
 };
 
 extern template class SyncRecordsOf<SyncCredentialTraits>;

@@ -26,9 +26,10 @@ package proto.storage;
 
 message HostBlob
 {
-    string address  = 1;
-    string username = 2;
-    string password = 3;
+    string address     = 1;
+    string username    = 2;
+    string password    = 3;
+    bytes unknown_data = 4;
 }
 
 message CredentialBlob

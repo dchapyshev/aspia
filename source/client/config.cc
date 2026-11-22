@@ -213,7 +213,7 @@ bool RouterHostConfig::isValid() const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> RouterHostConfig::encryptedData() const
 {
-    if (username_.isEmpty() && password_.isEmpty())
+    if (username_.isEmpty() && password_.isEmpty() && unknown_data_.isEmpty())
         return QByteArray();
 
     proto::storage::HostBlob data;
@@ -221,6 +221,7 @@ std::optional<QByteArray> RouterHostConfig::encryptedData() const
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
+    data.set_unknown_data(unknown_data_.constData(), static_cast<size_t>(unknown_data_.size()));
 
     std::optional<QByteArray> sealed = sealMessage(data, routerHostAad(host_id_));
 
@@ -235,6 +236,7 @@ bool RouterHostConfig::setEncryptedData(const QByteArray& blob)
 {
     username_.clear();
     password_.clear();
+    unknown_data_.clear();
 
     if (blob.isEmpty())
         return true;
@@ -245,6 +247,7 @@ bool RouterHostConfig::setEncryptedData(const QByteArray& blob)
 
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
+    unknown_data_ = QByteArray::fromStdString(data.unknown_data());
 
     memZero(data.mutable_username());
     memZero(data.mutable_password());

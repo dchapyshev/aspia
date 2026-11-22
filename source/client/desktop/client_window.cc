@@ -232,7 +232,13 @@ void ClientWindow::setOsCredentialId(qint64 credential_id)
         LocalHostStore().setOsCredentialId(host.entryId(), credential_id) :
         RouterHostStore().setOsCredentialId(stringToHostId(host.address()), credential_id);
     if (!saved)
+    {
         LOG(ERROR) << "Unable to save the operating system credentials of the host";
+        return;
+    }
+
+    if (host.entryId() <= 0)
+        RouterController::startSyncRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,7 +453,12 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
         saved = store.modify(credentials);
 
     if (!saved)
+    {
         LOG(ERROR) << "Unable to save credentials of host" << host_id;
+        return;
+    }
+
+    RouterController::startSyncRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -487,7 +498,12 @@ void ClientWindow::forgetRefusedCredentials()
     router_host.setHostId(stringToHostId(host.address()));
 
     if (!RouterHostStore().modify(router_host))
+    {
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
+        return;
+    }
+
+    RouterController::startSyncRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------

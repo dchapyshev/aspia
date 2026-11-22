@@ -495,7 +495,12 @@ void DesktopWindow::forgetHostCredentials()
     router_host.setHostId(stringToHostId(host_.address()));
 
     if (!RouterHostStore().modify(router_host))
+    {
         LOG(ERROR) << "Unable to remove credentials of host" << router_host.hostId();
+        return;
+    }
+
+    RouterController::startSyncRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -31,7 +31,8 @@ Database::ReadResult SyncCredentialTraits::readUnsynced(Database& db, QList<Unsy
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::optional<QByteArray> SyncCredentialTraits::seal(const SecureByteArray& key, const Config& config)
+std::optional<QByteArray> SyncCredentialTraits::seal(
+    Database& /* db */, const SecureByteArray& key, const Config& config)
 {
     proto::router::SyncCredential content;
     content.set_type(static_cast<quint32>(config.type()));
@@ -54,22 +55,22 @@ std::optional<QByteArray> SyncCredentialTraits::seal(const SecureByteArray& key,
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SyncCredentialTraits::openReceived(
-    const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config)
+SyncRecords::OpenResult SyncCredentialTraits::openReceived(
+    Database& /* db */, const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config)
 {
     if (record.deleted())
-        return true;
+        return SyncRecords::OpenResult::OPENED;
 
     std::optional<QByteArray> decrypted = SyncCrypto::decryptRecord(
         key, kType, record.id(), QByteArray::fromStdString(record.data()));
     if (!decrypted.has_value())
-        return false;
+        return SyncRecords::OpenResult::UNREADABLE;
 
     const SecureByteArray plain(std::move(*decrypted));
 
     proto::router::SyncCredential content;
     if (!parse(plain.toByteArray(), &content))
-        return false;
+        return SyncRecords::OpenResult::UNREADABLE;
 
     const std::string& password = content.password();
 
@@ -86,15 +87,10 @@ bool SyncCredentialTraits::openReceived(
     memZero(content.mutable_username());
     memZero(content.mutable_password());
 
-    return known_type && config->isValid();
-}
+    if (!known_type || !config->isValid())
+        return SyncRecords::OpenResult::UNREADABLE;
 
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::hasSameContent(const Config& first, const Config& second)
-{
-    return first.type() == second.type() && first.displayName() == second.displayName() &&
-           first.username() == second.username() && first.password() == second.password();
+    return SyncRecords::OpenResult::OPENED;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,12 +99,4 @@ bool SyncCredentialTraits::storeReceived(
     Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision)
 {
     return CredentialStore(db).storeReceived(transaction, config, sync_revision);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SyncCredentialTraits::storeUnknownData(
-    Database& db, SyncTransaction& transaction, const Config& config)
-{
-    return CredentialStore(db).setUnknownData(transaction, config.guid(), config.unknownData());
 }

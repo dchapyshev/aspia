@@ -27,6 +27,7 @@
 #include "base/crypto/random.h"
 #include "base/net/udp_channel.h"
 #include "client/router/router_test_fixture.h"
+#include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
@@ -116,6 +117,8 @@ protected:
         {
             if (type == proto::router::SYNC_DATA_TYPE_PROFILES)
                 ++profiles_changed_count_;
+            else if (type == proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS)
+                ++router_hosts_changed_count_;
             else
                 ++credentials_changed_count_;
         }, Qt::DirectConnection);
@@ -169,6 +172,10 @@ protected:
             {
                 ++profile_list_request_count_;
             }
+            else if (message.record_list_request().type() == proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS)
+            {
+                ++router_host_list_request_count_;
+            }
             else
             {
                 ++list_request_count_;
@@ -184,6 +191,11 @@ protected:
             if (!request.record().empty() && request.record(0).type() == proto::router::SYNC_DATA_TYPE_PROFILES)
             {
                 ++profile_record_request_count_;
+            }
+            else if (!request.record().empty() &&
+                     request.record(0).type() == proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS)
+            {
+                ++router_host_record_request_count_;
             }
             else
             {
@@ -337,7 +349,7 @@ protected:
 
                 records_[index].CopyFrom(record);
                 records_[index].set_revision(++revision_);
-                records_[index].set_time(kRouterTime - record_age_);
+                records_[index].set_time(kRouterTime);
 
                 result->add_record_revision(revision_);
             }
@@ -442,11 +454,11 @@ protected:
         proto::router::SyncToRouter message;
 
         proto::router::SyncRecordRequest* request = message.mutable_record_request();
-        ASSERT_EQ(records.readUnsyncedRecords(request), SyncRecords::Result::DONE);
+        ASSERT_EQ(records.readUnsyncedRecords(request), SyncRecords::SyncResult::DONE);
         request->set_storage_id(kStorageId);
 
         const qint64 revision = revision_;
-        ASSERT_EQ(records.confirmSentRecords(routerReply(message).record_result()), SyncRecords::Result::DONE);
+        ASSERT_EQ(records.confirmSentRecords(routerReply(message).record_result()), SyncRecords::SyncResult::DONE);
 
         if (notify && revision_ != revision)
             sendStorageNotification();
@@ -462,7 +474,7 @@ protected:
         request->set_revision(records.receivedRevision());
         request->set_count(proto::router::kMaxSyncPageSize);
 
-        ASSERT_EQ(records.storeReceivedRecords(routerReply(message).record_list()), SyncRecords::Result::DONE);
+        ASSERT_EQ(records.storeReceivedRecords(routerReply(message).record_list()), SyncRecords::SyncResult::DONE);
     }
 
     static CredentialConfig addCredential(Database& db, const QString& username)
@@ -539,7 +551,6 @@ protected:
     std::string error_code_;
     QList<proto::router::SyncRecord> records_;
     qint64 revision_ = 0;
-    qint64 record_age_ = 0;
     qint64 page_size_ = proto::router::kMaxSyncPageSize;
     int storage_info_request_count_ = 0;
     int storage_key_request_count_ = 0;
@@ -547,9 +558,12 @@ protected:
     int record_request_count_ = 0;
     int profile_list_request_count_ = 0;
     int profile_record_request_count_ = 0;
+    int router_host_list_request_count_ = 0;
+    int router_host_record_request_count_ = 0;
     QList<proto::router::SyncDataType> list_request_types_;
     int credentials_changed_count_ = 0;
     int profiles_changed_count_ = 0;
+    int router_hosts_changed_count_ = 0;
     QList<std::pair<SyncWorker::Event, QString>> events_;
     std::function<void()> before_storage_key_request_;
     std::function<void()> before_listing_;
@@ -753,12 +767,11 @@ TEST_F(SyncWorkerTest, RecordsAreReceivedPageByPage)
 //--------------------------------------------------------------------------------------------------
 // The other device stored its change after this one had received the records and before it sent
 // its own, and the router told this device of the change. The router refuses the record, and the
-// device does what it was told of: receives what the router holds, settles the two changes and
-// sends the outcome over the revision it has received.
-TEST_F(SyncWorkerTest, RefusedRecordIsSentOverWhatTheRouterHolds)
+// device does what it was told of: receives what the router holds. Its own change gives way to it
+// and is not sent again.
+TEST_F(SyncWorkerTest, RefusedRecordGivesWayToWhatTheRouterHolds)
 {
     Database& db = Database::instance();
-    record_age_ = 100;
 
     const QString guid = addCredential(db, "user").guid();
 
@@ -779,24 +792,23 @@ TEST_F(SyncWorkerTest, RefusedRecordIsSentOverWhatTheRouterHolds)
     worker_.onSessionFinished();
     worker_.onSessionStarted();
 
-    EXPECT_EQ(record_request_count_, 3);
-    EXPECT_EQ(storedUsername(db, guid), QString("laptop-user"));
+    EXPECT_EQ(record_request_count_, 2);
+    EXPECT_EQ(storedUsername(db, guid), QString("phone-user"));
     EXPECT_TRUE(unsyncedCredentials(db).isEmpty());
 
     receivePhoneRecords();
 
-    EXPECT_EQ(storedUsername(phone_db_, guid), QString("laptop-user"));
+    EXPECT_EQ(storedUsername(phone_db_, guid), QString("phone-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_db_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
 // The router refused a record, and the word of the change that caused it has not reached the
 // device. The record is not sent again in the same exchange. It waits for the next one, which
-// receives what the router holds and sends the outcome.
+// receives what the router holds, and the record gives way to it.
 TEST_F(SyncWorkerTest, RefusedRecordWaitsForTheNextExchange)
 {
     Database& db = Database::instance();
-    record_age_ = 100;
 
     const QString guid = addCredential(db, "user").guid();
 
@@ -822,8 +834,8 @@ TEST_F(SyncWorkerTest, RefusedRecordWaitsForTheNextExchange)
 
     sendStorageNotification();
 
-    EXPECT_EQ(record_request_count_, 3);
-    EXPECT_EQ(storedUsername(db, guid), QString("laptop-user"));
+    EXPECT_EQ(record_request_count_, 2);
+    EXPECT_EQ(storedUsername(db, guid), QString("phone-user"));
     EXPECT_TRUE(unsyncedCredentials(db).isEmpty());
 }
 
@@ -1941,21 +1953,31 @@ TEST_F(SyncWorkerTest, PendingResetIsNotDoneWhileSyncIsOff)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An exchange takes the credentials first and the profiles after them, each received before it is sent.
-TEST_F(SyncWorkerTest, ExchangeTakesTheCredentialsThenTheProfiles)
+// An exchange takes the credentials first, the profiles after them and the router hosts last, so
+// that the records a host links are on the device before the host comes. Each type is received
+// before it is sent.
+TEST_F(SyncWorkerTest, ExchangeTakesTheCredentialsThenTheProfilesThenTheRouterHosts)
 {
     Database& db = Database::instance();
     addCredential(db, "user");
     addProfile(db, "office");
 
+    RouterHostConfig host;
+    host.setHostId(100500);
+    host.setUsername("user");
+    host.setPassword(SecureString(QString("secret")));
+    ASSERT_TRUE(RouterHostStore(db).add(host));
+
     worker_.onSessionStarted();
 
     const QList<proto::router::SyncDataType> expected_types = {
-        proto::router::SYNC_DATA_TYPE_CREDENTIALS, proto::router::SYNC_DATA_TYPE_PROFILES };
+        proto::router::SYNC_DATA_TYPE_CREDENTIALS, proto::router::SYNC_DATA_TYPE_PROFILES,
+        proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS };
 
     EXPECT_EQ(list_request_types_, expected_types);
     EXPECT_EQ(record_request_count_, 1);
     EXPECT_EQ(profile_record_request_count_, 1);
+    EXPECT_EQ(router_host_record_request_count_, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2019,7 +2041,6 @@ TEST_F(SyncWorkerTest, SentProfileIsNotReceivedBack)
 TEST_F(SyncWorkerTest, RefusedCredentialDoesNotHoldBackTheProfiles)
 {
     Database& db = Database::instance();
-    record_age_ = 100;
 
     const QString guid = addCredential(db, "user").guid();
 

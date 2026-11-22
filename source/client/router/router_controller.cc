@@ -586,6 +586,9 @@ void RouterController::onSyncRecordsChanged(proto::router::SyncDataType type)
             emit sig_profilesChanged();
             break;
 
+        case proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS:
+            break;
+
         default:
             LOG(WARNING) << "Unhandled type of the synchronized records:" << type;
             break;

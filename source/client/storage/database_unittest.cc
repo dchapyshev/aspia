@@ -1816,7 +1816,8 @@ TEST_F(DatabaseTest, DiscardedCredentialsAreNotSent)
 
 //--------------------------------------------------------------------------------------------------
 // A record the new storage holds under the guid of one the device gave up takes the row of that
-// one over, and the hosts that referred to the record are entered with it again.
+// one over, and the local hosts that referred to the record are entered with it again. The router
+// hosts are given up with the rest of the data, the storage brings its own.
 TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
 {
     addRouter(true);
@@ -1844,10 +1845,8 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
               Database::SyncResult::DONE);
 
     EXPECT_FALSE(findCredentialByGuid(db_, stored->guid()).has_value());
-
-    std::optional<std::pair<QString, SecureString>> entered = router_hosts_.credentials(100500);
-    ASSERT_TRUE(entered.has_value());
-    EXPECT_TRUE(entered->first.isEmpty());
+    EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
+    EXPECT_EQ(rowCount("router_hosts"), 0);
 
     CredentialConfig received = credential("office", "other-user", "other-secret");
     received.setGuid(stored->guid());
@@ -1859,11 +1858,6 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
     ASSERT_TRUE(by_guid.has_value());
     EXPECT_EQ(by_guid->id(), credential_id);
     EXPECT_EQ(by_guid->username(), QString("other-user"));
-
-    entered = router_hosts_.credentials(100500);
-    ASSERT_TRUE(entered.has_value());
-    EXPECT_EQ(entered->first, QString("other-user"));
-    EXPECT_EQ(entered->second.toString(), QString("other-secret"));
 
     const std::optional<LocalHostConfig> local_host = findLocalHost(db_, host_id);
     ASSERT_TRUE(local_host.has_value());

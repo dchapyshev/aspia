@@ -41,10 +41,9 @@ TEST_F(LocalGroupStoreTest, RemovedGroupTakesItsChildGroupsWithIt)
 }
 
 //--------------------------------------------------------------------------------------------------
-// The hosts of the subtree are not deleted with it - they move to the root, where the user can see
-// them and decide what to do. Left in a group that no longer exists they would show up in a search
-// and nowhere else.
-TEST_F(LocalGroupStoreTest, HostsOfARemovedGroupMoveToTheRoot)
+// The hosts of the subtree are deleted with it: the user deleted the group with what it holds.
+// Moved to the root, they would come back in a place the user never put them.
+TEST_F(LocalGroupStoreTest, HostsOfARemovedGroupAreRemovedWithIt)
 {
     const qint64 parent = addGroup("parent", 0);
     const qint64 child = addGroup("child", parent);
@@ -55,8 +54,8 @@ TEST_F(LocalGroupStoreTest, HostsOfARemovedGroupMoveToTheRoot)
 
     ASSERT_TRUE(local_groups_.remove(parent));
 
-    EXPECT_EQ(hostNamesOfGroup(0),
-              QStringList({ "host-of-child", "host-of-parent", "host-of-root" }));
+    EXPECT_EQ(hostNamesOfGroup(0), QStringList({ "host-of-root" }));
+    EXPECT_EQ(rowCount("local_hosts"), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,7 +178,7 @@ TEST_F(LocalGroupStoreTest, RemovedGroupLeavesItsNeighbourAlone)
 
     EXPECT_EQ(groupNames(), QStringList({ "parent", "second" }));
     EXPECT_EQ(hostNamesOfGroup(second), QStringList({ "host-of-second" }));
-    EXPECT_EQ(hostNamesOfGroup(0), QStringList({ "host-of-first" }));
+    EXPECT_EQ(rowCount("local_hosts"), 1);
 }
 
 //--------------------------------------------------------------------------------------------------

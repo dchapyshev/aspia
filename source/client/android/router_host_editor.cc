@@ -25,6 +25,7 @@
 #include "client/android/credential_combo_box.h"
 #include "client/android/profile_combo_box.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/router_host_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -46,9 +47,6 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
       switch_saved_credentials_(new Switch(tr("Use existing"))),
       edit_username_(new LineEdit()),
       edit_password_(new LineEdit()),
-      label_note_(new Label(tr("The user name and the password are stored on this device only and "
-                         "are not sent to the router. Leave both empty to forget them."),
-                      Label::Role::CAPTION)),
       combo_credential_(new CredentialComboBox()),
       combo_profile_(new ProfileComboBox()),
       label_error_(new Label(QString(), Label::Role::CAPTION))
@@ -65,8 +63,6 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     label_error_->setWordWrap(true);
     label_error_->setVisible(false);
 
-    label_note_->setWordWrap(true);
-
     Button* save = new Button(tr("Save"), Button::Role::FILLED);
 
     QWidget* form = new QWidget();
@@ -78,7 +74,6 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
     form_layout->addWidget(switch_saved_credentials_);
     form_layout->addWidget(edit_username_);
     form_layout->addWidget(edit_password_);
-    form_layout->addWidget(label_note_);
     form_layout->addWidget(combo_credential_);
     form_layout->addWidget(save);
     form_layout->addStretch();
@@ -105,6 +100,12 @@ RouterHostEditor::RouterHostEditor(QWidget* parent)
 
     connect(switch_saved_credentials_, &Switch::toggled, this, &RouterHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &RouterHostEditor::onSaveClicked);
+
+    connect(switch_saved_credentials_, &Switch::clicked, this, [this]() { credentials_edited_ = true; });
+    connect(combo_credential_, &CredentialComboBox::activated, this, [this]() { credentials_edited_ = true; });
+    connect(edit_username_, &LineEdit::textEdited, this, [this]() { credentials_edited_ = true; });
+    connect(edit_password_, &LineEdit::textEdited, this, [this]() { credentials_edited_ = true; });
+    connect(combo_profile_, &ProfileComboBox::activated, this, [this]() { profile_edited_ = true; });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,6 +123,8 @@ bool RouterHostEditor::prepareForEdit(HostId host_id)
     }
 
     host_id_ = host_id;
+    credentials_edited_ = false;
+    profile_edited_ = false;
 
     edit_username_->clear();
     edit_password_->clear();
@@ -174,7 +177,6 @@ void RouterHostEditor::onSavedCredentialsToggled(bool checked)
 
     edit_username_->setVisible(!checked);
     edit_password_->setVisible(!checked);
-    label_note_->setVisible(!checked);
     combo_credential_->setVisible(checked);
 }
 
@@ -209,7 +211,7 @@ void RouterHostEditor::onSaveClicked()
         return;
     }
 
-    if (!username.isEmpty() || credential_id > 0 || found == Database::FindResult::FOUND)
+    if (credentials_edited_ && (!username.isEmpty() || credential_id > 0 || found == Database::FindResult::FOUND))
     {
         RouterHostConfig credentials;
         credentials.setHostId(host_id_);
@@ -231,12 +233,13 @@ void RouterHostEditor::onSaveClicked()
         }
     }
 
-    if (!store.setProfileId(host_id_, combo_profile_->currentProfileId()))
+    if (profile_edited_ && !store.setProfileId(host_id_, combo_profile_->currentProfileId()))
     {
         showError(tr("Failed to save the profile."));
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 

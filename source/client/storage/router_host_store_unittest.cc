@@ -48,7 +48,7 @@ protected:
 
         SqlQuery query(raw, "SELECT COUNT(*) FROM router_hosts WHERE host_id=? AND deleted=1 AND data=X'' AND "
                             "credential_id IS NULL AND os_credential_id IS NULL AND profile_id IS NULL AND "
-                            "sync_dirty=1");
+                            "sync_dirty!=0");
         query.addUInt64(host_id);
 
         return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
@@ -516,4 +516,249 @@ TEST_F(RouterHostStoreTest, EmptiedRouterHostRowTheRouterHoldsIsMarkedAsDeleted)
 
     EXPECT_TRUE(allRouterHosts().isEmpty());
     EXPECT_EQ(rowCount("router_hosts"), 2);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host the user enters is a change to send, and so is every edit of its pair, its links and its
+// profile. A check against the router is not.
+TEST_F(RouterHostStoreTest, NewAndEditedRouterHostsAreUnsynced)
+{
+    addRouterHost(100500, "user", "secret");
+
+    QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].host.hostId(), HostId(100500));
+    EXPECT_FALSE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].sync_revision, 0);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+    ASSERT_TRUE(router_hosts_.updateCheckTime(100500));
+    EXPECT_TRUE(unsyncedRouterHosts().isEmpty());
+
+    const qint64 credential_id = addCredential("office", "user", "secret");
+    const qint64 profile_id = addProfile("office");
+
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "other-user", "other-secret")));
+    ASSERT_TRUE(router_hosts_.setOsCredentialId(100500, credential_id));
+    ASSERT_TRUE(router_hosts_.setProfileId(100500, profile_id));
+    ASSERT_TRUE(router_hosts_.setProfileId(100500, 0));
+
+    unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+    EXPECT_EQ(unsynced[0].sync_dirty, 4);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host is sent with its links and the moment of its last edit, a host kept for its profile alone
+// included.
+TEST_F(RouterHostStoreTest, UnsyncedRouterHostCarriesItsLinksAndTheMomentOfTheEdit)
+{
+    const qint64 credential_id = addCredential("office", "user", "secret");
+    const qint64 os_credential_id = addCredential("windows", "admin", "secret");
+    const qint64 profile_id = addProfile("office");
+
+    RouterHostConfig linked = routerHost(100500, QString(), QString());
+    linked.setCredentialId(credential_id);
+    ASSERT_TRUE(router_hosts_.add(linked));
+    ASSERT_TRUE(router_hosts_.setOsCredentialId(100500, os_credential_id));
+    ASSERT_TRUE(setModifyTime("router_hosts", "host_id", 100500, 1000));
+    ASSERT_TRUE(router_hosts_.setProfileId(100501, profile_id));
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 2);
+
+    for (const RouterHostStore::Unsynced& item : unsynced)
+    {
+        EXPECT_FALSE(item.deleted);
+        EXPECT_FALSE(item.damaged);
+        EXPECT_TRUE(item.host.username().isEmpty());
+
+        if (item.host.hostId() == HostId(100500))
+        {
+            EXPECT_EQ(item.host.credentialId(), credential_id);
+            EXPECT_EQ(item.host.osCredentialId(), os_credential_id);
+            EXPECT_EQ(item.host.profileId(), 0);
+            EXPECT_EQ(item.host.modifyTime(), 1000);
+            EXPECT_EQ(item.sync_dirty, 2);
+        }
+        else
+        {
+            EXPECT_EQ(item.host.hostId(), HostId(100501));
+            EXPECT_EQ(item.host.credentialId(), 0);
+            EXPECT_EQ(item.host.osCredentialId(), 0);
+            EXPECT_EQ(item.host.profileId(), profile_id);
+            EXPECT_EQ(item.sync_dirty, 1);
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// A removed host the router holds is sent as removed, named by the id of its host and stamped with
+// the moment of the removal.
+TEST_F(RouterHostStoreTest, RemovedRouterHostIsUnsyncedAsDeleted)
+{
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(router_hosts_.remove(100500));
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_FALSE(unsynced[0].damaged);
+    EXPECT_EQ(unsynced[0].host.hostId(), HostId(100500));
+    EXPECT_GE(unsynced[0].host.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host whose sealed text does not open is still listed for sending, marked as damaged, so the
+// exchange can tell it from a host that holds nothing.
+TEST_F(RouterHostStoreTest, UnsyncedRouterHostThatDoesNotReadIsDamaged)
+{
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(corruptRouterHostData(100500));
+
+    QList<RouterHostStore::Unsynced> unsynced;
+    EXPECT_EQ(router_hosts_.unsynced(&unsynced), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].damaged);
+    EXPECT_FALSE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].host.hostId(), HostId(100500));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host received from the router replaces the local one and is not sent back, and the check of
+// the host against the router is kept. The revision the row already holds changes nothing.
+TEST_F(RouterHostStoreTest, ReceivedRouterHostIsStoredWithTheRevisionOfTheRouter)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(setRouterHostCheckTime(100500, QDateTime::currentSecsSinceEpoch()));
+    const qint64 profile_id = addProfile("office");
+
+    RouterHostConfig received = routerHost(100500, "other-user", "other-secret");
+    received.setProfileId(profile_id);
+    received.setModifyTime(2000);
+    ASSERT_TRUE(storeReceivedRouterHost(received, 7));
+
+    std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+    EXPECT_EQ(stored->password().toString(), QString("other-secret"));
+    EXPECT_EQ(stored->profileId(), profile_id);
+    EXPECT_EQ(stored->modifyTime(), 2000);
+    EXPECT_TRUE(unsyncedRouterHosts().isEmpty());
+    EXPECT_TRUE(outdatedRouterHosts().isEmpty());
+
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "local-user", "local-secret")));
+    ASSERT_TRUE(storeReceivedRouterHost(received, 7));
+
+    stored = findRouterHost(db_, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("local-user"));
+    EXPECT_EQ(unsyncedRouterHosts().size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host received for a row kept as removed brings the row back.
+TEST_F(RouterHostStoreTest, ReceivedRouterHostRestoresARemovedRow)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+    ASSERT_TRUE(router_hosts_.remove(100500));
+
+    ASSERT_TRUE(storeReceivedRouterHost(routerHost(100500, "other-user", "other-secret"), 8));
+
+    const std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+    EXPECT_TRUE(unsyncedRouterHosts().isEmpty());
+    EXPECT_EQ(rowCount("router_hosts"), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A received host with no pair, no links and no profile is refused: kept, it would be taken for a
+// host the device removed and sent back to the router as removed.
+TEST_F(RouterHostStoreTest, EmptyReceivedRouterHostIsRejected)
+{
+    attachSyncStorage();
+
+    EXPECT_FALSE(storeReceivedRouterHost(routerHost(100500, QString(), QString()), 7));
+    EXPECT_EQ(rowCount("router_hosts"), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The fields of a received host this version does not know survive an edit of the host.
+TEST_F(RouterHostStoreTest, EditKeepsTheUnknownDataOfARouterHost)
+{
+    attachSyncStorage();
+
+    RouterHostConfig received = routerHost(100500, "user", "secret");
+    received.setUnknownData("future");
+    ASSERT_TRUE(storeReceivedRouterHost(received, 7));
+
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "other-user", "other-secret")));
+
+    const std::optional<RouterHostConfig> stored = findRouterHost(db_, 100500);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->username(), QString("other-user"));
+    EXPECT_EQ(stored->unknownData(), QByteArray("future"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A device that finds another storage in place of the one it was attached to gives up its router
+// hosts and takes the ones the storage holds.
+TEST_F(RouterHostStoreTest, RouterHostsAreDiscardedForAnotherStorage)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    addRouterHost(100501, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+
+    ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), Random::byteArray(16),
+                                           SecureByteArray(Random::byteArray(32)), true),
+              Database::SyncResult::DONE);
+
+    EXPECT_EQ(rowCount("router_hosts"), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Another storage that is not made by a reset takes every router host of the device as new, and a
+// removal that was not sent has no one to be sent to.
+TEST_F(RouterHostStoreTest, RouterHostsAreNewToAnotherStorageNotMadeByAReset)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    addRouterHost(100501, "user", "secret");
+    addRouterHost(100502, "user", "secret");
+    ASSERT_TRUE(markRouterHostSynced(100500, 7));
+    ASSERT_TRUE(markRouterHostSynced(100501, 8));
+    ASSERT_TRUE(router_hosts_.remove(100501));
+
+    ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), Random::byteArray(16),
+                                           SecureByteArray(Random::byteArray(32)), false),
+              Database::SyncResult::DONE);
+
+    EXPECT_EQ(rowCount("router_hosts"), 2);
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 2);
+
+    for (const RouterHostStore::Unsynced& item : unsynced)
+    {
+        EXPECT_NE(item.host.hostId(), HostId(100501));
+        EXPECT_FALSE(item.deleted);
+        EXPECT_EQ(item.sync_revision, 0);
+        EXPECT_EQ(item.sync_dirty, 1);
+    }
 }

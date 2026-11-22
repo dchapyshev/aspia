@@ -308,11 +308,17 @@ TEST_F(ProfileStoreTest, EditKeepsTheUnknownDataOfAProfile)
 {
     attachSyncStorage();
 
-    const qint64 profile_id = addProfile("office");
+    ProfileConfig received;
+    received.setGuid("11111111-2222-4333-8444-555555555555");
+    received.setName("office");
+    received.setDesktopConfig(defaultDesktopConfig());
+    received.setUdpMethods(UDP_METHOD_ALL);
+    received.setUnknownData("unknown");
+    ASSERT_TRUE(storeReceivedProfile(received, 7));
 
     ProfileConfig stored;
-    ASSERT_EQ(profiles_.find(profile_id, &stored), Database::FindResult::FOUND);
-    ASSERT_TRUE(setProfileUnknownData(stored.guid(), "unknown"));
+    ASSERT_EQ(profiles_.findByGuid(received.guid(), &stored), Database::FindResult::FOUND);
+    const qint64 profile_id = stored.id();
 
     ProfileConfig edited;
     edited.setId(profile_id);
@@ -381,4 +387,99 @@ TEST_F(ProfileStoreTest, UnsyncedProfileThatDoesNotReadIsDamaged)
 
     for (const ProfileStore::Unsynced& item : std::as_const(unsynced))
         EXPECT_EQ(item.damaged, item.profile.id() == broken_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The row of a profile is found by its guid whether or not the profile is marked as removed. A guid
+// no row holds is not found.
+TEST_F(ProfileStoreTest, RowIsFoundByGuidWhileTheProfileIsMarkedAsRemoved)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig added;
+    ASSERT_EQ(profiles_.find(profile_id, &added), Database::FindResult::FOUND);
+
+    qint64 row_id = 0;
+    ASSERT_EQ(profiles_.findRowIdByGuid(added.guid(), &row_id), Database::FindResult::FOUND);
+    EXPECT_EQ(row_id, profile_id);
+
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
+    ASSERT_TRUE(profiles_.remove(profile_id));
+    ASSERT_TRUE(isMarkedDeleted("profiles", profile_id));
+
+    ASSERT_EQ(profiles_.findRowIdByGuid(added.guid(), &row_id), Database::FindResult::FOUND);
+    EXPECT_EQ(row_id, profile_id);
+
+    EXPECT_EQ(profiles_.findRowIdByGuid("22222222-2222-2222-2222-222222222222", &row_id),
+              Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(row_id, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid of a profile is found by the id of its row whether or not the profile is marked as
+// removed. An id no row has is not found.
+TEST_F(ProfileStoreTest, GuidIsFoundByRowIdWhileTheProfileIsMarkedAsRemoved)
+{
+    attachSyncStorage();
+
+    const qint64 profile_id = addProfile("office");
+
+    ProfileConfig added;
+    ASSERT_EQ(profiles_.find(profile_id, &added), Database::FindResult::FOUND);
+
+    QString guid;
+    ASSERT_EQ(profiles_.findGuidByRowId(profile_id, &guid), Database::FindResult::FOUND);
+    EXPECT_EQ(guid, added.guid());
+
+    ASSERT_TRUE(markSynced("profiles", profile_id, 7));
+    ASSERT_TRUE(profiles_.remove(profile_id));
+    ASSERT_TRUE(isMarkedDeleted("profiles", profile_id));
+
+    ASSERT_EQ(profiles_.findGuidByRowId(profile_id, &guid), Database::FindResult::FOUND);
+    EXPECT_EQ(guid, added.guid());
+
+    EXPECT_EQ(profiles_.findGuidByRowId(profile_id + 1, &guid), Database::FindResult::NOT_FOUND);
+    EXPECT_TRUE(guid.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An empty row holds the guid of a profile the device does not have yet, for the hosts that link it.
+// The row is neither listed nor sent. The profile that comes with this guid takes the row and keeps
+// its id.
+TEST_F(ProfileStoreTest, EmptyRowIsTakenByTheProfileThatComesWithItsGuid)
+{
+    attachSyncStorage();
+
+    const QString guid = "11111111-1111-1111-1111-111111111111";
+
+    qint64 row_id = 0;
+    ASSERT_TRUE(profiles_.addEmptyRow(guid, &row_id));
+    EXPECT_GT(row_id, 0);
+    EXPECT_TRUE(isMarkedDeleted("profiles", row_id));
+
+    EXPECT_TRUE(profileList().isEmpty());
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
+
+    ProfileConfig found;
+    EXPECT_EQ(profiles_.findByGuid(guid, &found), Database::FindResult::NOT_FOUND);
+
+    qint64 found_id = 0;
+    ASSERT_EQ(profiles_.findRowIdByGuid(guid, &found_id), Database::FindResult::FOUND);
+    EXPECT_EQ(found_id, row_id);
+
+    ProfileConfig received;
+    received.setGuid(guid);
+    received.setName("office");
+    received.setDesktopConfig(defaultDesktopConfig());
+    received.setUdpMethods(UDP_METHOD_ALL);
+    received.setModifyTime(1000);
+    ASSERT_TRUE(storeReceivedProfile(received, 12));
+
+    ASSERT_EQ(profiles_.findByGuid(guid, &found), Database::FindResult::FOUND);
+    EXPECT_EQ(found.id(), row_id);
+    EXPECT_EQ(found.name(), QString("office"));
+    EXPECT_EQ(profileList().size(), 1);
+    EXPECT_TRUE(unsyncedProfiles().isEmpty());
 }

@@ -30,13 +30,15 @@ class SyncRecords
 public:
     virtual ~SyncRecords() = default;
 
-    enum class Result { DONE, DETACHED, INVALID_ANSWER, FAILED };
+    enum class SyncResult { DONE, DETACHED, INVALID_ANSWER, FAILED };
+    enum class OpenResult { OPENED, UNREADABLE };
 
     virtual proto::router::SyncDataType type() const = 0;
     virtual qint64 receivedRevision() const = 0;
-    virtual Result readUnsyncedRecords(proto::router::SyncRecordRequest* request) = 0;
-    virtual Result confirmSentRecords(const proto::router::SyncRecordResult& result) = 0;
-    virtual Result storeReceivedRecords(const proto::router::SyncRecordList& list) = 0;
+    virtual SyncResult readUnsyncedRecords(proto::router::SyncRecordRequest* request) = 0;
+    virtual SyncResult confirmSentRecords(const proto::router::SyncRecordResult& result) = 0;
+    virtual SyncResult discardSentRecords() = 0;
+    virtual SyncResult storeReceivedRecords(const proto::router::SyncRecordList& list) = 0;
 };
 
 template <typename Traits>
@@ -47,9 +49,10 @@ public:
 
     proto::router::SyncDataType type() const final { return Traits::kType; }
     qint64 receivedRevision() const final { return SyncStore(db_).receivedRevision(Traits::kType); }
-    Result readUnsyncedRecords(proto::router::SyncRecordRequest* request) final;
-    Result confirmSentRecords(const proto::router::SyncRecordResult& result) final;
-    Result storeReceivedRecords(const proto::router::SyncRecordList& list) final;
+    SyncResult readUnsyncedRecords(proto::router::SyncRecordRequest* request) final;
+    SyncResult confirmSentRecords(const proto::router::SyncRecordResult& result) final;
+    SyncResult discardSentRecords() final;
+    SyncResult storeReceivedRecords(const proto::router::SyncRecordList& list) final;
 
 private:
     using Config = typename Traits::Config;
@@ -57,7 +60,8 @@ private:
 
     struct SentRecord
     {
-        QString guid;
+        QString record_id;
+        QByteArray data_hash;
         qint64 sync_dirty = 0;
     };
 

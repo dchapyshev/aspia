@@ -87,7 +87,9 @@ void RouterHostsCleaner::start()
             {
                 LOG(INFO) << "Host" << host_id << "is gone. Removing saved credentials";
 
-                if (!RouterHostStore().remove(host_id))
+                if (RouterHostStore().remove(host_id))
+                    RouterController::startSyncRecordExchange();
+                else
                     LOG(ERROR) << "Unable to remove credentials of host" << host_id;
             }
 

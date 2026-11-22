@@ -30,13 +30,15 @@ struct SyncTable
 {
     proto::router::SyncDataType type;
     const char* name;
+    const char* key;
     const char* received_revision_setting;
 };
 
 const SyncTable kSyncTables[] =
 {
-    { proto::router::SYNC_DATA_TYPE_CREDENTIALS, "credentials", "received_credentials_revision" },
-    { proto::router::SYNC_DATA_TYPE_PROFILES, "profiles", "received_profiles_revision" }
+    { proto::router::SYNC_DATA_TYPE_CREDENTIALS, "credentials", "guid", "received_credentials_revision" },
+    { proto::router::SYNC_DATA_TYPE_PROFILES, "profiles", "guid", "received_profiles_revision" },
+    { proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "router_hosts", "host_id", "received_router_hosts_revision" }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -55,7 +57,28 @@ const SyncTable* findSyncTable(proto::router::SyncDataType type)
 //--------------------------------------------------------------------------------------------------
 std::string tableQuery(const SyncTable& table, const char* query)
 {
-    return QString(query).arg(table.name).toStdString();
+    return QString(query).arg(table.name, table.key).toStdString();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool addRecordId(const SyncTable& table, const QString& record_id, SqlQuery* query)
+{
+    if (table.type != proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS)
+    {
+        query->addText(record_id);
+        return true;
+    }
+
+    bool ok = false;
+    const HostId host_id = record_id.toULongLong(&ok);
+    if (!ok || host_id == kInvalidHostId || isTempHostId(host_id))
+    {
+        LOG(ERROR) << "Invalid id of a router host record:" << record_id;
+        return false;
+    }
+
+    query->addUInt64(host_id);
+    return true;
 }
 
 } // namespace
@@ -105,7 +128,7 @@ bool SyncTransaction::commit()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QString& guid)
+bool SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QString& record_id)
 {
     if (!isActive())
     {
@@ -117,8 +140,9 @@ bool SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QStrin
     if (!table)
         return false;
 
-    SqlQuery query(db(), tableQuery(*table, "DELETE FROM %1 WHERE guid=?"));
-    query.addText(guid);
+    SqlQuery query(db(), tableQuery(*table, "DELETE FROM %1 WHERE %2=?"));
+    if (!addRecordId(*table, record_id, &query))
+        return false;
 
     if (!query.exec())
     {
@@ -131,7 +155,7 @@ bool SyncTransaction::eraseRecord(proto::router::SyncDataType type, const QStrin
 
 //--------------------------------------------------------------------------------------------------
 bool SyncTransaction::setRecordSyncRevision(
-    proto::router::SyncDataType type, const QString& guid, qint64 sync_revision)
+    proto::router::SyncDataType type, const QString& record_id, qint64 sync_revision)
 {
     if (!isActive())
     {
@@ -143,9 +167,10 @@ bool SyncTransaction::setRecordSyncRevision(
     if (!table)
         return false;
 
-    SqlQuery query(db(), tableQuery(*table, "UPDATE %1 SET sync_revision=? WHERE guid=?"));
+    SqlQuery query(db(), tableQuery(*table, "UPDATE %1 SET sync_revision=? WHERE %2=?"));
     query.addInt64(sync_revision);
-    query.addText(guid);
+    if (!addRecordId(*table, record_id, &query))
+        return false;
 
     if (!query.exec())
     {
@@ -158,7 +183,7 @@ bool SyncTransaction::setRecordSyncRevision(
 
 //--------------------------------------------------------------------------------------------------
 bool SyncTransaction::confirmSentRecord(
-    proto::router::SyncDataType type, const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+    proto::router::SyncDataType type, const QString& record_id, qint64 sync_revision, qint64 sync_dirty)
 {
     if (!isActive())
     {
@@ -170,17 +195,18 @@ bool SyncTransaction::confirmSentRecord(
     if (!table)
         return false;
 
-    if (guid.isEmpty() || sync_revision <= 0 || sync_dirty < 0)
+    if (record_id.isEmpty() || sync_revision <= 0 || sync_dirty < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
     SqlQuery update_query(db(), tableQuery(*table, "UPDATE %1 SET sync_revision=?, sync_dirty=sync_dirty-? "
-                                                    "WHERE guid=?"));
+                                                    "WHERE %2=?"));
     update_query.addInt64(sync_revision);
     update_query.addInt64(sync_dirty);
-    update_query.addText(guid);
+    if (!addRecordId(*table, record_id, &update_query))
+        return false;
 
     if (!update_query.exec())
     {
@@ -190,8 +216,9 @@ bool SyncTransaction::confirmSentRecord(
 
     if (db().changes() != 0)
     {
-        SqlQuery erase_query(db(), tableQuery(*table, "DELETE FROM %1 WHERE guid=? AND deleted!=0 AND sync_dirty=0"));
-        erase_query.addText(guid);
+        SqlQuery erase_query(db(), tableQuery(*table, "DELETE FROM %1 WHERE %2=? AND deleted!=0 AND sync_dirty=0"));
+        if (!addRecordId(*table, record_id, &erase_query))
+            return false;
 
         if (!erase_query.exec())
         {
@@ -201,9 +228,10 @@ bool SyncTransaction::confirmSentRecord(
     }
     else
     {
-        SqlQuery mark_query(db(), tableQuery(*table, "INSERT INTO %1 (id, guid, modify_time, sync_revision, "
-                                                      "sync_dirty, deleted) VALUES (NULL, ?, ?, ?, 1, 1)"));
-        mark_query.addText(guid);
+        SqlQuery mark_query(db(), tableQuery(*table, "INSERT INTO %1 (%2, modify_time, sync_revision, sync_dirty, "
+                                                      "deleted) VALUES (?, ?, ?, 1, 1)"));
+        if (!addRecordId(*table, record_id, &mark_query))
+            return false;
         mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
         mark_query.addInt64(sync_revision);
 
@@ -227,6 +255,116 @@ bool SyncTransaction::setReceivedRevision(proto::router::SyncDataType type, qint
     }
 
     return SyncStore(database_).setReceivedRevision(type, revision);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SyncTransaction::storeSentRecord(
+    proto::router::SyncDataType type, const QString& record_id, const QByteArray& data_hash, qint64 sync_dirty)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    if (record_id.isEmpty() || data_hash.isEmpty() || sync_dirty <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    SqlQuery query(db(), "INSERT OR REPLACE INTO sync_sent_records (type, id, data_hash, sync_dirty) "
+                          "VALUES (?, ?, ?, ?)");
+    query.addInt64(static_cast<qint64>(type));
+    query.addText(record_id);
+    query.addBlob(data_hash);
+    query.addInt64(sync_dirty);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::FindResult SyncTransaction::findSentRecord(
+    proto::router::SyncDataType type, const QString& record_id, const QByteArray& data_hash, qint64* sync_dirty) const
+{
+    CHECK(sync_dirty);
+    *sync_dirty = 0;
+
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return Database::FindResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT sync_dirty FROM sync_sent_records WHERE type=? AND id=? AND data_hash=?");
+    query.addInt64(static_cast<qint64>(type));
+    query.addText(record_id);
+    query.addBlob(data_hash);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return Database::FindResult::FAILED;
+    }
+
+    if (step == SqlQuery::StepResult::DONE)
+        return Database::FindResult::NOT_FOUND;
+
+    *sync_dirty = query.columnInt64(0);
+    return Database::FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SyncTransaction::eraseSentRecord(
+    proto::router::SyncDataType type, const QString& record_id, const QByteArray& data_hash)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlQuery query(db(), "DELETE FROM sync_sent_records WHERE type=? AND id=? AND data_hash=?");
+    query.addInt64(static_cast<qint64>(type));
+    query.addText(record_id);
+    query.addBlob(data_hash);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SyncTransaction::eraseAllSentRecords(proto::router::SyncDataType type, const QString& record_id)
+{
+    if (!isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    SqlQuery query(db(), "DELETE FROM sync_sent_records WHERE type=? AND id=?");
+    query.addInt64(static_cast<qint64>(type));
+    query.addText(record_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,6 +412,24 @@ bool SyncStore::reset()
         return false;
     }
 
+    if (!db().exec("DELETE FROM router_hosts WHERE deleted!=0"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("UPDATE router_hosts SET sync_revision=0, sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("DELETE FROM sync_sent_records"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
     return clearReceivedRevisions();
 }
 
@@ -306,6 +462,20 @@ bool SyncStore::discard()
     default_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
     if (!default_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("DELETE FROM router_hosts"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Router hosts discarded:" << db().changes();
+
+    if (!db().exec("DELETE FROM sync_sent_records"))
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;

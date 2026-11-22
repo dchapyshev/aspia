@@ -21,10 +21,21 @@
 
 #include "client/storage/database_store.h"
 
+class SyncTransaction;
+
 class RouterHostStore final : public DatabaseStore
 {
 public:
     explicit RouterHostStore(Database& db = Database::instance());
+
+    struct Unsynced
+    {
+        RouterHostConfig host;
+        bool deleted = false;
+        bool damaged = false;
+        qint64 sync_revision = 0;
+        qint64 sync_dirty = 0;
+    };
 
     Database::ReadResult list(QList<RouterHostConfig>* hosts) const;
     bool add(const RouterHostConfig& host);
@@ -36,6 +47,9 @@ public:
     bool updateCheckTime(HostId host_id);
     bool setOsCredentialId(HostId host_id, qint64 credential_id);
     bool setProfileId(HostId host_id, qint64 profile_id);
+    Database::ReadResult unsynced(QList<Unsynced>* hosts) const;
+
+    bool storeReceived(SyncTransaction& transaction, const RouterHostConfig& host, qint64 sync_revision);
 };
 
 #endif // CLIENT_STORAGE_ROUTER_HOST_STORE_H

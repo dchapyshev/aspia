@@ -356,6 +356,64 @@ Database::FindResult CredentialStore::findByGuid(const QString& guid, Credential
 }
 
 //--------------------------------------------------------------------------------------------------
+Database::FindResult CredentialStore::findRowIdByGuid(const QString& guid, qint64* credential_id) const
+{
+    CHECK(credential_id);
+    *credential_id = 0;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Database::FindResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT id FROM credentials WHERE guid=?");
+    query.addText(guid);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return Database::FindResult::FAILED;
+    }
+
+    if (step == SqlQuery::StepResult::DONE)
+        return Database::FindResult::NOT_FOUND;
+
+    *credential_id = query.columnInt64(0);
+    return Database::FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::FindResult CredentialStore::findGuidByRowId(qint64 credential_id, QString* guid) const
+{
+    CHECK(guid);
+    guid->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Database::FindResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT guid FROM credentials WHERE id=?");
+    query.addInt64(credential_id);
+
+    const SqlQuery::StepResult step = query.next();
+    if (step == SqlQuery::StepResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return Database::FindResult::FAILED;
+    }
+
+    if (step == SqlQuery::StepResult::DONE)
+        return Database::FindResult::NOT_FOUND;
+
+    *guid = query.columnText(0);
+    return Database::FindResult::FOUND;
+}
+
+//--------------------------------------------------------------------------------------------------
 Database::ReadResult CredentialStore::unsynced(QList<Unsynced>* credentials) const
 {
     CHECK(credentials);
@@ -446,48 +504,18 @@ bool CredentialStore::storeReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool CredentialStore::setUnknownData(
-    SyncTransaction& transaction, const QString& guid, const QByteArray& unknown_data)
+bool CredentialStore::addEmptyRow(const QString& guid, qint64* credential_id)
 {
-    if (!transaction.isActive())
+    CHECK(credential_id);
+    *credential_id = 0;
+
+    if (!isValid())
     {
-        LOG(ERROR) << "The transaction is not active";
+        LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    SqlQuery row(db(), "SELECT data FROM credentials WHERE guid=? AND deleted=0");
-    row.addText(guid);
-
-    const SqlQuery::StepResult step = row.next();
-    if (step != SqlQuery::StepResult::ROW)
-    {
-        if (step == SqlQuery::StepResult::FAILED)
-            LOG(ERROR) << "Unable to execute query:" << db().lastError();
-        else
-            LOG(ERROR) << "Credential with guid" << guid << "not found";
-        return false;
-    }
-
-    CredentialConfig credential;
-    credential.setGuid(guid);
-
-    if (!credential.setEncryptedData(row.columnBlob(0)))
-    {
-        LOG(ERROR) << "Unable to read encrypted data of credential with guid" << guid;
-        return false;
-    }
-
-    credential.setUnknownData(unknown_data);
-
-    std::optional<QByteArray> encrypted_data = credential.encryptedData();
-    if (!encrypted_data.has_value())
-    {
-        LOG(ERROR) << "Unable to seal credential with guid" << guid;
-        return false;
-    }
-
-    SqlQuery query(db(), "UPDATE credentials SET data=? WHERE guid=?");
-    query.addBlob(*encrypted_data);
+    SqlQuery query(db(), "INSERT INTO credentials (id, guid, deleted) VALUES (NULL, ?, 1)");
     query.addText(guid);
 
     if (!query.exec())
@@ -496,5 +524,6 @@ bool CredentialStore::setUnknownData(
         return false;
     }
 
+    *credential_id = db().lastInsertRowId();
     return true;
 }

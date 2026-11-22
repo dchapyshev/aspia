@@ -375,3 +375,94 @@ TEST_F(CredentialStoreTest, ReceivedCredentialIsStoredWithTheRevisionOfTheRouter
     EXPECT_EQ(rowCount("credentials"), 1);
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
 }
+
+//--------------------------------------------------------------------------------------------------
+// The row of a credential is found by its guid whether or not the credential is marked as removed.
+// A guid no row holds is not found.
+TEST_F(CredentialStoreTest, RowIsFoundByGuidWhileTheCredentialIsMarkedAsRemoved)
+{
+    attachSyncStorage();
+
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    CredentialConfig added;
+    ASSERT_EQ(credentials_.find(credential_id, &added), Database::FindResult::FOUND);
+
+    qint64 row_id = 0;
+    ASSERT_EQ(credentials_.findRowIdByGuid(added.guid(), &row_id), Database::FindResult::FOUND);
+    EXPECT_EQ(row_id, credential_id);
+
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    ASSERT_TRUE(isMarkedDeleted("credentials", credential_id));
+
+    ASSERT_EQ(credentials_.findRowIdByGuid(added.guid(), &row_id), Database::FindResult::FOUND);
+    EXPECT_EQ(row_id, credential_id);
+
+    EXPECT_EQ(credentials_.findRowIdByGuid("22222222-2222-2222-2222-222222222222", &row_id),
+              Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(row_id, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The guid of a credential is found by the id of its row whether or not the credential is marked as
+// removed. An id no row has is not found.
+TEST_F(CredentialStoreTest, GuidIsFoundByRowIdWhileTheCredentialIsMarkedAsRemoved)
+{
+    attachSyncStorage();
+
+    const qint64 credential_id = addCredential("office", "user", "secret");
+
+    CredentialConfig added;
+    ASSERT_EQ(credentials_.find(credential_id, &added), Database::FindResult::FOUND);
+
+    QString guid;
+    ASSERT_EQ(credentials_.findGuidByRowId(credential_id, &guid), Database::FindResult::FOUND);
+    EXPECT_EQ(guid, added.guid());
+
+    ASSERT_TRUE(markSynced("credentials", credential_id, 7));
+    ASSERT_TRUE(credentials_.remove(credential_id));
+    ASSERT_TRUE(isMarkedDeleted("credentials", credential_id));
+
+    ASSERT_EQ(credentials_.findGuidByRowId(credential_id, &guid), Database::FindResult::FOUND);
+    EXPECT_EQ(guid, added.guid());
+
+    EXPECT_EQ(credentials_.findGuidByRowId(credential_id + 1, &guid), Database::FindResult::NOT_FOUND);
+    EXPECT_TRUE(guid.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// An empty row holds the guid of a credential the device does not have yet, for the hosts that link
+// it. The row is neither listed nor sent. The credential that comes with this guid takes the row and
+// keeps its id.
+TEST_F(CredentialStoreTest, EmptyRowIsTakenByTheCredentialThatComesWithItsGuid)
+{
+    attachSyncStorage();
+
+    const QString guid = "11111111-1111-1111-1111-111111111111";
+
+    qint64 row_id = 0;
+    ASSERT_TRUE(credentials_.addEmptyRow(guid, &row_id));
+    EXPECT_GT(row_id, 0);
+    EXPECT_TRUE(isMarkedDeleted("credentials", row_id));
+
+    EXPECT_TRUE(credentialList().isEmpty());
+    EXPECT_TRUE(unsyncedCredentials().isEmpty());
+    EXPECT_FALSE(findCredentialByGuid(db_, guid).has_value());
+
+    qint64 found_id = 0;
+    ASSERT_EQ(credentials_.findRowIdByGuid(guid, &found_id), Database::FindResult::FOUND);
+    EXPECT_EQ(found_id, row_id);
+
+    CredentialConfig received = credential("office", "user", "secret");
+    received.setGuid(guid);
+    received.setModifyTime(1000);
+    ASSERT_TRUE(storeReceivedCredential(received, 12));
+
+    const std::optional<CredentialConfig> stored = findCredentialByGuid(db_, guid);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->id(), row_id);
+    EXPECT_EQ(stored->username(), QString("user"));
+    EXPECT_EQ(rowCount("credentials"), 1);
+    EXPECT_TRUE(unsyncedCredentials().isEmpty());
+}

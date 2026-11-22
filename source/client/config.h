@@ -129,6 +129,12 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    qint64 modifyTime() const { return modify_time_; }
+    void setModifyTime(qint64 value) { modify_time_ = value; }
+
+    const QByteArray& unknownData() const { return unknown_data_; }
+    void setUnknownData(const QByteArray& value) { unknown_data_ = value; }
+
     // The sealed column for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
@@ -140,6 +146,8 @@ private:
     qint64 profile_id_ = 0;
     QString username_;
     SecureString password_;
+    qint64 modify_time_ = 0;
+    QByteArray unknown_data_;
 };
 
 class LocalHostConfig final

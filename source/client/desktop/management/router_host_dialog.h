@@ -62,7 +62,10 @@ private:
     std::unique_ptr<Ui::RouterHostDialog> ui;
     RouterHost host_;
     bool credentials_loaded_ = false;
+    bool credentials_edited_ = false;
+    bool profile_edited_ = false;
 
+    friend class RouterHostDialogTestPeer;
     Q_DISABLE_COPY_MOVE(RouterHostDialog)
 };
 

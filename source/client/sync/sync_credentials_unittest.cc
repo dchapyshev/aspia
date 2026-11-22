@@ -18,7 +18,6 @@
 
 #include "client/sync/sync_credentials.h"
 
-#include <QDateTime>
 #include <QTemporaryDir>
 
 #include <gtest/gtest.h>
@@ -34,8 +33,8 @@
 
 namespace {
 
-// The clock of the router. It is set apart from the clock of the devices on purpose: a record is
-// as old as the router says, whatever the clocks show.
+// The moment the router stored a record, by its own clock. A received record takes it as the moment
+// of its change, whatever the clock of the device shows.
 const qint64 kRouterTime = 1000000;
 const char kStorageId[] = "0123456789abcdef";
 
@@ -112,18 +111,6 @@ protected:
         return credentials;
     }
 
-    // Makes the last change of the record |age| seconds old.
-    void setLocalAge(const QString& file_name, const QString& guid, qint64 age)
-    {
-        SqlDatabase raw;
-        ASSERT_TRUE(raw.open(dir_.filePath(file_name)));
-
-        SqlQuery query(raw, "UPDATE credentials SET modify_time=? WHERE guid=?");
-        query.addInt64(QDateTime::currentSecsSinceEpoch() - age);
-        query.addText(guid);
-        ASSERT_TRUE(query.exec());
-    }
-
     // Makes the data of the record unreadable and the record unsynced.
     void damageLocalRecord(const QString& file_name, const QString& guid)
     {
@@ -141,7 +128,7 @@ protected:
     proto::router::SyncRecordList sendRecords(SyncCredentials& sync)
     {
         proto::router::SyncRecordRequest request;
-        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
 
         proto::router::SyncRecordResult result;
         proto::router::SyncRecordList list;
@@ -155,19 +142,17 @@ protected:
             result.add_record_revision(revision_);
         }
 
-        EXPECT_EQ(sync.confirmSentRecords(result), SyncCredentials::Result::DONE);
+        EXPECT_EQ(sync.confirmSentRecords(result), SyncCredentials::SyncResult::DONE);
         return list;
     }
 
-    // Hands the records to the device as stored by the router |age| seconds ago.
-    static void receiveRecords(SyncCredentials& sync, proto::router::SyncRecordList list, qint64 age)
+    // Hands the records to the device as stored by the router.
+    static void receiveRecords(SyncCredentials& sync, proto::router::SyncRecordList list)
     {
-        list.set_current_time(kRouterTime);
-
         for (proto::router::SyncRecord& record : *list.mutable_record())
-            record.set_time(kRouterTime - age);
+            record.set_time(kRouterTime);
 
-        ASSERT_EQ(sync.storeReceivedRecords(list), SyncCredentials::Result::DONE);
+        ASSERT_EQ(sync.storeReceivedRecords(list), SyncCredentials::SyncResult::DONE);
     }
 
     // A record a newer version of the client has made: it carries |unknown_field|, a field this
@@ -197,7 +182,7 @@ protected:
     proto::router::SyncCredential sentContent(SyncCredentials& sync, const char* guid)
     {
         proto::router::SyncRecordRequest request;
-        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+        EXPECT_EQ(sync.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
         EXPECT_EQ(request.record_size(), 1);
 
         proto::router::SyncCredential content;
@@ -215,7 +200,7 @@ protected:
     QString addSharedCredential()
     {
         const QString guid = addCredential(laptop_, "user").guid();
-        receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
+        receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
         EXPECT_EQ(storedUsername(phone_, guid), QString("user"));
         return guid;
@@ -234,13 +219,13 @@ protected:
 
 //--------------------------------------------------------------------------------------------------
 // A record made on one device goes to the router sealed, based on no revision, and comes to the
-// other device as it was made, with the revision of the router and the age the router gave it.
+// other device as it was made, with the revision of the router and the moment the router stored it.
 TEST_F(SyncCredentialsTest, NewRecordReachesTheOtherDevice)
 {
     const CredentialConfig credential = addCredential(laptop_, "user");
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
     EXPECT_EQ(request.record(0).revision(), 0);
     EXPECT_EQ(request.record(0).type(), proto::router::SYNC_DATA_TYPE_CREDENTIALS);
@@ -254,8 +239,7 @@ TEST_F(SyncCredentialsTest, NewRecordReachesTheOtherDevice)
     ASSERT_EQ(list.record_size(), 1);
     EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
 
-    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
-    receiveRecords(phone_sync_, list, 100);
+    receiveRecords(phone_sync_, list);
 
     CredentialConfig received;
     ASSERT_EQ(CredentialStore(phone_).findByGuid(credential.guid(), &received), Database::FindResult::FOUND);
@@ -263,8 +247,7 @@ TEST_F(SyncCredentialsTest, NewRecordReachesTheOtherDevice)
     EXPECT_EQ(received.displayName(), credential.displayName());
     EXPECT_EQ(received.username(), credential.username());
     EXPECT_EQ(received.password(), credential.password());
-    EXPECT_GE(received.modifyTime(), start_time - 100);
-    EXPECT_LE(received.modifyTime(), QDateTime::currentSecsSinceEpoch() - 100);
+    EXPECT_EQ(received.modifyTime(), kRouterTime);
 
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
     EXPECT_EQ(SyncStore(phone_).receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), list.record(0).revision());
@@ -280,13 +263,13 @@ TEST_F(SyncCredentialsTest, RemovalReachesTheOtherDevice)
     removeCredential(laptop_, guid);
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
     EXPECT_EQ(request.record(0).revision(), 1);
     EXPECT_TRUE(request.record(0).deleted());
     EXPECT_TRUE(request.record(0).data().empty());
 
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 0);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     EXPECT_TRUE(storedUsername(phone_, guid).isEmpty());
     EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
@@ -294,44 +277,25 @@ TEST_F(SyncCredentialsTest, RemovalReachesTheOtherDevice)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Both devices changed the record. The change that is younger wins: a received one replaces the
-// local one, and a local one stays to be sent over the revision of the received one.
-TEST_F(SyncCredentialsTest, YoungerChangeWins)
+// Both devices changed the record. The router holds the change that reached it first, and the
+// change of the other device gives way to it: it is replaced and is not sent.
+TEST_F(SyncCredentialsTest, LocalChangeGivesWayToTheRouter)
 {
     const QString guid = addSharedCredential();
 
     modifyCredential(phone_, guid, "phone-user");
-    setLocalAge("phone.db3", guid, 30);
-
     modifyCredential(laptop_, guid, "laptop-user");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("laptop-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
-
-    modifyCredential(phone_, guid, "phone-user");
-    setLocalAge("phone.db3", guid, 20);
-
-    modifyCredential(laptop_, guid, "other-laptop-user");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
-
-    EXPECT_EQ(storedUsername(phone_, guid), QString("phone-user"));
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, revision_);
-
-    receiveRecords(laptop_sync_, sendRecords(phone_sync_), 0);
-
-    EXPECT_EQ(storedUsername(laptop_, guid), QString("phone-user"));
-    EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
+    EXPECT_EQ(sendRecords(phone_sync_).record_size(), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
 // A record the device has never sent meets a record of the router with the same guid: the device
-// was detached and attached again, or the record was imported. A local one that is younger wins,
-// and it is still to be sent, now over the revision of the received one.
-TEST_F(SyncCredentialsTest, RecordNeverSentThatWinsIsSent)
+// was detached and attached again, or the record was imported. The record of the router replaces it.
+TEST_F(SyncCredentialsTest, RecordNeverSentGivesWayToTheRouter)
 {
     const QString guid = addCredential(laptop_, "laptop-user").guid();
     const proto::router::SyncRecordList list = sendRecords(laptop_sync_);
@@ -343,83 +307,44 @@ TEST_F(SyncCredentialsTest, RecordNeverSentThatWinsIsSent)
     local.setPassword(SecureString(QString("secret")));
     ASSERT_TRUE(CredentialStore(phone_).add(local));
 
-    receiveRecords(phone_sync_, list, 30);
+    receiveRecords(phone_sync_, list);
 
-    EXPECT_EQ(storedUsername(phone_, guid), QString("phone-user"));
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, revision_);
-
-    receiveRecords(laptop_sync_, sendRecords(phone_sync_), 0);
-
-    EXPECT_EQ(storedUsername(laptop_, guid), QString("phone-user"));
+    EXPECT_EQ(storedUsername(phone_, guid), QString("laptop-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// One device removed the record the other one changed. A removal that is younger removes the
-// record, and a change that is younger brings the record back to the device that removed it.
+// One device removed the record the other one changed. The removal the router holds removes the
+// record, and the change is not sent.
 TEST_F(SyncCredentialsTest, ReceivedRemovalMeetsALocalChange)
 {
-    const QString removed_guid = addSharedCredential();
-    const QString kept_guid = addSharedCredential();
+    const QString guid = addSharedCredential();
 
-    modifyCredential(phone_, removed_guid, "phone-user");
-    modifyCredential(phone_, kept_guid, "phone-user");
-    setLocalAge("phone.db3", removed_guid, 30);
-    setLocalAge("phone.db3", kept_guid, 20);
+    modifyCredential(phone_, guid, "phone-user");
+    removeCredential(laptop_, guid);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
-    removeCredential(laptop_, removed_guid);
-    removeCredential(laptop_, kept_guid);
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
-
-    EXPECT_TRUE(storedUsername(phone_, removed_guid).isEmpty());
-    EXPECT_EQ(storedUsername(phone_, kept_guid), QString("phone-user"));
-    ASSERT_EQ(unsyncedCredentials(phone_).size(), 1);
-
-    receiveRecords(laptop_sync_, sendRecords(phone_sync_), 0);
-
-    EXPECT_TRUE(storedUsername(laptop_, removed_guid).isEmpty());
-    EXPECT_EQ(storedUsername(laptop_, kept_guid), QString("phone-user"));
+    EXPECT_TRUE(storedUsername(phone_, guid).isEmpty());
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// One device changed the record the other one removed. A change that is younger brings the record
-// back, and a removal that is younger stays to be sent over the revision of the change.
+// One device changed the record the other one removed. The change the router holds brings the
+// record back, and the removal is not sent.
 TEST_F(SyncCredentialsTest, ReceivedChangeMeetsALocalRemoval)
 {
-    const QString restored_guid = addSharedCredential();
-    const QString removed_guid = addSharedCredential();
+    const QString guid = addSharedCredential();
 
-    removeCredential(phone_, restored_guid);
-    removeCredential(phone_, removed_guid);
-    setLocalAge("phone.db3", restored_guid, 30);
-    setLocalAge("phone.db3", removed_guid, 20);
+    removeCredential(phone_, guid);
+    modifyCredential(laptop_, guid, "laptop-user");
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
-    modifyCredential(laptop_, restored_guid, "laptop-user");
-    modifyCredential(laptop_, removed_guid, "laptop-user");
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
-
-    EXPECT_EQ(storedUsername(phone_, restored_guid), QString("laptop-user"));
-    EXPECT_TRUE(storedUsername(phone_, removed_guid).isEmpty());
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(phone_);
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_TRUE(unsynced[0].deleted);
-    EXPECT_EQ(unsynced[0].credential.guid(), removed_guid);
-
-    receiveRecords(laptop_sync_, sendRecords(phone_sync_), 0);
-
-    EXPECT_EQ(storedUsername(laptop_, restored_guid), QString("laptop-user"));
-    EXPECT_TRUE(storedUsername(laptop_, removed_guid).isEmpty());
+    EXPECT_EQ(storedUsername(phone_, guid), QString("laptop-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// Devices that made the same change, or both removed the record, have nothing to tell each other,
-// whichever of them was the last.
+// Devices that made the same change, or both removed the record, have nothing to tell each other.
 TEST_F(SyncCredentialsTest, SameChangeOnBothDevicesIsNotSentBack)
 {
     const QString changed_guid = addSharedCredential();
@@ -427,12 +352,10 @@ TEST_F(SyncCredentialsTest, SameChangeOnBothDevicesIsNotSentBack)
 
     modifyCredential(phone_, changed_guid, "same-user");
     removeCredential(phone_, removed_guid);
-    setLocalAge("phone.db3", changed_guid, 5);
-    setLocalAge("phone.db3", removed_guid, 5);
 
     modifyCredential(laptop_, changed_guid, "same-user");
     removeCredential(laptop_, removed_guid);
-    receiveRecords(phone_sync_, sendRecords(laptop_sync_), 25);
+    receiveRecords(phone_sync_, sendRecords(laptop_sync_));
 
     EXPECT_EQ(storedUsername(phone_, changed_guid), QString("same-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
@@ -440,16 +363,15 @@ TEST_F(SyncCredentialsTest, SameChangeOnBothDevicesIsNotSentBack)
 
 //--------------------------------------------------------------------------------------------------
 // A device receives what it has sent itself. A record changed after it was sent is based on that
-// very revision, so what comes back does not replace the change, however young the router calls it.
+// very revision, so what comes back does not replace the change.
 TEST_F(SyncCredentialsTest, OwnRecordThatComesBackDoesNotReplaceALaterChange)
 {
     const QString guid = addCredential(laptop_, "user").guid();
     const proto::router::SyncRecordList list = sendRecords(laptop_sync_);
 
     modifyCredential(laptop_, guid, "later-user");
-    setLocalAge("laptop.db3", guid, 100);
 
-    receiveRecords(laptop_sync_, list, 0);
+    receiveRecords(laptop_sync_, list);
 
     EXPECT_EQ(storedUsername(laptop_, guid), QString("later-user"));
 
@@ -467,16 +389,16 @@ TEST_F(SyncCredentialsTest, RecordChangedWhileItWasSentIsSentAgain)
     const QString guid = addCredential(laptop_, "user").guid();
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
 
     modifyCredential(laptop_, guid, "later-user");
 
     proto::router::SyncRecordResult result;
     result.add_record_revision(7);
-    ASSERT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::SyncResult::DONE);
 
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
     EXPECT_EQ(request.record(0).revision(), 7);
     EXPECT_EQ(unsyncedCredentials(laptop_).value(0).sync_dirty, 1);
@@ -493,21 +415,21 @@ TEST_F(SyncCredentialsTest, RecordTheRouterDidNotStoreStaysUnsynced)
     modifyCredential(laptop_, guid, "laptop-user");
 
     proto::router::SyncRecordRequest request;
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     ASSERT_EQ(request.record_size(), 1);
 
     proto::router::SyncRecordResult result;
     result.add_record_revision(0);
-    ASSERT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::SyncResult::DONE);
 
     QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 1);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
 
-    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DONE);
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
     result.add_record_revision(8);
-    EXPECT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::Result::INVALID_ANSWER);
+    EXPECT_EQ(laptop_sync_.confirmSentRecords(result), SyncCredentials::SyncResult::INVALID_ANSWER);
 
     unsynced = unsyncedCredentials(laptop_);
     ASSERT_EQ(unsynced.size(), 1);
@@ -536,7 +458,7 @@ TEST_F(SyncCredentialsTest, ReceivedRecordThatDoesNotOpenLoses)
     unknown->set_id("11111111-1111-1111-1111-111111111111");
     unknown->set_data("damaged");
 
-    receiveRecords(phone_sync_, list, 0);
+    receiveRecords(phone_sync_, list);
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
@@ -554,8 +476,8 @@ TEST_F(SyncCredentialsTest, ReceivedRecordThatDoesNotOpenLoses)
 }
 
 //--------------------------------------------------------------------------------------------------
-// A damaged record of the device has nothing to keep, so an older change on the other device replaces it.
-TEST_F(SyncCredentialsTest, DamagedLocalRecordLosesToAnOlderChange)
+// A damaged record of the device gives way to a change the router holds like any other local change.
+TEST_F(SyncCredentialsTest, DamagedLocalRecordGivesWayToAChange)
 {
     const QString guid = addSharedCredential();
 
@@ -563,17 +485,16 @@ TEST_F(SyncCredentialsTest, DamagedLocalRecordLosesToAnOlderChange)
     const proto::router::SyncRecordList list = sendRecords(laptop_sync_);
 
     damageLocalRecord("phone.db3", guid);
-    setLocalAge("phone.db3", guid, 20);
 
-    receiveRecords(phone_sync_, list, 25);
+    receiveRecords(phone_sync_, list);
 
     EXPECT_EQ(storedUsername(phone_, guid), QString("laptop-user"));
     EXPECT_TRUE(unsyncedCredentials(phone_).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-// A damaged record of the device has nothing to keep, so an older removal on the other device removes it.
-TEST_F(SyncCredentialsTest, DamagedLocalRecordLosesToAnOlderRemoval)
+// A damaged record of the device gives way to a removal the router holds as well.
+TEST_F(SyncCredentialsTest, DamagedLocalRecordGivesWayToARemoval)
 {
     const QString guid = addSharedCredential();
 
@@ -581,9 +502,8 @@ TEST_F(SyncCredentialsTest, DamagedLocalRecordLosesToAnOlderRemoval)
     const proto::router::SyncRecordList list = sendRecords(laptop_sync_);
 
     damageLocalRecord("phone.db3", guid);
-    setLocalAge("phone.db3", guid, 20);
 
-    receiveRecords(phone_sync_, list, 25);
+    receiveRecords(phone_sync_, list);
 
     QList<CredentialConfig> credentials;
     EXPECT_EQ(CredentialStore(phone_).list(&credentials), Database::ReadResult::OK);
@@ -600,7 +520,7 @@ TEST_F(SyncCredentialsTest, FieldUnknownToTheDeviceComesBackWithItsChange)
 
     proto::router::SyncRecordList list;
     *list.add_record() = newerRecord(kGuid, 1, "user", kUnknownField);
-    receiveRecords(laptop_sync_, list, 0);
+    receiveRecords(laptop_sync_, list);
     ASSERT_EQ(storedUsername(laptop_, kGuid), QString("user"));
 
     modifyCredential(laptop_, kGuid, "other-user");
@@ -608,36 +528,6 @@ TEST_F(SyncCredentialsTest, FieldUnknownToTheDeviceComesBackWithItsChange)
     const proto::router::SyncCredential sent = sentContent(laptop_sync_, kGuid);
     EXPECT_EQ(sent.username(), "other-user");
     EXPECT_EQ(sent.unknown_fields(), kUnknownField);
-}
-
-//--------------------------------------------------------------------------------------------------
-// The device cannot have changed a field it does not know, so the field of the received record is
-// the newer one even when the change of the device wins.
-TEST_F(SyncCredentialsTest, FieldUnknownToTheDeviceIsTakenFromAReceivedRecordThatLoses)
-{
-    const char kGuid[] = "11111111-2222-4333-8444-555555555555";
-    const std::string kOldField = std::string("\x2a\x04") + "corp";
-    const std::string kNewField = std::string("\x2a\x05") + "corp2";
-
-    proto::router::SyncRecordList first;
-    *first.add_record() = newerRecord(kGuid, 1, "user", kOldField);
-    receiveRecords(laptop_sync_, first, 0);
-
-    modifyCredential(laptop_, kGuid, "laptop-user");
-
-    proto::router::SyncRecordList second;
-    *second.add_record() = newerRecord(kGuid, 2, "phone-user", kNewField);
-    receiveRecords(laptop_sync_, second, 100);
-
-    EXPECT_EQ(storedUsername(laptop_, kGuid), QString("laptop-user"));
-
-    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
-    ASSERT_EQ(unsynced.size(), 1);
-    EXPECT_EQ(unsynced[0].sync_revision, 2);
-
-    const proto::router::SyncCredential sent = sentContent(laptop_sync_, kGuid);
-    EXPECT_EQ(sent.username(), "laptop-user");
-    EXPECT_EQ(sent.unknown_fields(), kNewField);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -694,7 +584,7 @@ TEST_F(SyncCredentialsTest, RecordsAreNotReadForAStorageTheDeviceHasLeft)
     ASSERT_EQ(unsyncedCredentials(laptop_).size(), 1);
 
     proto::router::SyncRecordRequest request;
-    EXPECT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::Result::DETACHED);
+    EXPECT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DETACHED);
     EXPECT_EQ(request.record_size(), 0);
 }
 
@@ -709,13 +599,207 @@ TEST_F(SyncCredentialsTest, PageThatFailsHalfwayLeavesNothing)
     proto::router::SyncRecordList list = sendRecords(laptop_sync_);
     ASSERT_EQ(list.record_size(), 2);
 
-    list.set_current_time(kRouterTime);
     list.mutable_record(1)->set_revision(0);
 
-    EXPECT_EQ(phone_sync_.storeReceivedRecords(list), SyncCredentials::Result::FAILED);
+    EXPECT_EQ(phone_sync_.storeReceivedRecords(list), SyncCredentials::SyncResult::FAILED);
 
     QList<CredentialConfig> credentials;
     ASSERT_EQ(CredentialStore(phone_).list(&credentials), Database::ReadResult::OK);
     EXPECT_TRUE(credentials.isEmpty());
     EXPECT_EQ(SyncStore(phone_).receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router stored a change of the laptop, and the answer did not reach the laptop. The record is
+// changed on the laptop once more. The router then hands over the record the laptop sent: the laptop
+// knows it, keeps its later change, takes the revision and sends the change over it.
+TEST_F(SyncCredentialsTest, RecordTheDeviceSentItselfLeavesItsLaterChange)
+{
+    const QString guid = addSharedCredential();
+
+    modifyCredential(laptop_, guid, "first");
+
+    proto::router::SyncRecordRequest request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+
+    modifyCredential(laptop_, guid, "second");
+
+    proto::router::SyncRecordList list;
+    proto::router::SyncRecord* stored = list.add_record();
+    stored->CopyFrom(request.record(0));
+    stored->set_revision(++revision_);
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+    receiveRecords(next_sync, list);
+
+    EXPECT_EQ(storedUsername(laptop_, guid), QString("second"));
+
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, revision_);
+
+    receiveRecords(phone_sync_, sendRecords(next_sync));
+
+    EXPECT_EQ(storedUsername(phone_, guid), QString("second"));
+    EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record the router has never held is read to be sent: from now on the router may hold it, at a
+// revision the device does not know till the answer comes. Removed before the answer, such a record
+// is not erased: it stays marked as removed, and the mark is what the device sends next.
+TEST_F(SyncCredentialsTest, RecordReadToBeSentIsMarkedWhenRemoved)
+{
+    const CredentialConfig credential = addCredential(laptop_, "laptop-user");
+
+    proto::router::SyncRecordRequest request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+    EXPECT_EQ(request.record(0).revision(), 0);
+
+    QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, -1);
+
+    ASSERT_TRUE(CredentialStore(laptop_).remove(credential.id()));
+
+    unsynced = unsyncedCredentials(laptop_);
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+    ASSERT_EQ(next_sync.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+    EXPECT_TRUE(request.record(0).deleted());
+    EXPECT_EQ(request.record(0).revision(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router stored a change of the laptop, and the answer did not reach the laptop. Nothing is
+// changed on the laptop after that. The router hands over the record the laptop sent: the laptop
+// takes it for the answer it did not get and has nothing left to send.
+TEST_F(SyncCredentialsTest, RecordTheDeviceSentItselfIsNotSentAgain)
+{
+    const QString guid = addSharedCredential();
+
+    modifyCredential(laptop_, guid, "first");
+
+    proto::router::SyncRecordRequest request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+
+    proto::router::SyncRecordList list;
+    proto::router::SyncRecord* stored = list.add_record();
+    stored->CopyFrom(request.record(0));
+    stored->set_revision(++revision_);
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+    receiveRecords(next_sync, list);
+
+    EXPECT_EQ(storedUsername(laptop_, guid), QString("first"));
+    EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
+
+    ASSERT_EQ(next_sync.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    EXPECT_EQ(request.record_size(), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A change of the laptop is on its way to the router, when the router hands over a change of the
+// phone. It is not the record the laptop sent, so the change of the laptop gives way to it.
+TEST_F(SyncCredentialsTest, RecordOfAnotherDeviceIsNotTakenForTheOneTheDeviceSent)
+{
+    const QString guid = addSharedCredential();
+
+    modifyCredential(laptop_, guid, "laptop");
+
+    proto::router::SyncRecordRequest request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+
+    modifyCredential(phone_, guid, "phone");
+    const proto::router::SyncRecordList list = sendRecords(phone_sync_);
+    ASSERT_EQ(list.record_size(), 1);
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+    receiveRecords(next_sync, list);
+
+    EXPECT_EQ(storedUsername(laptop_, guid), QString("phone"));
+    EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The laptop sends a change and gets no answer, the record is changed once more, and the laptop
+// sends it again. The router has stored the first send meanwhile, so it refuses the second one. Then
+// the router hands over the record of the first send: the laptop knows it, keeps its later change,
+// takes the revision and sends the change over it.
+TEST_F(SyncCredentialsTest, EarlierSendIsKnownAfterALaterOneWasRefused)
+{
+    const QString guid = addSharedCredential();
+
+    modifyCredential(laptop_, guid, "first");
+
+    proto::router::SyncRecordRequest first_request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&first_request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(first_request.record_size(), 1);
+
+    modifyCredential(laptop_, guid, "second");
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+
+    proto::router::SyncRecordRequest second_request;
+    ASSERT_EQ(next_sync.readUnsyncedRecords(&second_request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(second_request.record_size(), 1);
+
+    proto::router::SyncRecordResult refused;
+    refused.add_record_revision(0);
+    ASSERT_EQ(next_sync.confirmSentRecords(refused), SyncCredentials::SyncResult::DONE);
+
+    proto::router::SyncRecordList list;
+    proto::router::SyncRecord* stored = list.add_record();
+    stored->CopyFrom(first_request.record(0));
+    stored->set_revision(++revision_);
+
+    receiveRecords(next_sync, list);
+
+    EXPECT_EQ(storedUsername(laptop_, guid), QString("second"));
+
+    const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials(laptop_);
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, revision_);
+
+    receiveRecords(phone_sync_, sendRecords(next_sync));
+
+    EXPECT_EQ(storedUsername(phone_, guid), QString("second"));
+    EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router answers a request with an error and stores none of its records, so what the laptop
+// kept about the send is dropped. A record with the very data of that send is then nothing the
+// laptop knows: a later change of the laptop gives way to it.
+TEST_F(SyncCredentialsTest, SendTheRouterDidNotStoreIsForgotten)
+{
+    const QString guid = addSharedCredential();
+
+    modifyCredential(laptop_, guid, "first");
+
+    proto::router::SyncRecordRequest request;
+    ASSERT_EQ(laptop_sync_.readUnsyncedRecords(&request), SyncCredentials::SyncResult::DONE);
+    ASSERT_EQ(request.record_size(), 1);
+
+    ASSERT_EQ(laptop_sync_.discardSentRecords(), SyncCredentials::SyncResult::DONE);
+
+    modifyCredential(laptop_, guid, "second");
+
+    proto::router::SyncRecordList list;
+    proto::router::SyncRecord* stored = list.add_record();
+    stored->CopyFrom(request.record(0));
+    stored->set_revision(++revision_);
+
+    SyncCredentials next_sync(laptop_, kStorageId, key_);
+    receiveRecords(next_sync, list);
+
+    EXPECT_EQ(storedUsername(laptop_, guid), QString("first"));
+    EXPECT_TRUE(unsyncedCredentials(laptop_).isEmpty());
 }

@@ -18,12 +18,13 @@
 
 #include "client/sync/sync_records.h"
 
-#include <QDateTime>
 #include <QHash>
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_profiles.h"
+#include "client/sync/sync_router_hosts.h"
 #include "proto/router_constants.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -38,9 +39,11 @@ SyncRecordsOf<Traits>::SyncRecordsOf(Database& db, const QByteArray& storage_id,
 
 //--------------------------------------------------------------------------------------------------
 template <typename Traits>
-SyncRecords::Result SyncRecordsOf<Traits>::readUnsyncedRecords(proto::router::SyncRecordRequest* request)
+SyncRecords::SyncResult SyncRecordsOf<Traits>::readUnsyncedRecords(proto::router::SyncRecordRequest* request)
 {
     CHECK(request);
+
+    static const qint64 kUnknownRevision = -1;
 
     request->clear_record();
     sent_records_.clear();
@@ -48,13 +51,13 @@ SyncRecords::Result SyncRecordsOf<Traits>::readUnsyncedRecords(proto::router::Sy
     SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
-        return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;
+        return begun == Database::SyncResult::DETACHED ? SyncResult::DETACHED : SyncResult::FAILED;
 
     QList<Unsynced> unsynced;
     if (Traits::readUnsynced(db_, &unsynced) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the unsynced records of type" << Traits::kType;
-        return Result::FAILED;
+        return SyncResult::FAILED;
     }
 
     for (const Unsynced& item : std::as_const(unsynced))
@@ -63,62 +66,80 @@ SyncRecords::Result SyncRecordsOf<Traits>::readUnsyncedRecords(proto::router::Sy
             break;
 
         const Config& config = Traits::config(item);
+        const QString record_id = Traits::recordId(config);
         std::optional<QByteArray> data;
 
         if (!item.deleted)
         {
             if (!Traits::isReadable(item))
             {
-                LOG(ERROR) << "Record" << config.id() << "of type" << Traits::kType
+                LOG(ERROR) << "Record" << record_id << "of type" << Traits::kType
                            << "could not be read and is not sent";
                 continue;
             }
 
-            data = Traits::seal(key_, config);
+            data = Traits::seal(db_, key_, config);
             if (!data.has_value())
             {
-                LOG(ERROR) << "Unable to seal record" << config.id() << "of type" << Traits::kType;
-                return Result::FAILED;
+                LOG(ERROR) << "Unable to seal record" << record_id << "of type" << Traits::kType;
+                return SyncResult::FAILED;
             }
 
             if (static_cast<size_t>(data->size()) > proto::router::kMaxSyncRecordDataSize)
             {
-                LOG(ERROR) << "Record" << config.id() << "of type" << Traits::kType << "is too large and is not sent";
+                LOG(ERROR) << "Record" << record_id << "of type" << Traits::kType << "is too large and is not sent";
                 continue;
             }
         }
 
         proto::router::SyncRecord* record = request->add_record();
-        record->set_revision(item.sync_revision);
+        record->set_revision(std::max<qint64>(item.sync_revision, 0));
         record->set_type(Traits::kType);
-        record->set_id(config.guid().toStdString());
+        record->set_id(record_id.toStdString());
         record->set_deleted(item.deleted);
 
         if (data.has_value())
             record->set_data(data->toStdString());
 
-        sent_records_.append(SentRecord{ config.guid(), item.sync_dirty });
+        const QByteArray data_hash = GenericHash::hash(GenericHash::SHA256, data.value_or(QByteArray()));
+
+        sent_records_.append(SentRecord{ record_id, data_hash, item.sync_dirty });
+
+        if (!transaction.storeSentRecord(Traits::kType, record_id, data_hash, item.sync_dirty))
+            return SyncResult::FAILED;
+
+        if (item.sync_revision == 0)
+        {
+            if (!transaction.setRecordSyncRevision(Traits::kType, record_id, kUnknownRevision))
+                return SyncResult::FAILED;
+        }
     }
 
-    return Result::DONE;
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return SyncResult::FAILED;
+    }
+
+    return SyncResult::DONE;
 }
 
 //--------------------------------------------------------------------------------------------------
 template <typename Traits>
-SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::router::SyncRecordResult& result)
+SyncRecords::SyncResult SyncRecordsOf<Traits>::confirmSentRecords(const proto::router::SyncRecordResult& result)
 {
     const QList<SentRecord> sent_records = std::exchange(sent_records_, {});
 
     if (result.record_revision_size() != sent_records.size())
     {
         LOG(ERROR) << "Revisions for" << result.record_revision_size() << "records, sent" << sent_records.size();
-        return Result::INVALID_ANSWER;
+        return SyncResult::INVALID_ANSWER;
     }
 
     SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
-        return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;
+        return begun == Database::SyncResult::DETACHED ? SyncResult::DETACHED : SyncResult::FAILED;
 
     qint64 stored_count = 0;
 
@@ -126,10 +147,21 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
     {
         const qint64 revision = result.record_revision(i);
         if (revision == 0)
-            continue;
+        {
+            if (!transaction.eraseSentRecord(Traits::kType, sent_records[i].record_id, sent_records[i].data_hash))
+                return SyncResult::FAILED;
 
-        if (!transaction.confirmSentRecord(Traits::kType, sent_records[i].guid, revision, sent_records[i].sync_dirty))
-            return Result::FAILED;
+            continue;
+        }
+
+        if (!transaction.eraseAllSentRecords(Traits::kType, sent_records[i].record_id))
+            return SyncResult::FAILED;
+
+        if (!transaction.confirmSentRecord(
+                Traits::kType, sent_records[i].record_id, revision, sent_records[i].sync_dirty))
+        {
+            return SyncResult::FAILED;
+        }
 
         ++stored_count;
     }
@@ -137,7 +169,7 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
     if (stored_count != 0 && storage_revision_ >= 0 && result.revision() == storage_revision_ + stored_count)
     {
         if (!transaction.setReceivedRevision(Traits::kType, result.revision()))
-            return Result::FAILED;
+            return SyncResult::FAILED;
 
         LOG(INFO) << "Sent records of type" << Traits::kType << "are not to be received, revision:"
                   << result.revision();
@@ -147,38 +179,63 @@ SyncRecords::Result SyncRecordsOf<Traits>::confirmSentRecords(const proto::route
     if (!transaction.commit())
     {
         LOG(ERROR) << "Unable to commit transaction";
-        return Result::FAILED;
+        return SyncResult::FAILED;
     }
 
-    return Result::DONE;
+    return SyncResult::DONE;
 }
 
 //--------------------------------------------------------------------------------------------------
 template <typename Traits>
-SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::router::SyncRecordList& list)
+SyncRecords::SyncResult SyncRecordsOf<Traits>::discardSentRecords()
 {
-    storage_revision_ = list.has_more() ? -1 : list.revision();
-
-    if (list.record().empty())
-        return Result::DONE;
+    const QList<SentRecord> sent_records = std::exchange(sent_records_, {});
 
     SyncTransaction transaction(db_);
     const Database::SyncResult begun = transaction.begin(storage_id_);
     if (begun != Database::SyncResult::DONE)
-        return begun == Database::SyncResult::DETACHED ? Result::DETACHED : Result::FAILED;
+        return begun == Database::SyncResult::DETACHED ? SyncResult::DETACHED : SyncResult::FAILED;
+
+    for (const SentRecord& sent_record : sent_records)
+    {
+        if (!transaction.eraseSentRecord(Traits::kType, sent_record.record_id, sent_record.data_hash))
+            return SyncResult::FAILED;
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return SyncResult::FAILED;
+    }
+
+    return SyncResult::DONE;
+}
+
+//--------------------------------------------------------------------------------------------------
+template <typename Traits>
+SyncRecords::SyncResult SyncRecordsOf<Traits>::storeReceivedRecords(const proto::router::SyncRecordList& list)
+{
+    storage_revision_ = list.has_more() ? -1 : list.revision();
+
+    if (list.record().empty())
+        return SyncResult::DONE;
+
+    SyncTransaction transaction(db_);
+    const Database::SyncResult begun = transaction.begin(storage_id_);
+    if (begun != Database::SyncResult::DONE)
+        return begun == Database::SyncResult::DETACHED ? SyncResult::DETACHED : SyncResult::FAILED;
 
     QList<Unsynced> unsynced;
     if (Traits::readUnsynced(db_, &unsynced) == Database::ReadResult::FAILED)
     {
         LOG(ERROR) << "Unable to read the unsynced records of type" << Traits::kType;
-        return Result::FAILED;
+        return SyncResult::FAILED;
     }
 
-    QHash<QString, const Unsynced*> unsynced_by_guid;
+    QHash<QString, const Unsynced*> unsynced_by_id;
     for (const Unsynced& item : std::as_const(unsynced))
-        unsynced_by_guid.insert(Traits::config(item).guid(), &item);
+        unsynced_by_id.insert(Traits::recordId(Traits::config(item)), &item);
 
-    const qint64 current_time = QDateTime::currentSecsSinceEpoch();
     qint64 received_revision = 0;
 
     for (const proto::router::SyncRecord& record : list.record())
@@ -191,72 +248,80 @@ SyncRecords::Result SyncRecordsOf<Traits>::storeReceivedRecords(const proto::rou
             continue;
         }
 
-        const QString guid = QString::fromStdString(record.id());
-        const Unsynced* local = unsynced_by_guid.value(guid);
+        const QString record_id = QString::fromStdString(record.id());
+        const Unsynced* local = unsynced_by_id.value(record_id);
 
         if (local && local->sync_revision == record.revision())
             continue;
 
-        const qint64 received_age = std::max<qint64>(list.current_time() - record.time(), 0);
+        if (local)
+        {
+            const QByteArray data_hash = GenericHash::hash(GenericHash::SHA256, std::string_view(record.data()));
+            qint64 sent_dirty = 0;
+
+            const Database::FindResult found =
+                transaction.findSentRecord(Traits::kType, record_id, data_hash, &sent_dirty);
+            if (found == Database::FindResult::FAILED)
+                return SyncResult::FAILED;
+
+            if (!transaction.eraseAllSentRecords(Traits::kType, record_id))
+                return SyncResult::FAILED;
+
+            if (found == Database::FindResult::FOUND)
+            {
+                LOG(INFO) << "Record" << record_id << "of type" << Traits::kType
+                          << "is the one this device sent, revision:" << record.revision();
+
+                if (!transaction.confirmSentRecord(Traits::kType, record_id, record.revision(), sent_dirty))
+                    return SyncResult::FAILED;
+
+                continue;
+            }
+        }
 
         Config received;
-        bool readable = true;
-        bool received_wins = true;
-
-        if (!Traits::openReceived(key_, record, &received))
-        {
-            LOG(ERROR) << "Received record" << guid << "of type" << Traits::kType << "could not be read";
-            readable = false;
-            received_wins = false;
-        }
-        else if (local)
-        {
-            const Config& local_config = Traits::config(*local);
-            const bool same_content = record.deleted() ?
-                local->deleted : !local->deleted && Traits::hasSameContent(local_config, received);
-            const bool local_damaged = !local->deleted && !Traits::isReadable(*local);
-
-            received_wins = local_damaged || same_content ||
-                received_age < current_time - local_config.modifyTime();
-        }
-
         bool stored = false;
 
-        if (!received_wins)
+        if (Traits::openReceived(db_, key_, record, &received) == OpenResult::UNREADABLE)
         {
-            stored = true;
-
-            if (readable && !record.deleted() && local && !local->deleted && Traits::isReadable(*local))
-                stored = Traits::storeUnknownData(db_, transaction, received);
-
-            if (stored)
-                stored = transaction.setRecordSyncRevision(Traits::kType, guid, record.revision());
-        }
-        else if (record.deleted())
-        {
-            stored = transaction.eraseRecord(Traits::kType, guid);
+            LOG(ERROR) << "Received record" << record_id << "of type" << Traits::kType << "could not be read";
+            stored = transaction.setRecordSyncRevision(Traits::kType, record_id, record.revision());
         }
         else
         {
-            received.setModifyTime(current_time - received_age);
-            stored = Traits::storeReceived(db_, transaction, std::move(received), record.revision());
+            if (local)
+            {
+                LOG(INFO) << "Local change of record" << record_id << "of type" << Traits::kType
+                          << "gives way to revision" << record.revision() << "of the router";
+            }
+
+            if (record.deleted())
+            {
+                stored = transaction.eraseRecord(Traits::kType, record_id);
+            }
+            else
+            {
+                received.setModifyTime(record.time());
+                stored = Traits::storeReceived(db_, transaction, std::move(received), record.revision());
+            }
         }
 
         if (!stored)
-            return Result::FAILED;
+            return SyncResult::FAILED;
     }
 
     if (!transaction.setReceivedRevision(Traits::kType, received_revision))
-        return Result::FAILED;
+        return SyncResult::FAILED;
 
     if (!transaction.commit())
     {
         LOG(ERROR) << "Unable to commit transaction";
-        return Result::FAILED;
+        return SyncResult::FAILED;
     }
 
-    return Result::DONE;
+    return SyncResult::DONE;
 }
 
 template class SyncRecordsOf<SyncCredentialTraits>;
 template class SyncRecordsOf<SyncProfileTraits>;
+template class SyncRecordsOf<SyncRouterHostTraits>;

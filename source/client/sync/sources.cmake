@@ -24,4 +24,6 @@ collect_sources(SOURCE_CLIENT_SYNC
     sync_profiles.cc
     sync_profiles.h
     sync_records.cc
-    sync_records.h)
+    sync_records.h
+    sync_router_hosts.cc
+    sync_router_hosts.h)

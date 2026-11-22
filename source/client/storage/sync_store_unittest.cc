@@ -49,6 +49,15 @@ protected:
                transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_PROFILES, guid, sync_revision, sync_dirty) &&
                transaction.commit();
     }
+
+    bool confirmSentRouterHost(HostId host_id, qint64 sync_revision, qint64 sync_dirty)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, QString::number(host_id),
+                                             sync_revision, sync_dirty) &&
+               transaction.commit();
+    }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -284,4 +293,183 @@ TEST_F(SyncStoreTest, ProfileRemovedOnItsWayToTheRouterIsRemovedThereToo)
     EXPECT_GE(unsynced[0].profile.modifyTime(), start_time);
     EXPECT_EQ(unsynced[0].sync_revision, 12);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A router host the router stored is sent again only when it was edited while it was on its way.
+// Its record is named by the id of its host.
+TEST_F(SyncStoreTest, ConfirmedRouterHostIsSentAgainOnlyWhenEditedMeanwhile)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+
+    ASSERT_TRUE(confirmSentRouterHost(100500, 12, 1));
+    EXPECT_TRUE(unsyncedRouterHosts().isEmpty());
+
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "other-user", "other-secret")));
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "other-user", "other-secret")));
+
+    const QList<RouterHostStore::Unsynced> sent = unsyncedRouterHosts();
+    ASSERT_EQ(sent.size(), 1);
+    EXPECT_EQ(sent[0].sync_revision, 12);
+    EXPECT_EQ(sent[0].sync_dirty, 2);
+
+    ASSERT_TRUE(router_hosts_.modify(routerHost(100500, "other-user", "other-secret")));
+    ASSERT_TRUE(confirmSentRouterHost(100500, 13, sent[0].sync_dirty));
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 13);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Once the router has stored the removal of a router host, the row kept for it is gone.
+TEST_F(SyncStoreTest, ConfirmedRemovalOfARouterHostErasesTheRow)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(confirmSentRouterHost(100500, 7, 1));
+    ASSERT_TRUE(router_hosts_.remove(100500));
+    ASSERT_EQ(rowCount("router_hosts"), 1);
+
+    ASSERT_TRUE(confirmSentRouterHost(100500, 8, 1));
+
+    EXPECT_EQ(rowCount("router_hosts"), 0);
+    EXPECT_TRUE(unsyncedRouterHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A router host removed while it was on its way to the router for the first time left no row, and
+// the router holds it now. Its removal is kept to be sent.
+TEST_F(SyncStoreTest, RouterHostRemovedOnItsWayToTheRouterIsRemovedThereToo)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+    ASSERT_TRUE(router_hosts_.remove(100500));
+    ASSERT_EQ(rowCount("router_hosts"), 0);
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(confirmSentRouterHost(100500, 12, 1));
+
+    EXPECT_TRUE(allRouterHosts().isEmpty());
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].host.hostId(), HostId(100500));
+    EXPECT_GE(unsynced[0].host.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 12);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A record of a router host is named by the decimal id of a host of the router. Any other id is
+// refused and changes nothing.
+TEST_F(SyncStoreTest, RecordIdThatIsNotAHostIdIsRejected)
+{
+    attachSyncStorage();
+
+    addRouterHost(100500, "user", "secret");
+
+    SyncTransaction transaction(db_);
+    ASSERT_EQ(transaction.begin(syncStorageId()), Database::SyncResult::DONE);
+
+    EXPECT_FALSE(transaction.eraseRecord(proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "office"));
+    EXPECT_FALSE(transaction.setRecordSyncRevision(proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "0", 7));
+    EXPECT_FALSE(transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "100500x", 7, 1));
+    EXPECT_FALSE(transaction.confirmSentRecord(
+        proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, QString::number(kMinTempHostId), 7, 1));
+    ASSERT_TRUE(transaction.commit());
+
+    EXPECT_EQ(rowCount("router_hosts"), 1);
+
+    const QList<RouterHostStore::Unsynced> unsynced = unsyncedRouterHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 0);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// What the device sent is kept under the type and the id of the record and under the hash of the
+// data that went. Several sends of one record are kept side by side: each is found by its hash and
+// erased on its own, and all of them are erased together.
+TEST_F(SyncStoreTest, SendsOfOneRecordAreKeptSideBySide)
+{
+    attachSyncStorage();
+
+    const proto::router::SyncDataType kType = proto::router::SYNC_DATA_TYPE_CREDENTIALS;
+    const QString kRecordId = "11111111-1111-1111-1111-111111111111";
+    const QByteArray kFirst("first");
+    const QByteArray kSecond("second");
+
+    qint64 sync_dirty = 0;
+
+    SyncTransaction transaction(db_);
+    ASSERT_EQ(transaction.begin(syncStorageId()), Database::SyncResult::DONE);
+
+    EXPECT_EQ(transaction.findSentRecord(kType, kRecordId, kFirst, &sync_dirty), Database::FindResult::NOT_FOUND);
+
+    ASSERT_TRUE(transaction.storeSentRecord(kType, kRecordId, kFirst, 1));
+    ASSERT_TRUE(transaction.storeSentRecord(kType, kRecordId, kSecond, 2));
+
+    ASSERT_EQ(transaction.findSentRecord(kType, kRecordId, kFirst, &sync_dirty), Database::FindResult::FOUND);
+    EXPECT_EQ(sync_dirty, 1);
+    ASSERT_EQ(transaction.findSentRecord(kType, kRecordId, kSecond, &sync_dirty), Database::FindResult::FOUND);
+    EXPECT_EQ(sync_dirty, 2);
+
+    EXPECT_EQ(transaction.findSentRecord(proto::router::SYNC_DATA_TYPE_PROFILES, kRecordId, kFirst, &sync_dirty),
+              Database::FindResult::NOT_FOUND);
+
+    ASSERT_TRUE(transaction.storeSentRecord(kType, kRecordId, kFirst, 3));
+    ASSERT_EQ(transaction.findSentRecord(kType, kRecordId, kFirst, &sync_dirty), Database::FindResult::FOUND);
+    EXPECT_EQ(sync_dirty, 3);
+
+    ASSERT_TRUE(transaction.eraseSentRecord(kType, kRecordId, kFirst));
+    EXPECT_EQ(transaction.findSentRecord(kType, kRecordId, kFirst, &sync_dirty), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(transaction.findSentRecord(kType, kRecordId, kSecond, &sync_dirty), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(transaction.storeSentRecord(kType, kRecordId, kFirst, 1));
+    ASSERT_TRUE(transaction.eraseAllSentRecords(kType, kRecordId));
+    EXPECT_EQ(transaction.findSentRecord(kType, kRecordId, kFirst, &sync_dirty), Database::FindResult::NOT_FOUND);
+    EXPECT_EQ(transaction.findSentRecord(kType, kRecordId, kSecond, &sync_dirty), Database::FindResult::NOT_FOUND);
+
+    ASSERT_TRUE(transaction.commit());
+    EXPECT_EQ(rowCount("sync_sent_records"), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// What the device sent to a storage means nothing once the device has left the storage or joined
+// another one, so it is dropped then.
+TEST_F(SyncStoreTest, SentRecordsAreDroppedWithTheStorage)
+{
+    attachSyncStorage();
+
+    const auto storeSentRecord = [this]()
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.storeSentRecord(
+                   proto::router::SYNC_DATA_TYPE_CREDENTIALS, "office", QByteArray("hash"), 1) &&
+               transaction.commit();
+    };
+
+    ASSERT_TRUE(storeSentRecord());
+    ASSERT_EQ(rowCount("sync_sent_records"), 1);
+
+    const SecureByteArray key(Random::byteArray(32));
+    ASSERT_EQ(router_store_.setSyncStorage(*findRouter(db_), Random::byteArray(16), key, false),
+              Database::SyncResult::DONE);
+    EXPECT_EQ(rowCount("sync_sent_records"), 0);
+
+    ASSERT_TRUE(storeSentRecord());
+    ASSERT_EQ(rowCount("sync_sent_records"), 1);
+
+    RouterConfig router = *findRouter(db_);
+    router.setSyncEnabled(false);
+    ASSERT_TRUE(router_store_.save(router));
+    EXPECT_EQ(rowCount("sync_sent_records"), 0);
 }

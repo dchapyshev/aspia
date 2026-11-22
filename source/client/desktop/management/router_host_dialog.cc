@@ -86,6 +86,12 @@ RouterHostDialog::RouterHostDialog(const RouterHost& host, QWidget* parent)
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &RouterHostDialog::onButtonBoxClicked);
     connect(ui->combo_workspace, &QComboBox::currentIndexChanged, this, &RouterHostDialog::onWorkspaceChanged);
 
+    connect(ui->checkbox_saved_credentials, &QCheckBox::clicked, this, [this]() { credentials_edited_ = true; });
+    connect(ui->combo_credential, &QComboBox::activated, this, [this]() { credentials_edited_ = true; });
+    connect(ui->edit_username, &QLineEdit::textEdited, this, [this]() { credentials_edited_ = true; });
+    connect(ui->edit_password, &QLineEdit::textEdited, this, [this]() { credentials_edited_ = true; });
+    connect(ui->combo_profile, &QComboBox::activated, this, [this]() { profile_edited_ = true; });
+
     int label_width = 0;
     for (const QLabel* label : { ui->label_workspace, ui->label_group, ui->label_display_name,
                                  ui->label_username, ui->label_password, ui->label_credential,
@@ -225,7 +231,6 @@ void RouterHostDialog::onSavedCredentialsToggled(bool checked)
     ui->edit_password->setVisible(!checked);
     ui->label_credential->setVisible(checked);
     ui->combo_credential->setVisible(checked);
-    ui->label_credentials_note->setVisible(!checked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -259,8 +264,8 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
     host.display_name = ui->edit_display_name->text();
     host.comment      = ui->edit_comment->toPlainText();
 
-    // The credentials live on this computer only, so they are not the router's to accept or
-    // refuse. Kept for the answer, they would be lost with any error of it. A failure to keep them
+    // The credentials are kept by the client, so they are not the router's to accept or refuse.
+    // Kept for the answer, they would be lost with any error of it. A failure to keep them
     // stops here, with what was typed still in the form.
     if (!saveCredentials())
     {
@@ -273,6 +278,8 @@ void RouterHostDialog::onButtonBoxClicked(QAbstractButton* button)
         MsgBox::warning(this, tr("Failed to save the profile."));
         return;
     }
+
+    RouterController::startSyncRecordExchange();
 
     if (session->config().sessionType() == proto::router::SESSION_TYPE_OPERATOR)
     {
@@ -400,7 +407,7 @@ bool RouterHostDialog::saveCredentials()
     if (isTempHostId(host_.host_id))
         return true;
 
-    if (!credentials_loaded_)
+    if (!credentials_loaded_ || !credentials_edited_)
         return true;
 
     RouterHostStore store;
@@ -445,7 +452,7 @@ bool RouterHostDialog::saveCredentials()
 //--------------------------------------------------------------------------------------------------
 bool RouterHostDialog::saveProfile()
 {
-    if (!credentials_loaded_)
+    if (!credentials_loaded_ || !profile_edited_)
         return true;
 
     return RouterHostStore().setProfileId(host_.host_id, ui->combo_profile->currentProfileId());

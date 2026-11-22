@@ -57,12 +57,13 @@ private:
     Switch* switch_saved_credentials_ = nullptr;
     LineEdit* edit_username_ = nullptr;
     LineEdit* edit_password_ = nullptr;
-    Label* label_note_ = nullptr;
     CredentialComboBox* combo_credential_ = nullptr;
     ProfileComboBox* combo_profile_ = nullptr;
     Label* label_error_ = nullptr;
     HostId host_id_ = kInvalidHostId;
     bool credentials_loaded_ = true;
+    bool credentials_edited_ = false;
+    bool profile_edited_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterHostEditor)
 };
