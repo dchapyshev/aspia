@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
 #include "base/net/tcp_channel.h"
@@ -297,6 +298,13 @@ void ClientWorker::onNewConnection()
             static_cast<proto::router::SessionType>(channel->peerSessionType());
 
         LOG(INFO) << "New client session:" << session_type << "(" << channel->peerAddress() << ")";
+
+        if (kCurrentVersion > channel->peerVersion())
+        {
+            LOG(WARNING) << "Version mismatch (router:" << kCurrentVersion << "client:"
+                         << channel->peerVersion() << "). Rejected";
+            continue;
+        }
 
         if (isUserLimitReached(channel->peerUserId()))
         {

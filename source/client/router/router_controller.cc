@@ -21,6 +21,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "client/config.h"
 #include "client/router/router_hosts_cleaner.h"
 #include "client/storage/router_store.h"
@@ -390,8 +391,27 @@ void RouterController::onTwoFactorFinished(qint64 user_id, const QVersionNumber&
 //--------------------------------------------------------------------------------------------------
 void RouterController::onRouterAuthenticated(const QVersionNumber& peer_version)
 {
-    if (context_ && context_->two_factor)
-        context_->two_factor->onStart(peer_version);
+    if (!context_ || !context_->two_factor)
+        return;
+
+    if (peer_version > kCurrentVersion)
+    {
+        LOG(WARNING) << "Version mismatch (router:" << peer_version << "client:" << kCurrentVersion << ")";
+
+        context_->two_factor.reset();
+
+        if (router_worker_)
+            QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
+
+        addEvent(RouterEvent::Severity::CRITICAL,
+                 tr("Router %1 has version %2, which is newer than the client version %3. Update the client"
+                    " to connect to the router.")
+                     .arg(context_->config->address(), peer_version.toString(), kCurrentVersion.toString()));
+        updateStatus();
+        return;
+    }
+
+    context_->two_factor->onStart(peer_version);
 }
 
 //--------------------------------------------------------------------------------------------------
