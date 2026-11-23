@@ -134,6 +134,12 @@ void UpdateChecker::setProxy(const ProxySettings& proxy)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UpdateChecker::setMaximumVersion(const QVersionNumber& version)
+{
+    maximum_version_ = version;
+}
+
+//--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
     LOG(TRACE) << "run BEGIN";
@@ -145,6 +151,13 @@ void UpdateChecker::run()
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::check()
 {
+    if (!maximum_version_.isNull() && maximum_version_ <= kCurrentVersion)
+    {
+        LOG(INFO) << "Version" << kCurrentVersion << "is limited to version" << maximum_version_;
+        emit sig_checkFinished(UpdateInfo());
+        return;
+    }
+
     QString os;
 #if defined(Q_OS_WINDOWS)
     os = "windows";
@@ -202,6 +215,13 @@ void UpdateChecker::check()
     if (!target_version)
     {
         emit sig_checkFailed();
+        return;
+    }
+
+    if (!maximum_version_.isNull() && *target_version > maximum_version_)
+    {
+        LOG(INFO) << "Version" << *target_version << "is newer than allowed version" << maximum_version_;
+        emit sig_checkFinished(UpdateInfo());
         return;
     }
 

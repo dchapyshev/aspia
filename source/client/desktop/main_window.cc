@@ -207,7 +207,7 @@ MainWindow::MainWindow(QWidget* parent)
         SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
             settings.updateServer(), settings.updatePublicKey(), UserSettings().updateChannel(), "client",
-            proxy.settings(), UpdateDialog::Action::ASK, this));
+            proxy.settings(), QVersionNumber(), UpdateDialog::Action::ASK, this));
         dialog->exec();
     }, Qt::QueuedConnection);
 

@@ -39,6 +39,7 @@ public:
     explicit UpdateWidget(const QString& package, QWidget* parent = nullptr);
     ~UpdateWidget() final;
 
+    void setMaximumVersion(const QVersionNumber& version);
     void check(const QString& server, const QByteArray& public_key, const QString& channel);
 
 private slots:
@@ -79,6 +80,7 @@ private:
     QString server_;
     QByteArray public_key_;
     QString channel_;
+    QVersionNumber maximum_version_;
     UpdateInfo update_info_;
 
     ScopedQPointer<UpdateChecker> checker_;

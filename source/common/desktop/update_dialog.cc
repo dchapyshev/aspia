@@ -45,7 +45,7 @@ QString makeUrl(const QUrl& url)
 //--------------------------------------------------------------------------------------------------
 UpdateDialog::UpdateDialog(const QString& server, const QByteArray& public_key,
                            const QString& channel, const QString& package, const ProxySettings& proxy,
-                           Action action, QWidget* parent)
+                           const QVersionNumber& maximum_version, Action action, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UpdateDialog>()),
       channel_(channel),
@@ -74,6 +74,7 @@ UpdateDialog::UpdateDialog(const QString& server, const QByteArray& public_key,
     checker_ = std::make_unique<UpdateChecker>(channel, package);
     checker_->setServer(server);
     checker_->setProxy(proxy_);
+    checker_->setMaximumVersion(maximum_version);
     if (!public_key.isEmpty())
         checker_->setPublicKeys({ public_key });
 

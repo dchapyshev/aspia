@@ -30,6 +30,7 @@
 #include "base/auto_qpointer.h"
 #include "base/build_config.h"
 #include "base/logging.h"
+#include "base/version_constants.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
@@ -38,6 +39,7 @@
 #include "common/desktop/msg_box.h"
 #include "common/desktop/update_dialog.h"
 #include "host/database.h"
+#include "host/host_storage.h"
 #include "host/screen_capturer.h"
 #include "host/service.h"
 #include "host/settings_util.h"
@@ -177,10 +179,19 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(ui->button_check_updates, &QPushButton::clicked, this, [this]()
     {
+        QVersionNumber maximum_version;
+        if (Database::instance().isRouterEnabled())
+        {
+            maximum_version = HostStorage().routerVersion();
+            if (maximum_version.isNull())
+                maximum_version = kCurrentVersion;
+        }
+
         SystemSettings settings;
         AutoQPointer<UpdateDialog> dialog(
             new UpdateDialog(settings.updateServer(), settings.updatePublicKey(), settings.updateChannel(),
-                             "host", Database::instance().proxySettings(), UpdateDialog::Action::ASK, this));
+                             "host", Database::instance().proxySettings(), maximum_version,
+                             UpdateDialog::Action::ASK, this));
         dialog->exec();
     });
 

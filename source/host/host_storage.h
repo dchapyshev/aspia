@@ -20,6 +20,7 @@
 #define HOST_HOST_STORAGE_H
 
 #include <QSettings>
+#include <QVersionNumber>
 
 #include "base/peer/host_id.h"
 
@@ -68,6 +69,9 @@ public:
     int routerConnectCount() const;
     int routerConnectCountSinceStart() const;
     void registerRouterConnect();
+
+    QVersionNumber routerVersion() const;
+    void setRouterVersion(const QVersionNumber& version);
 
     bool isBootToSafeMode() const;
     void setBootToSafeMode(bool enable);

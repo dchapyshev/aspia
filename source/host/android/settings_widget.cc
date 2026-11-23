@@ -30,6 +30,7 @@
 #include "base/build_config.h"
 #include "base/crypto/secure_string.h"
 #include "base/gui_application.h"
+#include "base/version_constants.h"
 #include "base/net/address.h"
 #include "common/android/about_widget.h"
 #include "common/android/button.h"
@@ -44,6 +45,7 @@
 #include "common/android/switch.h"
 #include "common/android/update_widget.h"
 #include "host/database.h"
+#include "host/host_storage.h"
 #include "host/settings_util.h"
 #include "host/system_settings.h"
 #include "host/user_settings.h"
@@ -198,7 +200,16 @@ void SettingsWidget::onShowUpdate()
     if (QWidget* widget = focusWidget())
         widget->clearFocus();
 
+    QVersionNumber maximum_version;
+    if (Database::instance().isRouterEnabled())
+    {
+        maximum_version = HostStorage().routerVersion();
+        if (maximum_version.isNull())
+            maximum_version = kCurrentVersion;
+    }
+
     SystemSettings settings;
+    update_page_->setMaximumVersion(maximum_version);
     update_page_->check(settings.updateServer(), settings.updatePublicKey(), settings.updateChannel());
 
     stack_->setCurrentWidget(update_page_);

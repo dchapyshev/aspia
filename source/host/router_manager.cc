@@ -176,7 +176,9 @@ void RouterManager::onTcpReady()
 
     if (!config_->isPortable())
     {
-        HostStorage().registerRouterConnect();
+        HostStorage storage;
+        storage.registerRouterConnect();
+        storage.setRouterVersion(tcp_channel_->peerVersion());
         onTelemetryChanged();
     }
 

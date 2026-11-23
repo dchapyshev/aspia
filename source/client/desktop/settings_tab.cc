@@ -956,7 +956,7 @@ void SettingsTab::onCheckForUpdatesClicked()
     SystemSettings settings;
     AutoQPointer<UpdateDialog> dialog(new UpdateDialog(
         settings.updateServer(), settings.updatePublicKey(), ui->combobox_update_channel->currentData().toString(),
-        "client", proxy.settings(), UpdateDialog::Action::ASK, this));
+        "client", proxy.settings(), QVersionNumber(), UpdateDialog::Action::ASK, this));
     dialog->exec();
 }
 

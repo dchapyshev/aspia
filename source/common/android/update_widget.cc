@@ -134,6 +134,12 @@ UpdateWidget::~UpdateWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+void UpdateWidget::setMaximumVersion(const QVersionNumber& version)
+{
+    maximum_version_ = version;
+}
+
+//--------------------------------------------------------------------------------------------------
 void UpdateWidget::check(const QString& server, const QByteArray& public_key, const QString& channel)
 {
     // The screen is left and entered again while the update it started is downloading, and a check
@@ -165,6 +171,7 @@ void UpdateWidget::check(const QString& server, const QByteArray& public_key, co
 
     checker_ = new UpdateChecker(channel_, package_, this);
     checker_->setServer(server_);
+    checker_->setMaximumVersion(maximum_version_);
     if (!public_key_.isEmpty())
         checker_->setPublicKeys({ public_key_ });
 

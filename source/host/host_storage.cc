@@ -262,6 +262,18 @@ void HostStorage::registerRouterConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
+QVersionNumber HostStorage::routerVersion() const
+{
+    return QVersionNumber::fromString(impl_.value("router_version").toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostStorage::setRouterVersion(const QVersionNumber& version)
+{
+    impl_.setValue("router_version", version.toString());
+}
+
+//--------------------------------------------------------------------------------------------------
 QList<qint64> HostStorage::serviceStarts() const
 {
     return readTimepoints(impl_, "service_starts");

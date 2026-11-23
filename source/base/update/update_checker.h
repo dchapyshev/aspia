@@ -46,6 +46,9 @@ public:
     // The files are read through the proxy of |proxy| if it is enabled.
     void setProxy(const ProxySettings& proxy);
 
+    // The check offers no version newer than |version|. A null one sets no limit.
+    void setMaximumVersion(const QVersionNumber& version);
+
 signals:
     void sig_checkFinished(const UpdateInfo& update_info);
     void sig_checkFailed();
@@ -63,6 +66,7 @@ private:
     const QString package_;
     QList<QByteArray> public_keys_;
     ProxySettings proxy_;
+    QVersionNumber maximum_version_;
     std::atomic_bool interrupted_ { false };
 
     Q_DISABLE_COPY_MOVE(UpdateChecker)

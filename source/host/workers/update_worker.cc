@@ -81,12 +81,26 @@ void UpdateWorker::onCheckUpdates()
     storage.setUpdateCheckResult(QString());
     storage.setUpdateInstallVersion(QString());
 
+    QVersionNumber router_version;
+    if (Database::instance().isRouterEnabled())
+    {
+        router_version = storage.routerVersion();
+        if (router_version <= kCurrentVersion)
+        {
+            LOG(INFO) << "Router version" << router_version << "is not newer than host version"
+                      << kCurrentVersion << ". The update is not checked";
+            setCheckResult(kResultNoUpdate);
+            return;
+        }
+    }
+
     SystemSettings settings;
     QByteArray public_key = settings.updatePublicKey();
 
     update_checker_ = new UpdateChecker(settings.updateChannel(), kHostUpdatePackage, this);
     update_checker_->setServer(settings.updateServer());
     update_checker_->setProxy(Database::instance().proxySettings());
+    update_checker_->setMaximumVersion(router_version);
     if (!public_key.isEmpty())
         update_checker_->setPublicKeys({ public_key });
 
