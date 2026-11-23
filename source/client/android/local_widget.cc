@@ -566,7 +566,6 @@ void LocalWidget::onLocalRecordsChanged()
 
     tree_outdated_ = true;
 
-    // An editor and the search keep what they show.
     if (page != kPageHosts)
         return;
 

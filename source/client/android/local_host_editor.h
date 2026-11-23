@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+#include "client/config.h"
+
 class Button;
 class CredentialComboBox;
 class Label;
@@ -49,6 +51,7 @@ signals:
     void sig_accepted();
 
 private slots:
+    void onLocalHostsChanged();
     void onSavedCredentialsToggled(bool checked);
     void onSaveClicked();
     void onDeleteClicked();
@@ -69,7 +72,7 @@ private:
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
-    qint64 group_id_ = 0;
+    LocalHostConfig loaded_host_;
     bool lists_loaded_ = true;
 
     Q_DISABLE_COPY_MOVE(LocalHostEditor)

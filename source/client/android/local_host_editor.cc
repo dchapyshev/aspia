@@ -122,6 +122,8 @@ LocalHostEditor::LocalHostEditor(QWidget* parent)
         switch_saved_credentials_->setEnabled(combo_credential_->count() > 0);
     });
 
+    connect(&RouterController::instance(), &RouterController::sig_localHostsChanged,
+            this, &LocalHostEditor::onLocalHostsChanged);
     connect(switch_saved_credentials_, &Switch::toggled, this, &LocalHostEditor::onSavedCredentialsToggled);
     connect(save, &Button::clicked, this, &LocalHostEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &LocalHostEditor::onDeleteClicked);
@@ -134,7 +136,8 @@ LocalHostEditor::~LocalHostEditor() = default;
 void LocalHostEditor::prepareForAdd(qint64 group_id)
 {
     entry_id_ = -1;
-    group_id_ = group_id;
+    loaded_host_ = LocalHostConfig();
+    loaded_host_.setGroupId(group_id);
 
     edit_name_->clear();
     edit_address_->clear();
@@ -163,7 +166,7 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     }
 
     entry_id_ = host_id;
-    group_id_ = host.groupId();
+    loaded_host_ = host;
 
     edit_name_->setText(host.name());
     edit_address_->setText(host.address());
@@ -187,6 +190,49 @@ bool LocalHostEditor::prepareForEdit(qint64 host_id)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostEditor::onLocalHostsChanged()
+{
+    if (entry_id_ < 0)
+        return;
+
+    LocalHostConfig host;
+    if (LocalHostStore().find(entry_id_, &host) != Database::FindResult::FOUND)
+    {
+        LOG(INFO) << "Host" << entry_id_ << "is not read, the form keeps what it shows";
+        return;
+    }
+
+    // A field the user has changed keeps what is entered, the rest follow the record.
+    if (edit_name_->text() == loaded_host_.name())
+        edit_name_->setText(host.name());
+
+    if (edit_address_->text() == loaded_host_.address())
+        edit_address_->setText(host.address());
+
+    if (edit_comment_->text() == loaded_host_.comment())
+        edit_comment_->setText(host.comment());
+
+    if (combo_profile_->currentProfileId() == loaded_host_.profileId())
+        combo_profile_->setCurrentProfileId(host.profileId());
+
+    const qint64 credential_id =
+        switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0;
+
+    // The pair and the record of credentials stand for one choice, so they change together.
+    if (credential_id == loaded_host_.credentialId() && edit_username_->text() == loaded_host_.username() &&
+        edit_password_->text() == loaded_host_.password().toString())
+    {
+        edit_username_->setText(host.username());
+        edit_password_->setText(host.password().toString());
+
+        if (!loadCredentials(host.credentialId()))
+            lists_loaded_ = false;
+    }
+
+    loaded_host_ = host;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,7 +314,7 @@ void LocalHostEditor::onSaveClicked()
 
     LocalHostConfig data;
     data.setId(entry_id_);
-    data.setGroupId(group_id_);
+    data.setGroupId(loaded_host_.groupId());
     data.setName(name);
     data.setAddress(address_text);
     data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
