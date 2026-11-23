@@ -406,3 +406,72 @@ TEST(UpdateCheckerTest, ManifestOfAnotherVersionFails)
     ASSERT_TRUE(failed.wait(15000));
     EXPECT_TRUE(spy.isEmpty());
 }
+
+//--------------------------------------------------------------------------------------------------
+// The version the rules offer is the maximum one itself.
+TEST(UpdateCheckerTest, UpdateUpToMaximumIsOffered)
+{
+    FileServer server(withSignatures(
+        { { "/stable.json", rules() },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), manifest() } }));
+
+    std::unique_ptr<UpdateChecker> checker = checkerFor(server);
+    checker->setMaximumVersion(nextVersion());
+
+    QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
+    QSignalSpy failed(checker.get(), &UpdateChecker::sig_checkFailed);
+
+    checker->start();
+
+    ASSERT_TRUE(spy.wait(15000));
+    EXPECT_TRUE(failed.isEmpty());
+    EXPECT_EQ(spy.takeFirst().at(0).value<UpdateInfo>().version(), nextVersion());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The manifest of the maximum version is there, but the rules of the channel do not offer it.
+TEST(UpdateCheckerTest, UpdateNewerThanMaximumIsNotOffered)
+{
+    QVersionNumber newer(nextVersion().majorVersion(), nextVersion().minorVersion(),
+                         nextVersion().microVersion() + 1);
+
+    QByteArray newer_rules = QByteArray(rules()).replace(
+        QString("\"latest\": \"%1\"").arg(nextVersion().toString()).toUtf8(),
+        QString("\"latest\": \"%1\"").arg(newer.toString()).toUtf8());
+    ASSERT_NE(newer_rules, rules());
+
+    FileServer server(withSignatures(
+        { { "/stable.json", newer_rules },
+          { QString("/versions/%1.json").arg(nextVersion().toString()), manifest() } }));
+
+    std::unique_ptr<UpdateChecker> checker = checkerFor(server);
+    checker->setMaximumVersion(nextVersion());
+
+    QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
+    QSignalSpy failed(checker.get(), &UpdateChecker::sig_checkFailed);
+
+    checker->start();
+
+    ASSERT_TRUE(spy.wait(15000));
+    EXPECT_TRUE(failed.isEmpty());
+    EXPECT_FALSE(spy.takeFirst().at(0).value<UpdateInfo>().isValid());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The server has no files, so an answer without a failure means it was not asked.
+TEST(UpdateCheckerTest, MaximumNotNewerThanCurrentVersionIsNotChecked)
+{
+    FileServer server({});
+
+    std::unique_ptr<UpdateChecker> checker = checkerFor(server);
+    checker->setMaximumVersion(kCurrentVersion);
+
+    QSignalSpy spy(checker.get(), &UpdateChecker::sig_checkFinished);
+    QSignalSpy failed(checker.get(), &UpdateChecker::sig_checkFailed);
+
+    checker->start();
+
+    ASSERT_TRUE(spy.wait(15000));
+    EXPECT_TRUE(failed.isEmpty());
+    EXPECT_FALSE(spy.takeFirst().at(0).value<UpdateInfo>().isValid());
+}
