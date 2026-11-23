@@ -20,6 +20,7 @@
 #define CLIENT_ANDROID_LOCAL_WIDGET_H
 
 #include <QList>
+#include <QSet>
 #include <QString>
 #include <QWidget>
 
@@ -86,7 +87,7 @@ private slots:
     void onLocalRecordsChanged();
 
 private:
-    void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
+    void populateGroups(qint64 parent_id, QTreeWidgetItem* parent, const QSet<qint64>& collapsed_groups);
     void showTree();
     void returnToTree();
     void showHosts(qint64 group_id, const QString& title);

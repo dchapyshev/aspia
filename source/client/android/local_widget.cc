@@ -23,6 +23,7 @@
 #include <QScrollBar>
 #include <QStackedWidget>
 #include <QTreeWidgetItem>
+#include <QTreeWidgetItemIterator>
 #include <QVBoxLayout>
 
 #include "base/auto_qpointer.h"
@@ -189,11 +190,18 @@ void LocalWidget::reload()
 
     const int scroll_position = tree_->verticalScrollBar()->value();
 
+    QSet<qint64> collapsed_groups;
+    for (QTreeWidgetItemIterator it(tree_, QTreeWidgetItemIterator::HasChildren); *it; ++it)
+    {
+        if (!(*it)->isExpanded())
+            collapsed_groups.insert((*it)->data(0, kGroupIdRole).toLongLong());
+    }
+
     tree_->clear();
     tree_outdated_ = false;
 
     // Top-level groups, then the ungrouped hosts (group_id 0) shown directly at the root.
-    populateGroups(0, nullptr);
+    populateGroups(0, nullptr, collapsed_groups);
 
     OnlineChecker::HostList hosts;
     const QIcon icon = GuiApplication::svgIcon(":/img/computer.svg");
@@ -639,7 +647,7 @@ bool LocalWidget::isEditorPage() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
+void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent, const QSet<qint64>& collapsed_groups)
 {
     const QIcon icon = GuiApplication::svgIcon(":/img/folder.svg");
 
@@ -656,9 +664,9 @@ void LocalWidget::populateGroups(qint64 parent_id, QTreeWidgetItem* parent)
         // A group row has no trailing address; spanning it across both columns keeps the accordion
         // chevron at the row edge instead of the column boundary.
         item->setFirstColumnSpanned(true);
-        item->setExpanded(true);
+        item->setExpanded(!collapsed_groups.contains(group.id()));
 
-        populateGroups(group.id(), item);
+        populateGroups(group.id(), item, collapsed_groups);
     }
 }
 
