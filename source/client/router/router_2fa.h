@@ -101,7 +101,7 @@ private:
 
     void openPrompt(const proto::router::TwoFactorChallenge& challenge, const QString& otpauth_uri);
     void sendCode(const QString& totp_code);
-    void send(const proto::router::ClientToRouter& message);
+    void sendTwoFactorResponse(proto::router::TwoFactorResponse&& response);
     void readTwoFactorChallenge(const proto::router::TwoFactorChallenge& challenge);
     void readLoginResult(const proto::router::LoginResult& result);
 
@@ -109,6 +109,7 @@ private:
     QVersionNumber version_;
     QPointer<RouterWorker> router_worker_;
     ScopedQPointer<TwoFactorPrompt> prompt_;
+    bool response_sent_ = false;
 
     Q_DISABLE_COPY_MOVE(Router2FA)
 };

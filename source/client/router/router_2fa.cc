@@ -161,17 +161,21 @@ void Router2FA::sendCode(const QString& totp_code)
     // it was refused or never arrived, the next challenge asking again and reopening the prompt.
     prompt_.reset();
 
-    proto::router::ClientToRouter message;
-    proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
-    response->set_totp_code(totp_code.toStdString());
-    send(message);
+    proto::router::TwoFactorResponse response;
+    response.set_totp_code(totp_code.toStdString());
+    sendTwoFactorResponse(std::move(response));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router2FA::send(const proto::router::ClientToRouter& message)
+void Router2FA::sendTwoFactorResponse(proto::router::TwoFactorResponse&& response)
 {
+    response_sent_ = true;
+
     if (!router_worker_)
         return;
+
+    proto::router::ClientToRouter message;
+    *message.mutable_two_factor_response() = std::move(response);
 
     QMetaObject::invokeMethod(router_worker_, &RouterWorker::onSendMessage, Qt::QueuedConnection,
                               quint8(proto::router::CHANNEL_ID_CLIENT), serialize(message));
@@ -208,10 +212,9 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
                 LOG(WARNING) << "Stored device token does not open here";
             if (!token.isEmpty())
             {
-                proto::router::ClientToRouter message;
-                proto::router::TwoFactorResponse* response = message.mutable_two_factor_response();
-                response->set_token(token.toStdString());
-                send(message);
+                proto::router::TwoFactorResponse response;
+                response.set_token(token.toStdString());
+                sendTwoFactorResponse(std::move(response));
                 return;
             }
 
@@ -266,6 +269,15 @@ void Router2FA::readTwoFactorChallenge(const proto::router::TwoFactorChallenge& 
 //--------------------------------------------------------------------------------------------------
 void Router2FA::readLoginResult(const proto::router::LoginResult& result)
 {
+    if (!response_sent_)
+    {
+        LOG(ERROR) << "Login result without a two-factor response";
+        RouterController::instance().addEvent(RouterEvent::Severity::CRITICAL,
+            tr("Router %1 did not perform two-factor authentication. Signing in is not possible.")
+                .arg(config_->address()));
+        return;
+    }
+
     LOG(INFO) << "Login completed";
 
     bool config_changed = false;

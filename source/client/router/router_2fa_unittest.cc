@@ -143,6 +143,15 @@ protected:
         return message;
     }
 
+    // Answers the question of the router with a code, the way the operator does. The router
+    // opens the session only in reply to an answer, and no other LoginResult is taken.
+    static void answerChallenge(Router2FA& login)
+    {
+        Router2FATestPeer::receive(login, activeChallenge());
+        ASSERT_NE(login.twoFactorPrompt(), nullptr);
+        login.twoFactorPrompt()->submitCode("123456");
+    }
+
     QTemporaryDir temp_dir_;
     Router2FA login_;
     int prompts_required_ = 0;
@@ -293,6 +302,59 @@ TEST_F(Router2FATest, RepeatedEnrollmentChallengeKeepsThePrompt)
 }
 
 //--------------------------------------------------------------------------------------------------
+// The router opens the session in reply to an answer of the second factor. A LoginResult for a
+// login that has answered nothing comes from a router without the stage, and opens no session.
+TEST_F(Router2FATest, LoginResultWithoutAnAnswerIsRefused)
+{
+    seedRecord();
+
+    RouterController controller;
+
+    int critical_events = 0;
+    QObject::connect(&controller, &RouterController::sig_event, &controller,
+                     [&critical_events](const RouterEvent& event)
+    {
+        if (event.severity == RouterEvent::Severity::CRITICAL)
+            ++critical_events;
+    });
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    Router2FATestPeer::receive(login_, activeChallenge());
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    message.mutable_login_result()->set_user_guid(kUserGuid);
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(logged_in_user_, 0);
+    EXPECT_EQ(critical_events, 1);
+
+    const std::optional<RouterConfig> stored = findRouter(Database::instance());
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_TRUE(stored->userGuid().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// The answer leaves towards the worker, which may already be on the next connection, so a
+// reconnect reported after it does not make the login forget that it has answered.
+TEST_F(Router2FATest, AnswerIsRememberedThroughAReconnect)
+{
+    seedRecord();
+
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    answerChallenge(login_);
+
+    Router2FATestPeer::dropConnection(login_);
+    Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+
+    proto::router::RouterToClient message;
+    message.mutable_login_result()->set_user_id(kUserId);
+    Router2FATestPeer::receive(login_, message);
+
+    EXPECT_EQ(logged_in_user_, kUserId);
+}
+
+//--------------------------------------------------------------------------------------------------
 // The token issued by LoginResult is what skips the prompt next time, so it must reach the
 // stored record.
 TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
@@ -300,6 +362,7 @@ TEST_F(Router2FATest, IssuedTokenIsStoredInTheRecord)
     seedRecord();
 
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    answerChallenge(login_);
 
     const std::string token(proto::router::kDeviceTokenSize, 't');
 
@@ -327,6 +390,7 @@ TEST_F(Router2FATest, TokenOfAnUnexpectedSizeIsNotStored)
     seedRecord();
 
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    answerChallenge(login_);
 
     proto::router::RouterToClient message;
     message.mutable_login_result()->set_user_id(kUserId);
@@ -349,6 +413,7 @@ TEST_F(Router2FATest, LoginResultStoresTheGuidOfTheUser)
     seedRecord();
 
     Router2FATestPeer::start(login_, QVersionNumber(3, 0, 0));
+    answerChallenge(login_);
 
     proto::router::RouterToClient message;
     message.mutable_login_result()->set_user_id(kUserId);
@@ -391,6 +456,7 @@ TEST_F(Router2FATest, LoginOfAnotherUserTurnsSyncOff)
 
     Router2FA login(record);
     Router2FATestPeer::start(login, QVersionNumber(3, 0, 0));
+    answerChallenge(login);
 
     proto::router::RouterToClient message;
     message.mutable_login_result()->set_user_id(kUserId);
@@ -435,6 +501,7 @@ TEST_F(Router2FATest, LoginOfAnotherUserWithAnIssuedTokenTurnsSyncOff)
 
     Router2FA login(record);
     Router2FATestPeer::start(login, QVersionNumber(3, 0, 0));
+    answerChallenge(login);
 
     const std::string token(proto::router::kDeviceTokenSize, 't');
 
