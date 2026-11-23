@@ -19,6 +19,7 @@
 #include "common/android/message_dialog.h"
 
 #include <QDialog>
+#include <QTimer>
 
 #include "common/android/dialog.h"
 
@@ -36,6 +37,48 @@ bool MessageDialog::confirm(QWidget* parent, const QString& title, const QString
 
     QObject::connect(cancel, &Button::clicked, &dialog, &QDialog::reject);
     QObject::connect(accept, &Button::clicked, &dialog, &QDialog::accept);
+
+    return dialog.exec() == QDialog::Accepted;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool MessageDialog::importantConfirm(QWidget* parent, const QString& title, const QString& text,
+                                     const QString& accept_text, Seconds delay)
+{
+    Dialog dialog(parent);
+    dialog.setTitle(title);
+    dialog.setText(text);
+
+    Button* cancel = dialog.addButton(QObject::tr("Cancel"), Button::Role::TEXT);
+    Button* accept = dialog.addButton(accept_text, Button::Role::FILLED);
+
+    QObject::connect(cancel, &Button::clicked, &dialog, &QDialog::reject);
+    QObject::connect(accept, &Button::clicked, &dialog, &QDialog::accept);
+
+    QTimer timer;
+    Seconds left = delay;
+
+    QObject::connect(&timer, &QTimer::timeout, &dialog, [&]()
+    {
+        left -= Seconds(1);
+        if (left <= Seconds::zero())
+        {
+            timer.stop();
+            accept->setText(accept_text);
+            accept->setEnabled(true);
+            return;
+        }
+
+        accept->setText(QString("%1 (%2)").arg(accept_text).arg(left.count()));
+    });
+
+    if (delay > Seconds::zero())
+    {
+        accept->setEnabled(false);
+        accept->setText(QString("%1 (%2)").arg(accept_text).arg(left.count()));
+        timer.start(Seconds(1));
+    }
 
     return dialog.exec() == QDialog::Accepted;
 }

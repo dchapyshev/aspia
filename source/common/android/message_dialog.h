@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QString>
 
+#include "base/time_types.h"
+
 class QWidget;
 
 // Helpers for the common modal prompts built on Dialog.
@@ -30,12 +32,12 @@ class MessageDialog
     Q_GADGET
 
 public:
-    // Shows a modal confirmation with a Cancel button and an accept button labelled |accept_text|.
-    // Returns true if the user chose the accept action.
     static bool confirm(QWidget* parent, const QString& title, const QString& text,
                         const QString& accept_text);
 
-    // Shows a modal message with a single OK button.
+    static bool importantConfirm(QWidget* parent, const QString& title, const QString& text,
+                                 const QString& accept_text, Seconds delay);
+
     static void info(QWidget* parent, const QString& title, const QString& text);
 
 private:

@@ -228,10 +228,9 @@ void RouterEditor::onSaveClicked()
 void RouterEditor::onResetSyncClicked()
 {
     const QString text =
-        tr("The synchronized data on the router and on the other devices of the account will be replaced with "
-           "the data of this device. Reset the synchronization?");
+        tr("The data on the router and on the other devices will be replaced with the data of this device.");
 
-    if (!MessageDialog::confirm(this, tr("Reset Synchronization"), text, tr("Reset")))
+    if (!MessageDialog::importantConfirm(this, tr("Reset Synchronization"), text, tr("Reset"), Seconds(10)))
         return;
 
     if (!RouterController::resetSyncStorage())

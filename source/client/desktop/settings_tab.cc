@@ -520,7 +520,7 @@ void SettingsTab::onResetSyncClicked()
         tr("The synchronized data on the router and on the other devices of the account will be replaced with "
            "the data of this device. Reset the synchronization?");
 
-    if (MsgBox::question(this, question) != MsgBox::Yes)
+    if (MsgBox::importantQuestion(this, question, Seconds(10)) != MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
