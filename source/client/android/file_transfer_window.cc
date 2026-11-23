@@ -243,7 +243,12 @@ void FileTransferWindow::forgetHostCredentials()
         local_host.setPassword(SecureString());
 
         if (!store.modify(local_host))
+        {
             LOG(ERROR) << "Unable to remove credentials of local host" << host_.entryId();
+            return;
+        }
+
+        RouterController::startSyncRecordExchange();
         return;
     }
 

@@ -869,7 +869,12 @@ void AndroidMainWindow::saveHostCredentials(const HostConfig& host, qint64 crede
         local_host.setPassword(password);
 
         if (!store.modify(local_host))
+        {
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
+            return;
+        }
+
+        RouterController::startSyncRecordExchange();
         return;
     }
 

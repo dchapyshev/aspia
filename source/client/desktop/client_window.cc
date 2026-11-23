@@ -237,8 +237,7 @@ void ClientWindow::setOsCredentialId(qint64 credential_id)
         return;
     }
 
-    if (host.entryId() <= 0)
-        RouterController::startSyncRecordExchange();
+    RouterController::startSyncRecordExchange();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -423,7 +422,12 @@ void ClientWindow::saveHostCredentials(const HostConfig& host, qint64 credential
         local_host.setPassword(password);
 
         if (!store.modify(local_host))
+        {
             LOG(ERROR) << "Unable to save credentials of local host" << host.entryId();
+            return;
+        }
+
+        RouterController::startSyncRecordExchange();
         return;
     }
 
@@ -490,7 +494,12 @@ void ClientWindow::forgetRefusedCredentials()
         local_host.setPassword(SecureString());
 
         if (!store.modify(local_host))
+        {
             LOG(ERROR) << "Unable to remove credentials of local host" << host.entryId();
+            return;
+        }
+
+        RouterController::startSyncRecordExchange();
         return;
     }
 
