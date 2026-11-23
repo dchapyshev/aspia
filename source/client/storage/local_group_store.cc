@@ -36,6 +36,7 @@ LocalGroupConfig readLocalGroup(const SqlQuery& query)
     group.setName(query.columnText(2));
     group.setComment(query.columnText(3));
     group.setGuid(query.columnText(4));
+    group.setModifyTime(query.columnInt64(5));
     return group;
 }
 
@@ -222,7 +223,7 @@ bool LocalGroupStore::list(qint64 parent_id, QList<LocalGroupConfig>* groups) co
         return false;
     }
 
-    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid, modify_time FROM local_groups "
                           "WHERE parent_id IS NULLIF(?, 0) AND sync_state=0 ORDER BY casefold(name)");
     query.addInt64(parent_id);
 
@@ -255,7 +256,7 @@ bool LocalGroupStore::all(QList<LocalGroupConfig>* groups) const
         return false;
     }
 
-    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid, modify_time FROM local_groups "
                           "WHERE sync_state=0 ORDER BY casefold(name)");
 
     for (;;)
@@ -464,7 +465,7 @@ Database::FindResult LocalGroupStore::find(qint64 group_id, LocalGroupConfig* gr
         return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid FROM local_groups "
+    SqlQuery query(db(), "SELECT id, IFNULL(parent_id, 0), name, comment, guid, modify_time FROM local_groups "
                           "WHERE id=? AND sync_state=0");
     query.addInt64(group_id);
 
@@ -570,7 +571,6 @@ Database::ReadResult LocalGroupStore::unsynced(QList<Unsynced>* groups) const
 
         Unsynced& unsynced = groups->emplaceBack();
         unsynced.group = readLocalGroup(query);
-        unsynced.group.setModifyTime(query.columnInt64(5));
         unsynced.deleted = query.columnInt64(9) == SyncStore::SYNC_STATE_DELETED;
         unsynced.sync_revision = query.columnInt64(6);
         unsynced.sync_dirty = query.columnInt64(7);

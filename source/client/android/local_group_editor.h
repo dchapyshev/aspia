@@ -47,10 +47,12 @@ signals:
     void sig_accepted();
 
 private slots:
+    void onLocalGroupsChanged();
     void onSaveClicked();
     void onDeleteClicked();
 
 private:
+    bool loadGroup(qint64 group_id);
     void showError(const QString& message);
 
     LineEdit* edit_name_ = nullptr;
@@ -59,6 +61,7 @@ private:
     Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
     qint64 parent_id_ = 0;
+    qint64 modify_time_ = 0;
 
     Q_DISABLE_COPY_MOVE(LocalGroupEditor)
 };

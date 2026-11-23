@@ -136,8 +136,7 @@ LocalHostEditor::~LocalHostEditor() = default;
 void LocalHostEditor::prepareForAdd(qint64 group_id)
 {
     entry_id_ = -1;
-    loaded_host_ = LocalHostConfig();
-    loaded_host_.setGroupId(group_id);
+    group_id_ = group_id;
 
     edit_name_->clear();
     edit_address_->clear();
@@ -157,82 +156,24 @@ void LocalHostEditor::prepareForAdd(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalHostEditor::prepareForEdit(qint64 host_id)
 {
-    LocalHostConfig host;
-    const Database::FindResult found = LocalHostStore().find(host_id, &host);
-    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Host not found:" << host_id;
+    if (!loadHost(host_id))
         return false;
-    }
-
-    entry_id_ = host_id;
-    loaded_host_ = host;
-
-    edit_name_->setText(host.name());
-    edit_address_->setText(host.address());
-    edit_username_->setText(host.username());
-    edit_password_->setText(host.password().toString());
-    edit_comment_->setText(host.comment());
-    label_error_->setVisible(false);
-    button_delete_->show();
-
-    const bool credentials_loaded = loadCredentials(host.credentialId());
-    const bool profiles_loaded = loadProfiles(host.profileId());
-    lists_loaded_ = credentials_loaded && profiles_loaded;
 
     edit_name_->setFocus();
-
-    if (found == Database::FindResult::UNREADABLE)
-    {
-        LOG(ERROR) << "Data of host" << host_id << "could not be read";
-        if (lists_loaded_)
-            showError(tr("The data of the host is damaged. Enter it again."));
-    }
-
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalHostEditor::onLocalHostsChanged()
 {
-    if (entry_id_ < 0)
+    if (entry_id_ < 0 || isHidden())
         return;
 
-    LocalHostConfig host;
-    if (LocalHostStore().find(entry_id_, &host) != Database::FindResult::FOUND)
-    {
-        LOG(INFO) << "Host" << entry_id_ << "is not read, the form keeps what it shows";
-        return;
-    }
+    LocalHostConfig record;
+    const Database::FindResult found = LocalHostStore().find(entry_id_, &record);
 
-    // A field the user has changed keeps what is entered, the rest follow the record.
-    if (edit_name_->text() == loaded_host_.name())
-        edit_name_->setText(host.name());
-
-    if (edit_address_->text() == loaded_host_.address())
-        edit_address_->setText(host.address());
-
-    if (edit_comment_->text() == loaded_host_.comment())
-        edit_comment_->setText(host.comment());
-
-    if (combo_profile_->currentProfileId() == loaded_host_.profileId())
-        combo_profile_->setCurrentProfileId(host.profileId());
-
-    const qint64 credential_id =
-        switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0;
-
-    // The pair and the record of credentials stand for one choice, so they change together.
-    if (credential_id == loaded_host_.credentialId() && edit_username_->text() == loaded_host_.username() &&
-        edit_password_->text() == loaded_host_.password().toString())
-    {
-        edit_username_->setText(host.username());
-        edit_password_->setText(host.password().toString());
-
-        if (!loadCredentials(host.credentialId()))
-            lists_loaded_ = false;
-    }
-
-    loaded_host_ = host;
+    if (found == Database::FindResult::FOUND && record.modifyTime() != modify_time_)
+        loadHost(entry_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -314,7 +255,7 @@ void LocalHostEditor::onSaveClicked()
 
     LocalHostConfig data;
     data.setId(entry_id_);
-    data.setGroupId(loaded_host_.groupId());
+    data.setGroupId(group_id_);
     data.setName(name);
     data.setAddress(address_text);
     data.setCredentialId(switch_saved_credentials_->isChecked() ? combo_credential_->currentData().toLongLong() : 0);
@@ -352,6 +293,43 @@ void LocalHostEditor::onDeleteClicked()
 
     RouterController::startSyncRecordExchange();
     emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostEditor::loadHost(qint64 host_id)
+{
+    LocalHostConfig host;
+    const Database::FindResult found = LocalHostStore().find(host_id, &host);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Host not found:" << host_id;
+        return false;
+    }
+
+    entry_id_ = host_id;
+    group_id_ = host.groupId();
+    modify_time_ = host.modifyTime();
+
+    edit_name_->setText(host.name());
+    edit_address_->setText(host.address());
+    edit_username_->setText(host.username());
+    edit_password_->setText(host.password().toString());
+    edit_comment_->setText(host.comment());
+    label_error_->setVisible(false);
+    button_delete_->show();
+
+    const bool credentials_loaded = loadCredentials(host.credentialId());
+    const bool profiles_loaded = loadProfiles(host.profileId());
+    lists_loaded_ = credentials_loaded && profiles_loaded;
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of host" << host_id << "could not be read";
+        if (lists_loaded_)
+            showError(tr("The data of the host is damaged. Enter it again."));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

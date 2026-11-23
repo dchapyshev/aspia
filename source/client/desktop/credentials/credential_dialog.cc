@@ -67,6 +67,8 @@ CredentialDialog::CredentialDialog(qint64 credential_id, QWidget* parent)
 
     onTypeChanged();
 
+    connect(&RouterController::instance(), &RouterController::sig_credentialsChanged,
+            this, &CredentialDialog::onCredentialsChanged);
     connect(ui->combo_type, &QComboBox::currentIndexChanged, this, &CredentialDialog::onTypeChanged);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &CredentialDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
@@ -95,6 +97,19 @@ void CredentialDialog::resizeEvent(QResizeEvent* event)
 
     if (event->size().width() != event->oldSize().width())
         fitHeight();
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialDialog::onCredentialsChanged()
+{
+    if (credential_id_ == -1 || isHidden())
+        return;
+
+    CredentialConfig record;
+    const Database::FindResult found = CredentialStore().find(credential_id_, &record);
+
+    if (found == Database::FindResult::FOUND && record.modifyTime() != modify_time_)
+        onLoadData();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +228,8 @@ void CredentialDialog::onLoadData()
         reject();
         return;
     }
+
+    modify_time_ = credential.modifyTime();
 
     ui->combo_type->setCurrentIndex(ui->combo_type->findData(static_cast<int>(credential.type())));
     ui->combo_type->setEnabled(false);

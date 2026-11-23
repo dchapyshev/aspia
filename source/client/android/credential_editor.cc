@@ -98,6 +98,8 @@ CredentialEditor::CredentialEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
+    connect(&RouterController::instance(), &RouterController::sig_credentialsChanged,
+            this, &CredentialEditor::onCredentialsChanged);
     connect(save, &Button::clicked, this, &CredentialEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &CredentialEditor::onDeleteClicked);
 }
@@ -124,33 +126,24 @@ void CredentialEditor::prepareForAdd()
 //--------------------------------------------------------------------------------------------------
 bool CredentialEditor::prepareForEdit(qint64 credential_id)
 {
-    CredentialConfig credential;
-    const Database::FindResult found = CredentialStore().find(credential_id, &credential);
-    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Credentials not found:" << credential_id;
+    if (!loadCredential(credential_id))
         return false;
-    }
-
-    credential_id_ = credential_id;
-
-    combo_type_->setCurrentIndex(combo_type_->findData(static_cast<int>(credential.type())));
-    combo_type_->setEnabled(false);
-    edit_name_->setText(credential.displayName());
-    edit_username_->setText(credential.username());
-    edit_password_->setText(credential.password().toString());
-    label_error_->setVisible(false);
-    button_delete_->show();
 
     edit_name_->setFocus();
-
-    if (found == Database::FindResult::UNREADABLE)
-    {
-        LOG(ERROR) << "Data of credentials" << credential_id << "could not be read";
-        showError(tr("The credentials are damaged. Enter them again."));
-    }
-
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void CredentialEditor::onCredentialsChanged()
+{
+    if (credential_id_ < 0 || isHidden())
+        return;
+
+    CredentialConfig record;
+    const Database::FindResult found = CredentialStore().find(credential_id_, &record);
+
+    if (found == Database::FindResult::FOUND && record.modifyTime() != modify_time_)
+        loadCredential(credential_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,6 +231,37 @@ void CredentialEditor::onDeleteClicked()
 
     RouterController::startSyncRecordExchange();
     emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool CredentialEditor::loadCredential(qint64 credential_id)
+{
+    CredentialConfig credential;
+    const Database::FindResult found = CredentialStore().find(credential_id, &credential);
+    if (found == Database::FindResult::NOT_FOUND || found == Database::FindResult::FAILED)
+    {
+        LOG(ERROR) << "Credentials not found:" << credential_id;
+        return false;
+    }
+
+    credential_id_ = credential_id;
+    modify_time_ = credential.modifyTime();
+
+    combo_type_->setCurrentIndex(combo_type_->findData(static_cast<int>(credential.type())));
+    combo_type_->setEnabled(false);
+    edit_name_->setText(credential.displayName());
+    edit_username_->setText(credential.username());
+    edit_password_->setText(credential.password().toString());
+    label_error_->setVisible(false);
+    button_delete_->show();
+
+    if (found == Database::FindResult::UNREADABLE)
+    {
+        LOG(ERROR) << "Data of credentials" << credential_id << "could not be read";
+        showError(tr("The credentials are damaged. Enter them again."));
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

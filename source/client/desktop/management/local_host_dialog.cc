@@ -67,6 +67,8 @@ LocalHostDialog::LocalHostDialog(qint64 entry_id, qint64 group_id, QWidget* pare
     ui->edit_username->setMaxLength(static_cast<int>(User::kMaxUserNameLength));
     ui->edit_password->setShowPasswordButtonVisible(true);
     ui->edit_comment->setMaxLength(LocalHostConfig::kMaxCommentLength);
+    connect(&RouterController::instance(), &RouterController::sig_localHostsChanged,
+            this, &LocalHostDialog::onLocalHostsChanged);
     connect(ui->checkbox_saved_credentials, &QCheckBox::toggled, this, &LocalHostDialog::onSavedCredentialsToggled);
     connect(ui->edit_address, &QLineEdit::textEdited, this, [this](const QString& text)
     {
@@ -100,6 +102,22 @@ LocalHostDialog::~LocalHostDialog()
 
     UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostDialog::onLocalHostsChanged()
+{
+    if (entry_id_ == -1 || isHidden())
+        return;
+
+    LocalHostConfig record;
+    const Database::FindResult found = LocalHostStore().find(entry_id_, &record);
+
+    if (found != Database::FindResult::FOUND || record.modifyTime() == modify_time_)
+        return;
+
+    if (!loadGroups() || !loadHost())
+        reject();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,13 +293,19 @@ void LocalHostDialog::onLoadData()
         return;
     }
 
+    if (!loadGroups() || !loadHost())
+        reject();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostDialog::loadGroups()
+{
     QList<LocalGroupConfig> all_groups;
     if (!LocalGroupStore().all(&all_groups))
     {
         LOG(ERROR) << "Unable to read the list of groups";
         MsgBox::warning(this, tr("Failed to read the list of groups."));
-        reject();
-        return;
+        return false;
     }
 
     QList<GroupComboBox::Entry> group_entries;
@@ -296,7 +320,12 @@ void LocalHostDialog::onLoadData()
     }
 
     ui->combo_group->loadGroups(tr("Local"), QIcon(":/img/folder.svg"), group_entries);
+    return true;
+}
 
+//--------------------------------------------------------------------------------------------------
+bool LocalHostDialog::loadHost()
+{
     Database::FindResult host_found = Database::FindResult::NOT_FOUND;
 
     if (entry_id_ != -1)
@@ -308,8 +337,7 @@ void LocalHostDialog::onLoadData()
         {
             LOG(ERROR) << "Unable to find host with id" << entry_id_;
             MsgBox::warning(this, tr("Failed to retrieve host information from the local database."));
-            reject();
-            return;
+            return false;
         }
 
         ui->edit_name->setText(host.name());
@@ -319,15 +347,14 @@ void LocalHostDialog::onLoadData()
         ui->edit_comment->setPlainText(host.comment());
 
         const int credential_index = ui->combo_credential->findData(QVariant::fromValue(host.credentialId()));
+        ui->checkbox_saved_credentials->setChecked(credential_index >= 0);
         if (credential_index >= 0)
-        {
-            ui->checkbox_saved_credentials->setChecked(true);
             ui->combo_credential->setCurrentIndex(credential_index);
-        }
 
         ui->combo_profile->setCurrentProfileId(host.profileId());
 
         group_id_ = host.groupId();
+        modify_time_ = host.modifyTime();
     }
 
     ui->combo_group->selectGroup(group_id_);
@@ -340,4 +367,6 @@ void LocalHostDialog::onLoadData()
         LOG(ERROR) << "Data of host" << entry_id_ << "could not be read";
         MsgBox::warning(this, tr("The data of the host is damaged. Enter it again."));
     }
+
+    return true;
 }

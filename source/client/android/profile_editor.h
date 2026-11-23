@@ -49,6 +49,7 @@ signals:
     void sig_accepted();
 
 private slots:
+    void onProfilesChanged();
     void onSaveClicked();
     void onDeleteClicked();
 
@@ -75,6 +76,7 @@ private:
     Button* button_delete_ = nullptr;
 
     qint64 profile_id_ = -1;
+    qint64 modify_time_ = 0;
     proto::control::Config desktop_config_;
 
     Q_DISABLE_COPY_MOVE(ProfileEditor)

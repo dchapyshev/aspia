@@ -121,6 +121,8 @@ ProfileEditor::ProfileEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
+    connect(&RouterController::instance(), &RouterController::sig_profilesChanged,
+            this, &ProfileEditor::onProfilesChanged);
     connect(save, &Button::clicked, this, &ProfileEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &ProfileEditor::onDeleteClicked);
 }
@@ -156,6 +158,7 @@ bool ProfileEditor::prepareForEdit(qint64 profile_id)
         const ProfileConfig default_profile = store.defaultProfile();
 
         profile_id_ = 0;
+        modify_time_ = default_profile.modifyTime();
         desktop_config_ = default_profile.desktopConfig();
 
         edit_name_->clear();
@@ -176,6 +179,7 @@ bool ProfileEditor::prepareForEdit(qint64 profile_id)
     }
 
     profile_id_ = profile_id;
+    modify_time_ = profile.modifyTime();
 
     edit_name_->setText(profile.name());
     edit_name_->show();
@@ -195,6 +199,24 @@ bool ProfileEditor::prepareForEdit(qint64 profile_id)
     desktop_config_ = profile.desktopConfig();
     showParameters(desktop_config_, profile.udpMethods());
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ProfileEditor::onProfilesChanged()
+{
+    if (profile_id_ < 0 || isHidden())
+        return;
+
+    ProfileStore store;
+    ProfileConfig profile;
+
+    if (profile_id_ == 0)
+        profile = store.defaultProfile();
+    else if (store.find(profile_id_, &profile) != Database::FindResult::FOUND)
+        return;
+
+    if (profile.modifyTime() != modify_time_)
+        prepareForEdit(profile_id_);
 }
 
 //--------------------------------------------------------------------------------------------------

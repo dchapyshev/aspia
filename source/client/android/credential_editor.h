@@ -46,10 +46,12 @@ signals:
     void sig_accepted();
 
 private slots:
+    void onCredentialsChanged();
     void onSaveClicked();
     void onDeleteClicked();
 
 private:
+    bool loadCredential(qint64 credential_id);
     void showError(const QString& message);
 
     ComboBox* combo_type_ = nullptr;
@@ -59,6 +61,7 @@ private:
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;
     qint64 credential_id_ = -1;
+    qint64 modify_time_ = 0;
 
     Q_DISABLE_COPY_MOVE(CredentialEditor)
 };

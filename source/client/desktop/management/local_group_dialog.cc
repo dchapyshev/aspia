@@ -56,6 +56,8 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     ui->edit_name->setMaxLength(LocalGroupConfig::kMaxNameLength);
     ui->edit_comment->setMaxLength(LocalGroupConfig::kMaxCommentLength);
 
+    connect(&RouterController::instance(), &RouterController::sig_localGroupsChanged,
+            this, &LocalGroupDialog::onLocalGroupsChanged);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
     ui->edit_name->setFocus();
 
@@ -69,6 +71,19 @@ LocalGroupDialog::~LocalGroupDialog()
 
     UserSettings settings;
     settings.setDialogGeometry(objectName(), saveGeometry());
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupDialog::onLocalGroupsChanged()
+{
+    if (group_id_ == -1 || isHidden())
+        return;
+
+    LocalGroupConfig record;
+    const Database::FindResult found = LocalGroupStore().find(group_id_, &record);
+
+    if (found == Database::FindResult::FOUND && record.modifyTime() != modify_time_)
+        onLoadData();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -180,6 +195,7 @@ void LocalGroupDialog::onLoadData()
         ui->edit_name->setText(group.name());
         ui->edit_comment->setPlainText(group.comment());
         parent_id_ = group.parentId();
+        modify_time_ = group.modifyTime();
     }
 
     QList<LocalGroupConfig> all_groups;

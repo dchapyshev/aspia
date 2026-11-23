@@ -721,6 +721,13 @@ void SettingsTab::onRenameProfile()
     if (name.isEmpty())
         return;
 
+    if (store.find(profile_id, &profile) != Database::FindResult::FOUND)
+    {
+        LOG(ERROR) << "Unable to read profile" << profile_id;
+        MsgBox::warning(this, tr("Failed to read the profile."));
+        return;
+    }
+
     profile.setName(name);
 
     if (!store.modify(profile))

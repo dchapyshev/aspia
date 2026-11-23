@@ -38,6 +38,7 @@ public:
     ~LocalGroupDialog() final;
 
 private slots:
+    void onLocalGroupsChanged();
     void onButtonBoxClicked(QAbstractButton* button);
     void onLoadData();
 
@@ -45,6 +46,7 @@ private:
     std::unique_ptr<Ui::LocalGroupDialog> ui;
     qint64 group_id_ = -1;
     qint64 parent_id_ = 0;
+    qint64 modify_time_ = 0;
 
     Q_DISABLE_COPY_MOVE(LocalGroupDialog)
 };

@@ -49,6 +49,7 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
 
 private slots:
+    void onCredentialsChanged();
     void onButtonBoxClicked(QAbstractButton* button);
     void onTypeChanged();
     void onLoadData();
@@ -58,6 +59,7 @@ private:
 
     std::unique_ptr<Ui::CredentialDialog> ui;
     qint64 credential_id_ = -1;
+    qint64 modify_time_ = 0;
 
     Q_DISABLE_COPY_MOVE(CredentialDialog)
 };

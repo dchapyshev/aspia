@@ -21,8 +21,6 @@
 
 #include <QWidget>
 
-#include "client/config.h"
-
 class Button;
 class CredentialComboBox;
 class Label;
@@ -57,6 +55,7 @@ private slots:
     void onDeleteClicked();
 
 private:
+    bool loadHost(qint64 host_id);
     bool loadCredentials(qint64 selected_credential_id);
     bool loadProfiles(qint64 selected_profile_id);
     void showError(const QString& message);
@@ -72,7 +71,8 @@ private:
     Label* label_error_ = nullptr;
     Button* button_delete_ = nullptr;
     qint64 entry_id_ = -1;
-    LocalHostConfig loaded_host_;
+    qint64 group_id_ = 0;
+    qint64 modify_time_ = 0;
     bool lists_loaded_ = true;
 
     Q_DISABLE_COPY_MOVE(LocalHostEditor)

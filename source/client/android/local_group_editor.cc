@@ -83,6 +83,8 @@ LocalGroupEditor::LocalGroupEditor(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(scroll);
 
+    connect(&RouterController::instance(), &RouterController::sig_localGroupsChanged,
+            this, &LocalGroupEditor::onLocalGroupsChanged);
     connect(save, &Button::clicked, this, &LocalGroupEditor::onSaveClicked);
     connect(button_delete_, &Button::clicked, this, &LocalGroupEditor::onDeleteClicked);
 }
@@ -107,23 +109,24 @@ void LocalGroupEditor::prepareForAdd(qint64 parent_id)
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupEditor::prepareForEdit(qint64 group_id)
 {
-    LocalGroupConfig group;
-    if (LocalGroupStore().find(group_id, &group) != Database::FindResult::FOUND)
-    {
-        LOG(ERROR) << "Group not found:" << group_id;
+    if (!loadGroup(group_id))
         return false;
-    }
-
-    entry_id_ = group_id;
-    parent_id_ = group.parentId();
-
-    edit_name_->setText(group.name());
-    edit_comment_->setText(group.comment());
-    label_error_->setVisible(false);
-    button_delete_->show();
 
     edit_name_->setFocus();
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupEditor::onLocalGroupsChanged()
+{
+    if (entry_id_ < 0 || isHidden())
+        return;
+
+    LocalGroupConfig record;
+    const Database::FindResult found = LocalGroupStore().find(entry_id_, &record);
+
+    if (found == Database::FindResult::FOUND && record.modifyTime() != modify_time_)
+        loadGroup(entry_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,6 +192,28 @@ void LocalGroupEditor::onDeleteClicked()
 
     RouterController::startSyncRecordExchange();
     emit sig_accepted();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalGroupEditor::loadGroup(qint64 group_id)
+{
+    LocalGroupConfig group;
+    if (LocalGroupStore().find(group_id, &group) != Database::FindResult::FOUND)
+    {
+        LOG(ERROR) << "Group not found:" << group_id;
+        return false;
+    }
+
+    entry_id_ = group_id;
+    parent_id_ = group.parentId();
+    modify_time_ = group.modifyTime();
+
+    edit_name_->setText(group.name());
+    edit_comment_->setText(group.comment());
+    label_error_->setVisible(false);
+    button_delete_->show();
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
