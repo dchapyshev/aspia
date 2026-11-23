@@ -495,6 +495,11 @@ void AndroidMainWindow::onConnectHost(qint64 entry_id, proto::peer::SessionType 
             MessageDialog::info(this, tr("Connection"),
                 tr("The data of the host is damaged. Edit the host and enter it again."));
         }
+        else
+        {
+            MessageDialog::info(this, tr("Connection"),
+                tr("Failed to retrieve host information from the local database."));
+        }
         return;
     }
 
