@@ -326,6 +326,13 @@ bool LocalGroupStore::modify(const LocalGroupConfig& group)
         return false;
     }
 
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
     if (wouldCloseLoop(db(), group.id(), group.parentId()))
     {
         LOG(ERROR) << "Group" << group.id() << "cannot be put under" << group.parentId();
@@ -352,6 +359,12 @@ bool LocalGroupStore::modify(const LocalGroupConfig& group)
         return false;
     }
 
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return false;
+    }
+
     return true;
 }
 
@@ -361,6 +374,13 @@ bool LocalGroupStore::move(qint64 group_id, qint64 new_parent_id)
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
         return false;
     }
 
@@ -385,6 +405,12 @@ bool LocalGroupStore::move(qint64 group_id, qint64 new_parent_id)
     if (db().changes() == 0)
     {
         LOG(ERROR) << "Local group" << group_id << "not found";
+        return false;
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
         return false;
     }
 
