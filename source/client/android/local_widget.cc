@@ -20,6 +20,7 @@
 
 #include <QFileDialog>
 #include <QHeaderView>
+#include <QScrollBar>
 #include <QStackedWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
@@ -156,6 +157,10 @@ LocalWidget::LocalWidget(QWidget* parent)
     connect(online_checker_, &OnlineChecker::sig_checkerResult,
             this, &LocalWidget::onOnlineCheckerResult);
 
+    RouterController& controller = RouterController::instance();
+    connect(&controller, &RouterController::sig_localGroupsChanged, this, &LocalWidget::onLocalRecordsChanged);
+    connect(&controller, &RouterController::sig_localHostsChanged, this, &LocalWidget::onLocalRecordsChanged);
+
     reload();
 }
 
@@ -181,7 +186,11 @@ void LocalWidget::reload()
         return;
 
     showTree();
+
+    const int scroll_position = tree_->verticalScrollBar()->value();
+
     tree_->clear();
+    tree_outdated_ = false;
 
     // Top-level groups, then the ungrouped hosts (group_id 0) shown directly at the root.
     populateGroups(0, nullptr);
@@ -209,6 +218,10 @@ void LocalWidget::reload()
         hosts.append(host);
     }
 
+    // The range of the scroll bar is known once the rows are laid out.
+    tree_->doItemsLayout();
+    tree_->verticalScrollBar()->setValue(scroll_position);
+
     online_checker_->start(hosts);
 }
 
@@ -221,12 +234,12 @@ void LocalWidget::goBack()
     }
     else if (isSearchPage())
     {
-        showTree();
+        returnToTree();
         emit sig_searchModeChanged(false);
     }
     else
     {
-        showTree();
+        returnToTree();
     }
 }
 
@@ -541,6 +554,40 @@ void LocalWidget::onRefreshClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalWidget::onLocalRecordsChanged()
+{
+    const int page = stack_->currentIndex();
+
+    if (page == kPageTree)
+    {
+        reload();
+        return;
+    }
+
+    tree_outdated_ = true;
+
+    // An editor and the search keep what they show.
+    if (page != kPageHosts)
+        return;
+
+    LocalGroupConfig group;
+    if (LocalGroupStore().find(current_group_id_, &group) != Database::FindResult::FOUND)
+    {
+        LOG(INFO) << "Group" << current_group_id_ << "is not shown any more";
+        reload();
+        return;
+    }
+
+    const int scroll_position = tree_host_->verticalScrollBar()->value();
+
+    showHosts(current_group_id_, group.name());
+
+    // The range of the scroll bar is known once the rows are laid out.
+    tree_host_->doItemsLayout();
+    tree_host_->verticalScrollBar()->setValue(scroll_position);
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalWidget::editGroup(qint64 group_id)
 {
     if (!group_editor_->prepareForEdit(group_id))
@@ -567,10 +614,20 @@ void LocalWidget::returnFromEditor()
 {
     // Return to where the editor was opened from, refreshing so a newly saved host shows up. The
     // page is switched first so appBarActions() reflects the destination when the actions update.
-    if (current_group_id_ == 0)
-        reload();
+    LocalGroupConfig group;
+    const bool group_shown = current_group_id_ != 0 &&
+        LocalGroupStore().find(current_group_id_, &group) == Database::FindResult::FOUND;
+
+    if (group_shown)
+    {
+        // A group may have been added to the open one, and the tree does not hold it yet.
+        tree_outdated_ = true;
+        showHosts(current_group_id_, group.name());
+    }
     else
-        showHosts(current_group_id_, current_title_);
+    {
+        reload();
+    }
 
     emit sig_appBarActionsChanged();
 }
@@ -611,10 +668,18 @@ void LocalWidget::showTree()
 {
     // A new host added from the tree goes to the root (ungrouped).
     current_group_id_ = 0;
-    current_title_.clear();
 
     stack_->setCurrentIndex(kPageTree);
     emit sig_titleChanged(QString(), false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalWidget::returnToTree()
+{
+    if (tree_outdated_)
+        reload();
+    else
+        showTree();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -622,7 +687,6 @@ void LocalWidget::showHosts(qint64 group_id, const QString& title)
 {
     // A new host added from this page goes to the open group.
     current_group_id_ = group_id;
-    current_title_ = title;
 
     tree_host_->clear();
 

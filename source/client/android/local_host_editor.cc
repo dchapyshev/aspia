@@ -29,6 +29,7 @@
 #include "client/android/credential_combo_box.h"
 #include "client/android/profile_combo_box.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/local_host_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -284,6 +285,7 @@ void LocalHostEditor::onSaveClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 
@@ -302,6 +304,7 @@ void LocalHostEditor::onDeleteClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 

@@ -98,6 +98,14 @@ SidebarLocalGroup::SidebarLocalGroup(const LocalGroupConfig& group, QTreeWidgetI
 }
 
 //--------------------------------------------------------------------------------------------------
+void SidebarLocalGroup::update(const LocalGroupConfig& group)
+{
+    parent_id_ = group.parentId();
+    group_name_ = group.name();
+    setText(0, group.name());
+}
+
+//--------------------------------------------------------------------------------------------------
 SidebarRouter::SidebarRouter(QTreeWidget* parent)
     : SidebarItem(ROUTER, -1, parent)
 {

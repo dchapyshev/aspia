@@ -38,7 +38,9 @@ const SyncTable kSyncTables[] =
 {
     { proto::router::SYNC_DATA_TYPE_CREDENTIALS, "credentials", "guid", "received_credentials_revision" },
     { proto::router::SYNC_DATA_TYPE_PROFILES, "profiles", "guid", "received_profiles_revision" },
-    { proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "router_hosts", "host_id", "received_router_hosts_revision" }
+    { proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, "router_hosts", "host_id", "received_router_hosts_revision" },
+    { proto::router::SYNC_DATA_TYPE_LOCAL_GROUPS, "local_groups", "guid", "received_local_groups_revision" },
+    { proto::router::SYNC_DATA_TYPE_LOCAL_HOSTS, "local_hosts", "guid", "received_local_hosts_revision" }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -216,9 +218,10 @@ bool SyncTransaction::confirmSentRecord(
 
     if (db().changes() != 0)
     {
-        SqlQuery erase_query(db(), tableQuery(*table, "DELETE FROM %1 WHERE %2=? AND deleted!=0 AND sync_dirty=0"));
+        SqlQuery erase_query(db(), tableQuery(*table, "DELETE FROM %1 WHERE %2=? AND sync_state=? AND sync_dirty=0"));
         if (!addRecordId(*table, record_id, &erase_query))
             return false;
+        erase_query.addInt64(SyncStore::SYNC_STATE_DELETED);
 
         if (!erase_query.exec())
         {
@@ -229,11 +232,12 @@ bool SyncTransaction::confirmSentRecord(
     else
     {
         SqlQuery mark_query(db(), tableQuery(*table, "INSERT INTO %1 (%2, modify_time, sync_revision, sync_dirty, "
-                                                      "deleted) VALUES (?, ?, ?, 1, 1)"));
+                                                      "sync_state) VALUES (?, ?, ?, 1, ?)"));
         if (!addRecordId(*table, record_id, &mark_query))
             return false;
         mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
         mark_query.addInt64(sync_revision);
+        mark_query.addInt64(SyncStore::SYNC_STATE_DELETED);
 
         if (!mark_query.exec())
         {
@@ -395,9 +399,9 @@ bool SyncStore::reset()
 {
     CHECK(db().isTransactionActive());
 
-    if (!db().exec("DELETE FROM credentials WHERE deleted!=0") ||
+    if (!db().exec("DELETE FROM credentials WHERE sync_state!=0") ||
         !db().exec("UPDATE credentials SET sync_revision=0, sync_dirty=1") ||
-        !db().exec("DELETE FROM profiles WHERE deleted!=0"))
+        !db().exec("DELETE FROM profiles WHERE sync_state!=0"))
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
@@ -412,13 +416,37 @@ bool SyncStore::reset()
         return false;
     }
 
-    if (!db().exec("DELETE FROM router_hosts WHERE deleted!=0"))
+    if (!db().exec("DELETE FROM router_hosts WHERE sync_state!=0"))
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
     }
 
     if (!db().exec("UPDATE router_hosts SET sync_revision=0, sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("DELETE FROM local_hosts WHERE sync_state!=0"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("UPDATE local_hosts SET sync_revision=0, sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("DELETE FROM local_groups WHERE sync_state!=0"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (!db().exec("UPDATE local_groups SET sync_revision=0, sync_dirty=1"))
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
@@ -438,7 +466,11 @@ bool SyncStore::discard()
 {
     CHECK(db().isTransactionActive());
 
-    if (!db().exec("UPDATE credentials SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1"))
+    SqlQuery credentials_query(db(), "UPDATE credentials SET name='', data=X'', sync_revision=0, sync_dirty=0, "
+                                      "sync_state=?");
+    credentials_query.addInt64(SYNC_STATE_EMPTY);
+
+    if (!credentials_query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
         return false;
@@ -446,8 +478,9 @@ bool SyncStore::discard()
 
     LOG(INFO) << "Credentials discarded:" << db().changes();
 
-    SqlQuery profiles_query(db(), "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, deleted=1 "
+    SqlQuery profiles_query(db(), "UPDATE profiles SET name='', data=X'', sync_revision=0, sync_dirty=0, sync_state=? "
                                    "WHERE guid<>?");
+    profiles_query.addInt64(SYNC_STATE_EMPTY);
     profiles_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
     if (!profiles_query.exec())
@@ -474,6 +507,22 @@ bool SyncStore::discard()
     }
 
     LOG(INFO) << "Router hosts discarded:" << db().changes();
+
+    if (!db().exec("DELETE FROM local_hosts"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Local hosts discarded:" << db().changes();
+
+    if (!db().exec("DELETE FROM local_groups"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    LOG(INFO) << "Local groups discarded:" << db().changes();
 
     if (!db().exec("DELETE FROM sync_sent_records"))
     {

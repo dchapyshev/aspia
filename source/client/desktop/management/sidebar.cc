@@ -34,6 +34,7 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
+#include <unordered_map>
 
 #include "base/auto_qpointer.h"
 #include "base/logging.h"
@@ -140,6 +141,7 @@ Sidebar::Sidebar(QWidget* parent)
     connect(&controller, &RouterController::sig_statusChanged, this, &Sidebar::onRouterStatusChanged);
     connect(&controller, &RouterController::sig_workspacesChanged, this, &Sidebar::onRefreshWorkspaces);
     connect(&controller, &RouterController::sig_groupsChanged, this, &Sidebar::onRefreshHostGroups);
+    connect(&controller, &RouterController::sig_localGroupsChanged, this, &Sidebar::onLocalGroupsChanged);
 
     const Database::ReadResult router_result = loadRouter();
 
@@ -187,12 +189,6 @@ void Sidebar::setLocalHostMimeType(const QString& mime_type)
 void Sidebar::setRouterHostMimeType(const QString& mime_type)
 {
     router_host_mime_type_ = mime_type;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Sidebar::dragging() const
-{
-    return dragging_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -334,6 +330,12 @@ void Sidebar::setRouterStatus(SidebarRouter::Status status)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::setRouterWorkspaces(const QList<RouterWorkspace>& workspaces)
 {
+    if (isDragActive())
+    {
+        router_groups_outdated_ = true;
+        return;
+    }
+
     SidebarRouter* router = routerItem();
     if (!router)
         return;
@@ -385,6 +387,12 @@ void Sidebar::setRouterWorkspaces(const QList<RouterWorkspace>& workspaces)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::setRouterHostGroups(qint64 workspace_id, const QList<RouterGroup>& groups)
 {
+    if (isDragActive())
+    {
+        router_groups_outdated_ = true;
+        return;
+    }
+
     SidebarRouter* router = routerItem();
     if (!router)
         return;
@@ -739,14 +747,16 @@ void Sidebar::onAddGroup()
         return;
     }
 
-    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(-1, item->groupId(), this));
+    const qint64 parent_id = item->groupId();
+
+    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(-1, parent_id, this));
     if (dialog->exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    reloadGroups(item->groupId());
+    reloadGroups(parent_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -765,17 +775,19 @@ void Sidebar::onEditGroup()
         return;
 
     SidebarLocalGroup* local_group = static_cast<SidebarLocalGroup*>(item);
-    if (local_group->groupId() == 0)
+
+    const qint64 group_id = local_group->groupId();
+    if (group_id == 0)
         return;
 
-    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(local_group->groupId(), local_group->parentId(), this));
+    AutoQPointer<LocalGroupDialog> dialog(new LocalGroupDialog(group_id, local_group->parentId(), this));
     if (dialog->exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    reloadGroups(item->groupId());
+    reloadGroups(group_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -795,6 +807,9 @@ void Sidebar::onRemoveGroup()
 
     SidebarLocalGroup* local_group = static_cast<SidebarLocalGroup*>(item);
 
+    qint64 parent_id = local_group->parentId();
+    qint64 group_id = local_group->groupId();
+
     QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
     if (MsgBox::question(this, message) == MsgBox::No)
@@ -803,9 +818,6 @@ void Sidebar::onRemoveGroup()
         return;
     }
 
-    qint64 parent_id = local_group->parentId();
-    qint64 group_id = local_group->groupId();
-
     if (!LocalGroupStore().remove(group_id))
     {
         MsgBox::warning(this, tr("Unable to remove group"));
@@ -813,6 +825,7 @@ void Sidebar::onRemoveGroup()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     InstanceSettings().removeLocalGroupExpanded(group_id);
 
     reloadGroups(parent_id);
@@ -872,7 +885,11 @@ bool Sidebar::eventFilter(QObject* watched, QEvent* event)
                 return onDragLeave(static_cast<QDragLeaveEvent*>(event));
 
             case QEvent::Drop:
-                return onDrop(static_cast<QDropEvent*>(event));
+            {
+                const bool handled = onDrop(static_cast<QDropEvent*>(event));
+                updateOutdatedItems();
+                return handled;
+            }
 
             default:
                 break;
@@ -990,6 +1007,12 @@ void Sidebar::onRouterStatusChanged(RouterStatus status)
     }
     setRouterStatus(sidebar_status);
 
+    if (isDragActive())
+    {
+        router_status_outdated_ = true;
+        return;
+    }
+
     if (status == RouterStatus::ONLINE)
     {
         if (!pending_item_.isEmpty())
@@ -1013,6 +1036,103 @@ void Sidebar::onRouterStatusChanged(RouterStatus status)
         removeRouterSections();
         setRouterWorkspaces({});
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::onLocalGroupsChanged()
+{
+    if (isDragActive())
+    {
+        local_groups_outdated_ = true;
+        return;
+    }
+
+    QList<LocalGroupConfig> groups;
+    if (!LocalGroupStore().all(&groups))
+    {
+        LOG(ERROR) << "Unable to read the list of groups";
+        return;
+    }
+
+    std::unordered_map<qint64, std::vector<const LocalGroupConfig*>> groups_by_parent;
+    for (const LocalGroupConfig& group : std::as_const(groups))
+        groups_by_parent[group.parentId()].emplace_back(&group);
+
+    std::unordered_map<qint64, SidebarLocalGroup*> unclaimed_items;
+    for (QTreeWidgetItemIterator it(tree_widget_); *it; ++it)
+    {
+        SidebarItem* item = static_cast<SidebarItem*>(*it);
+        if (item->itemType() == SidebarItem::LOCAL_GROUP && item != local_root_)
+            unclaimed_items.emplace(item->groupId(), static_cast<SidebarLocalGroup*>(item));
+    }
+
+    SidebarItem* selected_item = currentItem();
+    if (selected_item && selected_item->itemType() != SidebarItem::LOCAL_GROUP)
+        selected_item = nullptr;
+
+    {
+        QSignalBlocker blocker(tree_widget_);
+        InstanceSettings settings;
+
+        std::function<void(qint64, QTreeWidgetItem*)> place_groups =
+            [&](qint64 parent_id, QTreeWidgetItem* parent_item)
+        {
+            const auto child_groups = groups_by_parent.find(parent_id);
+            if (child_groups == groups_by_parent.end())
+                return;
+
+            for (const LocalGroupConfig* group : child_groups->second)
+            {
+                SidebarLocalGroup* group_item = nullptr;
+
+                const auto unclaimed_item = unclaimed_items.find(group->id());
+                if (unclaimed_item == unclaimed_items.end())
+                {
+                    group_item = new SidebarLocalGroup(*group, parent_item);
+                }
+                else
+                {
+                    group_item = unclaimed_item->second;
+                    unclaimed_items.erase(unclaimed_item);
+
+                    group_item->update(*group);
+                    if (group_item->parent() != parent_item)
+                    {
+                        group_item->parent()->removeChild(group_item);
+                        parent_item->addChild(group_item);
+                    }
+                }
+
+                group_item->setExpanded(settings.isLocalGroupExpanded(group->id()));
+                place_groups(group->id(), group_item);
+            }
+
+            parent_item->sortChildren(0, Qt::AscendingOrder);
+        };
+        place_groups(0, local_root_);
+
+        while (selected_item && unclaimed_items.contains(selected_item->groupId()))
+            selected_item = static_cast<SidebarItem*>(selected_item->parent());
+
+        std::vector<SidebarLocalGroup*> removed_items;
+        for (const auto& [group_id, group_item] : unclaimed_items)
+        {
+            settings.removeLocalGroupExpanded(group_id);
+
+            // An item is deleted together with the items below it.
+            if (!unclaimed_items.contains(static_cast<SidebarItem*>(group_item->parent())->groupId()))
+                removed_items.emplace_back(group_item);
+        }
+
+        for (SidebarLocalGroup* removed_item : removed_items)
+            delete removed_item;
+
+        if (selected_item)
+            tree_widget_->setCurrentItem(selected_item);
+    }
+
+    if (selected_item && selected_item->groupId() != current_group_id_)
+        onCurrentItemChanged(selected_item, nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1137,6 +1257,8 @@ void Sidebar::startDrag()
 
         drag.exec(Qt::MoveAction);
     }
+
+    updateOutdatedItems();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1325,6 +1447,8 @@ bool Sidebar::onDragLeave(QDragLeaveEvent* /* event */)
         tree_widget_->setCurrentItem(drag_source_item_);
         drag_source_item_ = nullptr;
     }
+
+    updateOutdatedItems();
     return false;
 }
 
@@ -1402,6 +1526,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
+        RouterController::startSyncRecordExchange();
         event->acceptProposedAction();
 
         // Reload groups and select the moved group.
@@ -1457,10 +1582,10 @@ bool Sidebar::onDrop(QDropEvent* event)
         if (store.list(target_group_id, &target_hosts) == Database::ReadResult::FAILED)
         {
             LOG(ERROR) << "Unable to read the hosts of the target group";
+            restoreSelection();
             MsgBox::warning(tree_widget_, single ?
                 tr("Failed to move the host to the selected group.") :
                 tr("Failed to move the hosts to the selected group."));
-            restoreSelection();
             return true;
         }
 
@@ -1508,16 +1633,19 @@ bool Sidebar::onDrop(QDropEvent* event)
                 tr("Failed to move %n of the selected hosts.", "", failed));
         }
 
+        restoreSelection();
+
         if (!errors.isEmpty())
             MsgBox::warning(tree_widget_, errors.join('\n'));
 
         if (moved > 0)
             event->acceptProposedAction();
 
-        restoreSelection();
-
         if (moved > 0)
+        {
+            RouterController::startSyncRecordExchange();
             emit sig_itemDropped();
+        }
 
         return true;
     }
@@ -1785,4 +1913,38 @@ void Sidebar::selectPendingItem()
 
     pending_item_.clear();
     tree_widget_->setCurrentItem(item);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::isDragActive() const
+{
+    return dragging_ || findChild<QDrag*>(Qt::FindDirectChildrenOnly);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::updateOutdatedItems()
+{
+    if (isDragActive())
+        return;
+
+    if (local_groups_outdated_)
+    {
+        local_groups_outdated_ = false;
+        onLocalGroupsChanged();
+    }
+
+    if (router_status_outdated_)
+    {
+        router_status_outdated_ = false;
+        router_groups_outdated_ = false;
+
+        // More than one change may have passed, so the items of the former session are dropped first.
+        onRouterStatusChanged(RouterStatus::OFFLINE);
+        onRouterStatusChanged(RouterController::status());
+    }
+    else if (router_groups_outdated_)
+    {
+        router_groups_outdated_ = false;
+        onRefreshWorkspaces();
+    }
 }

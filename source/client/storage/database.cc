@@ -81,9 +81,12 @@ bool migrateTables(SqlDatabase& db)
     //----------------------------------------------------------------------------------------------
     if (version < 1)
     {
-        if (!db.addColumn("credentials", "deleted", "INTEGER NOT NULL DEFAULT 0") ||
-            !db.addColumn("profiles", "deleted", "INTEGER NOT NULL DEFAULT 0") ||
-            !db.addColumn("router_hosts", "deleted", "INTEGER NOT NULL DEFAULT 0"))
+        if (!db.addColumn("credentials", "sync_state", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("profiles", "sync_state", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("router_hosts", "sync_state", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("local_hosts", "sync_state", "INTEGER NOT NULL DEFAULT 0") ||
+            !db.addColumn("local_groups", "data", "BLOB DEFAULT X''") ||
+            !db.addColumn("local_groups", "sync_state", "INTEGER NOT NULL DEFAULT 0"))
         {
             return false;
         }
@@ -94,13 +97,14 @@ bool migrateTables(SqlDatabase& db)
             return false;
         }
 
+        // The state the trigger sets is SyncStore::SYNC_STATE_DELETED.
         if (!db.exec("CREATE TRIGGER \"router_hosts_drop_empty\" "
                      "AFTER UPDATE ON \"router_hosts\" "
-                     "WHEN NEW.\"deleted\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                     "WHEN NEW.\"sync_state\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
                      "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
                      "BEGIN "
                      "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\" AND \"sync_revision\" = 0; "
-                     "UPDATE \"router_hosts\" SET \"deleted\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
+                     "UPDATE \"router_hosts\" SET \"sync_state\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
                      "\"modify_time\" = CAST(strftime('%s', 'now') AS INTEGER) WHERE \"host_id\" = NEW.\"host_id\"; "
                      "END"))
         {
@@ -111,6 +115,18 @@ bool migrateTables(SqlDatabase& db)
         if (!db.exec("UPDATE credentials SET sync_dirty=1"))
         {
             LOG(ERROR) << "Unable to mark credentials for sending:" << db.lastError();
+            return false;
+        }
+
+        if (!db.exec("UPDATE local_hosts SET sync_dirty=1"))
+        {
+            LOG(ERROR) << "Unable to mark local hosts for sending:" << db.lastError();
+            return false;
+        }
+
+        if (!db.exec("UPDATE local_groups SET sync_dirty=1"))
+        {
+            LOG(ERROR) << "Unable to mark local groups for sending:" << db.lastError();
             return false;
         }
 
@@ -432,9 +448,9 @@ bool Database::import(const std::optional<RouterConfig>& router,
             config.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
         SqlQuery query(db_, "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
-                            "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id) "
-                            "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
-                            "NULLIF(?, 0))");
+                            "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id, "
+                            "sync_dirty) VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), "
+                            "NULLIF(?, 0), NULLIF(?, 0), 1)");
         query.addInt64(config.groupId());
         query.addText(config.name());
         query.addText(config.comment());
@@ -497,7 +513,7 @@ Database::ReencryptResult Database::Reencryption::begin()
 
     const ReadResult read_results[] =
     {
-        LocalHostStore(db_).all(&local_hosts_),
+        LocalHostStore(db_).all(LocalHostStore::Scope::WITH_WAITING, &local_hosts_),
         RouterHostStore(db_).list(&router_hosts_),
         CredentialStore(db_).list(&credentials_),
         SettingsStore(db_).proxyConfig(&proxy_)
@@ -591,6 +607,8 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"data\" BLOB DEFAULT X'',"
+                 "\"sync_state\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_groups table:" << db.lastError();
@@ -612,6 +630,7 @@ bool Database::createTables(SqlDatabase& db)
                  "\"profile_id\" INTEGER REFERENCES \"profiles\"(\"id\") ON DELETE SET NULL,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_state\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create local_hosts table:" << db.lastError();
@@ -628,7 +647,7 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"deleted\" INTEGER NOT NULL DEFAULT 0)"))
+                 "\"sync_state\" INTEGER NOT NULL DEFAULT 0)"))
     {
         LOG(ERROR) << "Unable to create router_hosts table:" << db.lastError();
         return false;
@@ -643,7 +662,7 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"deleted\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_state\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create credentials table:" << db.lastError();
@@ -658,20 +677,21 @@ bool Database::createTables(SqlDatabase& db)
                  "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
                  "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
-                 "\"deleted\" INTEGER NOT NULL DEFAULT 0,"
+                 "\"sync_state\" INTEGER NOT NULL DEFAULT 0,"
                  "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create profiles table:" << db.lastError();
         return false;
     }
 
+    // The state the trigger sets is SyncStore::SYNC_STATE_DELETED.
     if (!db.exec("CREATE TRIGGER IF NOT EXISTS \"router_hosts_drop_empty\" "
                  "AFTER UPDATE ON \"router_hosts\" "
-                 "WHEN NEW.\"deleted\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
+                 "WHEN NEW.\"sync_state\" = 0 AND NEW.\"data\" = X'' AND NEW.\"credential_id\" IS NULL AND "
                  "NEW.\"os_credential_id\" IS NULL AND NEW.\"profile_id\" IS NULL "
                  "BEGIN "
                  "DELETE FROM \"router_hosts\" WHERE \"host_id\" = NEW.\"host_id\" AND \"sync_revision\" = 0; "
-                 "UPDATE \"router_hosts\" SET \"deleted\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
+                 "UPDATE \"router_hosts\" SET \"sync_state\" = 1, \"sync_dirty\" = \"sync_dirty\" + 1, "
                  "\"modify_time\" = CAST(strftime('%s', 'now') AS INTEGER) WHERE \"host_id\" = NEW.\"host_id\"; "
                  "END"))
     {

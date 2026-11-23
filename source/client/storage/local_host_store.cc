@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/sql/sql_query.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/sync_store.h"
 
 namespace {
 
@@ -51,6 +52,35 @@ Database::ReadResult readLocalHost(const SqlQuery& query, LocalHostConfig* host)
     return Database::ReadResult::OK;
 }
 
+//--------------------------------------------------------------------------------------------------
+bool removeHost(SqlDatabase& db, qint64 entry_id)
+{
+    SqlQuery remove_query(db, "DELETE FROM local_hosts WHERE id=? AND sync_revision=0");
+    remove_query.addInt64(entry_id);
+
+    if (!remove_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    SqlQuery mark_query(db, "UPDATE local_hosts SET group_id=NULL, name='', comment='', data=X'', "
+                             "credential_id=NULL, os_credential_id=NULL, profile_id=NULL, modify_time=?, "
+                             "sync_dirty=sync_dirty+1, sync_state=? "
+                             "WHERE id=? AND sync_revision!=0 AND sync_state=0");
+    mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+    mark_query.addInt64(SyncStore::SYNC_STATE_DELETED);
+    mark_query.addInt64(entry_id);
+
+    if (!mark_query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << db.lastError();
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -75,7 +105,8 @@ Database::ReadResult LocalHostStore::list(qint64 group_id, QList<LocalHostConfig
     SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
-                          "FROM local_hosts WHERE group_id IS NULLIF(?, 0) ORDER BY casefold(name)");
+                          "FROM local_hosts WHERE group_id IS NULLIF(?, 0) AND sync_state=0 "
+                          "ORDER BY casefold(name)");
     query.addInt64(group_id);
 
     Database::ReadResult result = Database::ReadResult::OK;
@@ -104,7 +135,7 @@ Database::ReadResult LocalHostStore::list(qint64 group_id, QList<LocalHostConfig
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ReadResult LocalHostStore::all(QList<LocalHostConfig>* hosts) const
+Database::ReadResult LocalHostStore::all(Scope scope, QList<LocalHostConfig>* hosts) const
 {
     CHECK(hosts);
     hosts->clear();
@@ -118,7 +149,8 @@ Database::ReadResult LocalHostStore::all(QList<LocalHostConfig>* hosts) const
     SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
-                          "FROM local_hosts");
+                          "FROM local_hosts WHERE sync_state=0 OR sync_state=?");
+    query.addInt64(scope == Scope::WITH_WAITING ? SyncStore::SYNC_STATE_WAITING : SyncStore::SYNC_STATE_PRESENT);
 
     Database::ReadResult result = Database::ReadResult::OK;
 
@@ -173,9 +205,9 @@ bool LocalHostStore::add(LocalHostConfig& host)
         host.setGuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 
     SqlQuery query(db(), "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
-                          "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id) "
-                          "VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), NULLIF(?, 0), "
-                          "NULLIF(?, 0))");
+                          "modify_time, connect_time, guid, credential_id, os_credential_id, profile_id, "
+                          "sync_dirty) VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, ?, NULLIF(?, 0), "
+                          "NULLIF(?, 0), NULLIF(?, 0), 1)");
     query.addInt64(host.groupId());
     query.addText(host.name());
     query.addText(host.comment());
@@ -213,15 +245,42 @@ bool LocalHostStore::modify(LocalHostConfig& host)
         return false;
     }
 
-    std::optional<QByteArray> encrypted_data = host.encryptedData();
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    SqlQuery row(db(), "SELECT data FROM local_hosts WHERE id=? AND sync_state=0");
+    row.addInt64(host.id());
+
+    const SqlQuery::StepResult step = row.next();
+    if (step != SqlQuery::StepResult::ROW)
+    {
+        if (step == SqlQuery::StepResult::FAILED)
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        else
+            LOG(ERROR) << "Local host" << host.id() << "not found";
+        return false;
+    }
+
+    LocalHostConfig stored;
+    if (!stored.setEncryptedData(row.columnBlob(0)))
+        LOG(WARNING) << "Stored data of host" << host.id() << "could not be read and is replaced";
+
+    LocalHostConfig modified = host;
+    modified.setUnknownData(stored.unknownData());
+
+    std::optional<QByteArray> encrypted_data = modified.encryptedData();
     if (!encrypted_data.has_value())
         return false;
 
     host.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), name=?, comment=?, "
-                          "data=?, modify_time=?, credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0) "
-                          "WHERE id=?");
+                          "data=?, modify_time=?, credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), "
+                          "sync_dirty=sync_dirty+1 WHERE id=? AND sync_state=0");
     query.addInt64(host.groupId());
     query.addText(host.name());
     query.addText(host.comment());
@@ -237,6 +296,12 @@ bool LocalHostStore::modify(LocalHostConfig& host)
         return false;
     }
 
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return false;
+    }
+
     return true;
 }
 
@@ -249,7 +314,8 @@ bool LocalHostStore::move(qint64 entry_id, qint64 new_group_id)
         return false;
     }
 
-    SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), modify_time=? WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), modify_time=?, sync_dirty=sync_dirty+1 "
+                          "WHERE id=? AND sync_state=0");
     query.addInt64(new_group_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addInt64(entry_id);
@@ -278,12 +344,19 @@ bool LocalHostStore::remove(qint64 entry_id)
         return false;
     }
 
-    SqlQuery query(db(), "DELETE FROM local_hosts WHERE id=?");
-    query.addInt64(entry_id);
-
-    if (!query.exec())
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
     {
-        LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
+
+    if (!removeHost(db(), entry_id))
+        return false;
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
         return false;
     }
 
@@ -299,7 +372,7 @@ bool LocalHostStore::setConnectTime(qint64 entry_id, qint64 connect_time)
         return false;
     }
 
-    SqlQuery query(db(), "UPDATE local_hosts SET connect_time=? WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET connect_time=? WHERE id=? AND sync_state=0");
     query.addInt64(connect_time);
     query.addInt64(entry_id);
 
@@ -321,7 +394,8 @@ bool LocalHostStore::setOsCredentialId(qint64 entry_id, qint64 credential_id)
         return false;
     }
 
-    SqlQuery query(db(), "UPDATE local_hosts SET os_credential_id=NULLIF(?, 0) WHERE id=?");
+    SqlQuery query(db(), "UPDATE local_hosts SET os_credential_id=NULLIF(?, 0), sync_dirty=sync_dirty+1 "
+                          "WHERE id=? AND sync_state=0");
     query.addInt64(credential_id);
     query.addInt64(entry_id);
 
@@ -349,7 +423,7 @@ Database::FindResult LocalHostStore::find(qint64 entry_id, LocalHostConfig* host
     SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
-                          "FROM local_hosts WHERE id=?");
+                          "FROM local_hosts WHERE id=? AND sync_state=0");
     query.addInt64(entry_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -407,7 +481,7 @@ Database::ReadResult LocalHostStore::search(const QString& query_text, QList<Loc
     SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
                           "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
                           "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0) "
-                          "FROM local_hosts ORDER BY casefold(name)");
+                          "FROM local_hosts WHERE sync_state=0 ORDER BY casefold(name)");
 
     Database::ReadResult result = Database::ReadResult::OK;
 
@@ -437,4 +511,184 @@ Database::ReadResult LocalHostStore::search(const QString& query_text, QList<Loc
     }
 
     return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::ReadResult LocalHostStore::unsynced(QList<Unsynced>* hosts) const
+{
+    CHECK(hosts);
+    hosts->clear();
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Database::ReadResult::FAILED;
+    }
+
+    SqlQuery query(db(), "SELECT id, IFNULL(group_id, 0), name, comment, data, "
+                          "create_time, modify_time, connect_time, guid, IFNULL(credential_id, 0), "
+                          "IFNULL(os_credential_id, 0), IFNULL(profile_id, 0), sync_revision, sync_dirty, sync_state "
+                          "FROM local_hosts WHERE sync_dirty!=0");
+
+    Database::ReadResult result = Database::ReadResult::OK;
+
+    for (;;)
+    {
+        const SqlQuery::StepResult step = query.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return Database::ReadResult::FAILED;
+        }
+        if (step == SqlQuery::StepResult::DONE)
+            break;
+
+        Unsynced& unsynced = hosts->emplaceBack();
+        unsynced.deleted = query.columnInt64(14) == SyncStore::SYNC_STATE_DELETED;
+        unsynced.sync_revision = query.columnInt64(12);
+        unsynced.sync_dirty = query.columnInt64(13);
+
+        if (unsynced.deleted)
+        {
+            unsynced.host.setId(query.columnInt64(0));
+            unsynced.host.setGuid(query.columnText(8));
+            unsynced.host.setModifyTime(query.columnInt64(6));
+        }
+        else if (readLocalHost(query, &unsynced.host) != Database::ReadResult::OK)
+        {
+            unsynced.damaged = true;
+            result = Database::ReadResult::INCOMPLETE;
+        }
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalHostStore::storeReceived(
+    SyncTransaction& transaction, const LocalHostConfig& host, qint64 sync_revision)
+{
+    if (!transaction.isActive())
+    {
+        LOG(ERROR) << "The transaction is not active";
+        return false;
+    }
+
+    if (!host.isValid() || host.guid().isEmpty() || sync_revision <= 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    std::optional<QByteArray> encrypted_data = host.encryptedData();
+    if (!encrypted_data.has_value())
+        return false;
+
+    qint64 entry_id = 0;
+    qint64 stored_revision = 0;
+
+    {
+        SqlQuery row(db(), "SELECT id, sync_revision FROM local_hosts WHERE guid=?");
+        row.addText(host.guid());
+
+        const SqlQuery::StepResult step = row.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::ROW)
+        {
+            entry_id = row.columnInt64(0);
+            stored_revision = row.columnInt64(1);
+        }
+    }
+
+    if (entry_id > 0 && stored_revision == sync_revision)
+        return true;
+
+    qint64 group_state = SyncStore::SYNC_STATE_PRESENT;
+
+    if (host.groupId() > 0)
+    {
+        SqlQuery group_query(db(), "SELECT sync_state FROM local_groups WHERE id=?");
+        group_query.addInt64(host.groupId());
+
+        if (group_query.next() != SqlQuery::StepResult::ROW)
+        {
+            LOG(ERROR) << "Unable to read group" << host.groupId() << "of the received host:" << db().lastError();
+            return false;
+        }
+
+        group_state = group_query.columnInt64(0);
+    }
+
+    // A host whose group has not come, or waits itself, is not in the tree yet.
+    const bool waits = group_state == SyncStore::SYNC_STATE_EMPTY || group_state == SyncStore::SYNC_STATE_WAITING;
+    const SyncStore::SyncState state = waits ? SyncStore::SYNC_STATE_WAITING : SyncStore::SYNC_STATE_PRESENT;
+
+    if (entry_id <= 0)
+    {
+        SqlQuery query(db(), "INSERT INTO local_hosts (id, group_id, name, comment, data, create_time, "
+                              "modify_time, guid, credential_id, os_credential_id, profile_id, sync_revision, "
+                              "sync_state) VALUES (NULL, NULLIF(?, 0), ?, ?, ?, ?, ?, ?, NULLIF(?, 0), "
+                              "NULLIF(?, 0), NULLIF(?, 0), ?, ?)");
+        query.addInt64(host.groupId());
+        query.addText(host.name());
+        query.addText(host.comment());
+        query.addBlob(*encrypted_data);
+        query.addInt64(host.createTime());
+        query.addInt64(host.modifyTime());
+        query.addText(host.guid());
+        query.addInt64(host.credentialId());
+        query.addInt64(host.osCredentialId());
+        query.addInt64(host.profileId());
+        query.addInt64(sync_revision);
+        query.addInt64(state);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+
+        entry_id = db().lastInsertRowId();
+    }
+    else
+    {
+        SqlQuery query(db(), "UPDATE local_hosts SET group_id=NULLIF(?, 0), name=?, comment=?, data=?, "
+                              "create_time=?, modify_time=?, credential_id=NULLIF(?, 0), "
+                              "os_credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), sync_revision=?, "
+                              "sync_dirty=0, sync_state=? WHERE id=?");
+        query.addInt64(host.groupId());
+        query.addText(host.name());
+        query.addText(host.comment());
+        query.addBlob(*encrypted_data);
+        query.addInt64(host.createTime());
+        query.addInt64(host.modifyTime());
+        query.addInt64(host.credentialId());
+        query.addInt64(host.osCredentialId());
+        query.addInt64(host.profileId());
+        query.addInt64(sync_revision);
+        query.addInt64(state);
+        query.addInt64(entry_id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+
+    if (group_state == SyncStore::SYNC_STATE_DELETED)
+    {
+        LOG(INFO) << "Received host" << entry_id << "lies in a group removed on the device and is removed too";
+        return removeHost(db(), entry_id);
+    }
+
+    if (waits)
+        LOG(INFO) << "Received host" << entry_id << "waits for group" << host.groupId();
+
+    return true;
 }

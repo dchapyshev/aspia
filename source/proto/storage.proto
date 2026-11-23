@@ -76,6 +76,11 @@ message ProfileData
     bytes unknown_data     = 3;
 }
 
+message GroupData
+{
+    bytes unknown_data = 1;
+}
+
 message BackupFile
 {
     message Router

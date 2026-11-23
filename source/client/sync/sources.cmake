@@ -21,6 +21,12 @@ collect_sources(SOURCE_CLIENT_SYNC
     sync_credentials.h
     sync_crypto.cc
     sync_crypto.h
+    sync_links.cc
+    sync_links.h
+    sync_local_groups.cc
+    sync_local_groups.h
+    sync_local_hosts.cc
+    sync_local_hosts.h
     sync_profiles.cc
     sync_profiles.h
     sync_records.cc

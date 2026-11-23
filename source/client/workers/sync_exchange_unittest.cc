@@ -21,15 +21,22 @@
 
 #include <gtest/gtest.h>
 
+#include <unordered_map>
+
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/random.h"
 #include "base/net/udp_channel.h"
+#include "base/sql/sql_database.h"
+#include "base/sql/sql_query.h"
 #include "client/router/router_test_fixture.h"
 #include "client/storage/credential_store.h"
+#include "client/storage/local_group_store.h"
+#include "client/storage/local_host_store.h"
 #include "client/storage/profile_store.h"
 #include "client/storage/router_host_store.h"
 #include "client/storage/router_store.h"
+#include "client/storage/sync_store.h"
 #include "client/workers/sync_worker.h"
 #include "proto/router.h"
 #include "router/storage/sync_storage.h"
@@ -430,21 +437,48 @@ protected:
 // the requests of the devices, the notifications of the router and a break of the session of the
 // laptop take place; the unhurried one lets the devices and the router finish before the user acts
 // again. After every schedule the devices have to hold the same records, with nothing left to send
-// and with no error told to the user. When only the laptop acts, the records also have to be the ones
-// the laptop held right after the last action of the user.
+// and with no error told to the user. After every step the tree of groups of a device has to be
+// whole.
 //
-// The devices stay in their sessions from one schedule to the next: joining the storage takes long.
-// Before a schedule the records of both devices are removed, and a credential with a host linking it
-// is brought to both.
+// Where it is known what the user left last, the records also have to be those. When only the laptop
+// acts, it is what the laptop held right after its last action. When both devices act, and one of
+// them took its last action holding exactly what the other one held after its own last action, it is
+// what that device held right after: its user saw all the other one did and changed it. Otherwise the
+// last actions were taken apart, and either of them may give way.
+//
+// A scenario may name the device that removes a group while the other one changes or adds what lies
+// in that group. Such a removal wins under every schedule, and the records have to be what that
+// device held right after it.
+//
+// A scenario may also ask for more deviations than the stand takes, when the order it is written
+// for lies that far from the unhurried one.
+//
+// The devices stay in their sessions from one schedule to the next, as joining the storage takes
+// long. Before a schedule the records of both devices are removed. Then both get a credential with a
+// router host linking it, and the groups "office" and "home" with the group "branch" in the office
+// and a local host in the branch that links the credential too.
 class SyncExchangeScheduleTest : public SyncExchangeTest
 {
 protected:
     using Action = std::function<void()>;
 
+    enum class Removal
+    {
+        NONE,
+        ON_LAPTOP,
+        ON_PHONE
+    };
+
     struct Scenario
     {
         QList<Action> laptop_actions;
         QList<Action> phone_actions;
+
+        // The removal of a group that wins over what the other device does in that group.
+        Removal removal = Removal::NONE;
+
+        // How many deviations the scenario asks for. They are taken when the stand takes fewer.
+        int deviations = 0;
     };
 
     // In the order the unhurried schedule takes them.
@@ -582,6 +616,124 @@ protected:
         EXPECT_TRUE(CredentialStore().remove(credential.id()));
     }
 
+    static bool findGroup(const QString& guid, LocalGroupConfig* group)
+    {
+        qint64 group_id = 0;
+        return LocalGroupStore().findRowIdByGuid(guid, &group_id) == Database::FindResult::FOUND &&
+               LocalGroupStore().find(group_id, group) == Database::FindResult::FOUND;
+    }
+
+    static bool findLocalHost(const QString& guid, LocalHostConfig* host)
+    {
+        QList<LocalHostConfig> local_hosts;
+        if (LocalHostStore().all(LocalHostStore::Scope::VISIBLE, &local_hosts) != Database::ReadResult::OK)
+            return false;
+
+        for (const LocalHostConfig& local_host : std::as_const(local_hosts))
+        {
+            if (local_host.guid() == guid)
+            {
+                *host = local_host;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // An empty |parent_guid| is the root.
+    void addGroup(const QString& name, const QString& parent_guid)
+    {
+        LocalGroupConfig parent;
+        if (!parent_guid.isEmpty() && !findGroup(parent_guid, &parent))
+            return;
+
+        LocalGroupConfig group;
+        group.setName(name);
+        group.setParentId(parent_guid.isEmpty() ? 0 : parent.id());
+        EXPECT_TRUE(LocalGroupStore().add(group));
+
+        added_group_guid_ = group.guid();
+    }
+
+    void renameGroup(const QString& guid, const QString& name) const
+    {
+        LocalGroupConfig group;
+        if (!findGroup(guid, &group))
+            return;
+
+        group.setName(name);
+        EXPECT_TRUE(LocalGroupStore().modify(group));
+    }
+
+    // A move that would close a loop is refused by the store, and the tree does not offer it.
+    void moveGroup(const QString& guid, const QString& parent_guid) const
+    {
+        LocalGroupConfig group;
+        LocalGroupConfig parent;
+        if (!findGroup(guid, &group) || !findGroup(parent_guid, &parent))
+            return;
+
+        LocalGroupStore().move(group.id(), parent.id());
+    }
+
+    void moveGroupIntoNewGroup(const QString& guid, const QString& new_group_name)
+    {
+        addGroup(new_group_name, QString());
+        moveGroup(guid, added_group_guid_);
+    }
+
+    void removeGroup(const QString& guid) const
+    {
+        LocalGroupConfig group;
+        if (!findGroup(guid, &group))
+            return;
+
+        EXPECT_TRUE(LocalGroupStore().remove(group.id()));
+    }
+
+    void addLocalHost(const QString& name, const QString& group_guid) const
+    {
+        LocalGroupConfig group;
+        if (!findGroup(group_guid, &group))
+            return;
+
+        LocalHostConfig host;
+        host.setName(name);
+        host.setAddress("192.168.0.2");
+        host.setGroupId(group.id());
+        EXPECT_TRUE(LocalHostStore().add(host));
+    }
+
+    void renameLocalHost(const QString& name) const
+    {
+        LocalHostConfig host;
+        if (!findLocalHost(local_host_guid_, &host))
+            return;
+
+        host.setName(name);
+        EXPECT_TRUE(LocalHostStore().modify(host));
+    }
+
+    void moveLocalHost(const QString& group_guid) const
+    {
+        LocalHostConfig host;
+        LocalGroupConfig group;
+        if (!findLocalHost(local_host_guid_, &host) || !findGroup(group_guid, &group))
+            return;
+
+        EXPECT_TRUE(LocalHostStore().move(host.id(), group.id()));
+    }
+
+    void removeLocalHost() const
+    {
+        LocalHostConfig host;
+        if (!findLocalHost(local_host_guid_, &host))
+            return;
+
+        EXPECT_TRUE(LocalHostStore().remove(host.id()));
+    }
+
     static void removeRecords()
     {
         QList<CredentialConfig> credentials;
@@ -604,6 +756,18 @@ protected:
 
         for (const RouterHostConfig& host : std::as_const(hosts))
             ASSERT_TRUE(RouterHostStore().remove(host.hostId()));
+
+        QList<LocalHostConfig> local_hosts;
+        ASSERT_EQ(LocalHostStore().all(LocalHostStore::Scope::VISIBLE, &local_hosts), Database::ReadResult::OK);
+
+        for (const LocalHostConfig& local_host : std::as_const(local_hosts))
+            ASSERT_TRUE(LocalHostStore().remove(local_host.id()));
+
+        QList<LocalGroupConfig> root_groups;
+        ASSERT_TRUE(LocalGroupStore().list(0, &root_groups));
+
+        for (const LocalGroupConfig& root_group : std::as_const(root_groups))
+            ASSERT_TRUE(LocalGroupStore().remove(root_group.id()));
     }
 
     // What the device holds, and how many records it has to send.
@@ -651,6 +815,32 @@ protected:
                      has_profile ? profile.guid() : QString("none")));
         }
 
+        QList<LocalGroupConfig> groups;
+        ASSERT_TRUE(LocalGroupStore().all(&groups));
+
+        std::unordered_map<qint64, QString> group_guids;
+        for (const LocalGroupConfig& group : std::as_const(groups))
+            group_guids.emplace(group.id(), group.guid());
+
+        const auto groupGuid = [&group_guids](qint64 group_id)
+        {
+            const auto group_guid = group_guids.find(group_id);
+            return group_guid == group_guids.end() ? QString("root") : group_guid->second;
+        };
+
+        for (const LocalGroupConfig& group : std::as_const(groups))
+            records->append(QString("group %1 %2 in %3").arg(group.guid(), group.name(), groupGuid(group.parentId())));
+
+        QList<LocalHostConfig> local_hosts;
+        ASSERT_EQ(LocalHostStore().all(LocalHostStore::Scope::VISIBLE, &local_hosts), Database::ReadResult::OK);
+
+        for (const LocalHostConfig& local_host : std::as_const(local_hosts))
+        {
+            records->append(QString("local host %1 %2 %3 in %4 credential %5").arg(local_host.guid(),
+                local_host.name(), local_host.address(), groupGuid(local_host.groupId()),
+                credentialGuid(local_host.credentialId())));
+        }
+
         records->sort();
 
         QList<CredentialStore::Unsynced> unsynced_credentials;
@@ -662,7 +852,98 @@ protected:
         QList<RouterHostStore::Unsynced> unsynced_hosts;
         ASSERT_EQ(RouterHostStore().unsynced(&unsynced_hosts), Database::ReadResult::OK);
 
-        *unsynced_count = unsynced_credentials.size() + unsynced_profiles.size() + unsynced_hosts.size();
+        QList<LocalGroupStore::Unsynced> unsynced_groups;
+        ASSERT_EQ(LocalGroupStore().unsynced(&unsynced_groups), Database::ReadResult::OK);
+
+        QList<LocalHostStore::Unsynced> unsynced_local_hosts;
+        ASSERT_EQ(LocalHostStore().unsynced(&unsynced_local_hosts), Database::ReadResult::OK);
+
+        *unsynced_count = unsynced_credentials.size() + unsynced_profiles.size() + unsynced_hosts.size() +
+            unsynced_groups.size() + unsynced_local_hosts.size();
+    }
+
+    // The groups and the local hosts of the device |name| that wait for a group. The stores do not
+    // hand them out, so they are counted in the file of the device.
+    qint64 waitingRowCount(const QString& name) const
+    {
+        SqlDatabase raw;
+        if (!raw.open(dir_.filePath(name + ".db3")))
+            return -1;
+
+        qint64 count = 0;
+
+        for (const char* sql : { "SELECT COUNT(*) FROM local_groups WHERE sync_state=?",
+                                 "SELECT COUNT(*) FROM local_hosts WHERE sync_state=?" })
+        {
+            SqlQuery query(raw, sql);
+            query.addInt64(SyncStore::SYNC_STATE_WAITING);
+
+            if (query.next() != SqlQuery::StepResult::ROW)
+                return -1;
+
+            count += query.columnInt64(0);
+        }
+
+        return count;
+    }
+
+    // Every group the device shows lies in the root or in a group it shows, and so does every local
+    // host. A group that lies in a loop never reaches the root.
+    static void expectTreeIsWhole(const char* device_name)
+    {
+        QList<LocalGroupConfig> groups;
+        ASSERT_TRUE(LocalGroupStore().all(&groups));
+
+        std::unordered_map<qint64, qint64> parent_ids;
+        for (const LocalGroupConfig& group : std::as_const(groups))
+            parent_ids.emplace(group.id(), group.parentId());
+
+        for (const LocalGroupConfig& group : std::as_const(groups))
+        {
+            qint64 group_id = group.id();
+
+            for (size_t passed_count = 0; group_id > 0; ++passed_count)
+            {
+                const auto parent_id = parent_ids.find(group_id);
+
+                ASSERT_TRUE(parent_id != parent_ids.end())
+                    << "Group " << group.name().toStdString() << " of the " << device_name
+                    << " lies below a group that is not shown";
+                ASSERT_LT(passed_count, parent_ids.size())
+                    << "Group " << group.name().toStdString() << " of the " << device_name << " lies in a loop";
+
+                group_id = parent_id->second;
+            }
+        }
+
+        QList<LocalHostConfig> local_hosts;
+        ASSERT_EQ(LocalHostStore().all(LocalHostStore::Scope::VISIBLE, &local_hosts), Database::ReadResult::OK);
+
+        for (const LocalHostConfig& local_host : std::as_const(local_hosts))
+        {
+            EXPECT_TRUE(local_host.groupId() <= 0 || parent_ids.find(local_host.groupId()) != parent_ids.end())
+                << "Local host " << local_host.name().toStdString() << " of the " << device_name
+                << " lies in a group that is not shown";
+        }
+    }
+
+    void expectTreesAreWhole()
+    {
+        laptop_->device.run([]() { expectTreeIsWhole("laptop"); });
+        phone_->device.run([]() { expectTreeIsWhole("phone"); });
+    }
+
+    static QStringList heldRecords(Session& session)
+    {
+        QStringList records;
+
+        session.device.run([&]()
+        {
+            qsizetype unsynced_count = 0;
+            readRecords(&records, &unsynced_count);
+        });
+
+        return records;
     }
 
     // Lets both devices exchange once more, the way the timer of the worker does, and compares them.
@@ -686,11 +967,16 @@ protected:
         if (!expected_records.isEmpty())
         {
             EXPECT_EQ(laptop_records.join('\n').toStdString(), expected_records.join('\n').toStdString())
-                << "The laptop does not hold what the user left on it";
+                << "The devices do not hold what the user left last";
         }
 
         EXPECT_EQ(laptop_unsynced_count, 0);
         EXPECT_EQ(phone_unsynced_count, 0);
+
+        EXPECT_EQ(waitingRowCount("laptop"), 0);
+        EXPECT_EQ(waitingRowCount("phone"), 0);
+
+        expectTreesAreWhole();
 
         for (Session* session : { laptop_.get(), phone_.get() })
         {
@@ -725,6 +1011,30 @@ protected:
             host.setPassword(SecureString(QString("secret")));
             host.setCredentialId(credential.id());
             ASSERT_TRUE(RouterHostStore().add(host));
+
+            LocalGroupConfig office;
+            office.setName("office");
+            ASSERT_TRUE(LocalGroupStore().add(office));
+            office_guid_ = office.guid();
+
+            LocalGroupConfig branch;
+            branch.setName("branch");
+            branch.setParentId(office.id());
+            ASSERT_TRUE(LocalGroupStore().add(branch));
+            branch_guid_ = branch.guid();
+
+            LocalGroupConfig home;
+            home.setName("home");
+            ASSERT_TRUE(LocalGroupStore().add(home));
+            home_guid_ = home.guid();
+
+            LocalHostConfig local_host;
+            local_host.setName("desk");
+            local_host.setAddress("192.168.0.1");
+            local_host.setGroupId(branch.id());
+            local_host.setCredentialId(credential.id());
+            ASSERT_TRUE(LocalHostStore().add(local_host));
+            local_host_guid_ = local_host.guid();
         });
 
         laptop_->device.startExchange();
@@ -732,8 +1042,8 @@ protected:
     }
 
     // Takes at every step the enabled step number |schedule[index]|, the first one past the end of
-    // |schedule|. |enabled_counts| gets how many steps every step was chosen from. When only the
-    // laptop acts, |expected_records| gets what it holds right after its last action.
+    // |schedule|. |enabled_counts| gets how many steps every step was chosen from. |expected_records|
+    // gets what the user left last, and stays empty when that is not known.
     void runSchedule(const Scenario& scenario, const QList<int>& schedule, QList<int>* enabled_counts,
         QStringList* taken_steps, QStringList* expected_records)
     {
@@ -741,6 +1051,12 @@ protected:
         qsizetype phone_action = 0;
         bool laptop_online = true;
         int break_count = 0;
+
+        // What a device held right before and right after the last action taken on it.
+        QStringList laptop_before;
+        QStringList laptop_after;
+        QStringList phone_before;
+        QStringList phone_after;
 
         for (int index = 0;; ++index)
         {
@@ -772,7 +1088,7 @@ protected:
             }
 
             if (enabled.isEmpty())
-                return;
+                break;
 
             const int choice = schedule.value(index, 0);
             ASSERT_LT(choice, enabled.size()) << "The schedule does not repeat";
@@ -809,23 +1125,17 @@ protected:
 
                 case Step::LAPTOP_ACTION:
                     taken_steps->append(QString("laptop action %1").arg(laptop_action + 1));
+                    laptop_before = heldRecords(*laptop_);
                     laptop_->device.run(scenario.laptop_actions[laptop_action++]);
-
-                    if (scenario.phone_actions.isEmpty() && laptop_action == scenario.laptop_actions.size())
-                    {
-                        laptop_->device.run([&]()
-                        {
-                            qsizetype unsynced_count = 0;
-                            readRecords(expected_records, &unsynced_count);
-                        });
-                    }
-
+                    laptop_after = heldRecords(*laptop_);
                     laptop_->device.startExchange();
                     break;
 
                 case Step::PHONE_ACTION:
                     taken_steps->append(QString("phone action %1").arg(phone_action + 1));
+                    phone_before = heldRecords(*phone_);
                     phone_->device.run(scenario.phone_actions[phone_action++]);
+                    phone_after = heldRecords(*phone_);
                     phone_->device.startExchange();
                     break;
 
@@ -843,7 +1153,33 @@ protected:
                     ++break_count;
                     break;
             }
+
+            // A record waits for its group only between the steps, so the end does not show it.
+            expectTreesAreWhole();
+
+            if (HasFailure())
+                return;
         }
+
+        if (scenario.phone_actions.isEmpty() || scenario.removal == Removal::ON_LAPTOP)
+        {
+            *expected_records = laptop_after;
+            return;
+        }
+
+        if (scenario.removal == Removal::ON_PHONE)
+        {
+            *expected_records = phone_after;
+            return;
+        }
+
+        const bool phone_saw_laptop = phone_before == laptop_after;
+        const bool laptop_saw_phone = laptop_before == phone_after;
+
+        if (phone_saw_laptop && !laptop_saw_phone)
+            *expected_records = phone_after;
+        else if (laptop_saw_phone && !phone_saw_laptop)
+            *expected_records = laptop_after;
     }
 
     void runEverySchedule(const Scenario& scenario)
@@ -851,8 +1187,11 @@ protected:
         QElapsedTimer timer;
         timer.start();
 
+        const int max_deviations = std::max(max_deviations_, scenario.deviations);
+
         QList<int> schedule;
         int schedule_count = 0;
+        int known_outcome_count = 0;
 
         for (;;)
         {
@@ -869,6 +1208,9 @@ protected:
                 expectDevicesMatch(expected_records);
 
             ++schedule_count;
+
+            if (!expected_records.isEmpty())
+                ++known_outcome_count;
 
             if (HasFailure())
             {
@@ -888,7 +1230,7 @@ protected:
                         ++deviation_count;
                 }
 
-                if (schedule.value(index, 0) + 1 < enabled_counts[index] && deviation_count < max_deviations_)
+                if (schedule.value(index, 0) + 1 < enabled_counts[index] && deviation_count < max_deviations)
                     break;
             }
 
@@ -904,14 +1246,20 @@ protected:
             schedule.append(next_choice);
         }
 
-        std::cout << "[  INFO ] Schedules: " << schedule_count << ", deviations: " << max_deviations_
-                  << ", breaks: " << max_breaks_ << ", ms: " << timer.elapsed() << std::endl;
+        std::cout << "[  INFO ] Schedules: " << schedule_count << ", with a known outcome: " << known_outcome_count
+                  << ", deviations: " << max_deviations << ", breaks: " << max_breaks_ << ", ms: "
+                  << timer.elapsed() << std::endl;
     }
 
     int max_deviations_ = 1;
     int max_breaks_ = 0;
     QString credential_guid_;
     QString added_credential_guid_;
+    QString office_guid_;
+    QString branch_guid_;
+    QString home_guid_;
+    QString added_group_guid_;
+    QString local_host_guid_;
 };
 
 } // namespace
@@ -984,6 +1332,78 @@ TEST_F(SyncExchangeTest, HostWithItsLinksReachesTheOtherDevice)
         {
             QList<RouterHostStore::Unsynced> hosts;
             EXPECT_EQ(RouterHostStore().unsynced(&hosts), Database::ReadResult::OK);
+            EXPECT_TRUE(hosts.isEmpty());
+        });
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group with a group and a host in it, made on the laptop, reaches the phone through the router
+// with its tree.
+TEST_F(SyncExchangeTest, GroupsAndHostsOfTheDeviceReachTheOtherDevice)
+{
+    laptop_->device.startSession();
+    settle();
+
+    laptop_->device.run([&]()
+    {
+        LocalGroupConfig office;
+        office.setName("office");
+        ASSERT_TRUE(LocalGroupStore().add(office));
+
+        LocalGroupConfig branch;
+        branch.setName("branch");
+        branch.setParentId(office.id());
+        ASSERT_TRUE(LocalGroupStore().add(branch));
+
+        LocalHostConfig host;
+        host.setName("host");
+        host.setAddress("192.168.0.1");
+        host.setUsername("user");
+        host.setPassword(SecureString(QString("secret")));
+        host.setGroupId(branch.id());
+        ASSERT_TRUE(LocalHostStore().add(host));
+    });
+
+    laptop_->device.startExchange();
+    settle();
+
+    phone_->device.startSession();
+    settle();
+
+    phone_->device.run([&]()
+    {
+        QList<LocalGroupConfig> root_groups;
+        ASSERT_TRUE(LocalGroupStore().list(0, &root_groups));
+        ASSERT_EQ(root_groups.size(), 1);
+        EXPECT_EQ(root_groups[0].name(), QString("office"));
+
+        QList<LocalGroupConfig> child_groups;
+        ASSERT_TRUE(LocalGroupStore().list(root_groups[0].id(), &child_groups));
+        ASSERT_EQ(child_groups.size(), 1);
+        EXPECT_EQ(child_groups[0].name(), QString("branch"));
+
+        QList<LocalHostConfig> hosts;
+        ASSERT_EQ(LocalHostStore().list(child_groups[0].id(), &hosts), Database::ReadResult::OK);
+        ASSERT_EQ(hosts.size(), 1);
+        EXPECT_EQ(hosts[0].name(), QString("host"));
+        EXPECT_EQ(hosts[0].address(), QString("192.168.0.1"));
+        EXPECT_EQ(hosts[0].username(), QString("user"));
+        EXPECT_EQ(hosts[0].password().toString(), QString("secret"));
+    });
+
+    for (Session* session : { laptop_.get(), phone_.get() })
+    {
+        EXPECT_EQ(session->device.events(), QList<SyncWorker::Event>{ SyncWorker::Event::STORAGE_ATTACHED });
+
+        session->device.run([]()
+        {
+            QList<LocalGroupStore::Unsynced> groups;
+            EXPECT_EQ(LocalGroupStore().unsynced(&groups), Database::ReadResult::OK);
+            EXPECT_TRUE(groups.isEmpty());
+
+            QList<LocalHostStore::Unsynced> hosts;
+            EXPECT_EQ(LocalHostStore().unsynced(&hosts), Database::ReadResult::OK);
             EXPECT_TRUE(hosts.isEmpty());
         });
     }
@@ -3090,6 +3510,136 @@ TEST_F(SyncExchangeScheduleTest, CredentialRemovedAndItsHostChangedWhileTheCrede
 }
 
 //--------------------------------------------------------------------------------------------------
+// The same group is renamed on both devices.
+TEST_F(SyncExchangeScheduleTest, GroupChangedOnBothDevices)
+{
+    runEverySchedule({ { [this]() { renameGroup(office_guid_, "laptop"); } },
+                       { [this]() { renameGroup(office_guid_, "phone"); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device and renamed on the other.
+TEST_F(SyncExchangeScheduleTest, GroupRemovedWhileItIsChanged)
+{
+    runEverySchedule({ { [this]() { removeGroup(office_guid_); } },
+                       { [this]() { renameGroup(office_guid_, "phone"); } }, Removal::ON_LAPTOP });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device, and a group is added to it on the other. With two deviations
+// the removal is confirmed before the added group comes, and that group waits for a parent that
+// is gone.
+TEST_F(SyncExchangeScheduleTest, GroupRemovedWhileAGroupIsAddedToIt)
+{
+    runEverySchedule({ { [this]() { removeGroup(office_guid_); } },
+                       { [this]() { addGroup("lab", office_guid_); } }, Removal::ON_LAPTOP, 2 });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device, and a host is added to a group below it on the other.
+TEST_F(SyncExchangeScheduleTest, GroupRemovedWhileAHostIsAddedBelowIt)
+{
+    runEverySchedule({ { [this]() { removeGroup(office_guid_); } },
+                       { [this]() { addLocalHost("bench", branch_guid_); } }, Removal::ON_LAPTOP });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device, and a host of a group below it is renamed on the other.
+TEST_F(SyncExchangeScheduleTest, GroupRemovedWhileAHostBelowItIsChanged)
+{
+    runEverySchedule({ { [this]() { removeGroup(office_guid_); } },
+                       { [this]() { renameLocalHost("phone"); } }, Removal::ON_LAPTOP });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Each of two groups is moved into the other one, every move on its own device.
+TEST_F(SyncExchangeScheduleTest, GroupsMovedIntoEachOther)
+{
+    runEverySchedule({ { [this]() { moveGroup(office_guid_, home_guid_); } },
+                       { [this]() { moveGroup(home_guid_, office_guid_); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device, and another group is moved into it on the other.
+TEST_F(SyncExchangeScheduleTest, GroupMovedIntoAGroupThatIsRemoved)
+{
+    runEverySchedule({ { [this]() { removeGroup(home_guid_); } },
+                       { [this]() { moveGroup(office_guid_, home_guid_); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same local host is renamed on both devices.
+TEST_F(SyncExchangeScheduleTest, LocalHostChangedOnBothDevices)
+{
+    runEverySchedule({ { [this]() { renameLocalHost("laptop"); } }, { [this]() { renameLocalHost("phone"); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A local host is removed on one device and renamed on the other.
+TEST_F(SyncExchangeScheduleTest, LocalHostRemovedWhileItIsChanged)
+{
+    runEverySchedule({ { [this]() { removeLocalHost(); } }, { [this]() { renameLocalHost("phone"); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group is removed on one device, and a local host is moved into it on the other.
+TEST_F(SyncExchangeScheduleTest, LocalHostMovedIntoAGroupThatIsRemoved)
+{
+    runEverySchedule({ { [this]() { removeGroup(home_guid_); } }, { [this]() { moveLocalHost(home_guid_); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The scenarios below swap the devices of the ones above. The unhurried schedule carries the
+// requests of the laptop first, so here the device that removes reaches the router second.
+TEST_F(SyncExchangeScheduleTest, GroupChangedWhileItIsRemoved)
+{
+    runEverySchedule({ { [this]() { renameGroup(office_guid_, "laptop"); } },
+                       { [this]() { removeGroup(office_guid_); } }, Removal::ON_PHONE });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupAddedToAGroupWhileTheGroupIsRemoved)
+{
+    runEverySchedule({ { [this]() { addGroup("lab", office_guid_); } },
+                       { [this]() { removeGroup(office_guid_); } }, Removal::ON_PHONE });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostAddedBelowAGroupWhileTheGroupIsRemoved)
+{
+    runEverySchedule({ { [this]() { addLocalHost("bench", branch_guid_); } },
+                       { [this]() { removeGroup(office_guid_); } }, Removal::ON_PHONE });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostBelowAGroupChangedWhileTheGroupIsRemoved)
+{
+    runEverySchedule({ { [this]() { renameLocalHost("laptop"); } },
+                       { [this]() { removeGroup(office_guid_); } }, Removal::ON_PHONE });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupMovedIntoAGroupWhileTheGroupIsRemoved)
+{
+    runEverySchedule({ { [this]() { moveGroup(office_guid_, home_guid_); } },
+                       { [this]() { removeGroup(home_guid_); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostChangedWhileItIsRemoved)
+{
+    runEverySchedule({ { [this]() { renameLocalHost("laptop"); } },
+                       { [this]() { removeLocalHost(); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostMovedIntoAGroupWhileTheGroupIsRemoved)
+{
+    runEverySchedule({ { [this]() { moveLocalHost(home_guid_); } },
+                       { [this]() { removeGroup(home_guid_); } } });
+}
+
+//--------------------------------------------------------------------------------------------------
 // The scenarios below are the ones of one device: what the user leaves on the laptop is what both
 // devices have to end with, whatever happens to the session.
 TEST_F(SyncExchangeScheduleTest, CredentialChangedTwice)
@@ -3137,4 +3687,51 @@ TEST_F(SyncExchangeScheduleTest, CredentialRemovedAndItsHostChanged)
 TEST_F(SyncExchangeScheduleTest, HostUnlinkedAndLinkedToANewCredential)
 {
     runEverySchedule({ { [this]() { unlinkHost(); }, [this]() { addCredentialAndLinkHost("home"); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupAddedAndGivenAHost)
+{
+    runEverySchedule({ { [this]() { addGroup("lab", QString()); },
+                         [this]() { addLocalHost("bench", added_group_guid_); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupAddedAndRemoved)
+{
+    runEverySchedule({ { [this]() { addGroup("lab", QString()); },
+                         [this]() { removeGroup(added_group_guid_); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupChangedAndRemoved)
+{
+    runEverySchedule({ { [this]() { renameGroup(office_guid_, "main"); },
+                         [this]() { removeGroup(office_guid_); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, GroupMovedAndChanged)
+{
+    runEverySchedule({ { [this]() { moveGroup(office_guid_, home_guid_); },
+                         [this]() { renameGroup(office_guid_, "main"); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+// The moved group is sent ahead of the new one, so the other device gets it before its parent.
+TEST_F(SyncExchangeScheduleTest, GroupMovedIntoANewGroup)
+{
+    runEverySchedule({ { [this]() { moveGroupIntoNewGroup(branch_guid_, "lab"); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostMovedAndChanged)
+{
+    runEverySchedule({ { [this]() { moveLocalHost(home_guid_); }, [this]() { renameLocalHost("another"); } }, {} });
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(SyncExchangeScheduleTest, LocalHostChangedAndRemoved)
+{
+    runEverySchedule({ { [this]() { renameLocalHost("another"); }, [this]() { removeLocalHost(); } }, {} });
 }

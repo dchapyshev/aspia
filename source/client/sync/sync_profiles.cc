@@ -118,3 +118,10 @@ bool SyncProfileTraits::storeReceived(
 
     return store.storeReceived(transaction, config, sync_revision);
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool SyncProfileTraits::eraseReceived(Database& /* db */, SyncTransaction& transaction, const QString& record_id)
+{
+    return transaction.eraseRecord(kType, record_id);
+}

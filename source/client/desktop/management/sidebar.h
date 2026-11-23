@@ -42,7 +42,6 @@ public:
 
     void setLocalHostMimeType(const QString& mime_type);
     void setRouterHostMimeType(const QString& mime_type);
-    bool dragging() const;
 
     bool loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
     void reloadGroups(qint64 selected_group_id = 0);
@@ -90,6 +89,7 @@ private slots:
     void onItemExpanded(QTreeWidgetItem* item);
     void onItemCollapsed(QTreeWidgetItem* item);
     void onRouterStatusChanged(RouterStatus status);
+    void onLocalGroupsChanged();
 
 private:
     void buildRouterSections();
@@ -108,6 +108,8 @@ private:
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
     QTreeWidgetItem* findItem(const QByteArray& key) const;
     void selectPendingItem();
+    bool isDragActive() const;
+    void updateOutdatedItems();
 
     QTreeWidget* tree_widget_ = nullptr;
 
@@ -121,6 +123,9 @@ private:
     QString local_group_mime_type_;
     QString router_group_mime_type_;
     bool dragging_ = false;
+    bool local_groups_outdated_ = false;
+    bool router_groups_outdated_ = false;
+    bool router_status_outdated_ = false;
     QTreeWidgetItem* drag_source_item_ = nullptr;
     QPoint start_pos_;
 

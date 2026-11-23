@@ -315,15 +315,32 @@ bool copyBook(SqlDatabase& from, SqlDatabase& to, qint64 router_id)
         return false;
     }
 
+    if (!to.exec("UPDATE local_groups SET sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to mark the local groups to be sent:" << to.lastError();
+        return false;
+    }
+
     // A direct host goes to every database, a host of a router to the database of its router only.
     // A host of a router the old file no longer has goes nowhere.
-    return copyRows(from, to, "local_hosts",
-                    { { "id", Kind::INTEGER }, { "group_id", Kind::INTEGER }, { "name", Kind::TEXT },
-                      { "comment", Kind::TEXT }, { "data", Kind::BLOB }, { "create_time", Kind::INTEGER },
-                      { "modify_time", Kind::INTEGER }, { "connect_time", Kind::INTEGER },
-                      { "guid", Kind::TEXT }, { "credential_id", Kind::INTEGER },
-                      { "os_credential_id", Kind::INTEGER } },
-                    "\"router_id\" = 0 OR \"router_id\" = ?", router_id);
+    if (!copyRows(from, to, "local_hosts",
+                  { { "id", Kind::INTEGER }, { "group_id", Kind::INTEGER }, { "name", Kind::TEXT },
+                    { "comment", Kind::TEXT }, { "data", Kind::BLOB }, { "create_time", Kind::INTEGER },
+                    { "modify_time", Kind::INTEGER }, { "connect_time", Kind::INTEGER },
+                    { "guid", Kind::TEXT }, { "credential_id", Kind::INTEGER },
+                    { "os_credential_id", Kind::INTEGER } },
+                  "\"router_id\" = 0 OR \"router_id\" = ?", router_id))
+    {
+        return false;
+    }
+
+    if (!to.exec("UPDATE local_hosts SET sync_dirty=1"))
+    {
+        LOG(ERROR) << "Unable to mark the local hosts to be sent:" << to.lastError();
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

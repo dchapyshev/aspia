@@ -21,107 +21,8 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/secure_memory.h"
-#include "client/storage/credential_store.h"
-#include "client/storage/profile_store.h"
 #include "client/sync/sync_crypto.h"
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QString> credentialGuid(Database& db, qint64 credential_id)
-{
-    if (credential_id <= 0)
-        return QString();
-
-    QString guid;
-    const Database::FindResult found = CredentialStore(db).findGuidByRowId(credential_id, &guid);
-    if (found == Database::FindResult::NOT_FOUND)
-        return QString();
-
-    if (found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read credentials" << credential_id;
-        return std::nullopt;
-    }
-
-    return guid;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QString> profileGuid(Database& db, qint64 profile_id)
-{
-    if (profile_id <= 0)
-        return QString();
-
-    QString guid;
-    const Database::FindResult found = ProfileStore(db).findGuidByRowId(profile_id, &guid);
-    if (found == Database::FindResult::NOT_FOUND)
-        return QString();
-
-    if (found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read profile" << profile_id;
-        return std::nullopt;
-    }
-
-    return guid;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<qint64> credentialId(Database& db, const std::string& guid)
-{
-    if (guid.empty())
-        return 0;
-
-    qint64 credential_id = 0;
-    const Database::FindResult found = CredentialStore(db).findRowIdByGuid(QString::fromStdString(guid), &credential_id);
-    if (found == Database::FindResult::NOT_FOUND)
-    {
-        LOG(INFO) << "Credentials with guid" << guid << "are not on the device, an empty row keeps the link";
-
-        if (!CredentialStore(db).addEmptyRow(QString::fromStdString(guid), &credential_id))
-            return std::nullopt;
-
-        return credential_id;
-    }
-
-    if (found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read credentials with guid" << guid;
-        return std::nullopt;
-    }
-
-    return credential_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<qint64> profileId(Database& db, const std::string& guid)
-{
-    if (guid.empty())
-        return 0;
-
-    qint64 profile_id = 0;
-    const Database::FindResult found = ProfileStore(db).findRowIdByGuid(QString::fromStdString(guid), &profile_id);
-    if (found == Database::FindResult::NOT_FOUND)
-    {
-        LOG(INFO) << "Profile with guid" << guid << "is not on the device, an empty row keeps the link";
-
-        if (!ProfileStore(db).addEmptyRow(QString::fromStdString(guid), &profile_id))
-            return std::nullopt;
-
-        return profile_id;
-    }
-
-    if (found == Database::FindResult::FAILED)
-    {
-        LOG(ERROR) << "Unable to read profile with guid" << guid;
-        return std::nullopt;
-    }
-
-    return profile_id;
-}
-
-} // namespace
+#include "client/sync/sync_links.h"
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -134,9 +35,9 @@ Database::ReadResult SyncRouterHostTraits::readUnsynced(Database& db, QList<Unsy
 // static
 std::optional<QByteArray> SyncRouterHostTraits::seal(Database& db, const SecureByteArray& key, const Config& config)
 {
-    const std::optional<QString> credential_guid = credentialGuid(db, config.credentialId());
-    const std::optional<QString> os_credential_guid = credentialGuid(db, config.osCredentialId());
-    const std::optional<QString> profile_guid = profileGuid(db, config.profileId());
+    const std::optional<QString> credential_guid = SyncLinks::credentialGuid(db, config.credentialId());
+    const std::optional<QString> os_credential_guid = SyncLinks::credentialGuid(db, config.osCredentialId());
+    const std::optional<QString> profile_guid = SyncLinks::profileGuid(db, config.profileId());
 
     if (!credential_guid.has_value() || !os_credential_guid.has_value() || !profile_guid.has_value())
     {
@@ -192,9 +93,9 @@ SyncRecords::OpenResult SyncRouterHostTraits::openReceived(
     if (!parse(plain.toByteArray(), &content))
         return SyncRecords::OpenResult::UNREADABLE;
 
-    const std::optional<qint64> credential_id = credentialId(db, content.credential_guid());
-    const std::optional<qint64> os_credential_id = credentialId(db, content.os_credential_guid());
-    const std::optional<qint64> profile_id = profileId(db, content.profile_guid());
+    const std::optional<qint64> credential_id = SyncLinks::credentialId(db, content.credential_guid());
+    const std::optional<qint64> os_credential_id = SyncLinks::credentialId(db, content.os_credential_guid());
+    const std::optional<qint64> profile_id = SyncLinks::profileId(db, content.profile_guid());
 
     const std::string& password = content.password();
 
@@ -235,4 +136,11 @@ bool SyncRouterHostTraits::storeReceived(
     }
 
     return RouterHostStore(db).storeReceived(transaction, config, sync_revision);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool SyncRouterHostTraits::eraseReceived(Database& /* db */, SyncTransaction& transaction, const QString& record_id)
+{
+    return transaction.eraseRecord(kType, record_id);
 }

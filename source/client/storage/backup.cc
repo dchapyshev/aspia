@@ -193,7 +193,7 @@ Backup::Result collectContent(Database& db, BackupContent* data, Backup::Report*
     const Database::ReadResult read_results[] =
     {
         CredentialStore(db).list(&credentials),
-        LocalHostStore(db).all(&hosts),
+        LocalHostStore(db).all(LocalHostStore::Scope::VISIBLE, &hosts),
         RouterHostStore(db).list(&router_hosts),
         ProfileStore(db).list(&profiles)
     };

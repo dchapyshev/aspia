@@ -279,7 +279,7 @@ TEST_F(DatabaseTest, ListOfAClosedDatabaseFails)
     Database closed;
 
     QList<LocalHostConfig> hosts;
-    EXPECT_EQ(LocalHostStore(closed).all(&hosts), Database::ReadResult::FAILED);
+    EXPECT_EQ(LocalHostStore(closed).all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::FAILED);
     EXPECT_TRUE(hosts.isEmpty());
 
     QList<CredentialConfig> credentials;
@@ -434,6 +434,63 @@ TEST_F(DatabaseTest, ReencryptionKeepsDataReadable)
     EXPECT_EQ(stored->address(), QString("192.168.0.1"));
     EXPECT_EQ(stored->username(), QString("user"));
     EXPECT_EQ(stored->password().toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// The fields a newer version put into a local host are resealed with the rest of the host.
+TEST_F(DatabaseTest, ReencryptionKeepsTheUnknownDataOfALocalHost)
+{
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setUnknownData("unknown");
+    ASSERT_TRUE(local_hosts_.add(host));
+
+    ASSERT_EQ(reencrypt(db_, SecureByteArray(Random::byteArray(32)), "salt", "verifier"),
+              Database::ReencryptResult::DONE);
+
+    std::optional<LocalHostConfig> stored = findLocalHost(db_, host.id());
+    ASSERT_TRUE(stored.has_value());
+
+    EXPECT_EQ(stored->address(), QString("192.168.0.1"));
+    EXPECT_EQ(stored->unknownData(), QByteArray("unknown"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host that waits for its group is in no list, and it holds sealed data like any other host. A
+// change of the master password reseals it too, or it would not open once its group comes.
+TEST_F(DatabaseTest, ReencryptionReachesAHostThatWaitsForItsGroup)
+{
+    attachSyncStorage();
+
+    const QString group_guid = "22222222-2222-2222-2222-222222222222";
+
+    qint64 row_id = 0;
+    ASSERT_TRUE(local_groups_.addEmptyRow(group_guid, &row_id));
+
+    LocalHostConfig host;
+    host.setGuid("11111111-1111-1111-1111-111111111111");
+    host.setName("host");
+    host.setGroupId(row_id);
+    host.setAddress("192.168.0.1");
+    host.setUsername("user");
+    host.setPassword(SecureString("secret"));
+    ASSERT_TRUE(storeReceivedLocalHost(host, 7));
+    ASSERT_TRUE(allLocalHosts().isEmpty());
+
+    ASSERT_EQ(reencrypt(db_, SecureByteArray(Random::byteArray(32)), "salt", "verifier"),
+              Database::ReencryptResult::DONE);
+
+    LocalGroupConfig group;
+    group.setGuid(group_guid);
+    group.setName("group");
+    ASSERT_TRUE(storeReceivedGroup(group, 8));
+
+    const QList<LocalHostConfig> hosts = localHostList(row_id);
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts[0].address(), QString("192.168.0.1"));
+    EXPECT_EQ(hosts[0].username(), QString("user"));
+    EXPECT_EQ(hosts[0].password().toString(), QString("secret"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -633,6 +690,38 @@ TEST_F(DatabaseTest, SyncStorageIsDroppedWhenSyncIsTurnedOff)
     const QList<CredentialStore::Unsynced> unsynced = unsyncedCredentials();
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_EQ(unsynced[0].sync_revision, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for the groups and the hosts of the device. They stay in their places, and they are new
+// to whatever storage comes next.
+TEST_F(DatabaseTest, GroupsAndHostsStayWhenSyncIsTurnedOff)
+{
+    attachSyncStorage();
+
+    const qint64 group = addGroup("group", 0);
+    const qint64 host = addHost("host", group);
+    ASSERT_TRUE(markSynced("local_groups", group, 7));
+    ASSERT_TRUE(markSynced("local_hosts", host, 8));
+
+    std::optional<RouterConfig> router = findRouter(db_);
+    ASSERT_TRUE(router.has_value());
+
+    router->setSyncEnabled(false);
+    ASSERT_TRUE(router_store_.save(*router));
+
+    EXPECT_EQ(groupNames(), QStringList({ "group" }));
+    EXPECT_EQ(hostNamesOfGroup(group), QStringList({ "host" }));
+
+    const QList<LocalGroupStore::Unsynced> groups = unsyncedGroups();
+    ASSERT_EQ(groups.size(), 1);
+    EXPECT_EQ(groups[0].sync_revision, 0);
+    EXPECT_EQ(groups[0].sync_dirty, 1);
+
+    const QList<LocalHostStore::Unsynced> hosts = unsyncedLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts[0].sync_revision, 0);
+    EXPECT_EQ(hosts[0].sync_dirty, 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1507,12 +1596,12 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsTheDeletedColumn)
     SqlDatabase raw;
     ASSERT_TRUE(raw.open(file_path));
 
-    SqlQuery query(raw, "SELECT deleted, sync_dirty FROM credentials");
+    SqlQuery query(raw, "SELECT sync_state, sync_dirty FROM credentials");
     ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(query.columnInt64(0), 0);
     EXPECT_EQ(query.columnInt64(1), 1);
 
-    SqlQuery profile_query(raw, "SELECT deleted FROM profiles WHERE name='office'");
+    SqlQuery profile_query(raw, "SELECT sync_state FROM profiles WHERE name='office'");
     ASSERT_EQ(profile_query.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(profile_query.columnInt64(0), 0);
 
@@ -1559,14 +1648,157 @@ TEST_F(DatabaseTest, DatabaseOfAnEarlierVersionGetsRemovedRouterHosts)
 
     ASSERT_TRUE(router_hosts.remove(100500));
 
-    SqlQuery query(raw, "SELECT deleted, sync_dirty FROM router_hosts WHERE host_id=100500");
+    SqlQuery query(raw, "SELECT sync_state, sync_dirty FROM router_hosts WHERE host_id=100500");
     ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
-    EXPECT_EQ(query.columnInt64(0), 1);
+    EXPECT_EQ(query.columnInt64(0), SyncStore::SYNC_STATE_DELETED);
     EXPECT_EQ(query.columnInt64(1), 1);
 
     SqlQuery version(raw, "PRAGMA user_version");
     ASSERT_EQ(version.next(), SqlQuery::StepResult::ROW);
     EXPECT_EQ(version.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A database made by an earlier version has the local hosts without the column that marks a removed
+// host, and the router knows none of them. When it is opened, the column appears and every host
+// waits to be sent.
+TEST_F(DatabaseTest, LocalHostsOfAnEarlierVersionAreToBeSent)
+{
+    const QString file_path = QFileInfo(file_path_).path() + "/earlier.db3";
+
+    LocalHostConfig config;
+    config.setName("host");
+    config.setAddress("192.168.0.1");
+
+    const std::optional<QByteArray> encrypted_data = config.encryptedData();
+    ASSERT_TRUE(encrypted_data.has_value());
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"local_hosts\" ("
+                             "\"id\" INTEGER UNIQUE,"
+                             "\"group_id\" INTEGER,"
+                             "\"name\" TEXT NOT NULL DEFAULT '',"
+                             "\"comment\" TEXT NOT NULL DEFAULT '',"
+                             "\"data\" BLOB DEFAULT X'',"
+                             "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"guid\" TEXT NOT NULL UNIQUE,"
+                             "\"credential_id\" INTEGER,"
+                             "\"os_credential_id\" INTEGER,"
+                             "\"profile_id\" INTEGER,"
+                             "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+
+        SqlQuery query(raw, "INSERT INTO local_hosts (name, data, guid) VALUES ('host', ?, ?)");
+        query.addBlob(*encrypted_data);
+        query.addText(QString("11111111-1111-1111-1111-111111111111"));
+        ASSERT_TRUE(query.exec());
+    }
+
+    // The second pass opens a database that has the column already.
+    for (int pass = 0; pass < 2; ++pass)
+    {
+        Database earlier;
+        ASSERT_TRUE(earlier.open(file_path));
+
+        QList<LocalHostConfig> hosts;
+        ASSERT_EQ(LocalHostStore(earlier).all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::OK);
+        ASSERT_EQ(hosts.size(), 1);
+        EXPECT_EQ(hosts[0].address(), QString("192.168.0.1"));
+    }
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path));
+
+    SqlQuery query(raw, "SELECT sync_state, sync_dirty FROM local_hosts");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 0);
+    EXPECT_EQ(query.columnInt64(1), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host that came with a batch is one the router does not hold, like a host the user has added.
+TEST_F(DatabaseTest, ImportedLocalHostsAreToBeSent)
+{
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+
+    ASSERT_TRUE(db_.import({}, {}, { host }, {}, {}, {}));
+
+    const QList<LocalHostConfig> hosts = allLocalHosts();
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(syncDirty("local_hosts", hosts.front().id()), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A database made by an earlier version has the local groups without the column that marks a
+// removed group, and the router knows none of them. When it is opened, the column appears and every
+// group waits to be sent.
+TEST_F(DatabaseTest, LocalGroupsOfAnEarlierVersionAreToBeSent)
+{
+    const QString file_path = QFileInfo(file_path_).path() + "/earlier.db3";
+
+    {
+        SqlDatabase raw;
+        ASSERT_TRUE(raw.open(file_path));
+        ASSERT_TRUE(raw.exec("CREATE TABLE \"local_groups\" ("
+                             "\"id\" INTEGER UNIQUE,"
+                             "\"parent_id\" INTEGER,"
+                             "\"name\" TEXT NOT NULL DEFAULT '',"
+                             "\"comment\" TEXT NOT NULL DEFAULT '',"
+                             "\"guid\" TEXT NOT NULL UNIQUE,"
+                             "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_revision\" INTEGER NOT NULL DEFAULT 0,"
+                             "\"sync_dirty\" INTEGER NOT NULL DEFAULT 0,"
+                             "PRIMARY KEY(\"id\" AUTOINCREMENT))"));
+        ASSERT_TRUE(raw.exec("INSERT INTO local_groups (name, guid) "
+                             "VALUES ('group', '11111111-1111-1111-1111-111111111111')"));
+    }
+
+    // The second pass opens a database that has the column already.
+    for (int pass = 0; pass < 2; ++pass)
+    {
+        Database earlier;
+        ASSERT_TRUE(earlier.open(file_path));
+
+        QList<LocalGroupConfig> groups;
+        ASSERT_TRUE(LocalGroupStore(earlier).all(&groups));
+        ASSERT_EQ(groups.size(), 1);
+        EXPECT_EQ(groups[0].name(), QString("group"));
+
+        QList<LocalGroupStore::Unsynced> unsynced;
+        ASSERT_EQ(LocalGroupStore(earlier).unsynced(&unsynced), Database::ReadResult::OK);
+        ASSERT_EQ(unsynced.size(), 1);
+        EXPECT_EQ(unsynced[0].sync_dirty, 1);
+    }
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path));
+
+    SqlQuery query(raw, "SELECT sync_state, sync_dirty FROM local_groups");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 0);
+    EXPECT_EQ(query.columnInt64(1), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group that came with a batch is one the router does not hold, like a group the user has added.
+TEST_F(DatabaseTest, ImportedLocalGroupsAreToBeSent)
+{
+    LocalGroupConfig group;
+    group.setId(-1);
+    group.setName("group");
+
+    ASSERT_TRUE(db_.import({}, { group }, {}, {}, {}, {}));
+
+    const QList<LocalGroupConfig> groups = allLocalGroups();
+    ASSERT_EQ(groups.size(), 1);
+    EXPECT_EQ(syncDirty("local_groups", groups.front().id()), 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1692,8 +1924,8 @@ TEST_F(DatabaseTest, ReceivedRevisionIsKeptUntilABatchReplacesTheRecords)
 
 //--------------------------------------------------------------------------------------------------
 // A device that finds another storage in place of the one it was attached to gives up its records
-// and takes what the new storage holds. The rows stay in place, marked as deleted and wiped, so
-// that the hosts keep their links, and the reading starts over. The same storage set once more
+// and takes what the new storage holds. The rows stay in place, emptied, for the records of the
+// storage to take them, and the reading starts over. The same storage set once more
 // changes nothing of that, even with another key.
 TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
 {
@@ -1725,7 +1957,7 @@ TEST_F(DatabaseTest, AnotherStorageDiscardsTheDataOfTheDevice)
     EXPECT_EQ(rowCount("credentials"), 4);
 
     for (qint64 credential_id : { kept_id, edited_id, removed_id, new_id })
-        EXPECT_TRUE(isMarkedDeleted("credentials", credential_id));
+        EXPECT_TRUE(isEmptyRow("credentials", credential_id));
 
     EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_CREDENTIALS), 0);
 
@@ -1816,8 +2048,8 @@ TEST_F(DatabaseTest, DiscardedCredentialsAreNotSent)
 
 //--------------------------------------------------------------------------------------------------
 // A record the new storage holds under the guid of one the device gave up takes the row of that
-// one over, and the local hosts that referred to the record are entered with it again. The router
-// hosts are given up with the rest of the data, the storage brings its own.
+// one over. The hosts and the groups are given up with the rest of the data, the storage brings
+// its own.
 TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
 {
     addRouter(true);
@@ -1847,6 +2079,9 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
     EXPECT_FALSE(findCredentialByGuid(db_, stored->guid()).has_value());
     EXPECT_FALSE(findRouterHost(db_, 100500).has_value());
     EXPECT_EQ(rowCount("router_hosts"), 0);
+    EXPECT_FALSE(findLocalHost(db_, host_id).has_value());
+    EXPECT_EQ(rowCount("local_hosts"), 0);
+    EXPECT_EQ(rowCount("local_groups"), 0);
 
     CredentialConfig received = credential("office", "other-user", "other-secret");
     received.setGuid(stored->guid());
@@ -1858,10 +2093,6 @@ TEST_F(DatabaseTest, ReceivedCredentialTakesTheRowOfTheDiscardedOne)
     ASSERT_TRUE(by_guid.has_value());
     EXPECT_EQ(by_guid->id(), credential_id);
     EXPECT_EQ(by_guid->username(), QString("other-user"));
-
-    const std::optional<LocalHostConfig> local_host = findLocalHost(db_, host_id);
-    ASSERT_TRUE(local_host.has_value());
-    EXPECT_EQ(local_host->osCredentialId(), credential_id);
 
     EXPECT_TRUE(unsyncedCredentials().isEmpty());
 }
@@ -2206,8 +2437,8 @@ TEST_F(DatabaseTest, DiscardedProfilesGiveWayToTheStorage)
               Database::SyncResult::DONE);
 
     EXPECT_TRUE(profileList().isEmpty());
-    EXPECT_TRUE(isMarkedDeleted("profiles", kept_id));
-    EXPECT_TRUE(isMarkedDeleted("profiles", new_id));
+    EXPECT_TRUE(isEmptyRow("profiles", kept_id));
+    EXPECT_TRUE(isEmptyRow("profiles", new_id));
     EXPECT_EQ(profiles_.defaultProfile().udpMethods(), static_cast<quint32>(UDP_METHOD_DIRECT));
     EXPECT_TRUE(unsyncedProfiles().isEmpty());
     EXPECT_EQ(sync_store_.receivedRevision(proto::router::SYNC_DATA_TYPE_PROFILES), 0);

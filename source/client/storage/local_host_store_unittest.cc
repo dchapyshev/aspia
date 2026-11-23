@@ -22,6 +22,35 @@
 
 #include "client/storage/database_test_base.h"
 
+namespace {
+
+const char kHostGuid[] = "11111111-1111-1111-1111-111111111111";
+const char kGroupGuid[] = "22222222-2222-2222-2222-222222222222";
+const char kParentGuid[] = "33333333-3333-3333-3333-333333333333";
+
+//--------------------------------------------------------------------------------------------------
+LocalHostConfig receivedHost(const QString& guid, const QString& name, qint64 group_id)
+{
+    LocalHostConfig host;
+    host.setGuid(guid);
+    host.setName(name);
+    host.setAddress("192.168.0.1");
+    host.setGroupId(group_id);
+    return host;
+}
+
+//--------------------------------------------------------------------------------------------------
+LocalGroupConfig receivedGroup(const QString& guid, const QString& name, qint64 parent_id)
+{
+    LocalGroupConfig group;
+    group.setGuid(guid);
+    group.setName(name);
+    group.setParentId(parent_id);
+    return group;
+}
+
+} // namespace
+
 using LocalHostStoreTest = DatabaseTestBase;
 
 //--------------------------------------------------------------------------------------------------
@@ -186,7 +215,7 @@ TEST_F(LocalHostStoreTest, HostThatDoesNotOpenLeavesTheListIncomplete)
     EXPECT_EQ(readable.address(), QString("192.168.0.1"));
 
     QList<LocalHostConfig> all_hosts;
-    EXPECT_EQ(local_hosts_.all(&all_hosts), Database::ReadResult::INCOMPLETE);
+    EXPECT_EQ(local_hosts_.all(LocalHostStore::Scope::VISIBLE, &all_hosts), Database::ReadResult::INCOMPLETE);
     EXPECT_EQ(all_hosts.size(), 2);
 }
 
@@ -368,4 +397,420 @@ TEST_F(LocalHostStoreTest, LocalHostIsEnteredWithTheCredentialsItRefersToOrItsOw
     ASSERT_TRUE(credentials.has_value());
     EXPECT_EQ(credentials->first, QString("user"));
     EXPECT_EQ(credentials->second.toString(), QString("secret"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host the user has just added is one the router does not hold yet.
+TEST_F(LocalHostStoreTest, NewHostIsToBeSent)
+{
+    const qint64 entry_id = addHost("host", 0);
+
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Every change the user makes to a host is counted, so that the answer of the router to an earlier
+// change is not taken for the answer to a later one.
+TEST_F(LocalHostStoreTest, ChangeOfAHostIsCounted)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "shared-user", "shared-secret");
+    const qint64 entry_id = addHost("host", 0);
+
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+
+    std::optional<LocalHostConfig> host = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(host.has_value());
+
+    host->setName("renamed");
+    ASSERT_TRUE(local_hosts_.modify(*host));
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 1);
+
+    ASSERT_TRUE(local_hosts_.move(entry_id, group));
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 2);
+
+    ASSERT_TRUE(local_hosts_.setOsCredentialId(entry_id, credential_id));
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 3);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The moment of the last connection is kept by the device alone, so a connection is not a change
+// to send.
+TEST_F(LocalHostStoreTest, ConnectionDoesNotCountAsAChange)
+{
+    const qint64 entry_id = addHost("host", 0);
+
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+    ASSERT_TRUE(local_hosts_.setConnectTime(entry_id, 1700000000));
+
+    const std::optional<LocalHostConfig> host = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(host.has_value());
+    EXPECT_EQ(host->connectTime(), 1700000000);
+
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router has never held the host, so there is no removal to tell it of.
+TEST_F(LocalHostStoreTest, RemovedHostThatWasNeverSentLeavesNoRow)
+{
+    const qint64 entry_id = addHost("host", 0);
+
+    ASSERT_TRUE(local_hosts_.remove(entry_id));
+
+    EXPECT_EQ(rowCount("local_hosts"), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router holds the host, so its row stays as a mark of the removal until the router is told.
+// The mark keeps the guid and nothing of what the host held.
+TEST_F(LocalHostStoreTest, RemovedHostThatWasSentLeavesAMark)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "shared-user", "shared-secret");
+
+    LocalHostConfig host;
+    host.setName("host");
+    host.setAddress("192.168.0.1");
+    host.setComment("comment");
+    host.setGroupId(group);
+    host.setCredentialId(credential_id);
+    ASSERT_TRUE(local_hosts_.add(host));
+
+    ASSERT_TRUE(local_hosts_.setOsCredentialId(host.id(), credential_id));
+    ASSERT_TRUE(markSynced("local_hosts", host.id(), 7));
+
+    ASSERT_TRUE(local_hosts_.remove(host.id()));
+
+    EXPECT_TRUE(isMarkedDeleted("local_hosts", host.id()));
+    EXPECT_EQ(syncDirty("local_hosts", host.id()), 1);
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path_));
+
+    SqlQuery query(raw, "SELECT COUNT(*) FROM local_hosts WHERE id=? AND guid=? AND group_id IS NULL AND "
+                        "comment='' AND credential_id IS NULL AND os_credential_id IS NULL AND "
+                        "profile_id IS NULL");
+    query.addInt64(host.id());
+    query.addText(host.guid());
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The mark of a removed host is not a host: it is not listed, not found, and nothing changes it.
+TEST_F(LocalHostStoreTest, MarkOfARemovedHostIsNotShownAndNotChanged)
+{
+    const qint64 group = addGroup("group", 0);
+    const qint64 entry_id = addHost("host", 0);
+
+    const std::optional<LocalHostConfig> host = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(host.has_value());
+
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+    ASSERT_TRUE(local_hosts_.remove(entry_id));
+
+    EXPECT_TRUE(localHostList(0).isEmpty());
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+
+    QList<LocalHostConfig> found;
+    EXPECT_EQ(local_hosts_.search(QString(), &found), Database::ReadResult::OK);
+    EXPECT_TRUE(found.isEmpty());
+
+    EXPECT_FALSE(findLocalHost(db_, entry_id).has_value());
+    EXPECT_FALSE(local_hosts_.credentials(entry_id).has_value());
+
+    LocalHostConfig changed = *host;
+    changed.setName("renamed");
+    EXPECT_FALSE(local_hosts_.modify(changed));
+
+    EXPECT_FALSE(local_hosts_.move(entry_id, group));
+
+    local_hosts_.setOsCredentialId(entry_id, 0);
+    local_hosts_.setConnectTime(entry_id, 1700000000);
+    local_hosts_.remove(entry_id);
+
+    EXPECT_TRUE(isMarkedDeleted("local_hosts", entry_id));
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 1);
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(file_path_));
+
+    SqlQuery query(raw, "SELECT COUNT(*) FROM local_hosts WHERE id=? AND group_id IS NULL AND connect_time=0");
+    query.addInt64(entry_id);
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The fields a newer version put into a host stay with it through an edit and are sent back.
+TEST_F(LocalHostStoreTest, UnknownFieldsOfAHostSurviveItsEdit)
+{
+    attachSyncStorage();
+
+    LocalHostConfig received = receivedHost(kHostGuid, "host", 0);
+    received.setUnknownData("unknown");
+    ASSERT_TRUE(storeReceivedLocalHost(received, 7));
+
+    const QList<LocalHostConfig> hosts = localHostList(0);
+    ASSERT_EQ(hosts.size(), 1);
+
+    LocalHostConfig edited;
+    edited.setId(hosts[0].id());
+    edited.setName("renamed");
+    edited.setAddress("192.168.0.2");
+    ASSERT_TRUE(local_hosts_.modify(edited));
+
+    const QList<LocalHostStore::Unsynced> unsynced = unsyncedLocalHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].host.name(), "renamed");
+    EXPECT_EQ(unsynced[0].host.address(), "192.168.0.2");
+    EXPECT_EQ(unsynced[0].host.unknownData(), QByteArray("unknown"));
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// An edit of a host that is no longer there is refused, so the one who made it is told.
+TEST_F(LocalHostStoreTest, EditOfAHostThatIsGoneIsRefused)
+{
+    const qint64 entry_id = addHost("host", 0);
+
+    std::optional<LocalHostConfig> host = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(host.has_value());
+
+    ASSERT_TRUE(local_hosts_.remove(entry_id));
+
+    host->setName("renamed");
+    EXPECT_FALSE(local_hosts_.modify(*host));
+    EXPECT_EQ(rowCount("local_hosts"), 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host whose data does not open is listed among the unsynced ones as damaged.
+TEST_F(LocalHostStoreTest, UnsyncedHostThatDoesNotOpenIsDamaged)
+{
+    const qint64 broken_id = addHost("office", 0);
+    addHost("home", 0);
+    ASSERT_TRUE(corruptRecordData("local_hosts", broken_id));
+
+    QList<LocalHostStore::Unsynced> unsynced;
+    ASSERT_EQ(local_hosts_.unsynced(&unsynced), Database::ReadResult::INCOMPLETE);
+    ASSERT_EQ(unsynced.size(), 2);
+
+    for (const LocalHostStore::Unsynced& item : std::as_const(unsynced))
+        EXPECT_EQ(item.damaged, item.host.id() == broken_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A received host is what the router holds, so it keeps the moments it came with and is not sent.
+TEST_F(LocalHostStoreTest, ReceivedHostIsStoredAsTheRouterHoldsIt)
+{
+    attachSyncStorage();
+
+    const qint64 group = addGroup("group", 0);
+    const qint64 credential_id = addCredential("office", "user", "secret");
+    const qint64 os_credential_id = addCredential("system", "admin", "secret");
+    const qint64 profile_id = addProfile("office");
+
+    LocalHostConfig received = receivedHost(kHostGuid, "host", group);
+    received.setComment("comment");
+    received.setCredentialId(credential_id);
+    received.setOsCredentialId(os_credential_id);
+    received.setProfileId(profile_id);
+    received.setCreateTime(500);
+    received.setModifyTime(1000);
+    ASSERT_TRUE(storeReceivedLocalHost(received, 7));
+
+    const QList<LocalHostConfig> hosts = localHostList(group);
+    ASSERT_EQ(hosts.size(), 1);
+    EXPECT_EQ(hosts[0].name(), "host");
+    EXPECT_EQ(hosts[0].comment(), "comment");
+    EXPECT_EQ(hosts[0].address(), "192.168.0.1");
+    EXPECT_EQ(hosts[0].guid(), kHostGuid);
+    EXPECT_EQ(hosts[0].credentialId(), credential_id);
+    EXPECT_EQ(hosts[0].osCredentialId(), os_credential_id);
+    EXPECT_EQ(hosts[0].profileId(), profile_id);
+    EXPECT_EQ(hosts[0].createTime(), 500);
+    EXPECT_EQ(hosts[0].modifyTime(), 1000);
+    EXPECT_EQ(hosts[0].connectTime(), 0);
+    EXPECT_TRUE(unsyncedLocalHosts().isEmpty());
+
+    ASSERT_TRUE(local_hosts_.move(hosts[0].id(), 0));
+
+    const QList<LocalHostStore::Unsynced> unsynced = unsyncedLocalHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 7);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A newer revision replaces what the row of its guid holds. The revision the row already has
+// changes nothing, so an edit made since stays.
+TEST_F(LocalHostStoreTest, ReceivedHostTakesTheRowOfItsGuid)
+{
+    attachSyncStorage();
+
+    const qint64 entry_id = addHost("host", 0);
+    const QString guid = findLocalHost(db_, entry_id)->guid();
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(guid, "renamed", 0), 8));
+
+    EXPECT_EQ(rowCount("local_hosts"), 1);
+    EXPECT_EQ(findLocalHost(db_, entry_id)->name(), "renamed");
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 0);
+
+    LocalHostConfig edited = *findLocalHost(db_, entry_id);
+    edited.setName("edited");
+    ASSERT_TRUE(local_hosts_.modify(edited));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(guid, "renamed", 0), 8));
+
+    EXPECT_EQ(findLocalHost(db_, entry_id)->name(), "edited");
+    EXPECT_EQ(syncDirty("local_hosts", entry_id), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The moment of the last connection belongs to the device and is not taken from a received host.
+TEST_F(LocalHostStoreTest, ReceivedHostKeepsTheMomentOfItsLastConnection)
+{
+    attachSyncStorage();
+
+    const qint64 entry_id = addHost("host", 0);
+    const QString guid = findLocalHost(db_, entry_id)->guid();
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+    ASSERT_TRUE(local_hosts_.setConnectTime(entry_id, 1700000000));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(guid, "renamed", 0), 8));
+
+    const std::optional<LocalHostConfig> stored = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->name(), "renamed");
+    EXPECT_EQ(stored->connectTime(), 1700000000);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A change of a host that comes while its removal is not sent yet brings the host back as the
+// router holds it.
+TEST_F(LocalHostStoreTest, ReceivedHostBringsBackTheOneRemovedOnTheDevice)
+{
+    attachSyncStorage();
+
+    const qint64 entry_id = addHost("host", 0);
+    const QString guid = findLocalHost(db_, entry_id)->guid();
+    ASSERT_TRUE(markSynced("local_hosts", entry_id, 7));
+
+    ASSERT_TRUE(local_hosts_.remove(entry_id));
+    ASSERT_TRUE(isMarkedDeleted("local_hosts", entry_id));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(guid, "renamed", 0), 8));
+
+    const std::optional<LocalHostConfig> stored = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(stored.has_value());
+    EXPECT_EQ(stored->name(), "renamed");
+    EXPECT_TRUE(unsyncedLocalHosts().isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group removed on the device is removed with what lies in it, a host another device has put
+// there meanwhile included. The router holds that host, so it leaves a mark.
+TEST_F(LocalHostStoreTest, HostReceivedIntoARemovedGroupIsRemovedToo)
+{
+    attachSyncStorage();
+
+    const qint64 group = addGroup("group", 0);
+    ASSERT_TRUE(markSynced("local_groups", group, 7));
+    ASSERT_TRUE(local_groups_.remove(group));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", group), 8));
+
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+
+    const QList<LocalHostStore::Unsynced> unsynced = unsyncedLocalHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].host.guid(), kHostGuid);
+    EXPECT_EQ(unsynced[0].sync_revision, 8);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+    EXPECT_TRUE(isMarkedDeleted("local_hosts", unsynced[0].host.id()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host may come before the group it lies in. It is stored under the row kept for that group, is
+// in no list and is not found until the group comes, and is in the group after that.
+TEST_F(LocalHostStoreTest, HostReceivedIntoAnEmptyRowOfAGroupWaitsThere)
+{
+    attachSyncStorage();
+
+    qint64 row_id = 0;
+    ASSERT_TRUE(local_groups_.addEmptyRow(kGroupGuid, &row_id));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", row_id), 7));
+
+    EXPECT_TRUE(localHostList(0).isEmpty());
+    EXPECT_TRUE(localHostList(row_id).isEmpty());
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+    EXPECT_TRUE(unsyncedLocalHosts().isEmpty());
+
+    QList<LocalHostConfig> stored;
+    EXPECT_EQ(local_hosts_.all(LocalHostStore::Scope::WITH_WAITING, &stored), Database::ReadResult::OK);
+    EXPECT_EQ(stored.size(), 1);
+
+    QList<LocalHostConfig> found;
+    EXPECT_EQ(local_hosts_.search("host", &found), Database::ReadResult::OK);
+    EXPECT_TRUE(found.isEmpty());
+
+    ASSERT_TRUE(storeReceivedGroup(receivedGroup(kGroupGuid, "group", 0), 8));
+
+    EXPECT_EQ(hostNamesOfGroup(row_id), QStringList({ "host" }));
+    EXPECT_EQ(allLocalHosts().size(), 1);
+
+    EXPECT_EQ(local_hosts_.search("host", &found), Database::ReadResult::OK);
+    EXPECT_EQ(found.size(), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The same for a host whose group has come but waits for a group of its own.
+TEST_F(LocalHostStoreTest, HostReceivedIntoAWaitingGroupWaitsToo)
+{
+    attachSyncStorage();
+
+    qint64 parent = 0;
+    ASSERT_TRUE(local_groups_.addEmptyRow(kParentGuid, &parent));
+
+    ASSERT_TRUE(storeReceivedGroup(receivedGroup(kGroupGuid, "group", parent), 7));
+
+    qint64 group = 0;
+    ASSERT_EQ(local_groups_.findRowIdByGuid(kGroupGuid, &group), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", group), 8));
+
+    EXPECT_TRUE(localHostList(group).isEmpty());
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+
+    ASSERT_TRUE(storeReceivedGroup(receivedGroup(kParentGuid, "parent", 0), 9));
+
+    EXPECT_EQ(hostNamesOfGroup(group), QStringList({ "host" }));
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host the router moved into a group that has not come leaves the lists, and a host moved out
+// of such a group is back in them.
+TEST_F(LocalHostStoreTest, ReceivedMoveOfAHostFollowsTheStateOfItsGroup)
+{
+    attachSyncStorage();
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", 0), 7));
+    ASSERT_EQ(hostNamesOfGroup(0), QStringList({ "host" }));
+
+    qint64 row_id = 0;
+    ASSERT_TRUE(local_groups_.addEmptyRow(kGroupGuid, &row_id));
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", row_id), 8));
+
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+
+    ASSERT_TRUE(storeReceivedLocalHost(receivedHost(kHostGuid, "host", 0), 9));
+
+    EXPECT_EQ(hostNamesOfGroup(0), QStringList({ "host" }));
 }

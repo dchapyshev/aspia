@@ -204,6 +204,9 @@ public:
     const SecureString& password() const { return password_; }
     void setPassword(const SecureString& value) { password_ = value; }
 
+    const QByteArray& unknownData() const { return unknown_data_; }
+    void setUnknownData(const QByteArray& value) { unknown_data_ = value; }
+
     // The sealed column for database I/O. See RouterConfig for what the two answer.
     std::optional<QByteArray> encryptedData() const;
     bool setEncryptedData(const QByteArray& blob);
@@ -223,6 +226,7 @@ private:
     QString address_;
     QString username_;
     SecureString password_;
+    QByteArray unknown_data_;
 };
 
 class LocalGroupConfig final
@@ -244,18 +248,30 @@ public:
     const QString& guid() const { return guid_; }
     void setGuid(const QString& value) { guid_ = value; }
 
+    qint64 modifyTime() const { return modify_time_; }
+    void setModifyTime(qint64 value) { modify_time_ = value; }
+
     const QString& name() const { return name_; }
     void setName(const QString& value) { name_ = value; }
 
     const QString& comment() const { return comment_; }
     void setComment(const QString& value) { comment_ = value; }
 
+    const QByteArray& unknownData() const { return unknown_data_; }
+    void setUnknownData(const QByteArray& value) { unknown_data_ = value; }
+
+    // The data column for database I/O.
+    QByteArray serializedData() const;
+    bool setSerializedData(const QByteArray& data);
+
 private:
     qint64 id_ = -1;
     qint64 parent_id_ = 0;
     QString guid_;
+    qint64 modify_time_ = 0;
     QString name_;
     QString comment_;
+    QByteArray unknown_data_;
 };
 
 class CredentialConfig final

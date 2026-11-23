@@ -100,3 +100,10 @@ bool SyncCredentialTraits::storeReceived(
 {
     return CredentialStore(db).storeReceived(transaction, config, sync_revision);
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool SyncCredentialTraits::eraseReceived(Database& /* db */, SyncTransaction& transaction, const QString& record_id)
+{
+    return transaction.eraseRecord(kType, record_id);
+}

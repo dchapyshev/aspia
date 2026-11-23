@@ -124,6 +124,9 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         if (online_check_enabled_)
             startOnlineChecker();
     });
+
+    connect(&RouterController::instance(), &RouterController::sig_localHostsChanged,
+            this, &LocalGroupWidget::onLocalHostsChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -344,6 +347,25 @@ void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, OnlineStatus statu
 void LocalGroupWidget::onOnlineCheckerFinished()
 {
     LOG(INFO) << "Online checker finished";
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::onLocalHostsChanged()
+{
+    if (current_group_id_ < 0)
+        return;
+
+    QList<LocalHostConfig> hosts;
+    if (LocalHostStore().list(current_group_id_, &hosts) == Database::ReadResult::FAILED)
+    {
+        LOG(ERROR) << "Unable to read the list of hosts";
+        return;
+    }
+
+    model_->updateHosts(hosts);
+
+    if (online_check_enabled_)
+        online_checker_->start(model_->hosts());
 }
 
 //--------------------------------------------------------------------------------------------------

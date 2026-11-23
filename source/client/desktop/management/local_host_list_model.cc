@@ -23,6 +23,8 @@
 #include <QLocale>
 
 #include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace {
 
@@ -68,6 +70,52 @@ void LocalHostListModel::clear()
     hosts_.clear();
     online_.clear();
     endResetModel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalHostListModel::updateHosts(const QList<LocalHostConfig>& hosts)
+{
+    std::unordered_set<qint64> host_ids;
+    for (const LocalHostConfig& host : hosts)
+        host_ids.emplace(host.id());
+
+    for (int row = static_cast<int>(hosts_.size()) - 1; row >= 0; --row)
+    {
+        const qint64 entry_id = hosts_[row].id();
+        if (!host_ids.contains(entry_id))
+            removeHost(entry_id);
+    }
+
+    std::unordered_map<qint64, int> rows_by_id;
+    for (int row = 0; row < hosts_.size(); ++row)
+        rows_by_id.emplace(hosts_[row].id(), row);
+
+    std::vector<const LocalHostConfig*> added_hosts;
+    for (const LocalHostConfig& host : hosts)
+    {
+        const auto row = rows_by_id.find(host.id());
+        if (row == rows_by_id.end())
+        {
+            added_hosts.emplace_back(&host);
+            continue;
+        }
+
+        hosts_[row->second] = host;
+        emitRowChanged(row->second);
+    }
+
+    if (!added_hosts.empty())
+    {
+        const int first_row = static_cast<int>(hosts_.size());
+        const int last_row = first_row + static_cast<int>(added_hosts.size()) - 1;
+
+        beginInsertRows(QModelIndex(), first_row, last_row);
+        for (const LocalHostConfig* added_host : added_hosts)
+            hosts_.emplaceBack(*added_host);
+        endInsertRows();
+    }
+
+    sort(sort_column_, sort_order_);
 }
 
 //--------------------------------------------------------------------------------------------------

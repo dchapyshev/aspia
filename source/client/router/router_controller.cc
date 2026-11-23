@@ -586,6 +586,14 @@ void RouterController::onSyncRecordsChanged(proto::router::SyncDataType type)
             emit sig_profilesChanged();
             break;
 
+        case proto::router::SYNC_DATA_TYPE_LOCAL_GROUPS:
+            emit sig_localGroupsChanged();
+            break;
+
+        case proto::router::SYNC_DATA_TYPE_LOCAL_HOSTS:
+            emit sig_localHostsChanged();
+            break;
+
         case proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS:
             break;
 

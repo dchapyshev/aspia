@@ -276,6 +276,7 @@ std::optional<QByteArray> LocalHostConfig::encryptedData() const
 
     const SecureByteArray password = password_.toUtf8();
     data.set_password(password.constData(), static_cast<size_t>(password.size()));
+    data.set_unknown_data(unknown_data_.constData(), static_cast<size_t>(unknown_data_.size()));
 
     std::optional<QByteArray> sealed = sealMessage(data, kLocalHostsAad);
 
@@ -292,6 +293,7 @@ bool LocalHostConfig::setEncryptedData(const QByteArray& blob)
     address_.clear();
     username_.clear();
     password_.clear();
+    unknown_data_.clear();
 
     if (blob.isEmpty())
         return true;
@@ -303,6 +305,7 @@ bool LocalHostConfig::setEncryptedData(const QByteArray& blob)
     address_ = QString::fromStdString(data.address());
     username_ = QString::fromStdString(data.username());
     password_ = toSecureString(data.password());
+    unknown_data_ = QByteArray::fromStdString(data.unknown_data());
 
     memZero(data.mutable_address());
     memZero(data.mutable_username());
@@ -316,6 +319,25 @@ bool LocalGroupConfig::isValid() const
 {
     return !name_.isEmpty() && name_.length() <= kMaxNameLength &&
            comment_.length() <= kMaxCommentLength;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray LocalGroupConfig::serializedData() const
+{
+    proto::storage::GroupData data;
+    data.set_unknown_data(unknown_data_.constData(), static_cast<size_t>(unknown_data_.size()));
+    return serialize(data);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalGroupConfig::setSerializedData(const QByteArray& data)
+{
+    proto::storage::GroupData group;
+    if (!parse(data, &group))
+        return false;
+
+    unknown_data_ = QByteArray::fromStdString(group.unknown_data());
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

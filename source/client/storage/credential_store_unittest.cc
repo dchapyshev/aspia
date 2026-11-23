@@ -444,7 +444,7 @@ TEST_F(CredentialStoreTest, EmptyRowIsTakenByTheCredentialThatComesWithItsGuid)
     qint64 row_id = 0;
     ASSERT_TRUE(credentials_.addEmptyRow(guid, &row_id));
     EXPECT_GT(row_id, 0);
-    EXPECT_TRUE(isMarkedDeleted("credentials", row_id));
+    EXPECT_TRUE(isEmptyRow("credentials", row_id));
 
     EXPECT_TRUE(credentialList().isEmpty());
     EXPECT_TRUE(unsyncedCredentials().isEmpty());

@@ -457,7 +457,7 @@ TEST_F(ProfileStoreTest, EmptyRowIsTakenByTheProfileThatComesWithItsGuid)
     qint64 row_id = 0;
     ASSERT_TRUE(profiles_.addEmptyRow(guid, &row_id));
     EXPECT_GT(row_id, 0);
-    EXPECT_TRUE(isMarkedDeleted("profiles", row_id));
+    EXPECT_TRUE(isEmptyRow("profiles", row_id));
 
     EXPECT_TRUE(profileList().isEmpty());
     EXPECT_TRUE(unsyncedProfiles().isEmpty());

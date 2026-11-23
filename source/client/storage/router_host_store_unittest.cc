@@ -46,10 +46,11 @@ protected:
         if (!raw.open(file_path_))
             return false;
 
-        SqlQuery query(raw, "SELECT COUNT(*) FROM router_hosts WHERE host_id=? AND deleted=1 AND data=X'' AND "
+        SqlQuery query(raw, "SELECT COUNT(*) FROM router_hosts WHERE host_id=? AND sync_state=? AND data=X'' AND "
                             "credential_id IS NULL AND os_credential_id IS NULL AND profile_id IS NULL AND "
                             "sync_dirty!=0");
         query.addUInt64(host_id);
+        query.addInt64(SyncStore::SYNC_STATE_DELETED);
 
         return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
     }

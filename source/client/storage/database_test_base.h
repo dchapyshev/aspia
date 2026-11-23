@@ -215,6 +215,24 @@ protected:
         return query.exec();
     }
 
+    // The number of changes the row |id| of |table| waits to be sent with.
+    qint64 syncDirty(const QString& table, qint64 id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return -1;
+
+        const std::string sql = QString("SELECT sync_dirty FROM %1 WHERE id=?").arg(table).toStdString();
+
+        SqlQuery query(raw, sql);
+        query.addInt64(id);
+
+        if (query.next() != SqlQuery::StepResult::ROW)
+            return -1;
+
+        return query.columnInt64(0);
+    }
+
     // The rows of |table|, the ones marked as deleted, which the public API skips, included.
     qint64 rowCount(const QString& table)
     {
@@ -239,11 +257,46 @@ protected:
         if (!raw.open(file_path_))
             return false;
 
-        const std::string sql = QString("SELECT COUNT(*) FROM %1 WHERE id=? AND deleted=1 AND name='' AND data=X''")
+        const std::string sql = QString("SELECT COUNT(*) FROM %1 WHERE id=? AND sync_state=? AND name='' AND data=X''")
                                     .arg(table).toStdString();
 
         SqlQuery query(raw, sql);
         query.addInt64(id);
+        query.addInt64(SyncStore::SYNC_STATE_DELETED);
+
+        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
+    }
+
+    // True when the row |id| of |table| is an empty one, which keeps the guid of a record the device
+    // does not have, with no name and no data.
+    bool isEmptyRow(const QString& table, qint64 id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        const std::string sql = QString("SELECT COUNT(*) FROM %1 WHERE id=? AND sync_state=? AND name='' AND data=X''")
+                                    .arg(table).toStdString();
+
+        SqlQuery query(raw, sql);
+        query.addInt64(id);
+        query.addInt64(SyncStore::SYNC_STATE_EMPTY);
+
+        return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
+    }
+
+    // True when the row |id| of the local groups is in place, marked as deleted, with its parent,
+    // its name, its comment and its data wiped.
+    bool isGroupMarkedDeleted(qint64 id)
+    {
+        SqlDatabase raw;
+        if (!raw.open(file_path_))
+            return false;
+
+        SqlQuery query(raw, "SELECT COUNT(*) FROM local_groups WHERE id=? AND sync_state=? AND parent_id IS NULL AND "
+                            "name='' AND comment='' AND data=X''");
+        query.addInt64(id);
+        query.addInt64(SyncStore::SYNC_STATE_DELETED);
 
         return query.next() == SqlQuery::StepResult::ROW && query.columnInt64(0) == 1;
     }
@@ -470,6 +523,27 @@ protected:
         return groups;
     }
 
+    QList<LocalGroupStore::Unsynced> unsyncedGroups()
+    {
+        QList<LocalGroupStore::Unsynced> groups;
+        EXPECT_EQ(local_groups_.unsynced(&groups), Database::ReadResult::OK);
+        return groups;
+    }
+
+    bool storeReceivedGroup(const LocalGroupConfig& group, qint64 sync_revision)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               local_groups_.storeReceived(transaction, group, sync_revision) && transaction.commit();
+    }
+
+    bool eraseReceivedGroup(const QString& guid)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               local_groups_.eraseReceived(transaction, guid) && transaction.commit();
+    }
+
     qint64 addHost(const QString& name, qint64 group_id)
     {
         LocalHostConfig host;
@@ -500,8 +574,22 @@ protected:
     QList<LocalHostConfig> allLocalHosts()
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_EQ(local_hosts_.all(&hosts), Database::ReadResult::OK);
+        EXPECT_EQ(local_hosts_.all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::OK);
         return hosts;
+    }
+
+    QList<LocalHostStore::Unsynced> unsyncedLocalHosts()
+    {
+        QList<LocalHostStore::Unsynced> hosts;
+        EXPECT_EQ(local_hosts_.unsynced(&hosts), Database::ReadResult::OK);
+        return hosts;
+    }
+
+    bool storeReceivedLocalHost(const LocalHostConfig& host, qint64 sync_revision)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               local_hosts_.storeReceived(transaction, host, sync_revision) && transaction.commit();
     }
 
     Database db_;

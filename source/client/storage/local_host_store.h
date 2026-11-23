@@ -21,13 +21,30 @@
 
 #include "client/storage/database_store.h"
 
+class SyncTransaction;
+
 class LocalHostStore final : public DatabaseStore
 {
 public:
     explicit LocalHostStore(Database& db = Database::instance());
 
+    struct Unsynced
+    {
+        LocalHostConfig host;
+        bool deleted = false;
+        bool damaged = false;
+        qint64 sync_revision = 0;
+        qint64 sync_dirty = 0;
+    };
+
+    enum class Scope
+    {
+        VISIBLE,     // The hosts the lists show.
+        WITH_WAITING // The same and the hosts that wait for their group.
+    };
+
     Database::ReadResult list(qint64 group_id, QList<LocalHostConfig>* hosts) const;
-    Database::ReadResult all(QList<LocalHostConfig>* hosts) const;
+    Database::ReadResult all(Scope scope, QList<LocalHostConfig>* hosts) const;
     bool add(LocalHostConfig& host);
     bool modify(LocalHostConfig& host);
     bool move(qint64 entry_id, qint64 new_group_id);
@@ -37,6 +54,9 @@ public:
     Database::FindResult find(qint64 entry_id, LocalHostConfig* host) const;
     std::optional<std::pair<QString, SecureString>> credentials(qint64 entry_id) const;
     Database::ReadResult search(const QString& query, QList<LocalHostConfig>* hosts) const;
+    Database::ReadResult unsynced(QList<Unsynced>* hosts) const;
+
+    bool storeReceived(SyncTransaction& transaction, const LocalHostConfig& host, qint64 sync_revision);
 };
 
 #endif // CLIENT_STORAGE_LOCAL_HOST_STORE_H

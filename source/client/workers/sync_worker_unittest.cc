@@ -119,7 +119,7 @@ protected:
                 ++profiles_changed_count_;
             else if (type == proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS)
                 ++router_hosts_changed_count_;
-            else
+            else if (type == proto::router::SYNC_DATA_TYPE_CREDENTIALS)
                 ++credentials_changed_count_;
         }, Qt::DirectConnection);
 
@@ -176,7 +176,7 @@ protected:
             {
                 ++router_host_list_request_count_;
             }
-            else
+            else if (message.record_list_request().type() == proto::router::SYNC_DATA_TYPE_CREDENTIALS)
             {
                 ++list_request_count_;
 
@@ -1953,10 +1953,10 @@ TEST_F(SyncWorkerTest, PendingResetIsNotDoneWhileSyncIsOff)
 }
 
 //--------------------------------------------------------------------------------------------------
-// An exchange takes the credentials first, the profiles after them and the router hosts last, so
-// that the records a host links are on the device before the host comes. Each type is received
-// before it is sent.
-TEST_F(SyncWorkerTest, ExchangeTakesTheCredentialsThenTheProfilesThenTheRouterHosts)
+// An exchange takes the credentials first, the profiles after them, then the router hosts, the
+// local groups and the local hosts last, so that the records a host links and the group it lies in
+// are on the device before the host comes. Each type is received before it is sent.
+TEST_F(SyncWorkerTest, ExchangeTakesTheLinkedRecordsBeforeTheOnesThatLinkThem)
 {
     Database& db = Database::instance();
     addCredential(db, "user");
@@ -1972,7 +1972,8 @@ TEST_F(SyncWorkerTest, ExchangeTakesTheCredentialsThenTheProfilesThenTheRouterHo
 
     const QList<proto::router::SyncDataType> expected_types = {
         proto::router::SYNC_DATA_TYPE_CREDENTIALS, proto::router::SYNC_DATA_TYPE_PROFILES,
-        proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS };
+        proto::router::SYNC_DATA_TYPE_ROUTER_HOSTS, proto::router::SYNC_DATA_TYPE_LOCAL_GROUPS,
+        proto::router::SYNC_DATA_TYPE_LOCAL_HOSTS };
 
     EXPECT_EQ(list_request_types_, expected_types);
     EXPECT_EQ(record_request_count_, 1);

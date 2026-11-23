@@ -74,6 +74,7 @@ private slots:
     void onHeaderContextMenu(const QPoint& pos);
     void onOnlineCheckerResult(qint64 entry_id, OnlineStatus status);
     void onOnlineCheckerFinished();
+    void onLocalHostsChanged();
 
 private:
     void startDrag();

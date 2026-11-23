@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "client/config.h"
+#include "client/router/router_controller.h"
 #include "client/storage/local_group_store.h"
 #include "common/android/button.h"
 #include "common/android/controls.h"
@@ -167,6 +168,7 @@ void LocalGroupEditor::onSaveClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 
@@ -185,6 +187,7 @@ void LocalGroupEditor::onDeleteClicked()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
     emit sig_accepted();
 }
 

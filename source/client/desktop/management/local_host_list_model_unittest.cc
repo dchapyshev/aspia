@@ -432,3 +432,48 @@ TEST_F(LocalHostListModelTest, ClearDropsTheRows)
     EXPECT_EQ(model()->rowCount(), 0);
     EXPECT_EQ(model()->columnCount(), 7);
 }
+
+//--------------------------------------------------------------------------------------------------
+// The group is read again when its records change elsewhere. A host that left and came back was
+// not probed.
+TEST_F(LocalHostListModelTest, GroupReadAgainTakesTheChangesAndKeepsWhatWasProbed)
+{
+    model()->setHosts(hosts());
+    model()->sort(static_cast<int>(Column::NAME), Qt::AscendingOrder);
+    model()->setOnlineStatus(1, OnlineStatus::ONLINE);
+    model()->setOnlineStatus(2, OnlineStatus::OFFLINE);
+
+    model()->updateHosts({ makeHost(1, "renamed", "192.168.0.2", 3000),
+                           makeHost(3, "alpha", "10.0.0.1", 2000),
+                           makeHost(4, "beta", "10.0.0.2", 4000) });
+
+    EXPECT_EQ(rowIds(model()), QList<qint64>({ 3, 4, 1 }));
+    EXPECT_EQ(textAt(model(), 2, Column::NAME), QString("renamed"));
+    EXPECT_FALSE(textAt(model(), 2, Column::STATUS).isEmpty());
+    EXPECT_TRUE(textAt(model(), 1, Column::STATUS).isEmpty());
+
+    model()->updateHosts(hosts());
+
+    EXPECT_EQ(rowIds(model()), QList<qint64>({ 3, 1, 2 }));
+    EXPECT_TRUE(textAt(model(), 2, Column::STATUS).isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+TEST_F(LocalHostListModelTest, GroupReadAgainKeepsTheSelectionOnItsHost)
+{
+    model()->setHosts(hosts());
+    model()->sort(static_cast<int>(Column::NAME), Qt::AscendingOrder);
+
+    QItemSelectionModel selection(model());
+    selection.setCurrentIndex(model()->index(1, 0), QItemSelectionModel::SelectCurrent);
+
+    ASSERT_EQ(model()->hostAt(selection.currentIndex().row())->id(), 1);
+
+    model()->updateHosts({ makeHost(1, "zeta", "192.168.0.2", 3000),
+                           makeHost(2, "host10", "192.168.0.10", 1000),
+                           makeHost(4, "beta", "10.0.0.2", 4000) });
+
+    ASSERT_TRUE(selection.currentIndex().isValid());
+    EXPECT_EQ(model()->hostAt(selection.currentIndex().row())->id(), 1);
+    EXPECT_TRUE(selection.isSelected(selection.currentIndex()));
+}

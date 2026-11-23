@@ -83,10 +83,12 @@ private slots:
     void onAddHost();
     void onOnlineCheckerResult(qint64 entry_id, OnlineStatus status);
     void onRefreshClicked();
+    void onLocalRecordsChanged();
 
 private:
     void populateGroups(qint64 parent_id, QTreeWidgetItem* parent);
     void showTree();
+    void returnToTree();
     void showHosts(qint64 group_id, const QString& title);
 
     // Opens the session-type bottom sheet (Desktop / File Transfer) for the host with |host_id|.
@@ -112,7 +114,9 @@ private:
 
     // The group a new host is added to: the open group on the host page, or the root on the tree.
     qint64 current_group_id_ = 0;
-    QString current_title_;
+
+    // Records came while the tree was not shown, so it is read anew on the way back to it.
+    bool tree_outdated_ = false;
 
     Q_DISABLE_COPY_MOVE(LocalWidget)
 };

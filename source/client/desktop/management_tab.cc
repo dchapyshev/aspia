@@ -1047,6 +1047,8 @@ void ManagementTab::onCopyHost()
         return;
     }
 
+    RouterController::startSyncRecordExchange();
+
     qint64 new_id = host.id();
 
     AutoQPointer<LocalHostDialog> dialog(new LocalHostDialog(new_id, host.groupId(), this));
@@ -1126,6 +1128,9 @@ void ManagementTab::onRemoveHost()
             ++failed;
         }
     }
+
+    if (failed < total)
+        RouterController::startSyncRecordExchange();
 
     if (failed == 0)
         return;

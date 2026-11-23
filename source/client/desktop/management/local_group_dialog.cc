@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_group_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/local_group_store.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
@@ -156,6 +157,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
+    RouterController::startSyncRecordExchange();
     accept();
 }
 

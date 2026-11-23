@@ -71,7 +71,7 @@ QByteArray fileHash(const QString& file_path)
 QSet<QString> hostNames(Database& db)
 {
     QList<LocalHostConfig> hosts;
-    EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
+    EXPECT_EQ(LocalHostStore(db).all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::OK);
 
     QSet<QString> names;
     for (const LocalHostConfig& host : std::as_const(hosts))
@@ -84,7 +84,7 @@ QSet<QString> hostNames(Database& db)
 std::optional<LocalHostConfig> hostByName(Database& db, const QString& name)
 {
     QList<LocalHostConfig> hosts;
-    EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
+    EXPECT_EQ(LocalHostStore(db).all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::OK);
 
     for (const LocalHostConfig& host : std::as_const(hosts))
     {
@@ -504,6 +504,46 @@ TEST_F(DatabaseMigrationTest, MovedRecordsHaveNoMomentOfAnEdit)
     EXPECT_EQ(query.columnInt64(1), 1);
     EXPECT_EQ(query.columnInt64(2), 1);
     EXPECT_EQ(query.columnInt64(3), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router of the new database has never held the hosts of the old file, so each of them waits
+// to be sent.
+TEST_F(DatabaseMigrationTest, MovedLocalHostsAreToBeSent)
+{
+    createOldBook();
+    addOldRouter(1, "office", kFirstGuid);
+    addOldHost(1, 0, "direct", "192.168.0.1");
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(firstPath()));
+
+    SqlQuery query(raw, "SELECT COUNT(*) FROM local_hosts WHERE sync_dirty=1");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// The router of the new database has never held the groups of the old file, so each of them waits
+// to be sent.
+TEST_F(DatabaseMigrationTest, MovedLocalGroupsAreToBeSent)
+{
+    createOldBook();
+    addOldRouter(1, "office", kFirstGuid);
+    addOldGroup(1, "group");
+    closeOldBook();
+
+    ASSERT_EQ(DatabaseMigration::migrate(old_path_, dir_path_), DatabaseMigration::Result::DONE);
+
+    SqlDatabase raw;
+    ASSERT_TRUE(raw.open(firstPath()));
+
+    SqlQuery query(raw, "SELECT COUNT(*) FROM local_groups WHERE sync_dirty=1");
+    ASSERT_EQ(query.next(), SqlQuery::StepResult::ROW);
+    EXPECT_EQ(query.columnInt64(0), 1);
 }
 
 //--------------------------------------------------------------------------------------------------

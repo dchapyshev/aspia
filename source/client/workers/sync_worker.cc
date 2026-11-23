@@ -23,6 +23,8 @@
 #include "client/storage/router_store.h"
 #include "client/sync/sync_credentials.h"
 #include "client/sync/sync_crypto.h"
+#include "client/sync/sync_local_groups.h"
+#include "client/sync/sync_local_hosts.h"
 #include "client/sync/sync_profiles.h"
 #include "client/sync/sync_router_hosts.h"
 #include "client/workers/router_worker.h"
@@ -237,9 +239,11 @@ void SyncWorker::startReceivingRecords()
     Database& db = Database::instance();
 
     records_.clear();
-    records_.push_back(std::make_unique<SyncCredentials>(db, storage_id_, key_));
-    records_.push_back(std::make_unique<SyncProfiles>(db, storage_id_, key_));
-    records_.push_back(std::make_unique<SyncRouterHosts>(db, storage_id_, key_));
+    records_.emplace_back(std::make_unique<SyncCredentials>(db, storage_id_, key_));
+    records_.emplace_back(std::make_unique<SyncProfiles>(db, storage_id_, key_));
+    records_.emplace_back(std::make_unique<SyncRouterHosts>(db, storage_id_, key_));
+    records_.emplace_back(std::make_unique<SyncLocalGroups>(db, storage_id_, key_));
+    records_.emplace_back(std::make_unique<SyncLocalHosts>(db, storage_id_, key_));
     repeat_requested_ = false;
 
     exchangeRecords(0);
@@ -349,6 +353,8 @@ void SyncWorker::attachStorage(bool reset)
     {
         emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_CREDENTIALS);
         emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_PROFILES);
+        emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_LOCAL_GROUPS);
+        emit sig_recordsChanged(proto::router::SYNC_DATA_TYPE_LOCAL_HOSTS);
     }
 
     startRecordExchange();

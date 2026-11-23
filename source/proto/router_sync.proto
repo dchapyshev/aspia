@@ -30,6 +30,8 @@ enum SyncDataType
     SYNC_DATA_TYPE_CREDENTIALS  = 1;
     SYNC_DATA_TYPE_PROFILES     = 2;
     SYNC_DATA_TYPE_ROUTER_HOSTS = 3;
+    SYNC_DATA_TYPE_LOCAL_GROUPS = 4;
+    SYNC_DATA_TYPE_LOCAL_HOSTS  = 5;
 }
 
 message SyncCredential
@@ -54,6 +56,27 @@ message SyncRouterHost
     string credential_guid    = 3;
     string os_credential_guid = 4;
     string profile_guid       = 5;
+}
+
+message SyncLocalGroup
+{
+    string parent_guid = 1;
+    string name        = 2;
+    string comment     = 3;
+}
+
+message SyncLocalHost
+{
+    string group_guid         = 1;
+    string name               = 2;
+    string comment            = 3;
+    string address            = 4;
+    string username           = 5;
+    string password           = 6;
+    string credential_guid    = 7;
+    string os_credential_guid = 8;
+    string profile_guid       = 9;
+    int64 create_time         = 10;
 }
 
 // The key the records are encrypted with, sealed by the client.

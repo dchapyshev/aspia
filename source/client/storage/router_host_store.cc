@@ -76,7 +76,7 @@ Database::ReadResult RouterHostStore::list(QList<RouterHostConfig>* hosts) const
 
     SqlQuery query(db(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0), modify_time "
-                          "FROM router_hosts WHERE deleted=0");
+                          "FROM router_hosts WHERE sync_state=0");
 
     Database::ReadResult result = Database::ReadResult::OK;
 
@@ -125,7 +125,7 @@ bool RouterHostStore::add(const RouterHostConfig& host)
     {
         SqlQuery restore_query(db(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), "
                                       "os_credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), modify_time=?, "
-                                      "sync_dirty=sync_dirty+1, deleted=0 WHERE host_id=? AND deleted!=0");
+                                      "sync_dirty=sync_dirty+1, sync_state=0 WHERE host_id=? AND sync_state!=0");
         restore_query.addBlob(*encrypted_data);
         restore_query.addInt64(host.credentialId());
         restore_query.addInt64(host.osCredentialId());
@@ -184,7 +184,7 @@ bool RouterHostStore::modify(const RouterHostConfig& host)
         return false;
     }
 
-    SqlQuery row(db(), "SELECT data FROM router_hosts WHERE host_id=? AND deleted=0");
+    SqlQuery row(db(), "SELECT data FROM router_hosts WHERE host_id=? AND sync_state=0");
     row.addUInt64(host.hostId());
 
     const SqlQuery::StepResult step = row.next();
@@ -236,7 +236,7 @@ bool RouterHostStore::remove(HostId host_id)
     }
 
     SqlQuery query(db(), "UPDATE router_hosts SET data=X'', credential_id=NULL, os_credential_id=NULL, "
-                          "profile_id=NULL WHERE host_id=? AND deleted=0");
+                          "profile_id=NULL WHERE host_id=? AND sync_state=0");
     query.addUInt64(host_id);
 
     if (!query.exec())
@@ -262,7 +262,7 @@ Database::FindResult RouterHostStore::find(HostId host_id, RouterHostConfig* hos
 
     SqlQuery query(db(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
                           "IFNULL(profile_id, 0), modify_time "
-                          "FROM router_hosts WHERE host_id=? AND deleted=0");
+                          "FROM router_hosts WHERE host_id=? AND sync_state=0");
     query.addUInt64(host_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -319,7 +319,7 @@ bool RouterHostStore::outdated(QList<HostId>* hosts) const
 
     // The rows checked longest ago come first, so repeated calls walk the whole list instead of
     // returning to the same rows.
-    SqlQuery query(db(), "SELECT host_id FROM router_hosts WHERE check_time<? AND deleted=0 "
+    SqlQuery query(db(), "SELECT host_id FROM router_hosts WHERE check_time<? AND sync_state=0 "
                           "ORDER BY check_time LIMIT ?");
     query.addInt64(QDateTime::currentSecsSinceEpoch() - kRouterHostRecheckInterval);
     query.addInt64(kMaxRouterHostsToCheck);
@@ -350,7 +350,7 @@ bool RouterHostStore::updateCheckTime(HostId host_id)
         return false;
     }
 
-    SqlQuery query(db(), "UPDATE router_hosts SET check_time=? WHERE host_id=? AND deleted=0");
+    SqlQuery query(db(), "UPDATE router_hosts SET check_time=? WHERE host_id=? AND sync_state=0");
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
 
@@ -380,7 +380,7 @@ bool RouterHostStore::setOsCredentialId(HostId host_id, qint64 credential_id)
     }
 
     SqlQuery query(db(), "UPDATE router_hosts SET os_credential_id=NULLIF(?, 0), modify_time=?, "
-                          "sync_dirty=sync_dirty+1 WHERE host_id=? AND deleted=0");
+                          "sync_dirty=sync_dirty+1 WHERE host_id=? AND sync_state=0");
     query.addInt64(credential_id);
     query.addInt64(QDateTime::currentSecsSinceEpoch());
     query.addUInt64(host_id);
@@ -406,7 +406,7 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
     if (profile_id <= 0)
     {
         SqlQuery query(db(), "UPDATE router_hosts SET profile_id=NULL, modify_time=?, sync_dirty=sync_dirty+1 "
-                              "WHERE host_id=? AND deleted=0");
+                              "WHERE host_id=? AND sync_state=0");
         query.addInt64(QDateTime::currentSecsSinceEpoch());
         query.addUInt64(host_id);
 
@@ -425,17 +425,45 @@ bool RouterHostStore::setProfileId(HostId host_id, qint64 profile_id)
         return false;
     }
 
-    SqlQuery query(db(),
-        "INSERT INTO router_hosts (host_id, profile_id, modify_time, sync_dirty) VALUES (?, ?, ?, 1) "
-        "ON CONFLICT(host_id) DO UPDATE SET profile_id=excluded.profile_id, modify_time=excluded.modify_time, "
-        "sync_dirty=sync_dirty+1, deleted=0");
-    query.addUInt64(host_id);
-    query.addInt64(profile_id);
-    query.addInt64(QDateTime::currentSecsSinceEpoch());
+    SqlTransaction transaction(db());
+    if (!transaction.begin(SqlTransaction::Mode::IMMEDIATE))
+    {
+        LOG(ERROR) << "Unable to begin transaction";
+        return false;
+    }
 
-    if (!query.exec())
+    const qint64 modify_time = QDateTime::currentSecsSinceEpoch();
+
+    SqlQuery update_query(db(), "UPDATE router_hosts SET profile_id=?, modify_time=?, sync_dirty=sync_dirty+1, "
+                                 "sync_state=0 WHERE host_id=?");
+    update_query.addInt64(profile_id);
+    update_query.addInt64(modify_time);
+    update_query.addUInt64(host_id);
+
+    if (!update_query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << db().lastError();
+        return false;
+    }
+
+    if (db().changes() == 0)
+    {
+        SqlQuery insert_query(db(), "INSERT INTO router_hosts (host_id, profile_id, modify_time, sync_dirty) "
+                                     "VALUES (?, ?, ?, 1)");
+        insert_query.addUInt64(host_id);
+        insert_query.addInt64(profile_id);
+        insert_query.addInt64(modify_time);
+
+        if (!insert_query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
         return false;
     }
 
@@ -455,7 +483,7 @@ Database::ReadResult RouterHostStore::unsynced(QList<Unsynced>* hosts) const
     }
 
     SqlQuery query(db(), "SELECT host_id, data, IFNULL(credential_id, 0), IFNULL(os_credential_id, 0), "
-                          "IFNULL(profile_id, 0), modify_time, sync_revision, sync_dirty, deleted "
+                          "IFNULL(profile_id, 0), modify_time, sync_revision, sync_dirty, sync_state "
                           "FROM router_hosts WHERE sync_dirty!=0");
 
     Database::ReadResult result = Database::ReadResult::OK;
@@ -472,7 +500,7 @@ Database::ReadResult RouterHostStore::unsynced(QList<Unsynced>* hosts) const
             break;
 
         Unsynced& unsynced = hosts->emplaceBack();
-        unsynced.deleted = query.columnInt64(8) != 0;
+        unsynced.deleted = query.columnInt64(8) == SyncStore::SYNC_STATE_DELETED;
         unsynced.sync_revision = query.columnInt64(6);
         unsynced.sync_dirty = query.columnInt64(7);
 
@@ -518,25 +546,60 @@ bool RouterHostStore::storeReceived(
         return false;
     }
 
-    SqlQuery query(db(), "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, profile_id, "
-                          "modify_time, sync_revision) VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0), ?, ?) "
-                          "ON CONFLICT(host_id) DO UPDATE SET data=excluded.data, "
-                          "credential_id=excluded.credential_id, os_credential_id=excluded.os_credential_id, "
-                          "profile_id=excluded.profile_id, modify_time=excluded.modify_time, "
-                          "sync_revision=excluded.sync_revision, sync_dirty=0, deleted=0 "
-                          "WHERE router_hosts.sync_revision!=excluded.sync_revision");
-    query.addUInt64(host.hostId());
-    query.addBlob(*encrypted_data);
-    query.addInt64(host.credentialId());
-    query.addInt64(host.osCredentialId());
-    query.addInt64(host.profileId());
-    query.addInt64(host.modifyTime());
-    query.addInt64(sync_revision);
+    std::optional<qint64> stored_revision;
 
-    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db().lastError();
-        return false;
+        SqlQuery row(db(), "SELECT sync_revision FROM router_hosts WHERE host_id=?");
+        row.addUInt64(host.hostId());
+
+        const SqlQuery::StepResult step = row.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::ROW)
+            stored_revision = row.columnInt64(0);
+    }
+
+    if (!stored_revision.has_value())
+    {
+        SqlQuery query(db(), "INSERT INTO router_hosts (host_id, data, credential_id, os_credential_id, "
+                              "profile_id, modify_time, sync_revision) "
+                              "VALUES (?, ?, NULLIF(?, 0), NULLIF(?, 0), NULLIF(?, 0), ?, ?)");
+        query.addUInt64(host.hostId());
+        query.addBlob(*encrypted_data);
+        query.addInt64(host.credentialId());
+        query.addInt64(host.osCredentialId());
+        query.addInt64(host.profileId());
+        query.addInt64(host.modifyTime());
+        query.addInt64(sync_revision);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+    else if (*stored_revision != sync_revision)
+    {
+        SqlQuery query(db(), "UPDATE router_hosts SET data=?, credential_id=NULLIF(?, 0), "
+                              "os_credential_id=NULLIF(?, 0), profile_id=NULLIF(?, 0), modify_time=?, "
+                              "sync_revision=?, sync_dirty=0, sync_state=0 WHERE host_id=?");
+        query.addBlob(*encrypted_data);
+        query.addInt64(host.credentialId());
+        query.addInt64(host.osCredentialId());
+        query.addInt64(host.profileId());
+        query.addInt64(host.modifyTime());
+        query.addInt64(sync_revision);
+        query.addUInt64(host.hostId());
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
     }
 
     return true;

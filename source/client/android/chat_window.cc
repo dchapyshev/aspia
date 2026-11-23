@@ -163,7 +163,7 @@ ChatWindow::ChatWindow(const HostConfig& host, bool credentials_saved, QWidget* 
     : QWidget(parent),
       host_(host),
       credentials_saved_(credentials_saved),
-      display_name_(Database::instance().displayName()),
+      display_name_(SettingsStore().displayName()),
       app_bar_(new AppBar(this)),
       view_(new ChatView(this)),
       typing_throttle_(new QTimer(this)),

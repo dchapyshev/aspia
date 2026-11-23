@@ -68,9 +68,9 @@ Database::ReadResult CredentialStore::list(
     }
 
     SqlQuery query(db(), type.has_value() ?
-        "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE deleted=0 AND type=? "
+        "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE sync_state=0 AND type=? "
         "ORDER BY casefold(name)" :
-        "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE deleted=0 "
+        "SELECT id, type, name, data, guid, modify_time FROM credentials WHERE sync_state=0 "
         "ORDER BY casefold(name)");
     if (type.has_value())
         query.addInt64(static_cast<qint64>(*type));
@@ -126,7 +126,7 @@ bool CredentialStore::add(CredentialConfig& credential)
 
     {
         SqlQuery restore_query(db(), "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, "
-                                      "sync_dirty=sync_dirty+1, deleted=0 WHERE guid=? AND deleted!=0 "
+                                      "sync_dirty=sync_dirty+1, sync_state=0 WHERE guid=? AND sync_state!=0 "
                                       "RETURNING id");
         restore_query.addInt64(static_cast<int>(credential.type()));
         restore_query.addText(credential.displayName());
@@ -197,7 +197,7 @@ bool CredentialStore::modify(const CredentialConfig& credential)
         return false;
     }
 
-    SqlQuery row(db(), "SELECT guid, data FROM credentials WHERE id=? AND deleted=0");
+    SqlQuery row(db(), "SELECT guid, data FROM credentials WHERE id=? AND sync_state=0");
     row.addInt64(credential.id());
 
     const SqlQuery::StepResult step = row.next();
@@ -267,9 +267,10 @@ bool CredentialStore::remove(qint64 credential_id)
     }
 
     SqlQuery mark_query(db(), "UPDATE credentials SET name='', data=X'', modify_time=?, "
-                               "sync_dirty=sync_dirty+1, deleted=1 "
-                               "WHERE id=? AND sync_revision!=0 AND deleted=0");
+                               "sync_dirty=sync_dirty+1, sync_state=? "
+                               "WHERE id=? AND sync_revision!=0 AND sync_state=0");
     mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+    mark_query.addInt64(SyncStore::SYNC_STATE_DELETED);
     mark_query.addInt64(credential_id);
 
     if (!mark_query.exec())
@@ -294,7 +295,7 @@ Database::FindResult CredentialStore::find(qint64 credential_id, CredentialConfi
     }
 
     SqlQuery query(db(), "SELECT id, type, name, data, guid, modify_time FROM credentials "
-                          "WHERE id=? AND deleted=0");
+                          "WHERE id=? AND sync_state=0");
     query.addInt64(credential_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -333,7 +334,7 @@ Database::FindResult CredentialStore::findByGuid(const QString& guid, Credential
         return Database::FindResult::NOT_FOUND;
 
     SqlQuery query(db(), "SELECT id, type, name, data, guid, modify_time FROM credentials "
-                          "WHERE guid=? AND deleted=0");
+                          "WHERE guid=? AND sync_state=0");
     query.addText(guid);
 
     const SqlQuery::StepResult step = query.next();
@@ -425,7 +426,7 @@ Database::ReadResult CredentialStore::unsynced(QList<Unsynced>* credentials) con
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(db(), "SELECT id, type, name, data, guid, modify_time, sync_revision, sync_dirty, deleted "
+    SqlQuery query(db(), "SELECT id, type, name, data, guid, modify_time, sync_revision, sync_dirty, sync_state "
                           "FROM credentials WHERE sync_dirty!=0");
 
     Database::ReadResult result = Database::ReadResult::OK;
@@ -442,7 +443,7 @@ Database::ReadResult CredentialStore::unsynced(QList<Unsynced>* credentials) con
             break;
 
         Unsynced& unsynced = credentials->emplaceBack();
-        unsynced.deleted = query.columnInt64(8) != 0;
+        unsynced.deleted = query.columnInt64(8) == SyncStore::SYNC_STATE_DELETED;
         unsynced.sync_revision = query.columnInt64(6);
         unsynced.sync_dirty = query.columnInt64(7);
 
@@ -481,23 +482,60 @@ bool CredentialStore::storeReceived(
     if (!encrypted_data.has_value())
         return false;
 
-    SqlQuery query(db(), "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_revision) "
-                          "VALUES (NULL, ?, ?, ?, ?, ?, ?) "
-                          "ON CONFLICT(guid) DO UPDATE SET type=excluded.type, name=excluded.name, "
-                          "data=excluded.data, modify_time=excluded.modify_time, "
-                          "sync_revision=excluded.sync_revision, sync_dirty=0, deleted=0 "
-                          "WHERE credentials.sync_revision!=excluded.sync_revision");
-    query.addInt64(static_cast<int>(credential.type()));
-    query.addText(credential.displayName());
-    query.addBlob(*encrypted_data);
-    query.addText(credential.guid());
-    query.addInt64(credential.modifyTime());
-    query.addInt64(sync_revision);
+    qint64 credential_id = 0;
+    qint64 stored_revision = 0;
 
-    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db().lastError();
-        return false;
+        SqlQuery row(db(), "SELECT id, sync_revision FROM credentials WHERE guid=?");
+        row.addText(credential.guid());
+
+        const SqlQuery::StepResult step = row.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::ROW)
+        {
+            credential_id = row.columnInt64(0);
+            stored_revision = row.columnInt64(1);
+        }
+    }
+
+    if (credential_id <= 0)
+    {
+        SqlQuery query(db(), "INSERT INTO credentials (id, type, name, data, guid, modify_time, sync_revision) "
+                              "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+        query.addInt64(static_cast<int>(credential.type()));
+        query.addText(credential.displayName());
+        query.addBlob(*encrypted_data);
+        query.addText(credential.guid());
+        query.addInt64(credential.modifyTime());
+        query.addInt64(sync_revision);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+    else if (stored_revision != sync_revision)
+    {
+        SqlQuery query(db(), "UPDATE credentials SET type=?, name=?, data=?, modify_time=?, sync_revision=?, "
+                              "sync_dirty=0, sync_state=0 WHERE id=?");
+        query.addInt64(static_cast<int>(credential.type()));
+        query.addText(credential.displayName());
+        query.addBlob(*encrypted_data);
+        query.addInt64(credential.modifyTime());
+        query.addInt64(sync_revision);
+        query.addInt64(credential_id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
     }
 
     return true;
@@ -515,8 +553,9 @@ bool CredentialStore::addEmptyRow(const QString& guid, qint64* credential_id)
         return false;
     }
 
-    SqlQuery query(db(), "INSERT INTO credentials (id, guid, deleted) VALUES (NULL, ?, 1)");
+    SqlQuery query(db(), "INSERT INTO credentials (id, guid, sync_state) VALUES (NULL, ?, ?)");
     query.addText(guid);
+    query.addInt64(SyncStore::SYNC_STATE_EMPTY);
 
     if (!query.exec())
     {

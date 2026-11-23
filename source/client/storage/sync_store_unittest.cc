@@ -58,6 +58,24 @@ protected:
                                              sync_revision, sync_dirty) &&
                transaction.commit();
     }
+
+    bool confirmSentGroup(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_LOCAL_GROUPS, guid, sync_revision,
+                                             sync_dirty) &&
+               transaction.commit();
+    }
+
+    bool confirmSentLocalHost(const QString& guid, qint64 sync_revision, qint64 sync_dirty)
+    {
+        SyncTransaction transaction(db_);
+        return transaction.begin(syncStorageId()) == Database::SyncResult::DONE &&
+               transaction.confirmSentRecord(proto::router::SYNC_DATA_TYPE_LOCAL_HOSTS, guid, sync_revision,
+                                             sync_dirty) &&
+               transaction.commit();
+    }
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -361,6 +379,126 @@ TEST_F(SyncStoreTest, RouterHostRemovedOnItsWayToTheRouterIsRemovedThereToo)
     ASSERT_EQ(unsynced.size(), 1);
     EXPECT_TRUE(unsynced[0].deleted);
     EXPECT_EQ(unsynced[0].host.hostId(), HostId(100500));
+    EXPECT_GE(unsynced[0].host.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 12);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group the router stored is sent again only when it was edited while it was on its way.
+TEST_F(SyncStoreTest, ConfirmedGroupIsSentAgainOnlyWhenEditedMeanwhile)
+{
+    attachSyncStorage();
+
+    const qint64 group_id = addGroup("office", 0);
+
+    LocalGroupConfig edited;
+    ASSERT_EQ(local_groups_.find(group_id, &edited), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(confirmSentGroup(edited.guid(), 12, 1));
+    EXPECT_TRUE(unsyncedGroups().isEmpty());
+
+    edited.setName("renamed");
+    ASSERT_TRUE(local_groups_.modify(edited));
+    ASSERT_TRUE(local_groups_.modify(edited));
+
+    const QList<LocalGroupStore::Unsynced> sent = unsyncedGroups();
+    ASSERT_EQ(sent.size(), 1);
+    EXPECT_EQ(sent[0].sync_revision, 12);
+    EXPECT_EQ(sent[0].sync_dirty, 2);
+
+    ASSERT_TRUE(local_groups_.modify(edited));
+    ASSERT_TRUE(confirmSentGroup(edited.guid(), 13, sent[0].sync_dirty));
+
+    const QList<LocalGroupStore::Unsynced> unsynced = unsyncedGroups();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 13);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A group removed on its first way to the router left no row, so its removal is kept to be sent.
+TEST_F(SyncStoreTest, GroupRemovedOnItsWayToTheRouterIsRemovedThereToo)
+{
+    attachSyncStorage();
+
+    const qint64 group_id = addGroup("office", 0);
+
+    LocalGroupConfig stored;
+    ASSERT_EQ(local_groups_.find(group_id, &stored), Database::FindResult::FOUND);
+
+    ASSERT_TRUE(local_groups_.remove(group_id));
+    ASSERT_EQ(rowCount("local_groups"), 0);
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(confirmSentGroup(stored.guid(), 12, 1));
+
+    EXPECT_TRUE(allLocalGroups().isEmpty());
+
+    const QList<LocalGroupStore::Unsynced> unsynced = unsyncedGroups();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].group.guid(), stored.guid());
+    EXPECT_GE(unsynced[0].group.modifyTime(), start_time);
+    EXPECT_EQ(unsynced[0].sync_revision, 12);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A local host the router stored is sent again only when it was edited while it was on its way.
+TEST_F(SyncStoreTest, ConfirmedLocalHostIsSentAgainOnlyWhenEditedMeanwhile)
+{
+    attachSyncStorage();
+
+    const qint64 entry_id = addHost("host", 0);
+
+    std::optional<LocalHostConfig> edited = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(edited.has_value());
+
+    ASSERT_TRUE(confirmSentLocalHost(edited->guid(), 12, 1));
+    EXPECT_TRUE(unsyncedLocalHosts().isEmpty());
+
+    edited->setName("renamed");
+    ASSERT_TRUE(local_hosts_.modify(*edited));
+    ASSERT_TRUE(local_hosts_.modify(*edited));
+
+    const QList<LocalHostStore::Unsynced> sent = unsyncedLocalHosts();
+    ASSERT_EQ(sent.size(), 1);
+    EXPECT_EQ(sent[0].sync_revision, 12);
+    EXPECT_EQ(sent[0].sync_dirty, 2);
+
+    ASSERT_TRUE(local_hosts_.modify(*edited));
+    ASSERT_TRUE(confirmSentLocalHost(edited->guid(), 13, sent[0].sync_dirty));
+
+    const QList<LocalHostStore::Unsynced> unsynced = unsyncedLocalHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_EQ(unsynced[0].sync_revision, 13);
+    EXPECT_EQ(unsynced[0].sync_dirty, 1);
+}
+
+//--------------------------------------------------------------------------------------------------
+// A host removed on its first way to the router left no row, so its removal is kept to be sent.
+TEST_F(SyncStoreTest, LocalHostRemovedOnItsWayToTheRouterIsRemovedThereToo)
+{
+    attachSyncStorage();
+
+    const qint64 entry_id = addHost("host", 0);
+
+    const std::optional<LocalHostConfig> stored = findLocalHost(db_, entry_id);
+    ASSERT_TRUE(stored.has_value());
+
+    ASSERT_TRUE(local_hosts_.remove(entry_id));
+    ASSERT_EQ(rowCount("local_hosts"), 0);
+
+    const qint64 start_time = QDateTime::currentSecsSinceEpoch();
+    ASSERT_TRUE(confirmSentLocalHost(stored->guid(), 12, 1));
+
+    EXPECT_TRUE(allLocalHosts().isEmpty());
+
+    const QList<LocalHostStore::Unsynced> unsynced = unsyncedLocalHosts();
+    ASSERT_EQ(unsynced.size(), 1);
+    EXPECT_TRUE(unsynced[0].deleted);
+    EXPECT_EQ(unsynced[0].host.guid(), stored->guid());
     EXPECT_GE(unsynced[0].host.modifyTime(), start_time);
     EXPECT_EQ(unsynced[0].sync_revision, 12);
     EXPECT_EQ(unsynced[0].sync_dirty, 1);

@@ -68,7 +68,7 @@ Database::ReadResult ProfileStore::list(QList<ProfileConfig>* profiles) const
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE deleted=0 "
+    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE sync_state=0 "
                           "ORDER BY guid<>?, casefold(name)");
     query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
@@ -155,7 +155,7 @@ bool ProfileStore::modify(const ProfileConfig& profile)
         return false;
     }
 
-    SqlQuery row(db(), "SELECT data FROM profiles WHERE id=? AND deleted=0");
+    SqlQuery row(db(), "SELECT data FROM profiles WHERE id=? AND sync_state=0");
     row.addInt64(profile.id());
 
     const SqlQuery::StepResult step = row.next();
@@ -219,8 +219,9 @@ bool ProfileStore::remove(qint64 profile_id)
     const int removed = db().changes();
 
     SqlQuery mark_query(db(), "UPDATE profiles SET name='', data=X'', modify_time=?, sync_dirty=sync_dirty+1, "
-                               "deleted=1 WHERE id=? AND guid<>? AND sync_revision!=0 AND deleted=0");
+                               "sync_state=? WHERE id=? AND guid<>? AND sync_revision!=0 AND sync_state=0");
     mark_query.addInt64(QDateTime::currentSecsSinceEpoch());
+    mark_query.addInt64(SyncStore::SYNC_STATE_DELETED);
     mark_query.addInt64(profile_id);
     mark_query.addText(std::string_view(ProfileConfig::kDefaultGuid));
 
@@ -251,7 +252,7 @@ Database::FindResult ProfileStore::find(qint64 profile_id, ProfileConfig* profil
         return Database::FindResult::FAILED;
     }
 
-    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE id=? AND deleted=0");
+    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE id=? AND sync_state=0");
     query.addInt64(profile_id);
 
     const SqlQuery::StepResult step = query.next();
@@ -288,7 +289,7 @@ Database::FindResult ProfileStore::findByGuid(const QString& guid, ProfileConfig
     if (guid.isEmpty())
         return Database::FindResult::NOT_FOUND;
 
-    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE guid=? AND deleted=0");
+    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time FROM profiles WHERE guid=? AND sync_state=0");
     query.addText(guid);
 
     const SqlQuery::StepResult step = query.next();
@@ -446,7 +447,7 @@ Database::ReadResult ProfileStore::unsynced(QList<Unsynced>* profiles) const
         return Database::ReadResult::FAILED;
     }
 
-    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time, sync_revision, sync_dirty, deleted "
+    SqlQuery query(db(), "SELECT id, name, data, guid, modify_time, sync_revision, sync_dirty, sync_state "
                           "FROM profiles WHERE sync_dirty!=0");
 
     Database::ReadResult result = Database::ReadResult::OK;
@@ -463,7 +464,7 @@ Database::ReadResult ProfileStore::unsynced(QList<Unsynced>* profiles) const
             break;
 
         Unsynced& unsynced = profiles->emplaceBack();
-        unsynced.deleted = query.columnInt64(7) != 0;
+        unsynced.deleted = query.columnInt64(7) == SyncStore::SYNC_STATE_DELETED;
         unsynced.sync_revision = query.columnInt64(5);
         unsynced.sync_dirty = query.columnInt64(6);
 
@@ -538,21 +539,58 @@ bool ProfileStore::storeReceived(
         return false;
     }
 
-    SqlQuery query(db(), "INSERT INTO profiles (id, name, data, guid, modify_time, sync_revision) "
-                          "VALUES (NULL, ?, ?, ?, ?, ?) "
-                          "ON CONFLICT(guid) DO UPDATE SET name=excluded.name, data=excluded.data, "
-                          "modify_time=excluded.modify_time, sync_revision=excluded.sync_revision, sync_dirty=0, "
-                          "deleted=0 WHERE profiles.sync_revision!=excluded.sync_revision");
-    query.addText(profile.name());
-    query.addBlob(profile.serializedData());
-    query.addText(profile.guid());
-    query.addInt64(profile.modifyTime());
-    query.addInt64(sync_revision);
+    qint64 profile_id = 0;
+    qint64 stored_revision = 0;
 
-    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << db().lastError();
-        return false;
+        SqlQuery row(db(), "SELECT id, sync_revision FROM profiles WHERE guid=?");
+        row.addText(profile.guid());
+
+        const SqlQuery::StepResult step = row.next();
+        if (step == SqlQuery::StepResult::FAILED)
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+
+        if (step == SqlQuery::StepResult::ROW)
+        {
+            profile_id = row.columnInt64(0);
+            stored_revision = row.columnInt64(1);
+        }
+    }
+
+    if (profile_id <= 0)
+    {
+        SqlQuery query(db(), "INSERT INTO profiles (id, name, data, guid, modify_time, sync_revision) "
+                              "VALUES (NULL, ?, ?, ?, ?, ?)");
+        query.addText(profile.name());
+        query.addBlob(profile.serializedData());
+        query.addText(profile.guid());
+        query.addInt64(profile.modifyTime());
+        query.addInt64(sync_revision);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
+    }
+    else if (stored_revision != sync_revision)
+    {
+        SqlQuery query(db(), "UPDATE profiles SET name=?, data=?, modify_time=?, sync_revision=?, sync_dirty=0, "
+                              "sync_state=0 WHERE id=?");
+        query.addText(profile.name());
+        query.addBlob(profile.serializedData());
+        query.addInt64(profile.modifyTime());
+        query.addInt64(sync_revision);
+        query.addInt64(profile_id);
+
+        if (!query.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << db().lastError();
+            return false;
+        }
     }
 
     return true;
@@ -570,8 +608,9 @@ bool ProfileStore::addEmptyRow(const QString& guid, qint64* profile_id)
         return false;
     }
 
-    SqlQuery query(db(), "INSERT INTO profiles (id, guid, deleted) VALUES (NULL, ?, 1)");
+    SqlQuery query(db(), "INSERT INTO profiles (id, guid, sync_state) VALUES (NULL, ?, ?)");
     query.addText(guid);
+    query.addInt64(SyncStore::SYNC_STATE_EMPTY);
 
     if (!query.exec())
     {

@@ -34,6 +34,7 @@
 #include "client/config.h"
 #include "client/desktop/management/group_combo_box.h"
 #include "client/desktop/management/ui_local_host_dialog.h"
+#include "client/router/router_controller.h"
 #include "client/storage/local_group_store.h"
 #include "client/storage/local_host_store.h"
 #include "client/storage/user_settings.h"
@@ -240,6 +241,7 @@ void LocalHostDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
+    RouterController::startSyncRecordExchange();
     accept();
 }
 

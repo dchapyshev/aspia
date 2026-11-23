@@ -23,6 +23,8 @@
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 #include "client/sync/sync_credentials.h"
+#include "client/sync/sync_local_groups.h"
+#include "client/sync/sync_local_hosts.h"
 #include "client/sync/sync_profiles.h"
 #include "client/sync/sync_router_hosts.h"
 #include "proto/router_constants.h"
@@ -297,7 +299,7 @@ SyncRecords::SyncResult SyncRecordsOf<Traits>::storeReceivedRecords(const proto:
 
             if (record.deleted())
             {
-                stored = transaction.eraseRecord(Traits::kType, record_id);
+                stored = Traits::eraseReceived(db_, transaction, record_id);
             }
             else
             {
@@ -325,3 +327,5 @@ SyncRecords::SyncResult SyncRecordsOf<Traits>::storeReceivedRecords(const proto:
 template class SyncRecordsOf<SyncCredentialTraits>;
 template class SyncRecordsOf<SyncProfileTraits>;
 template class SyncRecordsOf<SyncRouterHostTraits>;
+template class SyncRecordsOf<SyncLocalGroupTraits>;
+template class SyncRecordsOf<SyncLocalHostTraits>;

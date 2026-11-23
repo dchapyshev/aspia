@@ -54,6 +54,9 @@ public:
     void setHosts(const QList<LocalHostConfig>& hosts);
     void clear();
 
+    // The same group read again. A host that stays keeps its row selected and its probed state.
+    void updateHosts(const QList<LocalHostConfig>& hosts);
+
     // Null when the row is out of range.
     const LocalHostConfig* hostAt(int row) const;
     int rowOf(qint64 entry_id) const;

@@ -55,6 +55,14 @@ class SyncStore final : public DatabaseStore
 public:
     explicit SyncStore(Database& db = Database::instance());
 
+    enum SyncState : qint64
+    {
+        SYNC_STATE_PRESENT = 0, // An ordinary record.
+        SYNC_STATE_DELETED = 1, // Removed on the device, the router does not know it yet.
+        SYNC_STATE_EMPTY   = 2, // Holds the guid of a record that has not come from the router.
+        SYNC_STATE_WAITING = 3  // Came from the router, the group it lies in has not come.
+    };
+
     qint64 receivedRevision(proto::router::SyncDataType type) const;
     bool reset();
     bool discard();

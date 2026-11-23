@@ -70,6 +70,8 @@ public:
     qint64 parentId() const { return parent_id_; }
     QString groupName() const { return group_name_; }
 
+    void update(const LocalGroupConfig& group);
+
 private:
     qint64 parent_id_;
     QString group_name_;

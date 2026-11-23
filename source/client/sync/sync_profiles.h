@@ -38,6 +38,7 @@ struct SyncProfileTraits
     static SyncRecords::OpenResult openReceived(
         Database& db, const SecureByteArray& key, const proto::router::SyncRecord& record, Config* config);
     static bool storeReceived(Database& db, SyncTransaction& transaction, Config config, qint64 sync_revision);
+    static bool eraseReceived(Database& db, SyncTransaction& transaction, const QString& record_id);
 };
 
 extern template class SyncRecordsOf<SyncProfileTraits>;

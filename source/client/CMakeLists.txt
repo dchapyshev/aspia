@@ -66,6 +66,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/client_list_model_unittest.cc
     desktop/management/edit_model_unittest.cc
     desktop/management/host_list_model_unittest.cc
+    desktop/management/local_group_widget_unittest.cc
     desktop/management/local_host_list_model_unittest.cc
     desktop/management/profile_combo_box_unittest.cc
     desktop/management/relay_list_model_unittest.cc
@@ -73,6 +74,7 @@ list(APPEND SOURCE_CLIENT_TESTS
     desktop/management/router_status_widget_unittest.cc
     desktop/management/router_user_dialog_unittest.cc
     desktop/management/search_result_model_unittest.cc
+    desktop/management/sidebar_unittest.cc
     desktop/management/temp_host_list_model_unittest.cc
     desktop/management/user_list_model_unittest.cc
     router/router_2fa_unittest.cc
@@ -100,6 +102,8 @@ list(APPEND SOURCE_CLIENT_TESTS
     storage/user_settings_unittest.cc
     sync/sync_credentials_unittest.cc
     sync/sync_crypto_unittest.cc
+    sync/sync_local_groups_unittest.cc
+    sync/sync_local_hosts_unittest.cc
     sync/sync_profiles_unittest.cc
     sync/sync_router_hosts_unittest.cc
     tests_main.cc

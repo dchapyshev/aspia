@@ -146,7 +146,7 @@ protected:
     static QList<LocalHostConfig> allLocalHosts(Database& db)
     {
         QList<LocalHostConfig> hosts;
-        EXPECT_EQ(LocalHostStore(db).all(&hosts), Database::ReadResult::OK);
+        EXPECT_EQ(LocalHostStore(db).all(LocalHostStore::Scope::VISIBLE, &hosts), Database::ReadResult::OK);
         return hosts;
     }
 

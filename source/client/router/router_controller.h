@@ -75,6 +75,8 @@ signals:
     void sig_groupsChanged();
     void sig_credentialsChanged();
     void sig_profilesChanged();
+    void sig_localGroupsChanged();
+    void sig_localHostsChanged();
 
 private slots:
     void onTwoFactorRequired();
