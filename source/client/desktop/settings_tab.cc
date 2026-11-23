@@ -350,11 +350,8 @@ SettingsTab::SettingsTab(QWidget* parent)
     connect(ui->button_router_sync_reset, &QPushButton::clicked, this, &SettingsTab::onResetSyncClicked);
     connect(&RouterController::instance(), &RouterController::sig_statusChanged,
             this, &SettingsTab::onRouterStatusChanged);
-    connect(&RouterController::instance(), &RouterController::sig_profilesChanged, this, [this]()
-    {
-        reloadProfiles(ui->combo_profile->currentData().toLongLong(), false);
-        emit sig_desktopConfigChanged();
-    });
+    connect(&RouterController::instance(), &RouterController::sig_profilesChanged,
+            this, &SettingsTab::onProfilesChanged);
 
     connect(ui->spinbox_proxy_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &SettingsTab::onGeneralChanged);
@@ -764,6 +761,28 @@ void SettingsTab::onDeleteProfile()
 
     RouterController::startSyncRecordExchange();
     reloadProfiles(0);
+    emit sig_desktopConfigChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onProfilesChanged()
+{
+    const qint64 shown_profile_id = ui->combo_profile->currentData().toLongLong();
+
+    loadProfileList(shown_profile_id, false);
+
+    const qint64 profile_id = ui->combo_profile->currentData().toLongLong();
+    ProfileStore store;
+    ProfileConfig profile;
+
+    if (profile_id <= 0)
+        profile = store.defaultProfile();
+    else if (store.find(profile_id, &profile) != Database::FindResult::FOUND)
+        LOG(ERROR) << "Profile" << profile_id << "is not read";
+
+    if (profile_id != shown_profile_id || profile.modifyTime() != profile_modify_time_)
+        showProfile(false);
+
     emit sig_desktopConfigChanged();
 }
 
@@ -1238,7 +1257,7 @@ void SettingsTab::showRouterError(QLineEdit* edit, const QString& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
+void SettingsTab::loadProfileList(qint64 profile_id, bool warn)
 {
     QList<ProfileConfig> profiles;
     if (ProfileStore().list(&profiles) == Database::ReadResult::FAILED && warn)
@@ -1260,7 +1279,12 @@ void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
         const int index = ui->combo_profile->findData(profile_id);
         ui->combo_profile->setCurrentIndex(index >= 0 ? index : 0);
     }
+}
 
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::reloadProfiles(qint64 profile_id, bool warn)
+{
+    loadProfileList(profile_id, warn);
     showProfile(warn);
 }
 
@@ -1278,11 +1302,13 @@ void SettingsTab::showProfile(bool warn)
         const ProfileConfig profile = store.defaultProfile();
         desktop_config = profile.desktopConfig();
         udp_methods = profile.udpMethods();
+        profile_modify_time_ = profile.modifyTime();
     }
     else
     {
         ProfileConfig profile;
         const Database::FindResult result = store.find(profile_id, &profile);
+        profile_modify_time_ = profile.modifyTime();
         if (result == Database::FindResult::FOUND)
         {
             desktop_config = profile.desktopConfig();
@@ -1468,6 +1494,8 @@ void SettingsTab::saveProfile()
         MsgBox::warning(this, tr("Unable to save profile."));
         return;
     }
+
+    profile_modify_time_ = profile.modifyTime();
 
     RouterController::startSyncRecordExchange();
     emit sig_desktopConfigChanged();

@@ -39,7 +39,7 @@ public:
 
     Database::ReadResult list(QList<ProfileConfig>* profiles) const;
     bool add(ProfileConfig& profile);
-    bool modify(const ProfileConfig& profile);
+    bool modify(ProfileConfig& profile);
     bool remove(qint64 profile_id);
     Database::FindResult find(qint64 profile_id, ProfileConfig* profile) const;
     Database::FindResult findByGuid(const QString& guid, ProfileConfig* profile) const;

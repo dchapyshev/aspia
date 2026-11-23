@@ -70,6 +70,7 @@ private slots:
     void onAddProfile();
     void onRenameProfile();
     void onDeleteProfile();
+    void onProfilesChanged();
     void onDesktopFeatureChanged();
     void onSelectRecordingPath();
     void onMcpEnabledChanged();
@@ -92,6 +93,7 @@ private:
     bool routerFromUi(std::optional<RouterConfig>* router);
     bool saveRouter(RouterConfig router);
     void showRouterError(QLineEdit* edit, const QString& message);
+    void loadProfileList(qint64 profile_id, bool warn);
     void reloadProfiles(qint64 profile_id, bool warn = true);
     void showProfile(bool warn = true);
     ProfileConfig profileFromUi() const;
@@ -102,6 +104,7 @@ private:
     QButtonGroup* category_group_ = nullptr;
     QButtonGroup* mcp_session_types_ = nullptr;
     bool router_changed_ = false;
+    qint64 profile_modify_time_ = 0;
 
     Q_DISABLE_COPY_MOVE(SettingsTab)
 };

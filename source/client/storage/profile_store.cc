@@ -134,7 +134,7 @@ bool ProfileStore::add(ProfileConfig& profile)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ProfileStore::modify(const ProfileConfig& profile)
+bool ProfileStore::modify(ProfileConfig& profile)
 {
     if (!isValid())
     {
@@ -175,10 +175,12 @@ bool ProfileStore::modify(const ProfileConfig& profile)
     ProfileConfig modified = profile;
     modified.setUnknownData(stored.unknownData());
 
+    const qint64 modify_time = QDateTime::currentSecsSinceEpoch();
+
     SqlQuery query(db(), "UPDATE profiles SET name=?, data=?, modify_time=?, sync_dirty=sync_dirty+1 WHERE id=?");
     query.addText(modified.name());
     query.addBlob(modified.serializedData());
-    query.addInt64(QDateTime::currentSecsSinceEpoch());
+    query.addInt64(modify_time);
     query.addInt64(modified.id());
 
     if (!query.exec())
@@ -187,7 +189,14 @@ bool ProfileStore::modify(const ProfileConfig& profile)
         return false;
     }
 
-    return transaction.commit();
+    if (!transaction.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction";
+        return false;
+    }
+
+    profile.setModifyTime(modify_time);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
