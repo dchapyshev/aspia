@@ -404,8 +404,7 @@ void RouterController::onRouterAuthenticated(const QVersionNumber& peer_version)
             QMetaObject::invokeMethod(router_worker_, &RouterWorker::onDisconnect, Qt::QueuedConnection);
 
         addEvent(RouterEvent::Severity::CRITICAL,
-                 tr("Router %1 has version %2, which is newer than the client version %3. Update the client"
-                    " to connect to the router.")
+                 tr("The version of router %1 is newer than the client version (%2 > %3). Update the client.")
                      .arg(context_->config->address(), peer_version.toString(), kCurrentVersion.toString()));
         updateStatus();
         return;

@@ -409,30 +409,30 @@
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="146"/>
-        <location filename="../client/android/main_window.cc" line="321"/>
-        <location filename="../client/android/main_window.cc" line="369"/>
+        <location filename="../client/android/main_window.cc" line="151"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="374"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="147"/>
-        <location filename="../client/android/main_window.cc" line="325"/>
-        <location filename="../client/android/main_window.cc" line="389"/>
+        <location filename="../client/android/main_window.cc" line="152"/>
+        <location filename="../client/android/main_window.cc" line="330"/>
+        <location filename="../client/android/main_window.cc" line="394"/>
         <source>Remote</source>
         <translation>원격</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="148"/>
-        <location filename="../client/android/main_window.cc" line="329"/>
-        <location filename="../client/android/main_window.cc" line="379"/>
+        <location filename="../client/android/main_window.cc" line="153"/>
+        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="384"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="149"/>
-        <location filename="../client/android/main_window.cc" line="333"/>
-        <location filename="../client/android/main_window.cc" line="399"/>
+        <location filename="../client/android/main_window.cc" line="154"/>
+        <location filename="../client/android/main_window.cc" line="338"/>
+        <location filename="../client/android/main_window.cc" line="404"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
         <location filename="../host/android/main_window.cc" line="390"/>
@@ -440,44 +440,50 @@
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="716"/>
+        <location filename="../client/android/main_window.cc" line="501"/>
+        <source>Failed to retrieve host information from the local database.</source>
+        <translation>로컬 데이터베이스에서 호스트 정보를 가져오지 못했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="726"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="717"/>
+        <location filename="../client/android/main_window.cc" line="727"/>
         <source>Version %1 is available.</source>
         <translation>%1 버전을 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="768"/>
+        <location filename="../client/android/main_window.cc" line="778"/>
         <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
         <translation>호스트에 라우터를 통해 연결하도록 되어 있지만 라우터가 설정되지 않았습니다. 라우터를 추가하거나 ID 대신 호스트 주소를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="771"/>
+        <location filename="../client/android/main_window.cc" line="781"/>
         <source>Failed to read the router.</source>
         <translation>라우터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="780"/>
+        <location filename="../client/android/main_window.cc" line="790"/>
         <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
         <translation>라우터가 꺼져 있습니다. 이 호스트에 연결하려면 라우터 설정에서 라우터를 켜십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="491"/>
+        <location filename="../client/android/main_window.cc" line="496"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 호스트를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="766"/>
+        <location filename="../client/android/main_window.cc" line="776"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="490"/>
-        <location filename="../client/android/main_window.cc" line="773"/>
-        <location filename="../client/android/main_window.cc" line="779"/>
+        <location filename="../client/android/main_window.cc" line="495"/>
+        <location filename="../client/android/main_window.cc" line="500"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
+        <location filename="../client/android/main_window.cc" line="789"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
         <location filename="../host/android/main_window.cc" line="388"/>
@@ -490,7 +496,7 @@
         <translation>권한</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="717"/>
+        <location filename="../client/android/main_window.cc" line="727"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
@@ -547,13 +553,13 @@
         <translation>로그인 정보 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="216"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="232"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="206"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="222"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="215"/>
         <source>User name cannot be empty.</source>
         <translation>사용자 이름은 비워 둘 수 없습니다.</translation>
     </message>
@@ -561,59 +567,59 @@
 <context>
     <name>AuthorizationWindow</name>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="73"/>
+        <location filename="../client/android/authorization_window.cc" line="55"/>
         <source>Enter user name and password</source>
         <translation>사용자 이름과 암호 입력</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="74"/>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>One-time password connection</source>
         <translation>일회용 암호 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="75"/>
+        <location filename="../client/android/authorization_window.cc" line="57"/>
         <source>Use saved credentials</source>
         <translation>저장된 자격 증명 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="85"/>
+        <location filename="../client/android/authorization_window.cc" line="67"/>
         <source>Authorization</source>
         <translation>인증</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="138"/>
+        <location filename="../client/android/authorization_window.cc" line="118"/>
         <source>Save sign-in data</source>
         <translation>로그인 정보 저장</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="236"/>
+        <location filename="../client/android/authorization_window.cc" line="231"/>
         <source>User name cannot be empty.</source>
         <translation>사용자 이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="96"/>
-        <location filename="../client/android/authorization_window.cc" line="99"/>
+        <location filename="../client/android/authorization_window.cc" line="78"/>
+        <location filename="../client/android/authorization_window.cc" line="81"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="102"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="106"/>
+        <location filename="../client/android/authorization_window.cc" line="86"/>
         <source>Connect</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="227"/>
-        <location filename="../client/android/authorization_window.cc" line="243"/>
+        <location filename="../client/android/authorization_window.cc" line="222"/>
+        <location filename="../client/android/authorization_window.cc" line="238"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
@@ -699,17 +705,17 @@
         <translation>Aspia 채팅</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="175"/>
+        <location filename="../common/desktop/chat_widget.ui" line="159"/>
         <source>Send message</source>
         <translation>메시지 보내기</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="204"/>
+        <location filename="../common/desktop/chat_widget.ui" line="188"/>
         <source>Tools</source>
         <translation>도구</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="210"/>
+        <location filename="../common/desktop/chat_widget.ui" line="194"/>
         <source>···</source>
         <translation>···</translation>
     </message>
@@ -846,113 +852,113 @@
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="137"/>
+        <location filename="../client/android/chat_window.cc" line="140"/>
         <source>User %1 has joined the chat</source>
         <translation>%1님이 채팅에 참여했습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="140"/>
+        <location filename="../client/android/chat_window.cc" line="143"/>
         <source>User %1 has left the chat</source>
         <translation>%1님이 채팅에서 나갔습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="143"/>
+        <location filename="../client/android/chat_window.cc" line="146"/>
         <source>User %1 is logged in</source>
         <translation>%1님이 로그인했습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="146"/>
+        <location filename="../client/android/chat_window.cc" line="149"/>
         <source>User %1 is not logged in</source>
         <translation>%1님이 로그인하지 않았습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="149"/>
+        <location filename="../client/android/chat_window.cc" line="152"/>
         <source>There are no connected users</source>
         <translation>연결된 사용자가 없습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="177"/>
-        <location filename="../client/android/chat_window.cc" line="361"/>
+        <location filename="../client/android/chat_window.cc" line="180"/>
+        <location filename="../client/android/chat_window.cc" line="364"/>
         <source>Chat</source>
         <translation>채팅</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="254"/>
+        <location filename="../client/android/chat_window.cc" line="257"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="272"/>
+        <location filename="../client/android/chat_window.cc" line="275"/>
         <source>The connection to the host has been lost.</source>
         <translation>호스트와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="284"/>
+        <location filename="../client/android/chat_window.cc" line="287"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>호스트 버전이 클라이언트보다 최신입니다. 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="312"/>
+        <location filename="../client/android/chat_window.cc" line="315"/>
         <source>%1 is typing...</source>
         <translation>%1님이 입력 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="467"/>
+        <location filename="../client/android/chat_window.cc" line="481"/>
         <source>Connecting...</source>
         <translation>연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="490"/>
+        <location filename="../client/android/chat_window.cc" line="504"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="491"/>
+        <location filename="../client/android/chat_window.cc" line="505"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="497"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Connecting to router...</source>
         <translation>라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="518"/>
+        <location filename="../client/android/chat_window.cc" line="532"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="530"/>
+        <location filename="../client/android/chat_window.cc" line="544"/>
         <source>Error requesting connection via router.</source>
         <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="354"/>
+        <location filename="../client/android/chat_window.cc" line="357"/>
         <source>Save Chat</source>
         <translation>채팅 저장</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="354"/>
+        <location filename="../client/android/chat_window.cc" line="357"/>
         <source>Text files (*.txt)</source>
         <translation>텍스트 파일 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="361"/>
+        <location filename="../client/android/chat_window.cc" line="364"/>
         <source>Could not open the file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear Chat</source>
         <translation>채팅 지우기</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear the chat history?</source>
         <translation>채팅 기록을 지우시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
@@ -983,33 +989,33 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="86"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>&quot;%1&quot; 디렉터리에 백업을 만들 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="92"/>
+        <location filename="../client/main.cc" line="94"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>백업을 만들 수 없습니다. 데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="98"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Unable to create a backup.</source>
         <translation>백업을 만들 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="240"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Unable to move the address book into the new format. The old address book is not changed, and the next start tries again. The details are in the log.</source>
         <translation>주소록을 새 형식으로 옮길 수 없습니다. 이전 주소록은 변경되지 않으며 다음에 시작할 때 다시 시도합니다. 자세한 내용은 로그를 참조하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="247"/>
-        <location filename="../client/main.cc" line="264"/>
+        <location filename="../client/main.cc" line="249"/>
+        <location filename="../client/main.cc" line="266"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="261"/>
+        <location filename="../client/main.cc" line="263"/>
         <source>Show the database selection dialog.</source>
         <translation>데이터베이스 선택 대화 상자를 표시합니다.</translation>
     </message>
@@ -1084,57 +1090,57 @@
         <translation>호스트 다시 연결 대기 시간이 초과되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="278"/>
+        <location filename="../client/desktop/client_window.cc" line="279"/>
         <source>Session started.</source>
         <translation>세션이 시작되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="290"/>
+        <location filename="../client/desktop/client_window.cc" line="291"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="294"/>
+        <location filename="../client/desktop/client_window.cc" line="295"/>
         <source>Connecting to host %1:%2...</source>
         <translation>%1:%2 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="330"/>
+        <location filename="../client/desktop/client_window.cc" line="331"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>호스트를 아직 사용할 수 없습니다. 다시 연결을 기다리는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="350"/>
+        <location filename="../client/desktop/client_window.cc" line="351"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>호스트 버전이 클라이언트 버전보다 최신입니다(%1 &gt; %2). 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="593"/>
+        <location filename="../client/desktop/client_window.cc" line="611"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="595"/>
+        <location filename="../client/desktop/client_window.cc" line="613"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="597"/>
+        <location filename="../client/desktop/client_window.cc" line="615"/>
         <source>The specified router is offline.</source>
         <translation>지정한 라우터가 오프라인 상태입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="604"/>
+        <location filename="../client/desktop/client_window.cc" line="622"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="612"/>
+        <location filename="../client/desktop/client_window.cc" line="630"/>
         <source>Connection offer received.</source>
         <translation>연결 제안을 받았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="626"/>
+        <location filename="../client/desktop/client_window.cc" line="644"/>
         <source>Error requesting connection via router.</source>
         <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
@@ -1144,7 +1150,7 @@
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="185"/>
-        <location filename="../host/ui/config_dialog.cc" line="136"/>
+        <location filename="../host/ui/config_dialog.cc" line="138"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -1372,258 +1378,258 @@
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="138"/>
+        <location filename="../host/ui/config_dialog.cc" line="140"/>
         <source>Installer</source>
         <translation>설치 프로그램</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="140"/>
+        <location filename="../host/ui/config_dialog.cc" line="142"/>
         <source>Quick Support</source>
         <translation>빠른 지원</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="147"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Once a day</source>
         <translation>하루에 한 번</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="148"/>
+        <location filename="../host/ui/config_dialog.cc" line="150"/>
         <source>Once a week</source>
         <translation>일주일에 한 번</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="149"/>
+        <location filename="../host/ui/config_dialog.cc" line="151"/>
         <source>Once a month</source>
         <translation>한 달에 한 번</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="151"/>
+        <location filename="../host/ui/config_dialog.cc" line="153"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="152"/>
+        <location filename="../host/ui/config_dialog.cc" line="154"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="153"/>
+        <location filename="../host/ui/config_dialog.cc" line="155"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>No proxy</source>
         <translation>프록시 서버 없음</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="259"/>
+        <location filename="../host/ui/config_dialog.cc" line="270"/>
         <source>On reboot</source>
         <translation>다시 시작할 때</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="260"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>Every 5 minutes</source>
         <translation>5분마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="261"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>Every 30 minutes</source>
         <translation>30분마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="262"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>Every 1 hour</source>
         <translation>1시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="263"/>
+        <location filename="../host/ui/config_dialog.cc" line="274"/>
         <source>Every 6 hours</source>
         <translation>6시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="264"/>
+        <location filename="../host/ui/config_dialog.cc" line="275"/>
         <source>Every 12 hours</source>
         <translation>12시간마다</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="283"/>
         <source>Letters and digits</source>
         <translation>영문자와 숫자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="275"/>
+        <location filename="../host/ui/config_dialog.cc" line="286"/>
         <source>Letters</source>
         <translation>영문자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="277"/>
+        <location filename="../host/ui/config_dialog.cc" line="288"/>
         <source>Digits</source>
         <translation>숫자</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="294"/>
+        <location filename="../host/ui/config_dialog.cc" line="305"/>
         <source>Never</source>
         <translation>안 함</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="295"/>
+        <location filename="../host/ui/config_dialog.cc" line="306"/>
         <source>15 seconds</source>
         <translation>15초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="296"/>
+        <location filename="../host/ui/config_dialog.cc" line="307"/>
         <source>30 seconds</source>
         <translation>30초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="297"/>
+        <location filename="../host/ui/config_dialog.cc" line="308"/>
         <source>45 seconds</source>
         <translation>45초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="298"/>
+        <location filename="../host/ui/config_dialog.cc" line="309"/>
         <source>60 seconds</source>
         <translation>60초</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="306"/>
+        <location filename="../host/ui/config_dialog.cc" line="317"/>
         <source>Accept connection</source>
         <translation>연결 수락</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="307"/>
+        <location filename="../host/ui/config_dialog.cc" line="318"/>
         <source>Reject connection</source>
         <translation>연결 거부</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="507"/>
+        <location filename="../host/ui/config_dialog.cc" line="518"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="535"/>
-        <location filename="../host/ui/config_dialog.cc" line="569"/>
+        <location filename="../host/ui/config_dialog.cc" line="546"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>An error occurred while processing the password.</source>
         <translation>암호를 처리하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="552"/>
+        <location filename="../host/ui/config_dialog.cc" line="563"/>
         <source>Settings storage is unavailable.</source>
         <translation>설정 저장소를 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="204"/>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <location filename="../host/ui/config_dialog.cc" line="594"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="594"/>
+        <location filename="../host/ui/config_dialog.cc" line="611"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="211"/>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
-        <location filename="../host/ui/config_dialog.cc" line="625"/>
-        <location filename="../host/ui/config_dialog.cc" line="660"/>
+        <location filename="../host/ui/config_dialog.cc" line="611"/>
+        <location filename="../host/ui/config_dialog.cc" line="636"/>
+        <location filename="../host/ui/config_dialog.cc" line="671"/>
         <source>Export</source>
         <translation>내보내기</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="625"/>
+        <location filename="../host/ui/config_dialog.cc" line="636"/>
         <source>MSI-files (*.msi)</source>
         <translation>MSI 파일 (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="635"/>
+        <location filename="../host/ui/config_dialog.cc" line="646"/>
         <source>The installer was successfully exported.</source>
         <translation>설치 프로그램을 성공적으로 내보냈습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="639"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>The installed host package was not found.</source>
         <translation>설치된 호스트 패키지를 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="643"/>
+        <location filename="../host/ui/config_dialog.cc" line="654"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>설치된 호스트 버전은 설치 프로그램 내보내기를 지원하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="647"/>
+        <location filename="../host/ui/config_dialog.cc" line="658"/>
         <source>Unable to export the installer.</source>
         <translation>설치 프로그램을 내보낼 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="660"/>
+        <location filename="../host/ui/config_dialog.cc" line="671"/>
         <source>Executable files (*.exe)</source>
         <translation>실행 파일 (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="670"/>
+        <location filename="../host/ui/config_dialog.cc" line="681"/>
         <source>The portable version was successfully exported.</source>
         <translation>포터블 버전을 성공적으로 내보냈습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="674"/>
+        <location filename="../host/ui/config_dialog.cc" line="685"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>포터블 버전은 라우터를 통해서만 작동합니다. 라우터 연결을 설정하고 설정을 저장하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="678"/>
+        <location filename="../host/ui/config_dialog.cc" line="689"/>
         <source>Unable to export the portable version.</source>
         <translation>포터블 버전을 내보낼 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="699"/>
+        <location filename="../host/ui/config_dialog.cc" line="710"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>구성을 저장할 수 없습니다. 쓰기 권한이 충분한지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="715"/>
+        <location filename="../host/ui/config_dialog.cc" line="726"/>
         <source>An invalid update server address was entered.</source>
         <translation>잘못된 업데이트 서버 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="723"/>
+        <location filename="../host/ui/config_dialog.cc" line="734"/>
         <source>Enter the update server address.</source>
         <translation>업데이트 서버 주소를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="744"/>
         <source>An invalid public key was entered.</source>
         <translation>잘못된 공개 키를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="752"/>
+        <location filename="../host/ui/config_dialog.cc" line="763"/>
         <source>Incorrect proxy address entered.</source>
         <translation>잘못된 프록시 서버 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="764"/>
+        <location filename="../host/ui/config_dialog.cc" line="775"/>
         <source>Incorrect router address entered.</source>
         <translation>잘못된 라우터 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="774"/>
+        <location filename="../host/ui/config_dialog.cc" line="785"/>
         <source>Incorrect router public key entered.</source>
         <translation>잘못된 라우터 공개 키를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="946"/>
+        <location filename="../host/ui/config_dialog.cc" line="957"/>
         <source>Install</source>
         <translation>설치</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="951"/>
+        <location filename="../host/ui/config_dialog.cc" line="962"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
@@ -1758,84 +1764,84 @@ Password: %2</source>
         <translation>암호:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="46"/>
         <source>Aspia Credentials</source>
         <translation>Aspia 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="48"/>
         <source>OS Credentials</source>
         <translation>OS 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>사용자 이름을 입력하십시오(예: %1). 도메인에 속한 컴퓨터에서는 도메인 계정으로 처리됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>다른 도메인의 계정인 경우 도메인을 추가하십시오(예: %1 또는 %2).</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>도메인에 속한 컴퓨터의 로컬 계정인 경우 이름 앞에 %1 접두사를 추가하십시오(예: %2).</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="66"/>
         <source>Edit Credentials</source>
         <translation>자격 증명 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="66"/>
         <source>Add Credentials</source>
         <translation>자격 증명 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="127"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="135"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Invalid user name.</source>
         <translation>잘못된 사용자 이름입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="158"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="167"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="185"/>
         <source>Unable to add credentials</source>
         <translation>자격 증명을 추가할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="196"/>
         <source>Unable to modify credentials</source>
         <translation>자격 증명을 수정할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="227"/>
         <source>Failed to read the credentials.</source>
         <translation>자격 증명을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="243"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>자격 증명이 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
@@ -1843,91 +1849,91 @@ Password: %2</source>
 <context>
     <name>CredentialEditor</name>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="54"/>
+        <location filename="../client/android/credential_editor.cc" line="55"/>
         <source>Type</source>
         <translation>유형</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="55"/>
+        <location filename="../client/android/credential_editor.cc" line="56"/>
         <source>Aspia Credentials</source>
         <translation>Aspia 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="57"/>
+        <location filename="../client/android/credential_editor.cc" line="58"/>
         <source>OS Credentials</source>
         <translation>OS 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="60"/>
+        <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="61"/>
+        <location filename="../client/android/credential_editor.cc" line="63"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="62"/>
+        <location filename="../client/android/credential_editor.cc" line="64"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="71"/>
+        <location filename="../client/android/credential_editor.cc" line="73"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="74"/>
-        <location filename="../client/android/credential_editor.cc" line="225"/>
+        <location filename="../client/android/credential_editor.cc" line="76"/>
+        <location filename="../client/android/credential_editor.cc" line="221"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="148"/>
+        <location filename="../client/android/credential_editor.cc" line="261"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>자격 증명이 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="160"/>
+        <location filename="../client/android/credential_editor.cc" line="155"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_editor.cc" line="167"/>
+        <location filename="../client/android/credential_editor.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="180"/>
-        <location filename="../client/android/credential_editor.cc" line="188"/>
+        <location filename="../client/android/credential_editor.cc" line="175"/>
+        <location filename="../client/android/credential_editor.cc" line="183"/>
         <source>Invalid user name.</source>
         <translation>잘못된 사용자 이름입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="196"/>
+        <location filename="../client/android/credential_editor.cc" line="191"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="214"/>
+        <location filename="../client/android/credential_editor.cc" line="209"/>
         <source>Failed to save the credentials.</source>
         <translation>자격 증명을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="224"/>
+        <location filename="../client/android/credential_editor.cc" line="220"/>
         <source>Delete Credentials</source>
         <translation>자격 증명 삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="225"/>
+        <location filename="../client/android/credential_editor.cc" line="221"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 자격 증명을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="232"/>
+        <location filename="../client/android/credential_editor.cc" line="228"/>
         <source>Failed to delete the credentials.</source>
         <translation>자격 증명을 삭제하지 못했습니다.</translation>
     </message>
@@ -2008,26 +2014,26 @@ Credentials exported: %1</source>
         <translation>OS 자격 증명</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="288"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="289"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="296"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="297"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="297"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="298"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="300"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="301"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
@@ -2136,32 +2142,32 @@ Credentials exported: %1</source>
         <translation>암호:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="68"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="74"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="87"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="93"/>
         <source>Check all</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="113"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="119"/>
         <source>Uncheck all</source>
         <translation>모두 선택 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="149"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="155"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="154"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="160"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="159"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="165"/>
         <source>Status</source>
         <translation>상태</translation>
     </message>
@@ -2211,17 +2217,17 @@ Credentials exported: %1</source>
         <translation>OS 자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="161"/>
         <source>Exists</source>
         <translation>기존</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="161"/>
         <source>New</source>
         <translation>신규</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="243"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="241"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
@@ -2230,7 +2236,7 @@ Credentials replaced: %3</source>
 대체된 자격 증명: %3</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="253"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="254"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2242,42 +2248,42 @@ Credentials replaced: %2</source>
 <context>
     <name>CredentialImportWidget</name>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="51"/>
+        <location filename="../client/android/credential_import_widget.cc" line="52"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="61"/>
+        <location filename="../client/android/credential_import_widget.cc" line="62"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="130"/>
+        <location filename="../client/android/credential_import_widget.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="143"/>
+        <location filename="../client/android/credential_import_widget.cc" line="144"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>지정한 암호로 파일의 암호를 해독할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="149"/>
+        <location filename="../client/android/credential_import_widget.cc" line="150"/>
         <source>Unable to read the file.</source>
         <translation>파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="153"/>
+        <location filename="../client/android/credential_import_widget.cc" line="154"/>
         <source>Unsupported file format version.</source>
         <translation>지원되지 않는 파일 형식 버전입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="157"/>
+        <location filename="../client/android/credential_import_widget.cc" line="158"/>
         <source>The file is not a valid credentials file.</source>
         <translation>파일이 올바른 자격 증명 파일이 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="161"/>
+        <location filename="../client/android/credential_import_widget.cc" line="162"/>
         <source>Failed to import the credentials.</source>
         <translation>자격 증명을 가져오지 못했습니다.</translation>
     </message>
@@ -2293,7 +2299,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="233"/>
-        <location filename="../client/android/credential_import_widget.cc" line="243"/>
+        <location filename="../client/android/credential_import_widget.cc" line="246"/>
         <source>Import Credentials</source>
         <translation>자격 증명 가져오기</translation>
     </message>
@@ -2307,7 +2313,7 @@ Credentials replaced: %3</source>
 대체된 자격 증명: %3</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="244"/>
+        <location filename="../client/android/credential_import_widget.cc" line="247"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2316,17 +2322,17 @@ Credentials replaced: %2</source>
 대체된 자격 증명: %2</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="254"/>
+        <location filename="../client/android/credential_import_widget.cc" line="257"/>
         <source>The checked credentials will be imported, and the ones that already exist will be replaced.</source>
         <translation>선택한 자격 증명을 가져오며, 이미 있는 자격 증명은 대체됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="256"/>
+        <location filename="../client/android/credential_import_widget.cc" line="259"/>
         <source>Enter the password the file was exported with.</source>
         <translation>파일을 내보낼 때 사용한 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="269"/>
+        <location filename="../client/android/credential_import_widget.cc" line="272"/>
         <source>Import (%1)</source>
         <translation>가져오기 (%1)</translation>
     </message>
@@ -2362,17 +2368,17 @@ Credentials replaced: %2</source>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="65"/>
         <source>Sign In</source>
         <translation>로그인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="72"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="53"/>
         <source>Not Selected</source>
         <translation>선택되지 않음</translation>
     </message>
@@ -2445,17 +2451,17 @@ Credentials replaced: %2</source>
         <translation>자격 증명 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="209"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 자격 증명을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="217"/>
         <source>Unable to delete credentials.</source>
         <translation>자격 증명을 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="263"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
@@ -2463,35 +2469,35 @@ Credentials replaced: %2</source>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="168"/>
+        <location filename="../client/android/credentials_widget.cc" line="169"/>
         <source>Add Credentials</source>
         <translation>자격 증명 추가</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="178"/>
-        <location filename="../client/android/credentials_widget.cc" line="208"/>
-        <location filename="../client/android/credentials_widget.cc" line="214"/>
+        <location filename="../client/android/credentials_widget.cc" line="179"/>
+        <location filename="../client/android/credentials_widget.cc" line="227"/>
+        <location filename="../client/android/credentials_widget.cc" line="233"/>
         <source>Import Credentials</source>
         <translation>자격 증명 가져오기</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="179"/>
-        <location filename="../client/android/credentials_widget.cc" line="200"/>
+        <location filename="../client/android/credentials_widget.cc" line="180"/>
+        <location filename="../client/android/credentials_widget.cc" line="219"/>
         <source>Export Credentials</source>
         <translation>자격 증명 내보내기</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="208"/>
+        <location filename="../client/android/credentials_widget.cc" line="227"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
         <translation>Aspia 자격 증명 (*.aspia-credentials)</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="225"/>
+        <location filename="../client/android/credentials_widget.cc" line="244"/>
         <source>Edit Credentials</source>
         <translation>자격 증명 편집</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="244"/>
+        <location filename="../client/android/credentials_widget.cc" line="210"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
@@ -2566,7 +2572,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1013"/>
         <source>Scale</source>
         <translation>배율</translation>
     </message>
@@ -2656,7 +2662,7 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="613"/>
         <source>Start recording</source>
         <translation>녹화 시작</translation>
     </message>
@@ -2678,69 +2684,69 @@ Credentials replaced: %2</source>
         <translation>세션 전환</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="400"/>
         <source>Resolution selection</source>
         <translation>해상도 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="513"/>
         <source>Scripts</source>
         <translation>스크립트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="576"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>원격 컴퓨터에서 &quot;%1&quot; 스크립트를 실행하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="608"/>
         <source>Stop recording</source>
         <translation>녹화 중지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>원격 컴퓨터를 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
         <source>Confirmation</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>원격 컴퓨터를 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Wait for host</source>
         <translation>호스트 대기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="877"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>원격 컴퓨터를 안전 모드로 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="909"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 끝내시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="924"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 잠그시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
         <source>Session %1</source>
         <translation>세션 %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
         <source>Session %1 (%2)</source>
         <translation>세션 %1 (%2)</translation>
     </message>
@@ -2781,188 +2787,188 @@ Credentials replaced: %2</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="80"/>
+        <location filename="../client/android/desktop_window.cc" line="83"/>
         <source>Session %1</source>
         <translation>세션 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="84"/>
         <source>Session %1 (%2)</source>
         <translation>세션 %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="508"/>
+        <location filename="../client/android/desktop_window.cc" line="522"/>
         <source>Connecting...</source>
         <translation>연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="531"/>
+        <location filename="../client/android/desktop_window.cc" line="545"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="532"/>
+        <location filename="../client/android/desktop_window.cc" line="546"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="552"/>
         <source>Connecting to router...</source>
         <translation>라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="559"/>
+        <location filename="../client/android/desktop_window.cc" line="573"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="768"/>
+        <location filename="../client/android/desktop_window.cc" line="782"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="788"/>
         <source>Connection established.</source>
         <translation>연결되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="787"/>
+        <location filename="../client/android/desktop_window.cc" line="801"/>
         <source>The connection to the host has been lost.</source>
         <translation>호스트와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="800"/>
+        <location filename="../client/android/desktop_window.cc" line="814"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>호스트 버전이 클라이언트보다 최신입니다. 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="164"/>
+        <location filename="../client/android/desktop_window.cc" line="167"/>
         <source>Monitor %1</source>
         <translation>모니터 %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="172"/>
+        <location filename="../client/android/desktop_window.cc" line="175"/>
         <source>Power</source>
         <translation>전원</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="176"/>
+        <location filename="../client/android/desktop_window.cc" line="179"/>
         <source>Keyboard</source>
         <translation>키보드</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="182"/>
+        <location filename="../client/android/desktop_window.cc" line="185"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="189"/>
+        <location filename="../client/android/desktop_window.cc" line="192"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="194"/>
+        <location filename="../client/android/desktop_window.cc" line="197"/>
         <source>Disconnect</source>
         <translation>연결 끊기</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="655"/>
-        <location filename="../client/android/desktop_window.cc" line="712"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="726"/>
         <source>Back</source>
         <translation>뒤로</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="656"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Shutdown</source>
         <translation>시스템 종료</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="657"/>
+        <location filename="../client/android/desktop_window.cc" line="671"/>
         <source>Reboot</source>
         <translation>다시 시작</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="676"/>
         <source>Safe Mode</source>
         <translation>안전 모드</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="677"/>
         <source>Logoff</source>
         <translation>로그오프</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="678"/>
         <source>Lock</source>
         <translation>잠금</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="680"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>원격 컴퓨터를 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="684"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>원격 컴퓨터를 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="688"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>원격 컴퓨터를 안전 모드로 다시 시작하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="692"/>
+        <location filename="../client/android/desktop_window.cc" line="706"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 끝내시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="696"/>
+        <location filename="../client/android/desktop_window.cc" line="710"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>원격 컴퓨터의 사용자 세션을 잠그시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Confirmation</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1149"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1153"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1154"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG 이미지 (*.png);;BMP 이미지 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1181"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1185"/>
         <source>Could not save image</source>
         <translation>이미지를 저장할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1434"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1438"/>
         <source>Invalid user name or password.</source>
         <translation>사용자 이름 또는 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1437"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1441"/>
         <source>The password has expired.</source>
         <translation>암호가 만료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1440"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1444"/>
         <source>The account is locked out.</source>
         <translation>계정이 잠겨 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1443"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1447"/>
         <source>The account is disabled.</source>
         <translation>계정이 사용 안 함 상태입니다.</translation>
     </message>
@@ -3177,109 +3183,109 @@ Credentials replaced: %2</source>
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="128"/>
         <source>Up</source>
         <translation>위로</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="131"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>상위 폴더로 이동 (Backspace)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="140"/>
         <source>Refresh</source>
         <translation>새로 고침</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="143"/>
         <source>Refresh (F5)</source>
         <translation>새로 고침 (F5)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="155"/>
         <source>New Folder</source>
         <translation>새 폴더</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="158"/>
         <source>Create a new folder</source>
         <translation>새 폴더 만들기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="170"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="173"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>선택한 개체 삭제 (Delete)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="202"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="185"/>
         <source>Send</source>
         <translation>보내기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="205"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="188"/>
         <source>Send selected object(s) (F11)</source>
         <translation>선택한 개체 보내기 (F11)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="227"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="245"/>
         <source>Failed to get list of drives: %1</source>
         <translation>드라이브 목록을 가져오지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="244"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="262"/>
         <source>Failed to get list of files: %1</source>
         <translation>파일 목록을 가져오지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="269"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="287"/>
         <source>Failed to create directory: %1</source>
         <translation>디렉터리를 만들지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="281"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="299"/>
         <source>Failed to rename item: %1</source>
         <translation>항목 이름을 바꾸지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="427"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="445"/>
         <source>%1 object(s) selected</source>
         <translation>개체 %1개 선택됨</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="455"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="473"/>
         <source>&amp;Send	F11</source>
         <translation>보내기(&amp;S)	F11</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="474"/>
         <source>&amp;Delete	Delete</source>
         <translation>삭제(&amp;D)	Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="466"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="484"/>
         <source>&amp;Create Folder</source>
         <translation>폴더 만들기(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="488"/>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="507"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="506"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="525"/>
         <source>Folder name can not be empty.</source>
         <translation>폴더 이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="494"/>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="513"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="512"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="531"/>
         <source>Name contains invalid characters.</source>
         <translation>이름에 잘못된 문자가 포함되어 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="191"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="209"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>선택한 항목을 삭제하시겠습니까?</translation>
     </message>
@@ -3617,91 +3623,91 @@ Credentials replaced: %2</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="57"/>
-        <location filename="../client/android/file_transfer_window.cc" line="179"/>
-        <location filename="../client/android/file_transfer_window.cc" line="420"/>
-        <location filename="../client/android/file_transfer_window.cc" line="431"/>
+        <location filename="../client/android/file_transfer_window.cc" line="60"/>
+        <location filename="../client/android/file_transfer_window.cc" line="182"/>
+        <location filename="../client/android/file_transfer_window.cc" line="435"/>
+        <location filename="../client/android/file_transfer_window.cc" line="446"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="62"/>
-        <location filename="../client/android/file_transfer_window.cc" line="75"/>
+        <location filename="../client/android/file_transfer_window.cc" line="65"/>
+        <location filename="../client/android/file_transfer_window.cc" line="78"/>
         <source>This Device</source>
         <translation>이 장치</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="138"/>
+        <location filename="../client/android/file_transfer_window.cc" line="141"/>
         <source>Connecting to host %1...</source>
         <translation>%1 호스트에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="158"/>
+        <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The connection to the host has been lost.</source>
         <translation>호스트와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="168"/>
+        <location filename="../client/android/file_transfer_window.cc" line="171"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>호스트 버전이 클라이언트보다 최신입니다. 응용 프로그램을 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="180"/>
+        <location filename="../client/android/file_transfer_window.cc" line="183"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
         <translation>호스트에 로그인한 사용자가 없습니다. 세션을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="264"/>
+        <location filename="../client/android/file_transfer_window.cc" line="279"/>
         <source>Connecting...</source>
         <translation>연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="287"/>
+        <location filename="../client/android/file_transfer_window.cc" line="302"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="288"/>
+        <location filename="../client/android/file_transfer_window.cc" line="303"/>
         <source>The specified router is unavailable.</source>
         <translation>지정한 라우터를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="294"/>
+        <location filename="../client/android/file_transfer_window.cc" line="309"/>
         <source>Connecting to router...</source>
         <translation>라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="315"/>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
         <source>Requesting connection to the host...</source>
         <translation>호스트에 연결을 요청하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="327"/>
+        <location filename="../client/android/file_transfer_window.cc" line="342"/>
         <source>Error requesting connection via router.</source>
         <translation>라우터를 통한 연결을 요청하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="421"/>
+        <location filename="../client/android/file_transfer_window.cc" line="436"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>먼저 반대쪽에서 대상 폴더를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="474"/>
+        <location filename="../client/android/file_transfer_window.cc" line="489"/>
         <source>Deleting</source>
         <translation>삭제 중</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="52"/>
         <source>Local Computer</source>
         <translation>로컬 컴퓨터</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="53"/>
         <source>Remote Computer</source>
         <translation>원격 컴퓨터</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="348"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="337"/>
         <source>Session error: %1</source>
         <translation>세션 오류: %1</translation>
     </message>
@@ -3810,17 +3816,17 @@ Credentials replaced: %2</source>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="690"/>
+        <location filename="../base/gui_application.cc" line="811"/>
         <source>Dark</source>
         <translation>어둡게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="692"/>
+        <location filename="../base/gui_application.cc" line="813"/>
         <source>Light</source>
         <translation>밝게</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="693"/>
+        <location filename="../base/gui_application.cc" line="814"/>
         <source>Auto</source>
         <translation>자동</translation>
     </message>
@@ -4202,62 +4208,62 @@ Credentials replaced: %2</source>
         <translation>메모:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="54"/>
         <source>Edit Group</source>
         <translation>그룹 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="54"/>
         <source>Add Group</source>
         <translation>그룹 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="190"/>
         <source>Failed to read the group.</source>
         <translation>그룹을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="222"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="82"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="90"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="120"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="114"/>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="185"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="135"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="206"/>
         <source>Failed to read the list of groups.</source>
         <translation>그룹 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="144"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>선택한 상위 그룹에 같은 이름의 그룹이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="141"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="160"/>
         <source>Unable to add group</source>
         <translation>그룹을 추가할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="169"/>
         <source>Unable to modify group</source>
         <translation>그룹을 수정할 수 없음</translation>
     </message>
@@ -4265,62 +4271,62 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupEditor</name>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="48"/>
+        <location filename="../client/android/local_group_editor.cc" line="49"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="49"/>
+        <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
         <translation>메모</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="57"/>
+        <location filename="../client/android/local_group_editor.cc" line="60"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="60"/>
-        <location filename="../client/android/local_group_editor.cc" line="175"/>
+        <location filename="../client/android/local_group_editor.cc" line="63"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="132"/>
+        <location filename="../client/android/local_group_editor.cc" line="138"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="139"/>
+        <location filename="../client/android/local_group_editor.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="148"/>
+        <location filename="../client/android/local_group_editor.cc" line="154"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="164"/>
+        <location filename="../client/android/local_group_editor.cc" line="170"/>
         <source>Failed to save the group.</source>
         <translation>그룹을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="174"/>
+        <location filename="../client/android/local_group_editor.cc" line="181"/>
         <source>Delete Group</source>
         <translation>그룹 삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="175"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Delete the group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="182"/>
+        <location filename="../client/android/local_group_editor.cc" line="189"/>
         <source>Failed to delete the group.</source>
         <translation>그룹을 삭제하지 못했습니다.</translation>
     </message>
@@ -4328,7 +4334,7 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="171"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
@@ -4396,101 +4402,96 @@ Credentials replaced: %2</source>
         <translation>메모:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="64"/>
         <source>Edit Host</source>
         <translation>호스트 편집</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="64"/>
         <source>Add Host</source>
         <translation>호스트 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="313"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="322"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="129"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="152"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="148"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="171"/>
         <source>An invalid host address was entered.</source>
         <translation>잘못된 호스트 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="169"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="190"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
         <source>Failed to read data from the local database.</source>
         <translation>로컬 데이터베이스에서 데이터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="199"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>선택한 그룹에 같은 이름의 호스트가 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="223"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>호스트를 추가할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="233"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>호스트를 수정할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="253"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="284"/>
         <source>Failed to read the list of credentials.</source>
         <translation>자격 증명 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="291"/>
         <source>Failed to read the list of profiles.</source>
         <translation>프로필 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="289"/>
-        <source>Default</source>
-        <translation>기본값</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="297"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="307"/>
         <source>Failed to read the list of groups.</source>
         <translation>그룹 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="325"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="339"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>로컬 데이터베이스에서 호스트 정보를 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="360"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="368"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
@@ -4498,177 +4499,172 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="54"/>
+        <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>
         <translation>기존 자격 증명 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="62"/>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>Address / ID</source>
         <translation>주소 / ID</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
+        <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="67"/>
+        <location filename="../client/android/local_host_editor.cc" line="70"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="69"/>
+        <location filename="../client/android/local_host_editor.cc" line="72"/>
         <source>Comment</source>
         <translation>메모</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="77"/>
+        <location filename="../client/android/local_host_editor.cc" line="81"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="80"/>
-        <location filename="../client/android/local_host_editor.cc" line="279"/>
+        <location filename="../client/android/local_host_editor.cc" line="84"/>
+        <location filename="../client/android/local_host_editor.cc" line="283"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="170"/>
+        <location filename="../client/android/local_host_editor.cc" line="329"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="196"/>
-        <location filename="../client/android/local_host_editor.cc" line="304"/>
-        <location filename="../client/android/local_host_editor.cc" line="341"/>
+        <location filename="../client/android/local_host_editor.cc" line="199"/>
+        <location filename="../client/android/local_host_editor.cc" line="340"/>
+        <location filename="../client/android/local_host_editor.cc" line="362"/>
         <source>Failed to read data from the local database.</source>
         <translation>로컬 데이터베이스에서 데이터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="68"/>
+        <location filename="../client/android/local_host_editor.cc" line="71"/>
         <source>Profile</source>
         <translation>프로필</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="203"/>
+        <location filename="../client/android/local_host_editor.cc" line="206"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="210"/>
+        <location filename="../client/android/local_host_editor.cc" line="213"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="219"/>
+        <location filename="../client/android/local_host_editor.cc" line="222"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>메모가 너무 깁니다. 메모의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="229"/>
+        <location filename="../client/android/local_host_editor.cc" line="232"/>
         <source>An invalid host address was entered.</source>
         <translation>잘못된 호스트 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="240"/>
+        <location filename="../client/android/local_host_editor.cc" line="243"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="249"/>
+        <location filename="../client/android/local_host_editor.cc" line="252"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="268"/>
+        <location filename="../client/android/local_host_editor.cc" line="271"/>
         <source>Failed to save the host.</source>
         <translation>호스트를 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="278"/>
+        <location filename="../client/android/local_host_editor.cc" line="282"/>
         <source>Delete Host</source>
         <translation>호스트 삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="279"/>
+        <location filename="../client/android/local_host_editor.cc" line="283"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="286"/>
+        <location filename="../client/android/local_host_editor.cc" line="290"/>
         <source>Failed to delete the host.</source>
         <translation>호스트를 삭제하지 못했습니다.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="353"/>
-        <source>Default</source>
-        <translation>기본값</translation>
     </message>
 </context>
 <context>
     <name>LocalHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="284"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="239"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="287"/>
         <source>Address / ID</source>
         <translation>주소 / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="242"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="290"/>
         <source>Comment</source>
         <translation>메모</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="245"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="293"/>
         <source>Created</source>
         <translation>만든 날짜</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="248"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="296"/>
         <source>Modified</source>
         <translation>수정한 날짜</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="251"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="299"/>
         <source>Last Connect</source>
         <translation>마지막 연결</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="254"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="302"/>
         <source>Status</source>
         <translation>상태</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="385"/>
         <source>Online</source>
         <translation>온라인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="340"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="388"/>
         <source>Offline</source>
         <translation>오프라인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="343"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="391"/>
         <source>Skipped</source>
         <translation>건너뜀</translation>
     </message>
@@ -4676,142 +4672,147 @@ Credentials replaced: %2</source>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="444"/>
+        <location filename="../client/android/local_widget.cc" line="318"/>
+        <location filename="../client/android/local_widget.cc" line="473"/>
         <source>Add Group</source>
         <translation>그룹 추가</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="296"/>
-        <location filename="../client/android/local_widget.cc" line="454"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="483"/>
         <source>Add Host</source>
         <translation>호스트 추가</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="355"/>
+        <location filename="../client/android/local_widget.cc" line="384"/>
         <source>Invalid password.</source>
         <translation>잘못된 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="402"/>
+        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="431"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Aspia 백업 (*.aspia-backup)</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="382"/>
+        <location filename="../client/android/local_widget.cc" line="411"/>
         <source>Router hosts imported: %1</source>
         <translation>가져온 라우터 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="383"/>
+        <location filename="../client/android/local_widget.cc" line="412"/>
         <source>Local groups imported: %1</source>
         <translation>가져온 로컬 그룹: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="384"/>
+        <location filename="../client/android/local_widget.cc" line="413"/>
         <source>Local hosts imported: %1</source>
         <translation>가져온 로컬 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="385"/>
+        <location filename="../client/android/local_widget.cc" line="414"/>
         <source>Credentials imported: %1</source>
         <translation>가져온 자격 증명: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="386"/>
+        <location filename="../client/android/local_widget.cc" line="415"/>
         <source>Profiles imported: %1</source>
         <translation>가져온 프로필: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="415"/>
+        <location filename="../client/android/local_widget.cc" line="444"/>
         <source>Unable to write the file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="297"/>
         <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="324"/>
-        <location filename="../client/android/local_widget.cc" line="373"/>
-        <location filename="../client/android/local_widget.cc" line="392"/>
+        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
+        <location filename="../client/android/local_widget.cc" line="402"/>
+        <location filename="../client/android/local_widget.cc" line="421"/>
         <source>Restore from Backup</source>
         <translation>백업에서 복원</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="298"/>
-        <location filename="../client/android/local_widget.cc" line="401"/>
-        <location filename="../client/android/local_widget.cc" line="429"/>
-        <location filename="../client/android/local_widget.cc" line="433"/>
+        <location filename="../client/android/local_widget.cc" line="321"/>
+        <location filename="../client/android/local_widget.cc" line="430"/>
+        <location filename="../client/android/local_widget.cc" line="458"/>
+        <location filename="../client/android/local_widget.cc" line="462"/>
         <source>Create Backup</source>
         <translation>백업 만들기</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="325"/>
+        <location filename="../client/android/local_widget.cc" line="352"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. The synchronized data on the router and on the other devices of the account saved in the backup will be replaced as well.</source>
+        <translation>현재 저장된 모든 내용이 삭제되고 백업에 있는 내용으로 바뀝니다. 라우터와, 백업에 저장된 계정의 다른 장치에 있는 동기화된 데이터도 바뀝니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="355"/>
         <source>Everything stored now is deleted and replaced with what the backup holds.</source>
         <translation>현재 저장된 모든 내용이 삭제되고 백업에 있는 내용으로 바뀝니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="326"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
         <source>Restore</source>
         <translation>복원</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="359"/>
+        <location filename="../client/android/local_widget.cc" line="388"/>
         <source>Unsupported file format version.</source>
         <translation>지원되지 않는 파일 형식 버전입니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="363"/>
+        <location filename="../client/android/local_widget.cc" line="392"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>백업에 데이터가 없으므로 아무것도 변경되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="367"/>
+        <location filename="../client/android/local_widget.cc" line="396"/>
         <source>Failed to restore from the backup.</source>
         <translation>백업에서 복원하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="380"/>
+        <location filename="../client/android/local_widget.cc" line="409"/>
         <source>Router imported</source>
         <translation>라우터를 가져왔습니다</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="419"/>
+        <location filename="../client/android/local_widget.cc" line="448"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="423"/>
+        <location filename="../client/android/local_widget.cc" line="452"/>
         <source>Failed to create the backup.</source>
         <translation>백업을 만들지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="434"/>
+        <location filename="../client/android/local_widget.cc" line="463"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>파일이 %1에 저장되었습니다. 다른 곳에서 열려면 이 설치본의 마스터 암호가 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="542"/>
+        <location filename="../client/android/local_widget.cc" line="604"/>
         <source>Edit Group</source>
         <translation>그룹 편집</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="553"/>
+        <location filename="../client/android/local_widget.cc" line="615"/>
         <source>Edit Host</source>
         <translation>호스트 편집</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="663"/>
+        <location filename="../client/android/local_widget.cc" line="742"/>
         <source>Desktop</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="665"/>
+        <location filename="../client/android/local_widget.cc" line="744"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="667"/>
+        <location filename="../client/android/local_widget.cc" line="746"/>
         <source>Chat</source>
         <translation>채팅</translation>
     </message>
@@ -4820,7 +4821,7 @@ Credentials replaced: %2</source>
     <name>MainWindow</name>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="572"/>
+        <location filename="../client/desktop/main_window.cc" line="574"/>
         <source>Aspia Client</source>
         <translation>Aspia 클라이언트</translation>
     </message>
@@ -4926,72 +4927,72 @@ Credentials replaced: %2</source>
         <translation>항상 위</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="126"/>
+        <location filename="../client/desktop/main_window.cc" line="129"/>
         <source>Search...</source>
         <translation>검색...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="218"/>
+        <location filename="../client/desktop/main_window.cc" line="220"/>
         <source>The MCP connector is already in use by another window of the application.</source>
         <translation>MCP 커넥터가 이미 응용 프로그램의 다른 창에서 사용 중입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="220"/>
+        <location filename="../client/desktop/main_window.cc" line="222"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>MCP 커넥터를 켤 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="243"/>
+        <location filename="../client/desktop/main_window.cc" line="245"/>
         <source>Management</source>
         <translation>관리</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="286"/>
+        <location filename="../client/desktop/main_window.cc" line="288"/>
         <source>Are you sure you want to close the application?</source>
         <translation>응용 프로그램을 닫으시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="527"/>
+        <location filename="../client/desktop/main_window.cc" line="529"/>
         <source>Close all sessions to change the database.</source>
         <translation>데이터베이스를 전환하려면 모든 세션을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="533"/>
+        <location filename="../client/desktop/main_window.cc" line="535"/>
         <source>Close all dialogs to change the database.</source>
         <translation>데이터베이스를 전환하려면 모든 대화 상자를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="548"/>
+        <location filename="../client/desktop/main_window.cc" line="550"/>
         <source>Close all sessions to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 세션을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="554"/>
+        <location filename="../client/desktop/main_window.cc" line="556"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>응용 프로그램을 잠그려면 모든 대화 상자를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="915"/>
+        <location filename="../client/desktop/main_window.cc" line="917"/>
         <source>Unknown application</source>
         <translation>알 수 없는 응용 프로그램</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="918"/>
+        <location filename="../client/desktop/main_window.cc" line="920"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>MCP 커넥터. 연결됨: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="919"/>
+        <location filename="../client/desktop/main_window.cc" line="921"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - AI 연결됨</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="480"/>
+        <location filename="../client/desktop/main_window.cc" line="482"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="517"/>
+        <location filename="../client/desktop/main_window.cc" line="519"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -5030,7 +5031,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
-        <location filename="../client/desktop/management_tab.cc" line="1972"/>
+        <location filename="../client/desktop/management_tab.cc" line="1945"/>
         <source>Delete Host</source>
         <translation>호스트 삭제</translation>
     </message>
@@ -5167,272 +5168,277 @@ Credentials replaced: %2</source>
         <translation>상태 자동 새로 고침</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1052"/>
-        <location filename="../client/desktop/management_tab.cc" line="1129"/>
-        <location filename="../client/desktop/management_tab.cc" line="2188"/>
+        <location filename="../client/desktop/management_tab.cc" line="1011"/>
+        <location filename="../client/desktop/management_tab.cc" line="1090"/>
+        <location filename="../client/desktop/management_tab.cc" line="2161"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>로컬 데이터베이스에서 호스트 정보를 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1084"/>
+        <location filename="../client/desktop/management_tab.cc" line="1041"/>
         <source>(copy)</source>
         <translation>(복사본)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1089"/>
+        <location filename="../client/desktop/management_tab.cc" line="1046"/>
         <source>Failed to add the host to the local database.</source>
         <translation>로컬 데이터베이스에 호스트를 추가하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1147"/>
+        <location filename="../client/desktop/management_tab.cc" line="1108"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1175"/>
+        <location filename="../client/desktop/management_tab.cc" line="1139"/>
         <source>Unable to remove host</source>
         <translation>호스트를 제거할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1243"/>
-        <location filename="../client/desktop/management_tab.cc" line="1320"/>
-        <location filename="../client/desktop/management_tab.cc" line="1353"/>
-        <location filename="../client/desktop/management_tab.cc" line="1376"/>
+        <location filename="../client/desktop/management_tab.cc" line="1207"/>
+        <location filename="../client/desktop/management_tab.cc" line="1284"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
+        <location filename="../client/desktop/management_tab.cc" line="1340"/>
         <source>Copy Row</source>
         <translation>행 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1244"/>
-        <location filename="../client/desktop/management_tab.cc" line="1321"/>
-        <location filename="../client/desktop/management_tab.cc" line="1354"/>
-        <location filename="../client/desktop/management_tab.cc" line="1377"/>
+        <location filename="../client/desktop/management_tab.cc" line="1208"/>
+        <location filename="../client/desktop/management_tab.cc" line="1285"/>
+        <location filename="../client/desktop/management_tab.cc" line="1318"/>
+        <location filename="../client/desktop/management_tab.cc" line="1341"/>
         <source>Copy Value</source>
         <translation>값 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1575"/>
         <source>Failed to delete the group.</source>
         <translation>그룹을 삭제하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1649"/>
-        <location filename="../client/desktop/management_tab.cc" line="1705"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
         <source>The database is not available.</source>
         <translation>데이터베이스를 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1655"/>
+        <location filename="../client/desktop/management_tab.cc" line="1619"/>
         <source>Create Backup</source>
         <translation>백업 만들기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1687"/>
+        <location filename="../client/desktop/management_tab.cc" line="1651"/>
         <source>Router exported</source>
         <translation>라우터를 내보냈습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1783"/>
+        <location filename="../client/desktop/management_tab.cc" line="1756"/>
         <source>Router imported</source>
         <translation>라우터를 가져왔습니다</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2183"/>
+        <location filename="../client/desktop/management_tab.cc" line="2156"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>호스트의 데이터가 손상되었습니다. 호스트를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2203"/>
+        <location filename="../client/desktop/management_tab.cc" line="2176"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 라우터를 편집하여 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2209"/>
+        <location filename="../client/desktop/management_tab.cc" line="2182"/>
         <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
         <translation>호스트에 라우터를 통해 연결하도록 되어 있지만 라우터가 설정되지 않았습니다. 라우터를 추가하거나 ID 대신 호스트 주소를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2216"/>
+        <location filename="../client/desktop/management_tab.cc" line="2189"/>
         <source>Failed to read the router.</source>
         <translation>라우터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2222"/>
+        <location filename="../client/desktop/management_tab.cc" line="2195"/>
         <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
         <translation>라우터가 꺼져 있습니다. 이 호스트에 연결하려면 라우터 설정에서 라우터를 켜십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1680"/>
+        <location filename="../client/desktop/management_tab.cc" line="1644"/>
         <source>Failed to create the backup.</source>
         <translation>백업을 만들지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1711"/>
-        <location filename="../client/desktop/management_tab.cc" line="1737"/>
+        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1710"/>
         <source>Restore from Backup</source>
         <translation>백업에서 복원</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1720"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>현재 저장된 모든 내용이 삭제되고 백업에 있는 내용으로 바뀝니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>백업이 다른 설치본에서 만들어졌습니다. 해당 설치본의 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1764"/>
+        <location filename="../client/desktop/management_tab.cc" line="1737"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>백업에 데이터가 없으므로 아무것도 변경되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1772"/>
+        <location filename="../client/desktop/management_tab.cc" line="1745"/>
         <source>The file is not a valid backup.</source>
         <translation>파일이 올바른 백업이 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1776"/>
+        <location filename="../client/desktop/management_tab.cc" line="1749"/>
         <source>Failed to restore from the backup.</source>
         <translation>백업에서 복원하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1656"/>
-        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1676"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Aspia 백업 (*.aspia-backup);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>Unable to write the file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1768"/>
+        <location filename="../client/desktop/management_tab.cc" line="1741"/>
         <source>Unable to read the file.</source>
         <translation>파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="884"/>
+        <location filename="../client/desktop/management_tab.cc" line="843"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>&quot;%1&quot; 세션 유형은 빠른 지원에서 사용할 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1149"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>호스트 %n개를 삭제하시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1177"/>
+        <location filename="../client/desktop/management_tab.cc" line="1141"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 삭제하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1476"/>
+        <location filename="../client/desktop/management_tab.cc" line="1440"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 스페이스를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1496"/>
+        <location filename="../client/desktop/management_tab.cc" line="1460"/>
         <source>Failed to delete the space.</source>
         <translation>스페이스를 삭제하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1557"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까? 이 그룹 또는 하위 그룹에 할당된 호스트는 스페이스 루트로 이동됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1676"/>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1684"/>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
         <source>Export completed successfully.</source>
         <translation>내보내기가 완료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1689"/>
+        <location filename="../client/desktop/management_tab.cc" line="1653"/>
         <source>Router hosts exported: %1</source>
         <translation>내보낸 라우터 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1690"/>
+        <location filename="../client/desktop/management_tab.cc" line="1654"/>
         <source>Local groups exported: %1</source>
         <translation>내보낸 로컬 그룹: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1691"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>Local hosts exported: %1</source>
         <translation>내보낸 로컬 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Credentials exported: %1</source>
         <translation>내보낸 자격 증명: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1693"/>
+        <location filename="../client/desktop/management_tab.cc" line="1657"/>
         <source>Profiles exported: %1</source>
         <translation>내보낸 프로필: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1756"/>
+        <location filename="../client/desktop/management_tab.cc" line="1689"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. The synchronized data on the router and on the other devices of the account saved in the backup will be replaced as well. Continue?</source>
+        <translation>현재 저장된 모든 내용이 삭제되고 백업에 있는 내용으로 바뀝니다. 라우터와, 백업에 저장된 계정의 다른 장치에 있는 동기화된 데이터도 바뀝니다. 계속하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1729"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>지정한 암호로 파일의 암호를 해독할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1760"/>
+        <location filename="../client/desktop/management_tab.cc" line="1733"/>
         <source>Unsupported file format version.</source>
         <translation>지원되지 않는 파일 형식 버전입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1780"/>
+        <location filename="../client/desktop/management_tab.cc" line="1753"/>
         <source>Import completed successfully.</source>
         <translation>가져오기가 완료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1785"/>
+        <location filename="../client/desktop/management_tab.cc" line="1758"/>
         <source>Router hosts imported: %1</source>
         <translation>가져온 라우터 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1786"/>
+        <location filename="../client/desktop/management_tab.cc" line="1759"/>
         <source>Local groups imported: %1</source>
         <translation>가져온 로컬 그룹: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1787"/>
+        <location filename="../client/desktop/management_tab.cc" line="1760"/>
         <source>Local hosts imported: %1</source>
         <translation>가져온 로컬 호스트: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1788"/>
+        <location filename="../client/desktop/management_tab.cc" line="1761"/>
         <source>Credentials imported: %1</source>
         <translation>가져온 자격 증명: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1789"/>
+        <location filename="../client/desktop/management_tab.cc" line="1762"/>
         <source>Profiles imported: %1</source>
         <translation>가져온 프로필: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2031"/>
+        <location filename="../client/desktop/management_tab.cc" line="2004"/>
         <source>Delete Hosts</source>
         <translation>호스트 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2229"/>
+        <location filename="../client/desktop/management_tab.cc" line="2202"/>
         <source>The host has an invalid host ID.</source>
         <translation>호스트의 호스트 ID가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2238"/>
+        <location filename="../client/desktop/management_tab.cc" line="2211"/>
         <source>The host has an incorrect address.</source>
         <translation>호스트의 주소가 잘못되었습니다.</translation>
     </message>
@@ -5451,7 +5457,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="54"/>
-        <location filename="../client/android/master_password_dialog.cc" line="171"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
@@ -5508,18 +5514,18 @@ Credentials replaced: %2</source>
         <translation>마스터 암호를 설정할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="172"/>
+        <location filename="../client/android/master_password_dialog.cc" line="170"/>
         <source>Use password</source>
         <translation>암호 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="189"/>
-        <location filename="../client/android/master_password_dialog.cc" line="197"/>
+        <location filename="../client/android/master_password_dialog.cc" line="187"/>
+        <location filename="../client/android/master_password_dialog.cc" line="195"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>생체 인식 잠금 해제에 실패했습니다. 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>생체 인식 정보가 변경되었습니다. 계속하려면 마스터 암호를 입력하십시오.</translation>
     </message>
@@ -5996,167 +6002,176 @@ Credentials replaced: %2</source>
     </message>
 </context>
 <context>
+    <name>ProfileComboBox</name>
+    <message>
+        <location filename="../client/android/profile_combo_box.cc" line="71"/>
+        <location filename="../client/desktop/management/profile_combo_box.cc" line="70"/>
+        <source>Default</source>
+        <translation>기본값</translation>
+    </message>
+</context>
+<context>
     <name>ProfileEditor</name>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="48"/>
+        <location filename="../client/android/profile_editor.cc" line="49"/>
         <source>Enable audio</source>
         <translation>오디오 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="49"/>
+        <location filename="../client/android/profile_editor.cc" line="50"/>
         <source>Enable clipboard</source>
         <translation>클립보드 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="50"/>
+        <location filename="../client/android/profile_editor.cc" line="51"/>
         <source>Show shape of remote cursor</source>
         <translation>원격 커서 모양 표시</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="51"/>
+        <location filename="../client/android/profile_editor.cc" line="52"/>
         <source>Show position of remote cursor</source>
         <translation>원격 커서 위치 표시</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="52"/>
+        <location filename="../client/android/profile_editor.cc" line="53"/>
         <source>Disable desktop effects</source>
         <translation>바탕 화면 효과 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="53"/>
+        <location filename="../client/android/profile_editor.cc" line="54"/>
         <source>Disable desktop wallpaper</source>
         <translation>바탕 화면 배경 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="54"/>
+        <location filename="../client/android/profile_editor.cc" line="55"/>
         <source>Lock computer at disconnect</source>
         <translation>연결이 끊길 때 컴퓨터 잠금</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="55"/>
+        <location filename="../client/android/profile_editor.cc" line="56"/>
         <source>Block remote input</source>
         <translation>원격 입력 차단</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="57"/>
+        <location filename="../client/android/profile_editor.cc" line="58"/>
         <source>Allow direct connections</source>
         <translation>직접 연결 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="58"/>
+        <location filename="../client/android/profile_editor.cc" line="59"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP 홀 펀칭 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="59"/>
+        <location filename="../client/android/profile_editor.cc" line="60"/>
         <source>Allow PCP protocol</source>
         <translation>PCP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="60"/>
+        <location filename="../client/android/profile_editor.cc" line="61"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="61"/>
+        <location filename="../client/android/profile_editor.cc" line="62"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="64"/>
+        <location filename="../client/android/profile_editor.cc" line="65"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="66"/>
+        <location filename="../client/android/profile_editor.cc" line="68"/>
         <source>Quality</source>
         <translation>화질</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="67"/>
+        <location filename="../client/android/profile_editor.cc" line="69"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="68"/>
+        <location filename="../client/android/profile_editor.cc" line="70"/>
         <source>Low</source>
         <translation>낮음</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="69"/>
+        <location filename="../client/android/profile_editor.cc" line="71"/>
         <source>Medium</source>
         <translation>보통</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="70"/>
+        <location filename="../client/android/profile_editor.cc" line="72"/>
         <source>High</source>
         <translation>높음</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="76"/>
+        <location filename="../client/android/profile_editor.cc" line="78"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="78"/>
-        <location filename="../client/android/profile_editor.cc" line="302"/>
+        <location filename="../client/android/profile_editor.cc" line="80"/>
+        <location filename="../client/android/profile_editor.cc" line="325"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="90"/>
+        <location filename="../client/android/profile_editor.cc" line="92"/>
         <source>Remote Desktop</source>
         <translation>원격 데스크톱</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="102"/>
+        <location filename="../client/android/profile_editor.cc" line="104"/>
         <source>UDP Connections</source>
         <translation>UDP 연결</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="191"/>
+        <location filename="../client/android/profile_editor.cc" line="195"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>프로필이 손상되었습니다. 수정하거나 삭제하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="213"/>
+        <location filename="../client/android/profile_editor.cc" line="235"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/profile_editor.cc" line="220"/>
+        <location filename="../client/android/profile_editor.cc" line="242"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="230"/>
+        <location filename="../client/android/profile_editor.cc" line="252"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="242"/>
+        <location filename="../client/android/profile_editor.cc" line="264"/>
         <source>A profile with this name already exists.</source>
         <translation>같은 이름의 프로필이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="291"/>
+        <location filename="../client/android/profile_editor.cc" line="313"/>
         <source>Failed to save the profile.</source>
         <translation>프로필을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="301"/>
+        <location filename="../client/android/profile_editor.cc" line="324"/>
         <source>Delete Profile</source>
         <translation>프로필 삭제</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="302"/>
+        <location filename="../client/android/profile_editor.cc" line="325"/>
         <source>Delete the profile &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 프로필을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="309"/>
+        <location filename="../client/android/profile_editor.cc" line="332"/>
         <source>Failed to delete the profile.</source>
         <translation>프로필을 삭제하지 못했습니다.</translation>
     </message>
@@ -6164,22 +6179,22 @@ Credentials replaced: %2</source>
 <context>
     <name>ProfilesWidget</name>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="101"/>
+        <location filename="../client/android/profiles_widget.cc" line="104"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="124"/>
+        <location filename="../client/android/profiles_widget.cc" line="127"/>
         <source>Add Profile</source>
         <translation>프로필 추가</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="135"/>
+        <location filename="../client/android/profiles_widget.cc" line="138"/>
         <source>Edit Profile</source>
         <translation>프로필 편집</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="150"/>
+        <location filename="../client/android/profiles_widget.cc" line="153"/>
         <source>Profiles</source>
         <translation>프로필</translation>
     </message>
@@ -6210,17 +6225,17 @@ Credentials replaced: %2</source>
 <context>
     <name>QAbstractSpinBox</name>
     <message>
-        <location filename="../base/gui_application.cc" line="102"/>
+        <location filename="../base/gui_application.cc" line="105"/>
         <source>&amp;Select All</source>
         <translation>모두 선택(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="103"/>
+        <location filename="../base/gui_application.cc" line="106"/>
         <source>&amp;Step up</source>
         <translation>값 증가(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="104"/>
+        <location filename="../base/gui_application.cc" line="107"/>
         <source>Step &amp;down</source>
         <translation>값 감소(&amp;D)</translation>
     </message>
@@ -6228,7 +6243,7 @@ Credentials replaced: %2</source>
 <context>
     <name>QGuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="81"/>
+        <location filename="../base/gui_application.cc" line="84"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
     </message>
@@ -6236,37 +6251,37 @@ Credentials replaced: %2</source>
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../base/gui_application.cc" line="87"/>
+        <location filename="../base/gui_application.cc" line="90"/>
         <source>&amp;Undo</source>
         <translation>실행 취소(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="88"/>
+        <location filename="../base/gui_application.cc" line="91"/>
         <source>&amp;Redo</source>
         <translation>다시 실행(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="89"/>
+        <location filename="../base/gui_application.cc" line="92"/>
         <source>Cu&amp;t</source>
         <translation>잘라내기(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="90"/>
+        <location filename="../base/gui_application.cc" line="93"/>
         <source>&amp;Copy</source>
         <translation>복사(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="91"/>
+        <location filename="../base/gui_application.cc" line="94"/>
         <source>&amp;Paste</source>
         <translation>붙여넣기(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="92"/>
+        <location filename="../base/gui_application.cc" line="95"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="93"/>
+        <location filename="../base/gui_application.cc" line="96"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
@@ -6274,12 +6289,13 @@ Credentials replaced: %2</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../common/android/message_dialog.cc" line="34"/>
+        <location filename="../common/android/message_dialog.cc" line="35"/>
+        <location filename="../common/android/message_dialog.cc" line="53"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../common/android/message_dialog.cc" line="51"/>
+        <location filename="../common/android/message_dialog.cc" line="94"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -6287,42 +6303,42 @@ Credentials replaced: %2</source>
 <context>
     <name>QWidgetTextControl</name>
     <message>
-        <location filename="../base/gui_application.cc" line="94"/>
+        <location filename="../base/gui_application.cc" line="97"/>
         <source>&amp;Undo</source>
         <translation>실행 취소(&amp;U)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="95"/>
+        <location filename="../base/gui_application.cc" line="98"/>
         <source>&amp;Redo</source>
         <translation>다시 실행(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="96"/>
+        <location filename="../base/gui_application.cc" line="99"/>
         <source>Cu&amp;t</source>
         <translation>잘라내기(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="97"/>
+        <location filename="../base/gui_application.cc" line="100"/>
         <source>&amp;Copy</source>
         <translation>복사(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="98"/>
+        <location filename="../base/gui_application.cc" line="101"/>
         <source>Copy &amp;Link Location</source>
         <translation>링크 주소 복사(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="99"/>
+        <location filename="../base/gui_application.cc" line="102"/>
         <source>&amp;Paste</source>
         <translation>붙여넣기(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="100"/>
+        <location filename="../base/gui_application.cc" line="103"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="101"/>
+        <location filename="../base/gui_application.cc" line="104"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
@@ -6335,17 +6351,17 @@ Credentials replaced: %2</source>
         <translation>빠른 연결</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.ui" line="23"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="66"/>
         <source>Host name, IP address or ID</source>
         <translation>호스트 이름, IP 주소 또는 ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="62"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="61"/>
         <source>Connect</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="124"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="118"/>
         <source>An invalid host address was entered.</source>
         <translation>잘못된 호스트 주소를 입력했습니다.</translation>
     </message>
@@ -6429,6 +6445,19 @@ Credentials replaced: %2</source>
     </message>
 </context>
 <context>
+    <name>Router2FA</name>
+    <message>
+        <location filename="../client/router/router_2fa.cc" line="276"/>
+        <source>Router %1 did not perform two-factor authentication. Signing in is not possible.</source>
+        <translation>%1 라우터가 2단계 인증을 수행하지 않았습니다. 로그인할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_2fa.cc" line="296"/>
+        <source>Signed in as another user. Data synchronization has been turned off.</source>
+        <translation>다른 사용자로 로그인했습니다. 데이터 동기화가 꺼졌습니다.</translation>
+    </message>
+</context>
+<context>
     <name>RouterAccessLogWidget</name>
     <message>
         <location filename="../client/desktop/management/router_access_log_widget.ui" line="46"/>
@@ -6496,32 +6525,32 @@ Credentials replaced: %2</source>
         <translation>페이지당 항목 수:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="119"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="120"/>
         <source>All Session Types</source>
         <translation>모든 세션 유형</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="270"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="270"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
         <source>Could not open file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="327"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="316"/>
         <source>Unable to write file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="537"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="526"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>항목 %n개</numerusform>
@@ -6531,18 +6560,18 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterCard</name>
     <message>
-        <location filename="../client/android/router_card.cc" line="178"/>
-        <location filename="../client/android/router_card.cc" line="227"/>
+        <location filename="../client/android/router_card.cc" line="171"/>
+        <location filename="../client/android/router_card.cc" line="223"/>
         <source>Enter Code</source>
         <translation>코드 입력</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="225"/>
+        <location filename="../client/android/router_card.cc" line="221"/>
         <source>Blocked</source>
         <translation>차단됨</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="227"/>
+        <location filename="../client/android/router_card.cc" line="223"/>
         <source>Set Up</source>
         <translation>설정</translation>
     </message>
@@ -6550,46 +6579,46 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="216"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="216"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Could not open file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="263"/>
         <source>Unable to write file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="283"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 클라이언트의 연결을 끊으시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="288"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>클라이언트 %n개의 연결을 끊으시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="335"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>선택한 클라이언트 중 %n개의 연결을 끊지 못했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="491"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>클라이언트 %n개</numerusform>
@@ -6624,100 +6653,181 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router/router_controller.cc" line="191"/>
-        <location filename="../client/router/router_controller.cc" line="216"/>
-        <location filename="../client/router/router_controller.cc" line="390"/>
+        <location filename="../client/router/router_controller.cc" line="173"/>
+        <source>Data synchronization will be reset after connecting to router %1.</source>
+        <translation>%1 라우터에 연결한 후 데이터 동기화가 다시 설정됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="257"/>
+        <location filename="../client/router/router_controller.cc" line="282"/>
+        <location filename="../client/router/router_controller.cc" line="481"/>
         <source>Connecting to router %1...</source>
         <translation>%1 라우터에 연결하는 중...</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="235"/>
+        <location filename="../client/router/router_controller.cc" line="301"/>
         <source>Event history cleared.</source>
         <translation>이벤트 기록이 지워졌습니다.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="278"/>
+        <location filename="../client/router/router_controller.cc" line="344"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>실패한 시도가 너무 많습니다. %1 라우터는 약 %2분 후에 코드를 다시 받습니다.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="284"/>
+        <location filename="../client/router/router_controller.cc" line="350"/>
         <source>The code was not accepted by router %1.</source>
         <translation>%1 라우터가 코드를 받아들이지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="286"/>
+        <location filename="../client/router/router_controller.cc" line="352"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>%1 라우터가 2단계 인증 코드를 기다리고 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="309"/>
+        <location filename="../client/router/router_controller.cc" line="382"/>
         <source>Connection to router %1 established.</source>
         <translation>%1 라우터에 연결되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="350"/>
+        <location filename="../client/router/router_controller.cc" line="407"/>
+        <source>The version of router %1 is newer than the client version (%2 &gt; %3). Update the client.</source>
+        <translation>%1 라우터 버전이 클라이언트 버전보다 최신입니다(%2 &gt; %3). 클라이언트를 업데이트하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="441"/>
         <source>Network error: %1</source>
         <translation>네트워크 오류: %1</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="364"/>
+        <location filename="../client/router/router_controller.cc" line="455"/>
         <source>Disconnected from router %1.</source>
         <translation>%1 라우터와의 연결이 끊어졌습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="569"/>
+        <source>Data synchronization is on.</source>
+        <translation>데이터 동기화가 켜져 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="574"/>
+        <source>The synchronization key cannot be opened with the password of the account. Sign in with the current password on a device that is already synchronized.</source>
+        <translation>계정 암호로 동기화 키를 열 수 없습니다. 이미 동기화된 장치에서 현재 암호로 로그인하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="580"/>
+        <source>Synchronization error: %1</source>
+        <translation>동기화 오류: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="585"/>
+        <source>The router returned an invalid answer to the synchronization.</source>
+        <translation>라우터가 동기화에 대해 잘못된 응답을 반환했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="590"/>
+        <source>Synchronization stopped because of an error on this device.</source>
+        <translation>이 장치의 오류로 인해 동기화가 중지되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="650"/>
+        <source>Unable to save the user of router %1. Data synchronization does not work in this connection.</source>
+        <translation>%1 라우터의 사용자를 저장할 수 없습니다. 이 연결에서는 데이터 동기화가 작동하지 않습니다.</translation>
     </message>
 </context>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="51"/>
+        <location filename="../client/android/router_editor.cc" line="53"/>
         <source>Enabled</source>
         <translation>사용</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="54"/>
+        <source>Synchronize data</source>
+        <translation>데이터 동기화</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="236"/>
+        <source>Reset Synchronization</source>
+        <translation>동기화 다시 설정</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="58"/>
         <source>Address</source>
         <translation>주소</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="55"/>
+        <location filename="../client/android/router_editor.cc" line="59"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="61"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="65"/>
+        <location filename="../client/android/router_editor.cc" line="70"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="127"/>
+        <location filename="../client/android/router_editor.cc" line="148"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>라우터의 데이터가 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="140"/>
+        <location filename="../client/android/router_editor.cc" line="161"/>
         <source>An invalid router address was entered.</source>
         <translation>잘못된 라우터 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="149"/>
+        <location filename="../client/android/router_editor.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot; 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="159"/>
+        <location filename="../client/android/router_editor.cc" line="180"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="184"/>
-        <location filename="../client/android/router_editor.cc" line="193"/>
+        <location filename="../client/android/router_editor.cc" line="201"/>
+        <location filename="../client/android/router_editor.cc" line="223"/>
         <source>Failed to save the router.</source>
         <translation>라우터를 저장하지 못했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="214"/>
+        <source>The synchronized data of this device will be sent to the storage of the account &quot;%1&quot;. Continue?</source>
+        <translation>이 장치의 동기화된 데이터가 &quot;%1&quot; 계정의 저장소로 전송됩니다. 계속하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="217"/>
+        <source>Confirmation</source>
+        <translation>확인</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="217"/>
+        <source>Continue</source>
+        <translation>계속</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="234"/>
+        <source>The data on the router and on the other devices will be replaced with the data of this device.</source>
+        <translation>라우터와 다른 장치의 데이터가 이 장치의 데이터로 바뀝니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="236"/>
+        <source>Reset</source>
+        <translation>다시 설정</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="240"/>
+        <source>Failed to reset the synchronization.</source>
+        <translation>동기화를 다시 설정하지 못했습니다.</translation>
     </message>
 </context>
 <context>
@@ -6784,6 +6894,11 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
+        <source>The limit on the number of records has been reached.</source>
+        <translation>레코드 수 제한에 도달했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/router_error.cc" line="61"/>
         <source>Unknown error type.</source>
         <translation>알 수 없는 오류 유형입니다.</translation>
     </message>
@@ -6844,7 +6959,7 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="425"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="414"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>호스트 %n개</numerusform>
@@ -6899,11 +7014,6 @@ Credentials replaced: %2</source>
         <translation>사용자 이름:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="118"/>
-        <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
-        <translation>사용자 이름과 암호는 이 컴퓨터에만 저장되며 라우터로 전송되지 않습니다.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="94"/>
         <source>Password:</source>
         <translation>암호:</translation>
@@ -6929,63 +7039,58 @@ Credentials replaced: %2</source>
         <translation>프로필:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="130"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="120"/>
         <source>Comment:</source>
         <translation>메모:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="147"/>
         <source>Failed to get list of spaces.</source>
         <translation>스페이스 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="147"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="155"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="199"/>
         <source>Not assigned</source>
         <translation>할당되지 않음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="176"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="184"/>
         <source>Failed to get list of groups.</source>
         <translation>그룹 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="257"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="272"/>
         <source>Failed to save the credentials.</source>
         <translation>자격 증명을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="271"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="278"/>
         <source>Failed to save the profile.</source>
         <translation>프로필을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="297"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="301"/>
         <source>Failed to read the list of profiles.</source>
         <translation>프로필 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="310"/>
-        <source>Default</source>
-        <translation>기본값</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="324"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="325"/>
         <source>Failed to read the list of credentials.</source>
         <translation>자격 증명 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="375"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="359"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>호스트의 자격 증명을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="380"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="364"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>호스트의 자격 증명이 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
@@ -6993,71 +7098,61 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterHostEditor</name>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="56"/>
+        <location filename="../client/android/router_host_editor.cc" line="54"/>
         <source>User Name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="58"/>
+        <location filename="../client/android/router_host_editor.cc" line="56"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="49"/>
-        <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation>사용자 이름과 암호는 이 장치에만 저장되며 라우터로 전송되지 않습니다. 저장된 자격 증명을 지우려면 둘 다 비워 두십시오.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="46"/>
+        <location filename="../client/android/router_host_editor.cc" line="47"/>
         <source>Use existing</source>
         <translation>기존 자격 증명 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="61"/>
+        <location filename="../client/android/router_host_editor.cc" line="59"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="62"/>
+        <location filename="../client/android/router_host_editor.cc" line="60"/>
         <source>Profile</source>
         <translation>프로필</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="70"/>
+        <location filename="../client/android/router_host_editor.cc" line="66"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="142"/>
-        <location filename="../client/android/router_host_editor.cc" line="174"/>
-        <location filename="../client/android/router_host_editor.cc" line="242"/>
-        <location filename="../client/android/router_host_editor.cc" line="279"/>
+        <location filename="../client/android/router_host_editor.cc" line="157"/>
+        <location filename="../client/android/router_host_editor.cc" line="188"/>
+        <location filename="../client/android/router_host_editor.cc" line="251"/>
+        <location filename="../client/android/router_host_editor.cc" line="273"/>
         <source>Failed to read data from the local database.</source>
         <translation>로컬 데이터베이스에서 데이터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="148"/>
+        <location filename="../client/android/router_host_editor.cc" line="163"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>호스트의 자격 증명이 손상되었습니다. 다시 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="196"/>
-        <location filename="../client/android/router_host_editor.cc" line="217"/>
+        <location filename="../client/android/router_host_editor.cc" line="210"/>
+        <location filename="../client/android/router_host_editor.cc" line="231"/>
         <source>Failed to save the credentials.</source>
         <translation>자격 증명을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="224"/>
+        <location filename="../client/android/router_host_editor.cc" line="238"/>
         <source>Failed to save the profile.</source>
         <translation>프로필을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="291"/>
-        <source>Default</source>
-        <translation>기본값</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="185"/>
+        <location filename="../client/android/router_host_editor.cc" line="199"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>사용자 이름과 암호를 모두 입력하거나 둘 다 비워 두십시오.</translation>
     </message>
@@ -7125,84 +7220,84 @@ Credentials replaced: %2</source>
         <translation>페이지당 항목 수:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>모든 스페이스</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>스페이스 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="367"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 호스트의 연결을 끊으시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="358"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>호스트 %n개의 연결을 끊으시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="380"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개의 연결을 끊지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="396"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="385"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>호스트를 삭제하면 라우터 연결에 대한 모든 구성이 삭제되고 호스트에서 응용 프로그램이 제거됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="401"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="390"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>호스트 %n개가 삭제됩니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="412"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="401"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 삭제하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="429"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="418"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개에서 업데이트를 확인하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="762"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="751"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>호스트 %n개</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="815"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="815"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="837"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
         <source>Could not open file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="884"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="873"/>
         <source>Unable to write file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
@@ -7210,61 +7305,61 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="231"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="231"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="249"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>Could not open file for writing.</source>
         <translation>쓰기 위해 파일을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="311"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="304"/>
         <source>Unable to write file.</source>
         <translation>파일을 쓸 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="331"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="324"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 릴레이의 연결을 끊으시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="336"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="329"/>
         <source>Are you sure you want to disconnect %n relays?</source>
         <translation>
             <numerusform>릴레이 %n개의 연결을 끊으시겠습니까?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="383"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="376"/>
         <source>Failed to disconnect %n of the selected relays.</source>
         <translation>
             <numerusform>선택한 릴레이 중 %n개의 연결을 끊지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="443"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="436"/>
         <source>Disconnect</source>
         <translation>연결 끊기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="445"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="438"/>
         <source>Copy Row</source>
         <translation>행 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="446"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="439"/>
         <source>Copy Value</source>
         <translation>값 복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="448"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 피어의 연결을 끊으시겠습니까?</translation>
     </message>
@@ -7272,7 +7367,7 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterSession</name>
     <message>
-        <location filename="../client/router/router_session.cc" line="163"/>
+        <location filename="../client/router/router_session.cc" line="153"/>
         <source>The router accepted the new password, but the record was not updated.</source>
         <translation>라우터가 새 암호를 수락했지만 레코드가 업데이트되지 않았습니다.</translation>
     </message>
@@ -7281,13 +7376,13 @@ Credentials replaced: %2</source>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="188"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="178"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>라우터가 2단계 인증 코드를 기다리고 있습니다.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="189"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="179"/>
         <source>Enter Code</source>
         <translation>코드 입력</translation>
     </message>
@@ -7302,17 +7397,17 @@ Credentials replaced: %2</source>
         <translation>이벤트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="178"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="168"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>실패한 시도가 너무 많아 2단계 인증이 차단되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="193"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="183"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>이 라우터에 대해 2단계 인증을 설정해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="194"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="184"/>
         <source>Set Up</source>
         <translation>설정</translation>
     </message>
@@ -7320,49 +7415,49 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="71"/>
         <source>Previous page</source>
         <translation>이전 페이지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="75"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="74"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="76"/>
         <source>Next page</source>
         <translation>다음 페이지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="96"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="98"/>
         <source>Items per page:</source>
         <translation>페이지당 항목 수:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="223"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>호스트를 승인하면 라우터에 대한 영구 액세스 권한이 부여됩니다. &quot;%1&quot; 호스트를 승인하시겠습니까?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="234"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>호스트를 승인하면 라우터에 대한 영구 액세스 권한이 부여됩니다. 호스트 %n개를 승인하시겠습니까?</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="270"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="274"/>
         <source>Failed to approve the host.</source>
         <translation>호스트를 승인하지 못했습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="272"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="276"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 승인하지 못했습니다.</numerusform>
@@ -7447,128 +7542,128 @@ Credentials replaced: %2</source>
         <translation>모두 로그아웃</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>2단계 인증을 다시 설정하면 이 사용자는 모든 세션에서 로그아웃되며 다음 로그인 시 다시 등록해야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="383"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>이 사용자를 이 세션에서 로그아웃하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="408"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>이 사용자를 모든 세션에서 로그아웃하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="522"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>입력한 암호가 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="200"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="228"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>다른 콘솔에서 사용자가 삭제되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="329"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>2단계 인증을 다시 설정하면 모든 세션에서 로그아웃되며 다음 로그인 시 다시 등록해야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>이것은 현재 세션의 토큰입니다. 철회하면 연결이 끊어집니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="494"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
         <source>The email address is invalid.</source>
         <translation>이메일 주소가 올바르지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="509"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="533"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="635"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>입력한 사용자 이름이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="717"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>두 번 클릭하여 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="770"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>현재 세션의 토큰입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="803"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>관리자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="807"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>매니저</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="811"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>운영자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="829"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>없음</translation>
     </message>
@@ -7576,22 +7671,22 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="200"/>
         <source>You cannot delete a built-in user.</source>
         <translation>기본 제공 사용자는 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="263"/>
         <source>Failed to get list of users.</source>
         <translation>사용자 목록을 가져오지 못했습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="406"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>사용자 %n명</numerusform>
@@ -7626,22 +7721,22 @@ Credentials replaced: %2</source>
 <context>
     <name>RouterWidget</name>
     <message>
-        <location filename="../client/android/router_widget.cc" line="127"/>
+        <location filename="../client/android/router_widget.cc" line="133"/>
         <source>No router is set</source>
         <translation>설정된 라우터 없음</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="168"/>
+        <location filename="../client/android/router_widget.cc" line="177"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="171"/>
+        <location filename="../client/android/router_widget.cc" line="179"/>
         <source>%1 (disabled)</source>
         <translation>%1 (사용 안 함)</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="205"/>
+        <location filename="../client/android/router_widget.cc" line="212"/>
         <source>Add Router</source>
         <translation>라우터 추가</translation>
     </message>
@@ -7822,32 +7917,32 @@ Credentials replaced: %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="282"/>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="283"/>
         <source>Previous page</source>
         <translation>이전 페이지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="290"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="291"/>
         <source>Next page</source>
         <translation>다음 페이지</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="560"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="538"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="754"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="721"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>결과 %n개</numerusform>
@@ -7887,17 +7982,17 @@ Credentials replaced: %2</source>
         <translation>디렉터리 열기</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="352"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="339"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="353"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="340"/>
         <source>Event</source>
         <translation>이벤트</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="354"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="341"/>
         <source>Details</source>
         <translation>자세히</translation>
     </message>
@@ -8045,49 +8140,49 @@ Credentials replaced: %2</source>
         <translation>응용 프로그램을 닫을 때 확인 요청</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="366"/>
+        <location filename="../client/desktop/settings_tab.ui" line="380"/>
         <source>Backup</source>
         <translation>백업</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="372"/>
+        <location filename="../client/desktop/settings_tab.ui" line="386"/>
         <source>Create backups on application startup</source>
         <translation>응용 프로그램을 시작할 때 백업 만들기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="379"/>
+        <location filename="../client/desktop/settings_tab.ui" line="393"/>
         <source>Directory:</source>
         <translation>디렉터리:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="402"/>
+        <location filename="../client/desktop/settings_tab.ui" line="416"/>
         <source>Keep backups for:</source>
         <translation>백업 보관 기간:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="293"/>
+        <location filename="../client/desktop/settings_tab.ui" line="307"/>
         <source>Proxy</source>
         <translation>프록시 서버</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="299"/>
+        <location filename="../client/desktop/settings_tab.ui" line="313"/>
         <source>Type:</source>
         <translation>유형:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="221"/>
-        <location filename="../client/desktop/settings_tab.ui" line="313"/>
+        <location filename="../client/desktop/settings_tab.ui" line="327"/>
         <source>Address:</source>
         <translation>주소:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="323"/>
+        <location filename="../client/desktop/settings_tab.ui" line="337"/>
         <source>Port:</source>
         <translation>포트:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="252"/>
-        <location filename="../client/desktop/settings_tab.ui" line="343"/>
+        <location filename="../client/desktop/settings_tab.ui" line="357"/>
         <source>User Name:</source>
         <translation>사용자 이름:</translation>
     </message>
@@ -8113,7 +8208,7 @@ Credentials replaced: %2</source>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="266"/>
-        <location filename="../client/desktop/settings_tab.ui" line="353"/>
+        <location filename="../client/desktop/settings_tab.ui" line="367"/>
         <source>Password:</source>
         <translation>암호:</translation>
     </message>
@@ -8123,579 +8218,605 @@ Credentials replaced: %2</source>
         <translation>사용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="529"/>
+        <location filename="../client/desktop/settings_tab.ui" line="543"/>
         <source>Save Settings</source>
         <translation>설정 저장</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="598"/>
+        <location filename="../client/desktop/settings_tab.ui" line="612"/>
         <source>Add...</source>
         <translation>추가...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="625"/>
         <source>Rename...</source>
         <translation>이름 바꾸기...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="624"/>
+        <location filename="../client/desktop/settings_tab.ui" line="638"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="639"/>
+        <location filename="../client/desktop/settings_tab.ui" line="653"/>
         <source>Desktop Features</source>
         <translation>데스크톱 기능</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="717"/>
+        <location filename="../client/desktop/settings_tab.ui" line="731"/>
         <source>Desktop Screen</source>
         <translation>데스크톱 화면</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="779"/>
+        <location filename="../client/desktop/settings_tab.ui" line="793"/>
         <source>Desktop Recording</source>
         <translation>데스크톱 녹화</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="829"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>UDP Connections</source>
         <translation>UDP 연결</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="835"/>
+        <location filename="../client/desktop/settings_tab.ui" line="849"/>
         <source>Allow direct connections</source>
         <translation>직접 연결 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="842"/>
+        <location filename="../client/desktop/settings_tab.ui" line="856"/>
         <source>Allow UDP Hole Punching</source>
         <translation>UDP 홀 펀칭 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="849"/>
+        <location filename="../client/desktop/settings_tab.ui" line="863"/>
         <source>Allow PCP protocol</source>
         <translation>PCP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="856"/>
+        <location filename="../client/desktop/settings_tab.ui" line="870"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>NAT-PMP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="863"/>
+        <location filename="../client/desktop/settings_tab.ui" line="877"/>
         <source>Allow UPnP protocol</source>
         <translation>UPnP 프로토콜 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="419"/>
+        <location filename="../client/desktop/settings_tab.ui" line="433"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="425"/>
+        <location filename="../client/desktop/settings_tab.ui" line="290"/>
+        <source>Synchronize data</source>
+        <translation>데이터 동기화</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="297"/>
+        <source>Reset Synchronization...</source>
+        <translation>동기화 다시 설정...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="439"/>
         <source>Lock after inactivity:</source>
         <translation>잠금 대기 시간:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="439"/>
+        <location filename="../client/desktop/settings_tab.ui" line="453"/>
         <source>Unlock automatically on startup</source>
         <translation>시작할 때 자동으로 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="446"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Change Master Password...</source>
         <translation>마스터 암호 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="645"/>
+        <location filename="../client/desktop/settings_tab.ui" line="659"/>
         <source>Enable audio</source>
         <translation>오디오 사용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="652"/>
+        <location filename="../client/desktop/settings_tab.ui" line="666"/>
         <source>Enable clipboard</source>
         <translation>클립보드 사용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="659"/>
+        <location filename="../client/desktop/settings_tab.ui" line="673"/>
         <source>Show shape of remote cursor</source>
         <translation>원격 커서 모양 표시</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="666"/>
+        <location filename="../client/desktop/settings_tab.ui" line="680"/>
         <source>Show position of remote cursor</source>
         <translation>원격 커서 위치 표시</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="673"/>
+        <location filename="../client/desktop/settings_tab.ui" line="687"/>
         <source>Disable desktop effects</source>
         <translation>바탕 화면 효과 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="680"/>
+        <location filename="../client/desktop/settings_tab.ui" line="694"/>
         <source>Disable desktop wallpaper</source>
         <translation>바탕 화면 배경 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="687"/>
+        <location filename="../client/desktop/settings_tab.ui" line="701"/>
         <source>Lock computer at disconnect</source>
         <translation>연결이 끊길 때 컴퓨터 잠금</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="694"/>
+        <location filename="../client/desktop/settings_tab.ui" line="708"/>
         <source>Block remote input</source>
         <translation>원격 입력 차단</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="701"/>
+        <location filename="../client/desktop/settings_tab.ui" line="715"/>
         <source>Send key combinations</source>
         <translation>키 조합 보내기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="723"/>
+        <location filename="../client/desktop/settings_tab.ui" line="737"/>
         <source>Preferred resolution:</source>
         <translation>기본 해상도:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="743"/>
+        <location filename="../client/desktop/settings_tab.ui" line="757"/>
         <source>Quality:</source>
         <translation>화질:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="763"/>
+        <location filename="../client/desktop/settings_tab.ui" line="777"/>
         <source>Scale image to window size on the host side</source>
         <translation>호스트 측에서 이미지를 창 크기에 맞게 조정</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="785"/>
+        <location filename="../client/desktop/settings_tab.ui" line="799"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>연결 시 자동으로 세션 녹화 시작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="794"/>
+        <location filename="../client/desktop/settings_tab.ui" line="808"/>
         <source>Write path:</source>
         <translation>저장 경로:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="934"/>
+        <location filename="../client/desktop/settings_tab.ui" line="948"/>
         <source>MCP Connector</source>
         <translation>MCP 커넥터</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="940"/>
+        <location filename="../client/desktop/settings_tab.ui" line="954"/>
         <source>Allow the use of MCP</source>
         <translation>MCP 사용 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="947"/>
+        <location filename="../client/desktop/settings_tab.ui" line="961"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>이 명령을 AI 응용 프로그램의 MCP 서버에 추가하십시오:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="970"/>
+        <location filename="../client/desktop/settings_tab.ui" line="984"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="986"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1000"/>
         <source>Allowed Session Types</source>
         <translation>허용된 세션 유형</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1000"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1014"/>
         <source>Actions</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1006"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1020"/>
         <source>Confirm actions automatically</source>
         <translation>자동으로 동작 승인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1013"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1027"/>
         <source>Allow signing in with saved credentials</source>
         <translation>저장된 자격 증명으로 로그인 허용</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1084"/>
-        <location filename="../client/desktop/settings_tab.cc" line="148"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1098"/>
+        <location filename="../client/desktop/settings_tab.cc" line="151"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1090"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1104"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1099"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1113"/>
         <source>Update channel:</source>
         <translation>업데이트 채널:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1113"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1127"/>
         <source>Update server:</source>
         <translation>업데이트 서버:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1127"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1141"/>
         <source>Public key:</source>
         <translation>공개 키:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1145"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1159"/>
         <source>Change Update Server...</source>
         <translation>업데이트 서버 변경...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1165"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1179"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="144"/>
-        <location filename="../client/desktop/settings_tab.cc" line="145"/>
+        <location filename="../client/desktop/settings_tab.cc" line="148"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="146"/>
+        <location filename="../client/desktop/settings_tab.cc" line="149"/>
         <source>Profiles</source>
         <translation>프로필</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 week</source>
         <translation>1주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>2 weeks</source>
         <translation>2주</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>1 month</source>
         <translation>1개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>6 months</source>
         <translation>6개월</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 year</source>
         <translation>1년</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="221"/>
+        <location filename="../client/desktop/settings_tab.cc" line="224"/>
         <source>Do not lock</source>
         <translation>잠그지 않음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="222"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>1 minute</source>
         <translation>1분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>5 minutes</source>
         <translation>5분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="224"/>
+        <location filename="../client/desktop/settings_tab.cc" line="227"/>
         <source>10 minutes</source>
         <translation>10분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="228"/>
         <source>30 minutes</source>
         <translation>30분</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="226"/>
+        <location filename="../client/desktop/settings_tab.cc" line="229"/>
         <source>1 hour</source>
         <translation>1시간</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="241"/>
+        <location filename="../client/desktop/settings_tab.cc" line="244"/>
         <source>No proxy</source>
         <translation>프록시 서버 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="265"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="267"/>
+        <location filename="../client/desktop/settings_tab.cc" line="270"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="268"/>
+        <location filename="../client/desktop/settings_tab.cc" line="271"/>
         <source>Low</source>
         <translation>낮음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="269"/>
+        <location filename="../client/desktop/settings_tab.cc" line="272"/>
         <source>Medium</source>
         <translation>보통</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="270"/>
+        <location filename="../client/desktop/settings_tab.cc" line="273"/>
         <source>High</source>
         <translation>높음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="307"/>
+        <location filename="../client/desktop/settings_tab.cc" line="310"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="308"/>
+        <location filename="../client/desktop/settings_tab.cc" line="311"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="309"/>
+        <location filename="../client/desktop/settings_tab.cc" line="312"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="605"/>
+        <location filename="../client/desktop/settings_tab.cc" line="656"/>
         <source>Failed to save the settings.</source>
         <translation>설정을 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="673"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>새 언어는 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="495"/>
-        <location filename="../client/desktop/settings_tab.cc" line="726"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="809"/>
         <source>Choose path</source>
         <translation>경로 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="449"/>
+        <location filename="../client/desktop/settings_tab.cc" line="458"/>
         <source>The settings have unsaved changes. Close the tab without saving?</source>
         <translation>설정에 저장하지 않은 변경 사항이 있습니다. 저장하지 않고 탭을 닫으시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="637"/>
+        <location filename="../client/desktop/settings_tab.cc" line="527"/>
+        <source>The synchronized data on the router and on the other devices of the account will be replaced with the data of this device. Reset the synchronization?</source>
+        <translation>라우터와 계정의 다른 장치에 있는 동기화된 데이터가 이 장치의 데이터로 바뀝니다. 동기화를 다시 설정하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="537"/>
+        <source>Failed to reset the synchronization.</source>
+        <translation>동기화를 다시 설정하지 못했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="688"/>
         <source>Add Profile</source>
         <translation>프로필 추가</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="698"/>
         <source>Unable to add profile.</source>
         <translation>프로필을 추가할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="668"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1224"/>
+        <location filename="../client/desktop/settings_tab.cc" line="720"/>
+        <location filename="../client/desktop/settings_tab.cc" line="731"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1351"/>
         <source>Failed to read the profile.</source>
         <translation>프로필을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="672"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>Rename Profile</source>
         <translation>프로필 이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="680"/>
+        <location filename="../client/desktop/settings_tab.cc" line="739"/>
         <source>Unable to rename profile.</source>
         <translation>프로필 이름을 바꿀 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="757"/>
         <source>Are you sure you want to delete profile &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 프로필을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="765"/>
         <source>Unable to delete profile.</source>
         <translation>프로필을 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="754"/>
+        <location filename="../client/desktop/settings_tab.cc" line="837"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>설정은 응용 프로그램을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="801"/>
+        <location filename="../client/desktop/settings_tab.cc" line="884"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="803"/>
+        <location filename="../client/desktop/settings_tab.cc" line="886"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>현재 암호를 입력하고 새 암호를 선택하십시오.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="811"/>
+        <location filename="../client/desktop/settings_tab.cc" line="894"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="818"/>
+        <location filename="../client/desktop/settings_tab.cc" line="901"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="819"/>
+        <location filename="../client/desktop/settings_tab.cc" line="902"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="822"/>
+        <location filename="../client/desktop/settings_tab.cc" line="905"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="835"/>
+        <location filename="../client/desktop/settings_tab.cc" line="918"/>
         <source>Invalid current password.</source>
         <translation>현재 암호가 잘못되었습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="839"/>
+        <location filename="../client/desktop/settings_tab.cc" line="922"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>데이터베이스의 일부 레코드가 손상되었습니다. 해당 레코드를 수정하거나 삭제한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="843"/>
+        <location filename="../client/desktop/settings_tab.cc" line="926"/>
         <source>Unable to change the password.</source>
         <translation>암호를 변경할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="959"/>
         <source>Unable to read the proxy settings.</source>
         <translation>프록시 서버 설정을 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="990"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1073"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>데이터베이스의 키가 이 컴퓨터에 저장됩니다. 사용자 계정으로 실행되는 모든 프로그램이 응용 프로그램이 실행되고 있지 않을 때에도 이 키를 읽을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="993"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1076"/>
         <source>Do you want to continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1004"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1087"/>
         <source>Unlock Automatically</source>
         <translation>자동 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1006"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1089"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>시작할 때 응용 프로그램의 잠금을 자동으로 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1016"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1099"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1020"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1103"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1034"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1117"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>자동 잠금 해제를 켤 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1050"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1089"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1133"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1176"/>
         <source>Failed to read the router.</source>
         <translation>라우터를 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1098"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1185"/>
         <source>An invalid router address was entered.</source>
         <translation>잘못된 라우터 주소를 입력했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1106"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1193"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, . 문자만 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1114"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1201"/>
         <source>Password cannot be empty.</source>
         <translation>암호는 비워 둘 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1140"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1150"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1228"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1252"/>
         <source>Failed to save the router.</source>
         <translation>라우터를 저장하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="211"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Administrator</source>
         <translation>관리자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="212"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Manager</source>
         <translation>매니저</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="213"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Operator</source>
         <translation>운영자</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1170"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1241"/>
+        <source>The synchronized data of this device will be sent to the storage of the account &quot;%1&quot;. Continue?</source>
+        <translation>이 장치의 동기화된 데이터가 &quot;%1&quot; 계정의 저장소로 전송됩니다. 계속하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1288"/>
         <source>Failed to read the list of profiles.</source>
         <translation>프로필 목록을 읽지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1181"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1299"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1222"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1349"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>프로필이 손상되었습니다. 수정하거나 삭제하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1324"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1451"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1462"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="1342"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1469"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1359"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1487"/>
         <source>A profile with this name already exists.</source>
         <translation>같은 이름의 프로필이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1390"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1518"/>
         <source>Unable to save profile.</source>
         <translation>프로필을 저장할 수 없습니다.</translation>
     </message>
@@ -8777,267 +8898,267 @@ Credentials replaced: %2</source>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
-        <location filename="../host/android/settings_widget.cc" line="205"/>
+        <location filename="../client/android/settings_widget.cc" line="194"/>
+        <location filename="../host/android/settings_widget.cc" line="216"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../client/android/settings_widget.cc" line="237"/>
         <source>Credentials</source>
         <translation>자격 증명</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="245"/>
-        <location filename="../client/android/settings_widget.cc" line="433"/>
+        <location filename="../client/android/settings_widget.cc" line="246"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Profiles</source>
         <translation>프로필</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="253"/>
-        <location filename="../host/android/settings_widget.cc" line="172"/>
+        <location filename="../client/android/settings_widget.cc" line="254"/>
+        <location filename="../host/android/settings_widget.cc" line="174"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="357"/>
-        <location filename="../host/android/settings_widget.cc" line="349"/>
+        <location filename="../client/android/settings_widget.cc" line="358"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="354"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
+        <location filename="../host/android/settings_widget.cc" line="365"/>
         <source>Theme</source>
         <translation>테마</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="373"/>
+        <location filename="../client/android/settings_widget.cc" line="374"/>
         <source>Display name when connected</source>
         <translation>연결 시 표시 이름</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="385"/>
-        <location filename="../host/android/settings_widget.cc" line="370"/>
+        <location filename="../client/android/settings_widget.cc" line="387"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
         <source>Security</source>
         <translation>보안</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
-        <location filename="../client/android/settings_widget.cc" line="387"/>
+        <location filename="../client/android/settings_widget.cc" line="280"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Change Master Password</source>
         <translation>마스터 암호 변경</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="260"/>
-        <location filename="../client/android/settings_widget.cc" line="463"/>
-        <location filename="../host/android/settings_widget.cc" line="277"/>
-        <location filename="../host/android/settings_widget.cc" line="512"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="465"/>
+        <location filename="../host/android/settings_widget.cc" line="288"/>
+        <location filename="../host/android/settings_widget.cc" line="523"/>
         <source>Add folder</source>
         <translation>폴더 추가</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="266"/>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
-        <location filename="../client/android/settings_widget.cc" line="602"/>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
-        <location filename="../host/android/settings_widget.cc" line="492"/>
-        <location filename="../host/android/settings_widget.cc" line="618"/>
+        <location filename="../client/android/settings_widget.cc" line="267"/>
+        <location filename="../client/android/settings_widget.cc" line="445"/>
+        <location filename="../client/android/settings_widget.cc" line="604"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="503"/>
+        <location filename="../host/android/settings_widget.cc" line="629"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="267"/>
-        <location filename="../host/android/settings_widget.cc" line="284"/>
+        <location filename="../client/android/settings_widget.cc" line="268"/>
+        <location filename="../host/android/settings_widget.cc" line="295"/>
         <source>This folder cannot be added. Choose a folder in the internal storage or on the SD card.</source>
         <translation>이 폴더는 추가할 수 없습니다. 내부 저장소 또는 SD 카드의 폴더를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="395"/>
+        <location filename="../client/android/settings_widget.cc" line="397"/>
         <source>Unlock with biometrics</source>
         <translation>생체 인식으로 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="420"/>
+        <location filename="../client/android/settings_widget.cc" line="422"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>이 기능을 사용하려면 시스템 설정에서 지문을 등록하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="422"/>
+        <location filename="../client/android/settings_widget.cc" line="424"/>
         <source>Biometrics are not available on this device.</source>
         <translation>이 장치에서는 생체 인식을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Manage Profiles</source>
         <translation>프로필 관리</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="516"/>
+        <location filename="../client/android/settings_widget.cc" line="469"/>
+        <location filename="../host/android/settings_widget.cc" line="527"/>
         <source>Files can be transferred only in the folders added here.</source>
         <translation>파일은 여기에 추가된 폴더에서만 전송할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="476"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../host/android/settings_widget.cc" line="536"/>
         <source>Updates</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../client/android/settings_widget.cc" line="480"/>
         <source>Check for updates on startup</source>
         <translation>시작할 때 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="485"/>
-        <location filename="../host/android/settings_widget.cc" line="528"/>
+        <location filename="../client/android/settings_widget.cc" line="487"/>
+        <location filename="../host/android/settings_widget.cc" line="539"/>
         <source>Update channel</source>
         <translation>업데이트 채널</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="486"/>
-        <location filename="../host/android/settings_widget.cc" line="529"/>
+        <location filename="../client/android/settings_widget.cc" line="488"/>
+        <location filename="../host/android/settings_widget.cc" line="540"/>
         <source>Stable</source>
         <translation>안정 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="487"/>
-        <location filename="../host/android/settings_widget.cc" line="530"/>
+        <location filename="../client/android/settings_widget.cc" line="489"/>
+        <location filename="../host/android/settings_widget.cc" line="541"/>
         <source>Beta</source>
         <translation>베타 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="488"/>
-        <location filename="../host/android/settings_widget.cc" line="531"/>
+        <location filename="../client/android/settings_widget.cc" line="490"/>
+        <location filename="../host/android/settings_widget.cc" line="542"/>
         <source>Alpha</source>
         <translation>알파 버전</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="499"/>
-        <location filename="../host/android/settings_widget.cc" line="545"/>
+        <location filename="../client/android/settings_widget.cc" line="501"/>
+        <location filename="../host/android/settings_widget.cc" line="556"/>
         <source>Update server</source>
         <translation>업데이트 서버</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="550"/>
+        <location filename="../client/android/settings_widget.cc" line="506"/>
+        <location filename="../host/android/settings_widget.cc" line="561"/>
         <source>Public key</source>
         <translation>공개 키</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="510"/>
-        <location filename="../host/android/settings_widget.cc" line="556"/>
+        <location filename="../client/android/settings_widget.cc" line="512"/>
+        <location filename="../host/android/settings_widget.cc" line="567"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>업데이트 서버를 지정하지 않으면 기본 서버가 사용됩니다. 공개 키를 지정하지 않으면 기본 제공 키가 사용됩니다.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="564"/>
-        <location filename="../host/android/settings_widget.cc" line="610"/>
+        <location filename="../client/android/settings_widget.cc" line="566"/>
+        <location filename="../host/android/settings_widget.cc" line="621"/>
         <source>Check for updates</source>
         <translation>업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="588"/>
+        <location filename="../client/android/settings_widget.cc" line="590"/>
         <source>Enable biometric unlock</source>
         <translation>생체 인식 잠금 해제 사용</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="589"/>
+        <location filename="../client/android/settings_widget.cc" line="591"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="603"/>
-        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <location filename="../client/android/settings_widget.cc" line="605"/>
+        <location filename="../host/android/settings_widget.cc" line="630"/>
         <source>Remove the folder %1 from file transfer?</source>
         <translation>파일 전송에서 %1 폴더를 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="603"/>
-        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <location filename="../client/android/settings_widget.cc" line="605"/>
+        <location filename="../host/android/settings_widget.cc" line="630"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="181"/>
+        <location filename="../host/android/settings_widget.cc" line="183"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="190"/>
+        <location filename="../host/android/settings_widget.cc" line="192"/>
         <source>Edit User</source>
         <translation>사용자 편집</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="190"/>
+        <location filename="../host/android/settings_widget.cc" line="192"/>
         <source>Add User</source>
         <translation>사용자 추가</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="372"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Manage users</source>
         <translation>사용자 관리</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="391"/>
         <source>Change password</source>
         <translation>암호 변경</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../host/android/settings_widget.cc" line="395"/>
         <source>Disable password protection</source>
         <translation>암호 보호 사용 안 함</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="393"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Enable password protection</source>
         <translation>암호 보호 사용</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="419"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="413"/>
+        <location filename="../host/android/settings_widget.cc" line="424"/>
         <source>Enable the use of a router</source>
         <translation>라우터 사용</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="418"/>
+        <location filename="../host/android/settings_widget.cc" line="429"/>
         <source>Address</source>
         <translation>주소</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="424"/>
+        <location filename="../host/android/settings_widget.cc" line="435"/>
         <source>Public Key</source>
         <translation>공개 키</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="429"/>
+        <location filename="../host/android/settings_widget.cc" line="440"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>직접 연결이 불가능한 경우(NAT 우회) 컴퓨터에 연결하려면 라우터가 필요합니다. Aspia는 공용 라우터를 제공하지 않지만 직접 설치할 수 있습니다. 라우터는 &lt;a href=&quot;https://aspia.org&quot;&gt;공식 웹 사이트&lt;/a&gt;에서 다운로드할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="218"/>
-        <location filename="../host/android/settings_widget.cc" line="239"/>
+        <location filename="../host/android/settings_widget.cc" line="229"/>
+        <location filename="../host/android/settings_widget.cc" line="250"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="218"/>
-        <location filename="../host/android/settings_widget.cc" line="239"/>
+        <location filename="../host/android/settings_widget.cc" line="229"/>
+        <location filename="../host/android/settings_widget.cc" line="250"/>
         <source>An error occurred while processing the password.</source>
         <translation>암호를 처리하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>JSON files (*.json)</source>
         <translation>JSON 파일 (*.json)</translation>
     </message>
@@ -9045,110 +9166,110 @@ Credentials replaced: %2</source>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="145"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="109"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="151"/>
         <source>Local</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="176"/>
         <location filename="../client/desktop/management/sidebar.cc" line="231"/>
         <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>데이터를 읽지 못했습니다. 목록이 오래되었을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="551"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Change Password</source>
         <translation>암호 변경</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="559"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="571"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="560"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="572"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="580"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="569"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="581"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="572"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="584"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="595"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>암호를 변경하는 중입니다. 세션이 다시 로그인하기를 기다리는 중...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="792"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="813"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 그룹을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="805"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="823"/>
         <source>Unable to remove group</source>
         <translation>그룹을 제거할 수 없음</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1383"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1515"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>선택한 상위 그룹에 같은 이름의 그룹이 이미 있습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1490"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1625"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>선택한 그룹에 같은 이름의 호스트가 이미 있어 선택한 호스트 중 %n개를 이동하지 않았습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1498"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1633"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1825"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>선택한 호스트 중 %n개를 이동하지 못했습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1373"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1392"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1590"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1728"/>
         <source>Failed to move the group.</source>
         <translation>그룹을 이동하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1452"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1588"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>호스트를 선택한 그룹으로 이동하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>선택한 그룹에 같은 이름의 호스트가 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1451"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1686"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1587"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1632"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>호스트를 선택한 그룹으로 이동하지 못했습니다.</translation>
     </message>
@@ -9156,7 +9277,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouter</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="104"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="112"/>
         <source>Router</source>
         <translation>라우터</translation>
     </message>
@@ -9164,7 +9285,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterAccessLog</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="193"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="201"/>
         <source>Access Log</source>
         <translation>액세스 로그</translation>
     </message>
@@ -9172,7 +9293,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="185"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="193"/>
         <source>Clients</source>
         <translation>클라이언트</translation>
     </message>
@@ -9180,7 +9301,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="169"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Approved Hosts</source>
         <translation>승인된 호스트</translation>
     </message>
@@ -9188,7 +9309,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterQsHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="217"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Quick Support</source>
         <translation>빠른 지원</translation>
     </message>
@@ -9196,7 +9317,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="201"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="209"/>
         <source>Relays</source>
         <translation>릴레이</translation>
     </message>
@@ -9204,7 +9325,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="209"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="217"/>
         <source>Unapproved Hosts</source>
         <translation>미승인 호스트</translation>
     </message>
@@ -9212,7 +9333,7 @@ Credentials replaced: %2</source>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="185"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
@@ -10100,157 +10221,157 @@ Credentials replaced: %2</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="363"/>
         <source>HTML File</source>
         <translation>HTML 파일</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="363"/>
         <source>HTML File (*.html)</source>
         <translation>HTML 파일 (*.html)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="373"/>
         <source>Failed to save file: %1</source>
         <translation>파일을 저장하지 못했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="428"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>Summary</source>
         <translation>요약</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="435"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="405"/>
         <source>Hardware</source>
         <translation>하드웨어</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="438"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="408"/>
         <source>DMI</source>
         <translation>DMI</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="441"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="411"/>
         <source>Processor</source>
         <translation>프로세서</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="444"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="414"/>
         <source>Devices</source>
         <translation>장치</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="447"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="417"/>
         <source>Drives</source>
         <translation>드라이브</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="450"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="420"/>
         <source>S.M.A.R.T.</source>
         <translation>S.M.A.R.T.</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="453"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="423"/>
         <source>Video Adapters</source>
         <translation>비디오 어댑터</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="457"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Monitors</source>
         <translation>모니터</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="460"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Printers</source>
         <translation>프린터</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="463"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Power Options</source>
         <translation>전원 옵션</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="480"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="450"/>
         <source>Software</source>
         <translation>소프트웨어</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="453"/>
         <source>Applications</source>
         <translation>응용 프로그램</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="456"/>
         <source>Drivers</source>
         <translation>드라이버</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="459"/>
         <source>Services</source>
         <translation>서비스</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="462"/>
         <source>Processes</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="465"/>
         <source>Licenses</source>
         <translation>라이선스</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="508"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="478"/>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="511"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="481"/>
         <source>Network Adapters</source>
         <translation>네트워크 어댑터</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="515"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="485"/>
         <source>Routes</source>
         <translation>라우팅 경로</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="518"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="488"/>
         <source>Connections</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="521"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="491"/>
         <source>Network Shares</source>
         <translation>네트워크 공유</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="524"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="494"/>
         <source>Open Files</source>
         <translation>열린 파일</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="537"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="507"/>
         <source>Operating System</source>
         <translation>운영 체제</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="540"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="510"/>
         <source>Environment Variables</source>
         <translation>환경 변수</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="544"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="514"/>
         <source>Event Logs</source>
         <translation>이벤트 로그</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="547"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="517"/>
         <source>Users</source>
         <translation>사용자</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="550"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="520"/>
         <source>User Groups</source>
         <translation>사용자 그룹</translation>
     </message>
@@ -12898,8 +13019,8 @@ Credentials replaced: %2</source>
 <context>
     <name>SystemInfoWindow</name>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="42"/>
-        <location filename="../host/ui/system_info_window.cc" line="46"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="47"/>
+        <location filename="../host/ui/system_info_window.cc" line="51"/>
         <source>System Information</source>
         <translation>시스템 정보</translation>
     </message>
@@ -13476,33 +13597,33 @@ Credentials replaced: %2</source>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="229"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="310"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1210"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1217"/>
         <source>User name</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1154"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1161"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1157"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1164"/>
         <source>Paste</source>
         <translation>붙여넣기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1160"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1167"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1208"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1215"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation>원격 컴퓨터에서 인증하려면 사용자 이름과 암호를 입력하십시오.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="234"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1229"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
@@ -13612,157 +13733,157 @@ Credentials replaced: %2</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="97"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="96"/>
         <source>Create database</source>
         <translation>데이터베이스 만들기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="126"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="116"/>
         <source>Rename database</source>
         <translation>데이터베이스 이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="155"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="136"/>
         <source>Delete database</source>
         <translation>데이터베이스 삭제</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="180"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="152"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="187"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="159"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="194"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="166"/>
         <source>Confirm password</source>
         <translation>암호 확인</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="49"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="63"/>
         <source>Open Database</source>
         <translation>데이터베이스 열기</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="143"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="158"/>
         <source>The database is already open.</source>
         <translation>데이터베이스가 이미 열려 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="145"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="160"/>
         <source>The master password of this database is not set.</source>
         <translation>이 데이터베이스의 마스터 암호가 설정되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="170"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="185"/>
         <source>The database is open in another window. Close it to rename the database.</source>
         <translation>데이터베이스가 다른 창에서 열려 있습니다. 데이터베이스 이름을 바꾸려면 해당 창을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="178"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="193"/>
         <source>Enter the new name of the database.</source>
         <translation>데이터베이스의 새 이름을 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="196"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="211"/>
         <source>The database is open in another window. Close it to delete the database.</source>
         <translation>데이터베이스가 다른 창에서 열려 있습니다. 데이터베이스를 삭제하려면 해당 창을 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="201"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="216"/>
         <source>The database &quot;%1&quot; with all its records and settings will be deleted.
 Delete the database?</source>
         <translation>&quot;%1&quot; 데이터베이스가 모든 레코드 및 설정과 함께 삭제됩니다.
 데이터베이스를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="202"/>
-        <location filename="../client/desktop/unlock_dialog.cc" line="251"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="217"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="266"/>
         <source>Unnamed database</source>
         <translation>이름 없는 데이터베이스</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="209"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="224"/>
         <source>Unable to move the database to the trash. Delete it permanently?</source>
         <translation>데이터베이스를 휴지통으로 이동할 수 없습니다. 영구적으로 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="218"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="233"/>
         <source>Unable to delete the database.</source>
         <translation>데이터베이스를 삭제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="256"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="271"/>
         <source>%1 (open)</source>
         <translation>%1 (열림)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="277"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="292"/>
         <source>Database #1</source>
         <translation>데이터베이스 #1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="318"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="333"/>
         <source>Unable to open the database.</source>
         <translation>데이터베이스를 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="348"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="363"/>
         <source>Invalid master password.</source>
         <translation>잘못된 마스터 암호입니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="355"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="370"/>
         <source>Unable to unlock the database.</source>
         <translation>데이터베이스를 잠금 해제할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="372"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="387"/>
         <source>Passwords do not match.</source>
         <translation>암호가 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="397"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="412"/>
         <source>Unable to create the database.</source>
         <translation>데이터베이스를 만들 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="426"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="441"/>
         <source>Unable to rename the database.</source>
         <translation>데이터베이스 이름을 바꿀 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="441"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="454"/>
         <source>Name cannot be empty.</source>
         <translation>이름은 비워 둘 수 없습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/unlock_dialog.cc" line="448"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="461"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>이름이 너무 깁니다. 이름의 최대 길이는 %n자입니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="456"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="469"/>
         <source>A database with this name already exists.</source>
         <translation>같은 이름의 데이터베이스가 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="494"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="507"/>
         <source>Enter the name and the master password of the new database.</source>
         <translation>새 데이터베이스의 이름과 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="520"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="533"/>
         <source>Enter the master password to unlock the database.</source>
         <translation>데이터베이스의 잠금을 해제하려면 마스터 암호를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="522"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="535"/>
         <source>The master password of this database is remembered on this computer.</source>
         <translation>이 데이터베이스의 마스터 암호가 이 컴퓨터에 저장되어 있습니다.</translation>
     </message>
@@ -13775,7 +13896,7 @@ Delete the database?</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="374"/>
+        <location filename="../common/desktop/update_dialog.cc" line="375"/>
         <source>Checking for updates</source>
         <translation>업데이트 확인 중</translation>
     </message>
@@ -13810,7 +13931,7 @@ Delete the database?</source>
         <translation>지금 업데이트!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="379"/>
+        <location filename="../common/desktop/update_dialog.cc" line="380"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -13820,75 +13941,75 @@ Delete the database?</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="158"/>
+        <location filename="../common/desktop/update_dialog.cc" line="159"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="164"/>
+        <location filename="../common/desktop/update_dialog.cc" line="165"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>업데이트가 다운로드됩니다. 다운로드가 완료되면 응용 프로그램이 자동으로 닫힙니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="166"/>
+        <location filename="../common/desktop/update_dialog.cc" line="167"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>연결된 모든 세션이 종료됩니다. 업데이트가 완료될 때까지 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="168"/>
+        <location filename="../common/desktop/update_dialog.cc" line="169"/>
         <source>All unsaved data will be lost.</source>
         <translation>저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="169"/>
+        <location filename="../common/desktop/update_dialog.cc" line="170"/>
         <source>Continue?</source>
         <translation>계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
-        <location filename="../common/desktop/update_dialog.cc" line="220"/>
-        <location filename="../common/desktop/update_dialog.cc" line="245"/>
-        <location filename="../common/desktop/update_dialog.cc" line="341"/>
+        <location filename="../common/desktop/update_dialog.cc" line="200"/>
+        <location filename="../common/desktop/update_dialog.cc" line="221"/>
+        <location filename="../common/desktop/update_dialog.cc" line="246"/>
+        <location filename="../common/desktop/update_dialog.cc" line="342"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="314"/>
+        <location filename="../common/desktop/update_dialog.cc" line="315"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="339"/>
+        <location filename="../common/desktop/update_dialog.cc" line="340"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="374"/>
+        <location filename="../common/desktop/update_dialog.cc" line="375"/>
         <source>Downloading the update</source>
         <translation>업데이트 다운로드 중</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="379"/>
+        <location filename="../common/desktop/update_dialog.cc" line="380"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="291"/>
+        <location filename="../common/desktop/update_dialog.cc" line="292"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="292"/>
+        <location filename="../common/desktop/update_dialog.cc" line="293"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="349"/>
+        <location filename="../common/desktop/update_dialog.cc" line="350"/>
         <source>Installing the update. Please wait.</source>
         <translation>업데이트를 설치하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="267"/>
+        <location filename="../common/desktop/update_dialog.cc" line="268"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
@@ -13940,9 +14061,9 @@ Delete the database?</source>
     <name>UpdateWidget</name>
     <message>
         <location filename="../common/android/update_widget.cc" line="76"/>
-        <location filename="../common/android/update_widget.cc" line="266"/>
-        <location filename="../common/android/update_widget.cc" line="275"/>
-        <location filename="../common/android/update_widget.cc" line="285"/>
+        <location filename="../common/android/update_widget.cc" line="273"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
+        <location filename="../common/android/update_widget.cc" line="292"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
@@ -13957,69 +14078,69 @@ Delete the database?</source>
         <translation>새로운 기능</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="203"/>
-        <location filename="../common/android/update_widget.cc" line="352"/>
+        <location filename="../common/android/update_widget.cc" line="210"/>
+        <location filename="../common/android/update_widget.cc" line="359"/>
         <source>Installed version: %1</source>
         <translation>설치된 버전: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="160"/>
+        <location filename="../common/android/update_widget.cc" line="166"/>
         <source>Receiving information...</source>
         <translation>정보를 받는 중...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
+        <location filename="../common/android/update_widget.cc" line="192"/>
         <source>No updates available.</source>
         <translation>사용 가능한 업데이트가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="204"/>
+        <location filename="../common/android/update_widget.cc" line="211"/>
         <source>Error retrieving update information.</source>
         <translation>업데이트 정보를 가져오는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="233"/>
+        <location filename="../common/android/update_widget.cc" line="240"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>업데이트를 다운로드하는 동안 오류가 발생했습니다: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="254"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
         <source>The downloaded file is damaged.</source>
         <translation>다운로드한 파일이 손상되었습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="256"/>
-        <location filename="../common/android/update_widget.cc" line="312"/>
+        <location filename="../common/android/update_widget.cc" line="263"/>
+        <location filename="../common/android/update_widget.cc" line="319"/>
         <source>An error occurred while installing the update.</source>
         <translation>업데이트를 설치하는 동안 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="267"/>
+        <location filename="../common/android/update_widget.cc" line="274"/>
         <source>Install the update yourself: %1</source>
         <translation>업데이트를 직접 설치하십시오: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="276"/>
+        <location filename="../common/android/update_widget.cc" line="283"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>업데이트를 설치하려면 다음 화면에서 이 응용 프로그램이 알 수 없는 앱을 설치하도록 허용하십시오.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="277"/>
+        <location filename="../common/android/update_widget.cc" line="284"/>
         <source>Allow</source>
         <translation>허용</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="286"/>
+        <location filename="../common/android/update_widget.cc" line="293"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>업데이트가 다운로드됩니다. 연결된 모든 세션이 종료되고 저장하지 않은 모든 데이터가 손실됩니다.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="287"/>
+        <location filename="../common/android/update_widget.cc" line="294"/>
         <source>Continue</source>
         <translation>계속</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="326"/>
+        <location filename="../common/android/update_widget.cc" line="333"/>
         <source>Downloading the update. Please wait.</source>
         <translation>업데이트를 다운로드하는 중입니다. 잠시 기다려 주십시오.</translation>
     </message>
@@ -14067,65 +14188,65 @@ Delete the database?</source>
         <translation>모두 선택 해제</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="182"/>
+        <location filename="../host/ui/user_dialog.cc" line="184"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 _, -, ., @ 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="200"/>
+        <location filename="../host/ui/user_dialog.cc" line="202"/>
         <source>The username you entered already exists.</source>
         <translation>입력한 사용자 이름이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="209"/>
+        <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The passwords you entered do not match.</source>
         <translation>입력한 암호가 일치하지 않습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="220"/>
+        <location filename="../host/ui/user_dialog.cc" line="222"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="222"/>
+        <location filename="../host/ui/user_dialog.cc" line="224"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="234"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>입력한 암호가 보안 요구 사항을 충족하지 않습니다!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="237"/>
+        <location filename="../host/ui/user_dialog.cc" line="239"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 대문자와 소문자, 숫자를 포함해야 하며 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="241"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Do you want to enter a different password?</source>
         <translation>다른 암호를 입력하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="244"/>
+        <location filename="../host/ui/user_dialog.cc" line="246"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="262"/>
-        <location filename="../host/ui/user_dialog.cc" line="292"/>
-        <location filename="../host/ui/user_dialog.cc" line="302"/>
+        <location filename="../host/ui/user_dialog.cc" line="264"/>
+        <location filename="../host/ui/user_dialog.cc" line="294"/>
+        <location filename="../host/ui/user_dialog.cc" line="304"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="340"/>
+        <location filename="../host/ui/user_dialog.cc" line="342"/>
         <source>Double-click to change</source>
         <translation>두 번 클릭하여 변경</translation>
     </message>
@@ -14138,110 +14259,110 @@ Delete the database?</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="115"/>
+        <location filename="../host/android/user_editor_widget.cc" line="116"/>
         <source>Password</source>
         <translation>암호</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="116"/>
+        <location filename="../host/android/user_editor_widget.cc" line="117"/>
         <source>Password (repeat)</source>
         <translation>암호 (다시 입력)</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="117"/>
+        <location filename="../host/android/user_editor_widget.cc" line="118"/>
         <source>Leave the password empty to keep the current one.</source>
         <translation>현재 암호를 유지하려면 암호를 비워 두십시오.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="118"/>
+        <location filename="../host/android/user_editor_widget.cc" line="119"/>
         <source>User enabled</source>
         <translation>사용자 사용</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="119"/>
+        <location filename="../host/android/user_editor_widget.cc" line="120"/>
         <source>Allowed sessions</source>
         <translation>허용된 세션</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="120"/>
+        <location filename="../host/android/user_editor_widget.cc" line="121"/>
         <source>Desktop</source>
         <translation>데스크톱</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="121"/>
+        <location filename="../host/android/user_editor_widget.cc" line="122"/>
         <source>File Transfer</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="122"/>
+        <location filename="../host/android/user_editor_widget.cc" line="123"/>
         <source>Delete user</source>
         <translation>사용자 삭제</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="169"/>
-        <location filename="../host/android/user_editor_widget.cc" line="182"/>
-        <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="215"/>
-        <location filename="../host/android/user_editor_widget.cc" line="223"/>
-        <location filename="../host/android/user_editor_widget.cc" line="246"/>
-        <location filename="../host/android/user_editor_widget.cc" line="257"/>
-        <location filename="../host/android/user_editor_widget.cc" line="280"/>
+        <location filename="../host/android/user_editor_widget.cc" line="170"/>
+        <location filename="../host/android/user_editor_widget.cc" line="183"/>
+        <location filename="../host/android/user_editor_widget.cc" line="203"/>
+        <location filename="../host/android/user_editor_widget.cc" line="216"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
+        <location filename="../host/android/user_editor_widget.cc" line="281"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="170"/>
+        <location filename="../host/android/user_editor_widget.cc" line="171"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>사용자 이름은 비워 둘 수 없으며 영문자, 숫자 및 &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; 문자만 사용할 수 있습니다. 숫자로만 구성할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="182"/>
+        <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The username you entered already exists.</source>
         <translation>입력한 사용자 이름이 이미 있습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="202"/>
+        <location filename="../host/android/user_editor_widget.cc" line="203"/>
         <source>The passwords you entered do not match.</source>
         <translation>입력한 암호가 일치하지 않습니다.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <location filename="../host/android/user_editor_widget.cc" line="211"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자보다 짧을 수 없습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <location filename="../host/android/user_editor_widget.cc" line="213"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>암호는 %n자를 초과할 수 없습니다.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="224"/>
-        <location filename="../host/android/user_editor_widget.cc" line="247"/>
-        <location filename="../host/android/user_editor_widget.cc" line="258"/>
+        <location filename="../host/android/user_editor_widget.cc" line="225"/>
+        <location filename="../host/android/user_editor_widget.cc" line="248"/>
+        <location filename="../host/android/user_editor_widget.cc" line="259"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>사용자를 만들거나 수정하는 동안 알 수 없는 내부 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="272"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete User</source>
         <translation>사용자 삭제</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="273"/>
+        <location filename="../host/android/user_editor_widget.cc" line="274"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; 사용자를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="273"/>
+        <location filename="../host/android/user_editor_widget.cc" line="274"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="280"/>
+        <location filename="../host/android/user_editor_widget.cc" line="281"/>
         <source>Failed to delete the user.</source>
         <translation>사용자를 삭제하지 못했습니다.</translation>
     </message>

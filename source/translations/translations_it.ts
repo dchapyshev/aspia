@@ -409,30 +409,30 @@
 <context>
     <name>AndroidMainWindow</name>
     <message>
-        <location filename="../client/android/main_window.cc" line="146"/>
-        <location filename="../client/android/main_window.cc" line="321"/>
-        <location filename="../client/android/main_window.cc" line="369"/>
+        <location filename="../client/android/main_window.cc" line="151"/>
+        <location filename="../client/android/main_window.cc" line="326"/>
+        <location filename="../client/android/main_window.cc" line="374"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="147"/>
-        <location filename="../client/android/main_window.cc" line="325"/>
-        <location filename="../client/android/main_window.cc" line="389"/>
+        <location filename="../client/android/main_window.cc" line="152"/>
+        <location filename="../client/android/main_window.cc" line="330"/>
+        <location filename="../client/android/main_window.cc" line="394"/>
         <source>Remote</source>
         <translation>Remoto</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="148"/>
-        <location filename="../client/android/main_window.cc" line="329"/>
-        <location filename="../client/android/main_window.cc" line="379"/>
+        <location filename="../client/android/main_window.cc" line="153"/>
+        <location filename="../client/android/main_window.cc" line="334"/>
+        <location filename="../client/android/main_window.cc" line="384"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="149"/>
-        <location filename="../client/android/main_window.cc" line="333"/>
-        <location filename="../client/android/main_window.cc" line="399"/>
+        <location filename="../client/android/main_window.cc" line="154"/>
+        <location filename="../client/android/main_window.cc" line="338"/>
+        <location filename="../client/android/main_window.cc" line="404"/>
         <location filename="../host/android/main_window.cc" line="84"/>
         <location filename="../host/android/main_window.cc" line="100"/>
         <location filename="../host/android/main_window.cc" line="390"/>
@@ -440,44 +440,50 @@
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="716"/>
+        <location filename="../client/android/main_window.cc" line="501"/>
+        <source>Failed to retrieve host information from the local database.</source>
+        <translation>Impossibile recuperare le informazioni dell&apos;host dal database locale.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/main_window.cc" line="726"/>
         <source>Update</source>
         <translation>Aggiornamento</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="717"/>
+        <location filename="../client/android/main_window.cc" line="727"/>
         <source>Version %1 is available.</source>
         <translation>La versione %1 è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="768"/>
+        <location filename="../client/android/main_window.cc" line="778"/>
         <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
         <translation>La connessione all&apos;host avviene tramite un router, ma nessun router è configurato. Aggiungi un router o inserisci l&apos;indirizzo dell&apos;host invece del suo ID.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="771"/>
+        <location filename="../client/android/main_window.cc" line="781"/>
         <source>Failed to read the router.</source>
         <translation>Impossibile leggere il router.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="780"/>
+        <location filename="../client/android/main_window.cc" line="790"/>
         <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
         <translation>Il router è disattivato. Attivalo nelle impostazioni del router per connetterti a questo host.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="491"/>
+        <location filename="../client/android/main_window.cc" line="496"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>I dati dell&apos;host sono danneggiati. Modifica l&apos;host e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="766"/>
+        <location filename="../client/android/main_window.cc" line="776"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="490"/>
-        <location filename="../client/android/main_window.cc" line="773"/>
-        <location filename="../client/android/main_window.cc" line="779"/>
+        <location filename="../client/android/main_window.cc" line="495"/>
+        <location filename="../client/android/main_window.cc" line="500"/>
+        <location filename="../client/android/main_window.cc" line="783"/>
+        <location filename="../client/android/main_window.cc" line="789"/>
         <location filename="../host/android/main_window.cc" line="83"/>
         <location filename="../host/android/main_window.cc" line="99"/>
         <location filename="../host/android/main_window.cc" line="388"/>
@@ -490,7 +496,7 @@
         <translation>Autorizzazioni</translation>
     </message>
     <message>
-        <location filename="../client/android/main_window.cc" line="717"/>
+        <location filename="../client/android/main_window.cc" line="727"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
@@ -547,13 +553,13 @@
         <translation>Salva i dati di accesso</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="216"/>
-        <location filename="../client/desktop/authorization_dialog.cc" line="232"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="206"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="222"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/authorization_dialog.cc" line="225"/>
+        <location filename="../client/desktop/authorization_dialog.cc" line="215"/>
         <source>User name cannot be empty.</source>
         <translation>Il nome utente non può essere vuoto.</translation>
     </message>
@@ -561,59 +567,59 @@
 <context>
     <name>AuthorizationWindow</name>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="73"/>
+        <location filename="../client/android/authorization_window.cc" line="55"/>
         <source>Enter user name and password</source>
         <translation>Inserisci nome utente e password</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="74"/>
+        <location filename="../client/android/authorization_window.cc" line="56"/>
         <source>One-time password connection</source>
         <translation>Password per singola connessione</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="75"/>
+        <location filename="../client/android/authorization_window.cc" line="57"/>
         <source>Use saved credentials</source>
         <translation>Usa credenziali salvate</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="85"/>
+        <location filename="../client/android/authorization_window.cc" line="67"/>
         <source>Authorization</source>
         <translation>Autorizzazione</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="93"/>
+        <location filename="../client/android/authorization_window.cc" line="75"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="138"/>
+        <location filename="../client/android/authorization_window.cc" line="118"/>
         <source>Save sign-in data</source>
         <translation>Salva i dati di accesso</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="236"/>
+        <location filename="../client/android/authorization_window.cc" line="231"/>
         <source>User name cannot be empty.</source>
         <translation>Il nome utente non può essere vuoto.</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="96"/>
-        <location filename="../client/android/authorization_window.cc" line="99"/>
+        <location filename="../client/android/authorization_window.cc" line="78"/>
+        <location filename="../client/android/authorization_window.cc" line="81"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="102"/>
+        <location filename="../client/android/authorization_window.cc" line="84"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="106"/>
+        <location filename="../client/android/authorization_window.cc" line="86"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
     <message>
-        <location filename="../client/android/authorization_window.cc" line="227"/>
-        <location filename="../client/android/authorization_window.cc" line="243"/>
+        <location filename="../client/android/authorization_window.cc" line="222"/>
+        <location filename="../client/android/authorization_window.cc" line="238"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
@@ -699,17 +705,17 @@
         <translation>Chat Aspia</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="175"/>
+        <location filename="../common/desktop/chat_widget.ui" line="159"/>
         <source>Send message</source>
         <translation>Invia messaggio</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="204"/>
+        <location filename="../common/desktop/chat_widget.ui" line="188"/>
         <source>Tools</source>
         <translation>Strumenti</translation>
     </message>
     <message>
-        <location filename="../common/desktop/chat_widget.ui" line="210"/>
+        <location filename="../common/desktop/chat_widget.ui" line="194"/>
         <source>···</source>
         <translation>···</translation>
     </message>
@@ -847,113 +853,113 @@
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="137"/>
+        <location filename="../client/android/chat_window.cc" line="140"/>
         <source>User %1 has joined the chat</source>
         <translation>L&apos;utente %1 si è unito alla chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="140"/>
+        <location filename="../client/android/chat_window.cc" line="143"/>
         <source>User %1 has left the chat</source>
         <translation>L&apos;utente %1 ha lasciato la chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="143"/>
+        <location filename="../client/android/chat_window.cc" line="146"/>
         <source>User %1 is logged in</source>
         <translation>L&apos;utente %1 è connesso</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="146"/>
+        <location filename="../client/android/chat_window.cc" line="149"/>
         <source>User %1 is not logged in</source>
         <translation>L&apos;utente %1 non è connesso</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="149"/>
+        <location filename="../client/android/chat_window.cc" line="152"/>
         <source>There are no connected users</source>
         <translation>Non ci sono utenti connessi</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="177"/>
-        <location filename="../client/android/chat_window.cc" line="361"/>
+        <location filename="../client/android/chat_window.cc" line="180"/>
+        <location filename="../client/android/chat_window.cc" line="364"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="254"/>
+        <location filename="../client/android/chat_window.cc" line="257"/>
         <source>Connecting to host %1...</source>
         <translation>Connessione all&apos;host %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="272"/>
+        <location filename="../client/android/chat_window.cc" line="275"/>
         <source>The connection to the host has been lost.</source>
         <translation>La connessione all&apos;host è stata persa.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="491"/>
+        <location filename="../client/android/chat_window.cc" line="505"/>
         <source>The specified router is unavailable.</source>
         <translation>Il router specificato non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="530"/>
+        <location filename="../client/android/chat_window.cc" line="544"/>
         <source>Error requesting connection via router.</source>
         <translation>Errore nella richiesta di connessione tramite il router.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="284"/>
+        <location filename="../client/android/chat_window.cc" line="287"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="312"/>
+        <location filename="../client/android/chat_window.cc" line="315"/>
         <source>%1 is typing...</source>
         <translation>%1 sta scrivendo...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="467"/>
+        <location filename="../client/android/chat_window.cc" line="481"/>
         <source>Connecting...</source>
         <translation>Connessione...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="490"/>
+        <location filename="../client/android/chat_window.cc" line="504"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="497"/>
+        <location filename="../client/android/chat_window.cc" line="511"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="518"/>
+        <location filename="../client/android/chat_window.cc" line="532"/>
         <source>Requesting connection to the host...</source>
         <translation>Richiesta di connessione all&apos;host...</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="354"/>
+        <location filename="../client/android/chat_window.cc" line="357"/>
         <source>Save Chat</source>
         <translation>Salva chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="354"/>
+        <location filename="../client/android/chat_window.cc" line="357"/>
         <source>Text files (*.txt)</source>
         <translation>File di testo (*.txt)</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="361"/>
+        <location filename="../client/android/chat_window.cc" line="364"/>
         <source>Could not open the file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear Chat</source>
         <translation>Pulisci chat</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear the chat history?</source>
         <translation>Cancellare la cronologia della chat?</translation>
     </message>
     <message>
-        <location filename="../client/android/chat_window.cc" line="384"/>
+        <location filename="../client/android/chat_window.cc" line="387"/>
         <source>Clear</source>
         <translation>Pulisci</translation>
     </message>
@@ -984,7 +990,7 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="92"/>
+        <location filename="../client/main.cc" line="94"/>
         <source>Unable to create a backup. Some records of the database are damaged. Fix or delete them.</source>
         <translation>Impossibile creare il backup. Alcuni record del database sono danneggiati. Correggili o eliminali.</translation>
     </message>
@@ -1015,28 +1021,28 @@
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="86"/>
+        <location filename="../client/main.cc" line="88"/>
         <source>Unable to create a backup in the directory &quot;%1&quot;.</source>
         <translation>Impossibile creare il backup nella directory &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="98"/>
+        <location filename="../client/main.cc" line="100"/>
         <source>Unable to create a backup.</source>
         <translation>Impossibile creare il backup.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="240"/>
+        <location filename="../client/main.cc" line="242"/>
         <source>Unable to move the address book into the new format. The old address book is not changed, and the next start tries again. The details are in the log.</source>
         <translation>Impossibile convertire la rubrica nel nuovo formato. La rubrica precedente non è stata modificata e al prossimo avvio verrà effettuato un nuovo tentativo. I dettagli sono disponibili nel log.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="247"/>
-        <location filename="../client/main.cc" line="264"/>
+        <location filename="../client/main.cc" line="249"/>
+        <location filename="../client/main.cc" line="266"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="261"/>
+        <location filename="../client/main.cc" line="263"/>
         <source>Show the database selection dialog.</source>
         <translation>Mostra la finestra di selezione del database.</translation>
     </message>
@@ -1082,37 +1088,37 @@
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="278"/>
+        <location filename="../client/desktop/client_window.cc" line="279"/>
         <source>Session started.</source>
         <translation>Sessione avviata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="593"/>
+        <location filename="../client/desktop/client_window.cc" line="611"/>
         <source>The specified router is unavailable.</source>
         <translation>Il router specificato non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="595"/>
+        <location filename="../client/desktop/client_window.cc" line="613"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="597"/>
+        <location filename="../client/desktop/client_window.cc" line="615"/>
         <source>The specified router is offline.</source>
         <translation>Il router specificato non è in linea.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="290"/>
+        <location filename="../client/desktop/client_window.cc" line="291"/>
         <source>Connecting to host %1...</source>
         <translation>Connessione all&apos;host %1...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="294"/>
+        <location filename="../client/desktop/client_window.cc" line="295"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Connessione all&apos;host %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="330"/>
+        <location filename="../client/desktop/client_window.cc" line="331"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>L&apos;host non è ancora disponibile. In attesa di riconnessione...</translation>
     </message>
@@ -1122,22 +1128,22 @@
         <translation>Tempo di attesa per la riconnessione all&apos;host scaduto.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="350"/>
+        <location filename="../client/desktop/client_window.cc" line="351"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>La versione dell&apos;host è più recente di quella del client (%1 &gt; %2). Aggiorna l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="604"/>
+        <location filename="../client/desktop/client_window.cc" line="622"/>
         <source>Requesting connection to the host...</source>
         <translation>Richiesta di connessione all&apos;host...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="612"/>
+        <location filename="../client/desktop/client_window.cc" line="630"/>
         <source>Connection offer received.</source>
         <translation>Offerta di connessione ricevuta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/client_window.cc" line="626"/>
+        <location filename="../client/desktop/client_window.cc" line="644"/>
         <source>Error requesting connection via router.</source>
         <translation>Errore nella richiesta di connessione tramite il router.</translation>
     </message>
@@ -1147,7 +1153,7 @@
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
         <location filename="../host/ui/config_dialog.ui" line="185"/>
-        <location filename="../host/ui/config_dialog.cc" line="136"/>
+        <location filename="../host/ui/config_dialog.cc" line="138"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
@@ -1375,258 +1381,258 @@
         <translation>Controlla aggiornamenti:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="138"/>
+        <location filename="../host/ui/config_dialog.cc" line="140"/>
         <source>Installer</source>
         <translation>Programma di installazione</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="140"/>
+        <location filename="../host/ui/config_dialog.cc" line="142"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="147"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Once a day</source>
         <translation>Una volta al giorno</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="148"/>
+        <location filename="../host/ui/config_dialog.cc" line="150"/>
         <source>Once a week</source>
         <translation>Una volta alla settimana</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="149"/>
+        <location filename="../host/ui/config_dialog.cc" line="151"/>
         <source>Once a month</source>
         <translation>Una volta al mese</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="151"/>
+        <location filename="../host/ui/config_dialog.cc" line="153"/>
         <source>Stable</source>
         <translation>Stabile</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="152"/>
+        <location filename="../host/ui/config_dialog.cc" line="154"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="153"/>
+        <location filename="../host/ui/config_dialog.cc" line="155"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="188"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Default</source>
         <translation>Predefinito</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="222"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>No proxy</source>
         <translation>Nessun server proxy</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="259"/>
+        <location filename="../host/ui/config_dialog.cc" line="270"/>
         <source>On reboot</source>
         <translation>Al riavvio</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="260"/>
+        <location filename="../host/ui/config_dialog.cc" line="271"/>
         <source>Every 5 minutes</source>
         <translation>Ogni 5 minuti</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="261"/>
+        <location filename="../host/ui/config_dialog.cc" line="272"/>
         <source>Every 30 minutes</source>
         <translation>Ogni 30 minuti</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="262"/>
+        <location filename="../host/ui/config_dialog.cc" line="273"/>
         <source>Every 1 hour</source>
         <translation>Ogni ora</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="263"/>
+        <location filename="../host/ui/config_dialog.cc" line="274"/>
         <source>Every 6 hours</source>
         <translation>Ogni 6 ore</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="264"/>
+        <location filename="../host/ui/config_dialog.cc" line="275"/>
         <source>Every 12 hours</source>
         <translation>Ogni 12 ore</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="272"/>
+        <location filename="../host/ui/config_dialog.cc" line="283"/>
         <source>Letters and digits</source>
         <translation>Lettere e cifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="275"/>
+        <location filename="../host/ui/config_dialog.cc" line="286"/>
         <source>Letters</source>
         <translation>Lettere</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="277"/>
+        <location filename="../host/ui/config_dialog.cc" line="288"/>
         <source>Digits</source>
         <translation>Cifre</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="294"/>
+        <location filename="../host/ui/config_dialog.cc" line="305"/>
         <source>Never</source>
         <translation>Mai</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="295"/>
+        <location filename="../host/ui/config_dialog.cc" line="306"/>
         <source>15 seconds</source>
         <translation>15 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="296"/>
+        <location filename="../host/ui/config_dialog.cc" line="307"/>
         <source>30 seconds</source>
         <translation>30 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="297"/>
+        <location filename="../host/ui/config_dialog.cc" line="308"/>
         <source>45 seconds</source>
         <translation>45 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="298"/>
+        <location filename="../host/ui/config_dialog.cc" line="309"/>
         <source>60 seconds</source>
         <translation>60 secondi</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="306"/>
+        <location filename="../host/ui/config_dialog.cc" line="317"/>
         <source>Accept connection</source>
         <translation>Accetta connessione</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="307"/>
+        <location filename="../host/ui/config_dialog.cc" line="318"/>
         <source>Reject connection</source>
         <translation>Rifiuta connessione</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="507"/>
+        <location filename="../host/ui/config_dialog.cc" line="518"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="535"/>
-        <location filename="../host/ui/config_dialog.cc" line="569"/>
+        <location filename="../host/ui/config_dialog.cc" line="546"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>An error occurred while processing the password.</source>
         <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="552"/>
+        <location filename="../host/ui/config_dialog.cc" line="563"/>
         <source>Settings storage is unavailable.</source>
         <translation>L&apos;archivio delle impostazioni non è disponibile.</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="204"/>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
+        <location filename="../host/ui/config_dialog.cc" line="594"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="594"/>
+        <location filename="../host/ui/config_dialog.cc" line="611"/>
         <source>JSON-files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="211"/>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
-        <location filename="../host/ui/config_dialog.cc" line="625"/>
-        <location filename="../host/ui/config_dialog.cc" line="660"/>
+        <location filename="../host/ui/config_dialog.cc" line="611"/>
+        <location filename="../host/ui/config_dialog.cc" line="636"/>
+        <location filename="../host/ui/config_dialog.cc" line="671"/>
         <source>Export</source>
         <translation>Esporta</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="625"/>
+        <location filename="../host/ui/config_dialog.cc" line="636"/>
         <source>MSI-files (*.msi)</source>
         <translation>File MSI (*.msi)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="635"/>
+        <location filename="../host/ui/config_dialog.cc" line="646"/>
         <source>The installer was successfully exported.</source>
         <translation>Il programma di installazione è stato esportato con successo.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="639"/>
+        <location filename="../host/ui/config_dialog.cc" line="650"/>
         <source>The installed host package was not found.</source>
         <translation>Il pacchetto dell&apos;host installato non è stato trovato.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="643"/>
+        <location filename="../host/ui/config_dialog.cc" line="654"/>
         <source>The installed version of the host does not support exporting the installer.</source>
         <translation>La versione installata dell&apos;host non supporta l&apos;esportazione del programma di installazione.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="647"/>
+        <location filename="../host/ui/config_dialog.cc" line="658"/>
         <source>Unable to export the installer.</source>
         <translation>Impossibile esportare il programma di installazione.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="660"/>
+        <location filename="../host/ui/config_dialog.cc" line="671"/>
         <source>Executable files (*.exe)</source>
         <translation>File eseguibili (*.exe)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="670"/>
+        <location filename="../host/ui/config_dialog.cc" line="681"/>
         <source>The portable version was successfully exported.</source>
         <translation>La versione portatile è stata esportata con successo.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="674"/>
+        <location filename="../host/ui/config_dialog.cc" line="685"/>
         <source>The portable version works only through a router. Set up the connection to the router and save the settings.</source>
         <translation>La versione portatile funziona solo tramite un router. Configura la connessione al router e salva le impostazioni.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="678"/>
+        <location filename="../host/ui/config_dialog.cc" line="689"/>
         <source>Unable to export the portable version.</source>
         <translation>Impossibile esportare la versione portatile.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="699"/>
+        <location filename="../host/ui/config_dialog.cc" line="710"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>La configurazione non può essere scritta. Assicurati di avere diritti di scrittura sufficienti.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="715"/>
+        <location filename="../host/ui/config_dialog.cc" line="726"/>
         <source>An invalid update server address was entered.</source>
         <translation>È stato inserito un indirizzo del server di aggiornamento non valido.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="723"/>
+        <location filename="../host/ui/config_dialog.cc" line="734"/>
         <source>Enter the update server address.</source>
         <translation>Inserisci l&apos;indirizzo del server di aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="744"/>
         <source>An invalid public key was entered.</source>
         <translation>È stata inserita una chiave pubblica non valida.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="752"/>
+        <location filename="../host/ui/config_dialog.cc" line="763"/>
         <source>Incorrect proxy address entered.</source>
         <translation>Indirizzo server proxy inserito errato.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="764"/>
+        <location filename="../host/ui/config_dialog.cc" line="775"/>
         <source>Incorrect router address entered.</source>
         <translation>Indirizzo router inserito errato.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="774"/>
+        <location filename="../host/ui/config_dialog.cc" line="785"/>
         <source>Incorrect router public key entered.</source>
         <translation>Chiave pubblica del router inserita errata.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="946"/>
+        <location filename="../host/ui/config_dialog.cc" line="957"/>
         <source>Install</source>
         <translation>Installa</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="951"/>
+        <location filename="../host/ui/config_dialog.cc" line="962"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
@@ -1763,47 +1769,47 @@ Password: %2</translation>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="45"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="46"/>
         <source>Aspia Credentials</source>
         <translation>Credenziali Aspia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="47"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="48"/>
         <source>OS Credentials</source>
         <translation>Credenziali SO</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="56"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
         <source>Enter the user name, for example %1. On a computer in a domain, this is a domain account.</source>
         <translation>Inserisci il nome utente, ad esempio %1. Su un computer in un dominio, è un account di dominio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="58"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
         <source>For an account of another domain, add the domain, for example %1 or %2.</source>
         <translation>Per un account di un altro dominio, aggiungi il dominio, ad esempio %1 o %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="60"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="62"/>
         <source>For a local account on a computer in a domain, add %1 before the name, for example %2.</source>
         <translation>Per un account locale su un computer in un dominio, aggiungi %1 prima del nome, ad esempio %2.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="66"/>
         <source>Edit Credentials</source>
         <translation>Modifica credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="64"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="66"/>
         <source>Add Credentials</source>
         <translation>Aggiungi credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="110"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="127"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="118"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="135"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -1811,37 +1817,37 @@ Password: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="132"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="149"/>
         <source>Invalid user name.</source>
         <translation>Nome utente non valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="141"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="158"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="150"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="167"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="168"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="185"/>
         <source>Unable to add credentials</source>
         <translation>Impossibile aggiungere le credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="179"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="196"/>
         <source>Unable to modify credentials</source>
         <translation>Impossibile modificare le credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="209"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="227"/>
         <source>Failed to read the credentials.</source>
         <translation>Impossibile leggere le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_dialog.cc" line="223"/>
+        <location filename="../client/desktop/credentials/credential_dialog.cc" line="243"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
@@ -1849,58 +1855,58 @@ Password: %2</translation>
 <context>
     <name>CredentialEditor</name>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="54"/>
+        <location filename="../client/android/credential_editor.cc" line="55"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="55"/>
+        <location filename="../client/android/credential_editor.cc" line="56"/>
         <source>Aspia Credentials</source>
         <translation>Credenziali Aspia</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="57"/>
+        <location filename="../client/android/credential_editor.cc" line="58"/>
         <source>OS Credentials</source>
         <translation>Credenziali SO</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="60"/>
+        <location filename="../client/android/credential_editor.cc" line="61"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="61"/>
+        <location filename="../client/android/credential_editor.cc" line="63"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="62"/>
+        <location filename="../client/android/credential_editor.cc" line="64"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="71"/>
+        <location filename="../client/android/credential_editor.cc" line="73"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="74"/>
-        <location filename="../client/android/credential_editor.cc" line="225"/>
+        <location filename="../client/android/credential_editor.cc" line="76"/>
+        <location filename="../client/android/credential_editor.cc" line="221"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="148"/>
+        <location filename="../client/android/credential_editor.cc" line="261"/>
         <source>The credentials are damaged. Enter them again.</source>
         <translation>Le credenziali sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="160"/>
+        <location filename="../client/android/credential_editor.cc" line="155"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/credential_editor.cc" line="167"/>
+        <location filename="../client/android/credential_editor.cc" line="162"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -1908,33 +1914,33 @@ Password: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="180"/>
-        <location filename="../client/android/credential_editor.cc" line="188"/>
+        <location filename="../client/android/credential_editor.cc" line="175"/>
+        <location filename="../client/android/credential_editor.cc" line="183"/>
         <source>Invalid user name.</source>
         <translation>Nome utente non valido.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="196"/>
+        <location filename="../client/android/credential_editor.cc" line="191"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="214"/>
+        <location filename="../client/android/credential_editor.cc" line="209"/>
         <source>Failed to save the credentials.</source>
         <translation>Impossibile salvare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="224"/>
+        <location filename="../client/android/credential_editor.cc" line="220"/>
         <source>Delete Credentials</source>
         <translation>Elimina credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="225"/>
+        <location filename="../client/android/credential_editor.cc" line="221"/>
         <source>Delete the credentials &quot;%1&quot;?</source>
         <translation>Eliminare le credenziali &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_editor.cc" line="232"/>
+        <location filename="../client/android/credential_editor.cc" line="228"/>
         <source>Failed to delete the credentials.</source>
         <translation>Impossibile eliminare le credenziali.</translation>
     </message>
@@ -2015,7 +2021,7 @@ Credenziali esportate: %1</translation>
         <translation>Credenziali SO</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="288"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="289"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -2023,12 +2029,12 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="296"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="297"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="297"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="298"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -2036,7 +2042,7 @@ Credenziali esportate: %1</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="300"/>
+        <location filename="../client/desktop/credentials/credential_export_dialog.cc" line="301"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
@@ -2147,32 +2153,32 @@ Credenziali esportate: %1</translation>
         <translation>Password:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="68"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="74"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="87"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="93"/>
         <source>Check all</source>
         <translation>Seleziona tutto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="113"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="119"/>
         <source>Uncheck all</source>
         <translation>Deseleziona tutto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="149"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="155"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="154"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="160"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="159"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.ui" line="165"/>
         <source>Status</source>
         <translation>Stato</translation>
     </message>
@@ -2222,17 +2228,17 @@ Credenziali esportate: %1</translation>
         <translation>Credenziali SO</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="161"/>
         <source>Exists</source>
         <translation>Esistente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="163"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="161"/>
         <source>New</source>
         <translation>Nuova</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="243"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="241"/>
         <source>Unable to write credentials &quot;%1&quot;. The import was interrupted.
 Credentials added: %2
 Credentials replaced: %3</source>
@@ -2241,7 +2247,7 @@ Credenziali aggiunte: %2
 Credenziali sostituite: %3</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="253"/>
+        <location filename="../client/desktop/credentials/credential_import_dialog.cc" line="254"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2253,42 +2259,42 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>CredentialImportWidget</name>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="51"/>
+        <location filename="../client/android/credential_import_widget.cc" line="52"/>
         <source>Open</source>
         <translation>Apri</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="61"/>
+        <location filename="../client/android/credential_import_widget.cc" line="62"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="130"/>
+        <location filename="../client/android/credential_import_widget.cc" line="131"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="143"/>
+        <location filename="../client/android/credential_import_widget.cc" line="144"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Impossibile decifrare il file con la password specificata.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="149"/>
+        <location filename="../client/android/credential_import_widget.cc" line="150"/>
         <source>Unable to read the file.</source>
         <translation>Impossibile leggere il file.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="153"/>
+        <location filename="../client/android/credential_import_widget.cc" line="154"/>
         <source>Unsupported file format version.</source>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="157"/>
+        <location filename="../client/android/credential_import_widget.cc" line="158"/>
         <source>The file is not a valid credentials file.</source>
         <translation>Il file non è un file di credenziali valido.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="161"/>
+        <location filename="../client/android/credential_import_widget.cc" line="162"/>
         <source>Failed to import the credentials.</source>
         <translation>Impossibile importare le credenziali.</translation>
     </message>
@@ -2304,7 +2310,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/android/credential_import_widget.cc" line="233"/>
-        <location filename="../client/android/credential_import_widget.cc" line="243"/>
+        <location filename="../client/android/credential_import_widget.cc" line="246"/>
         <source>Import Credentials</source>
         <translation>Importa credenziali</translation>
     </message>
@@ -2318,7 +2324,7 @@ Credenziali aggiunte: %2
 Credenziali sostituite: %3</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="244"/>
+        <location filename="../client/android/credential_import_widget.cc" line="247"/>
         <source>Import completed successfully.
 Credentials added: %1
 Credentials replaced: %2</source>
@@ -2327,17 +2333,17 @@ Credenziali aggiunte: %1
 Credenziali sostituite: %2</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="254"/>
+        <location filename="../client/android/credential_import_widget.cc" line="257"/>
         <source>The checked credentials will be imported, and the ones that already exist will be replaced.</source>
         <translation>Le credenziali selezionate verranno importate e quelle già esistenti verranno sostituite.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="256"/>
+        <location filename="../client/android/credential_import_widget.cc" line="259"/>
         <source>Enter the password the file was exported with.</source>
         <translation>Inserisci la password con cui è stato esportato il file.</translation>
     </message>
     <message>
-        <location filename="../client/android/credential_import_widget.cc" line="269"/>
+        <location filename="../client/android/credential_import_widget.cc" line="272"/>
         <source>Import (%1)</source>
         <translation>Importa (%1)</translation>
     </message>
@@ -2373,17 +2379,17 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>CredentialPanel</name>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="59"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="65"/>
         <source>Sign In</source>
         <translation>Accedi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="66"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="72"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials/credential_panel.cc" line="120"/>
+        <location filename="../client/desktop/credentials/credential_panel.cc" line="53"/>
         <source>Not Selected</source>
         <translation>Nessuna selezione</translation>
     </message>
@@ -2456,17 +2462,17 @@ Credenziali sostituite: %2</translation>
         <translation>Elimina credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="192"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="209"/>
         <source>Are you sure you want to delete credentials &quot;%1&quot;?</source>
         <translation>Eliminare le credenziali &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="200"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="217"/>
         <source>Unable to delete credentials.</source>
         <translation>Impossibile eliminare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/credentials_tab.cc" line="245"/>
+        <location filename="../client/desktop/credentials_tab.cc" line="263"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
     </message>
@@ -2474,35 +2480,35 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>CredentialsWidget</name>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="168"/>
+        <location filename="../client/android/credentials_widget.cc" line="169"/>
         <source>Add Credentials</source>
         <translation>Aggiungi credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="178"/>
-        <location filename="../client/android/credentials_widget.cc" line="208"/>
-        <location filename="../client/android/credentials_widget.cc" line="214"/>
+        <location filename="../client/android/credentials_widget.cc" line="179"/>
+        <location filename="../client/android/credentials_widget.cc" line="227"/>
+        <location filename="../client/android/credentials_widget.cc" line="233"/>
         <source>Import Credentials</source>
         <translation>Importa credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="179"/>
-        <location filename="../client/android/credentials_widget.cc" line="200"/>
+        <location filename="../client/android/credentials_widget.cc" line="180"/>
+        <location filename="../client/android/credentials_widget.cc" line="219"/>
         <source>Export Credentials</source>
         <translation>Esporta credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="208"/>
+        <location filename="../client/android/credentials_widget.cc" line="227"/>
         <source>Aspia Credentials (*.aspia-credentials)</source>
         <translation>Credenziali Aspia (*.aspia-credentials)</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="225"/>
+        <location filename="../client/android/credentials_widget.cc" line="244"/>
         <source>Edit Credentials</source>
         <translation>Modifica credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/credentials_widget.cc" line="244"/>
+        <location filename="../client/android/credentials_widget.cc" line="210"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
@@ -2577,7 +2583,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1022"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1013"/>
         <source>Scale</source>
         <translation>Scala</translation>
     </message>
@@ -2667,7 +2673,7 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="610"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="613"/>
         <source>Start recording</source>
         <translation>Avvia registrazione</translation>
     </message>
@@ -2689,69 +2695,69 @@ Credenziali sostituite: %2</translation>
         <translation>Cambia sessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="397"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="400"/>
         <source>Resolution selection</source>
         <translation>Selezione risoluzione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
         <source>Session %1</source>
         <translation>Sessione %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1197"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
         <source>Session %1 (%2)</source>
         <translation>Sessione %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="605"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="608"/>
         <source>Stop recording</source>
         <translation>Arresta registrazione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="510"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="513"/>
         <source>Scripts</source>
         <translation>Script</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="573"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="576"/>
         <source>Are you sure you want to run &quot;%1&quot; on the remote computer?</source>
         <translation>Eseguire lo script &quot;%1&quot; sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="837"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Spegnere il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="853"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Riavviare il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="861"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="894"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
         <source>Wait for host</source>
         <translation>Attendi l&apos;host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="886"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="877"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Riavviare il computer remoto in modalità sicura?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="918"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="909"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Terminare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="933"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="924"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Bloccare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
@@ -2792,188 +2798,188 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1149"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1153"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1150"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1154"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Immagine PNG (*.png);;Immagine BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1181"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1185"/>
         <source>Could not save image</source>
         <translation>Impossibile salvare l&apos;immagine</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1434"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1438"/>
         <source>Invalid user name or password.</source>
         <translation>Nome utente o password errati.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1437"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1441"/>
         <source>The password has expired.</source>
         <translation>La password è scaduta.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1440"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1444"/>
         <source>The account is locked out.</source>
         <translation>L&apos;account è bloccato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1443"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1447"/>
         <source>The account is disabled.</source>
         <translation>L&apos;account è disabilitato.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="508"/>
+        <location filename="../client/android/desktop_window.cc" line="522"/>
         <source>Connecting...</source>
         <translation>Connessione...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="532"/>
+        <location filename="../client/android/desktop_window.cc" line="546"/>
         <source>The specified router is unavailable.</source>
         <translation>Il router specificato non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="559"/>
+        <location filename="../client/android/desktop_window.cc" line="573"/>
         <source>Requesting connection to the host...</source>
         <translation>Richiesta di connessione all&apos;host...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="80"/>
+        <location filename="../client/android/desktop_window.cc" line="83"/>
         <source>Session %1</source>
         <translation>Sessione %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="81"/>
+        <location filename="../client/android/desktop_window.cc" line="84"/>
         <source>Session %1 (%2)</source>
         <translation>Sessione %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="531"/>
+        <location filename="../client/android/desktop_window.cc" line="545"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="538"/>
+        <location filename="../client/android/desktop_window.cc" line="552"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="768"/>
+        <location filename="../client/android/desktop_window.cc" line="782"/>
         <source>Connecting to host %1...</source>
         <translation>Connessione all&apos;host %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="774"/>
+        <location filename="../client/android/desktop_window.cc" line="788"/>
         <source>Connection established.</source>
         <translation>Connessione stabilita.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="787"/>
+        <location filename="../client/android/desktop_window.cc" line="801"/>
         <source>The connection to the host has been lost.</source>
         <translation>La connessione all&apos;host è stata persa.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="800"/>
+        <location filename="../client/android/desktop_window.cc" line="814"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="164"/>
+        <location filename="../client/android/desktop_window.cc" line="167"/>
         <source>Monitor %1</source>
         <translation>Monitor %1</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="172"/>
+        <location filename="../client/android/desktop_window.cc" line="175"/>
         <source>Power</source>
         <translation>Alimentazione</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="176"/>
+        <location filename="../client/android/desktop_window.cc" line="179"/>
         <source>Keyboard</source>
         <translation>Tastiera</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="182"/>
+        <location filename="../client/android/desktop_window.cc" line="185"/>
         <source>Ctrl+Alt+Del</source>
         <translation>Ctrl+Alt+Del</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="189"/>
+        <location filename="../client/android/desktop_window.cc" line="192"/>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="194"/>
+        <location filename="../client/android/desktop_window.cc" line="197"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="655"/>
-        <location filename="../client/android/desktop_window.cc" line="712"/>
+        <location filename="../client/android/desktop_window.cc" line="669"/>
+        <location filename="../client/android/desktop_window.cc" line="726"/>
         <source>Back</source>
         <translation>Indietro</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="656"/>
+        <location filename="../client/android/desktop_window.cc" line="670"/>
         <source>Shutdown</source>
         <translation>Spegni</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="657"/>
+        <location filename="../client/android/desktop_window.cc" line="671"/>
         <source>Reboot</source>
         <translation>Riavvia</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="662"/>
+        <location filename="../client/android/desktop_window.cc" line="676"/>
         <source>Safe Mode</source>
         <translation>Modalità sicura</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="663"/>
+        <location filename="../client/android/desktop_window.cc" line="677"/>
         <source>Logoff</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="664"/>
+        <location filename="../client/android/desktop_window.cc" line="678"/>
         <source>Lock</source>
         <translation>Blocca</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="680"/>
+        <location filename="../client/android/desktop_window.cc" line="694"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Spegnere il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="684"/>
+        <location filename="../client/android/desktop_window.cc" line="698"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Riavviare il computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="688"/>
+        <location filename="../client/android/desktop_window.cc" line="702"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Riavviare il computer remoto in modalità sicura?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="692"/>
+        <location filename="../client/android/desktop_window.cc" line="706"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Terminare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="696"/>
+        <location filename="../client/android/desktop_window.cc" line="710"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Bloccare la sessione dell&apos;utente sul computer remoto?</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Confirmation</source>
         <translation>Conferma</translation>
     </message>
     <message>
-        <location filename="../client/android/desktop_window.cc" line="751"/>
+        <location filename="../client/android/desktop_window.cc" line="765"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
@@ -3188,109 +3194,109 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>FilePanel</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="145"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="128"/>
         <source>Up</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="148"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="131"/>
         <source>Browse to parent folder (Backspace)</source>
         <translation>Visualizza cartella padre (Backspace)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="157"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="140"/>
         <source>Refresh</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="160"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="143"/>
         <source>Refresh (F5)</source>
         <translation>Aggiorna (F5)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="172"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="155"/>
         <source>New Folder</source>
         <translation>Nuova Cartella</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="175"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="158"/>
         <source>Create a new folder</source>
         <translation>Crea nuova cartella</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="187"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="170"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="190"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="173"/>
         <source>Delete selected object(s) (Delete)</source>
         <translation>Elimina oggetto/i selezionato/i (Delete)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="202"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="185"/>
         <source>Send</source>
         <translation>Invia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.ui" line="205"/>
+        <location filename="../client/desktop/file_transfer/file_panel.ui" line="188"/>
         <source>Send selected object(s) (F11)</source>
         <translation>Invia oggetto/i selezionato/i (F11)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="227"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="245"/>
         <source>Failed to get list of drives: %1</source>
         <translation>Impossibile ottenere l&apos;elenco delle unità: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="244"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="262"/>
         <source>Failed to get list of files: %1</source>
         <translation>Impossibile ottenere l&apos;elenco dei file: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="269"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="287"/>
         <source>Failed to create directory: %1</source>
         <translation>Impossibile creare la directory: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="281"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="299"/>
         <source>Failed to rename item: %1</source>
         <translation>Impossibile rinominare l&apos;elemento: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="427"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="445"/>
         <source>%1 object(s) selected</source>
         <translation>%1 oggetto/i selezionato/i</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="488"/>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="507"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="506"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="525"/>
         <source>Folder name can not be empty.</source>
         <translation>Il nome della cartella non può essere vuoto.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="494"/>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="513"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="512"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="531"/>
         <source>Name contains invalid characters.</source>
         <translation>Il nome contiene caratteri non validi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="455"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="473"/>
         <source>&amp;Send	F11</source>
         <translation>&amp;Invia	F11</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="456"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="474"/>
         <source>&amp;Delete	Delete</source>
         <translation>&amp;Elimina	Delete</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="466"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="484"/>
         <source>&amp;Create Folder</source>
         <translation>&amp;Crea cartella</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_panel.cc" line="191"/>
+        <location filename="../client/desktop/file_transfer/file_panel.cc" line="209"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>Eliminare gli elementi selezionati?</translation>
     </message>
@@ -3628,91 +3634,91 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="45"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="52"/>
         <source>Local Computer</source>
         <translation>Computer locale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="46"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="53"/>
         <source>Remote Computer</source>
         <translation>Computer remoto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="348"/>
+        <location filename="../client/desktop/file_transfer/file_transfer_window.cc" line="337"/>
         <source>Session error: %1</source>
         <translation>Errore di sessione: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="57"/>
-        <location filename="../client/android/file_transfer_window.cc" line="179"/>
-        <location filename="../client/android/file_transfer_window.cc" line="420"/>
-        <location filename="../client/android/file_transfer_window.cc" line="431"/>
+        <location filename="../client/android/file_transfer_window.cc" line="60"/>
+        <location filename="../client/android/file_transfer_window.cc" line="182"/>
+        <location filename="../client/android/file_transfer_window.cc" line="435"/>
+        <location filename="../client/android/file_transfer_window.cc" line="446"/>
         <source>File Transfer</source>
         <translation>Trasferimento file</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="62"/>
-        <location filename="../client/android/file_transfer_window.cc" line="75"/>
+        <location filename="../client/android/file_transfer_window.cc" line="65"/>
+        <location filename="../client/android/file_transfer_window.cc" line="78"/>
         <source>This Device</source>
         <translation>Questo dispositivo</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="138"/>
+        <location filename="../client/android/file_transfer_window.cc" line="141"/>
         <source>Connecting to host %1...</source>
         <translation>Connessione all&apos;host %1...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="158"/>
+        <location filename="../client/android/file_transfer_window.cc" line="161"/>
         <source>The connection to the host has been lost.</source>
         <translation>La connessione all&apos;host è stata persa.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="287"/>
+        <location filename="../client/android/file_transfer_window.cc" line="302"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="288"/>
+        <location filename="../client/android/file_transfer_window.cc" line="303"/>
         <source>The specified router is unavailable.</source>
         <translation>Il router specificato non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="327"/>
+        <location filename="../client/android/file_transfer_window.cc" line="342"/>
         <source>Error requesting connection via router.</source>
         <translation>Errore nella richiesta di connessione tramite il router.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="168"/>
+        <location filename="../client/android/file_transfer_window.cc" line="171"/>
         <source>The host version is newer than the client. Please update the application.</source>
         <translation>La versione dell&apos;host è più recente di quella del client. Aggiorna l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="180"/>
+        <location filename="../client/android/file_transfer_window.cc" line="183"/>
         <source>There is no logged in user on the host. The session is unavailable.</source>
         <translation>Nessun utente è connesso sull&apos;host. La sessione non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="264"/>
+        <location filename="../client/android/file_transfer_window.cc" line="279"/>
         <source>Connecting...</source>
         <translation>Connessione...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="294"/>
+        <location filename="../client/android/file_transfer_window.cc" line="309"/>
         <source>Connecting to router...</source>
         <translation>Connessione al router...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="315"/>
+        <location filename="../client/android/file_transfer_window.cc" line="330"/>
         <source>Requesting connection to the host...</source>
         <translation>Richiesta di connessione all&apos;host...</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="421"/>
+        <location filename="../client/android/file_transfer_window.cc" line="436"/>
         <source>Open a destination folder on the other side first.</source>
         <translation>Apri prima una cartella di destinazione sull&apos;altro lato.</translation>
     </message>
     <message>
-        <location filename="../client/android/file_transfer_window.cc" line="474"/>
+        <location filename="../client/android/file_transfer_window.cc" line="489"/>
         <source>Deleting</source>
         <translation>Eliminazione</translation>
     </message>
@@ -3825,17 +3831,17 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="690"/>
+        <location filename="../base/gui_application.cc" line="811"/>
         <source>Dark</source>
         <translation>Scuro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="692"/>
+        <location filename="../base/gui_application.cc" line="813"/>
         <source>Light</source>
         <translation>Chiaro</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="693"/>
+        <location filename="../base/gui_application.cc" line="814"/>
         <source>Auto</source>
         <translation>Automatico</translation>
     </message>
@@ -4217,32 +4223,32 @@ Credenziali sostituite: %2</translation>
         <translation>Commento:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="54"/>
         <source>Edit Group</source>
         <translation>Modifica gruppo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="53"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="54"/>
         <source>Add Group</source>
         <translation>Aggiungi gruppo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="170"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="190"/>
         <source>Failed to read the group.</source>
         <translation>Impossibile leggere il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="201"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="222"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="82"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="90"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="109"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -4250,7 +4256,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="101"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="120"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
@@ -4258,23 +4264,23 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="114"/>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="185"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="135"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="206"/>
         <source>Failed to read the list of groups.</source>
         <translation>Impossibile leggere l&apos;elenco dei gruppi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="123"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="144"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="141"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="160"/>
         <source>Unable to add group</source>
         <translation>Impossibile aggiungere il gruppo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_group_dialog.cc" line="150"/>
+        <location filename="../client/desktop/management/local_group_dialog.cc" line="169"/>
         <source>Unable to modify group</source>
         <translation>Impossibile modificare il gruppo</translation>
     </message>
@@ -4282,33 +4288,33 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>LocalGroupEditor</name>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="48"/>
+        <location filename="../client/android/local_group_editor.cc" line="49"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="49"/>
+        <location filename="../client/android/local_group_editor.cc" line="51"/>
         <source>Comment</source>
         <translation>Commento</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="57"/>
+        <location filename="../client/android/local_group_editor.cc" line="60"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="60"/>
-        <location filename="../client/android/local_group_editor.cc" line="175"/>
+        <location filename="../client/android/local_group_editor.cc" line="63"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="132"/>
+        <location filename="../client/android/local_group_editor.cc" line="138"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="139"/>
+        <location filename="../client/android/local_group_editor.cc" line="145"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -4316,7 +4322,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_group_editor.cc" line="148"/>
+        <location filename="../client/android/local_group_editor.cc" line="154"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
@@ -4324,22 +4330,22 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="164"/>
+        <location filename="../client/android/local_group_editor.cc" line="170"/>
         <source>Failed to save the group.</source>
         <translation>Impossibile salvare il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="174"/>
+        <location filename="../client/android/local_group_editor.cc" line="181"/>
         <source>Delete Group</source>
         <translation>Elimina gruppo</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="175"/>
+        <location filename="../client/android/local_group_editor.cc" line="182"/>
         <source>Delete the group &quot;%1&quot;?</source>
         <translation>Eliminare il gruppo &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_group_editor.cc" line="182"/>
+        <location filename="../client/android/local_group_editor.cc" line="189"/>
         <source>Failed to delete the group.</source>
         <translation>Impossibile eliminare il gruppo.</translation>
     </message>
@@ -4347,7 +4353,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/desktop/management/local_group_widget.cc" line="163"/>
+        <location filename="../client/desktop/management/local_group_widget.cc" line="171"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
     </message>
@@ -4415,27 +4421,27 @@ Credenziali sostituite: %2</translation>
         <translation>Commento:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="64"/>
         <source>Edit Host</source>
         <translation>Modifica host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="62"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="64"/>
         <source>Add Host</source>
         <translation>Aggiungi host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="313"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="322"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="129"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="152"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="137"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -4443,22 +4449,22 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="148"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="171"/>
         <source>An invalid host address was entered.</source>
         <translation>È stato inserito un indirizzo host non valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="160"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="183"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="169"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="192"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="177"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="200"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
@@ -4466,52 +4472,47 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="190"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="215"/>
         <source>Failed to read data from the local database.</source>
         <translation>Impossibile leggere i dati dal database locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="199"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="224"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="223"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="246"/>
         <source>Unable to add host</source>
         <translation>Impossibile aggiungere l&apos;host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="233"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="256"/>
         <source>Unable to modify host</source>
         <translation>Impossibile modificare l&apos;host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="253"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="284"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Impossibile leggere l&apos;elenco delle credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="276"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="291"/>
         <source>Failed to read the list of profiles.</source>
         <translation>Impossibile leggere l&apos;elenco dei profili.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="289"/>
-        <source>Default</source>
-        <translation>Predefinito</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="297"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="307"/>
         <source>Failed to read the list of groups.</source>
         <translation>Impossibile leggere l&apos;elenco dei gruppi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="325"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="339"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Impossibile recuperare le informazioni dell&apos;host dal database locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_dialog.cc" line="360"/>
+        <location filename="../client/desktop/management/local_host_dialog.cc" line="368"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>I dati dell&apos;host sono danneggiati. Inseriscili di nuovo.</translation>
     </message>
@@ -4519,75 +4520,75 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>LocalHostEditor</name>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="54"/>
+        <location filename="../client/android/local_host_editor.cc" line="55"/>
         <source>Use existing</source>
         <translation>Usa esistenti</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="62"/>
+        <location filename="../client/android/local_host_editor.cc" line="63"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="63"/>
+        <location filename="../client/android/local_host_editor.cc" line="65"/>
         <source>Address / ID</source>
         <translation>Indirizzo / ID</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="64"/>
+        <location filename="../client/android/local_host_editor.cc" line="66"/>
         <source>User Name</source>
         <translation>Nome Utente</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="65"/>
+        <location filename="../client/android/local_host_editor.cc" line="68"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="67"/>
+        <location filename="../client/android/local_host_editor.cc" line="70"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="69"/>
+        <location filename="../client/android/local_host_editor.cc" line="72"/>
         <source>Comment</source>
         <translation>Commento</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="77"/>
+        <location filename="../client/android/local_host_editor.cc" line="81"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="80"/>
-        <location filename="../client/android/local_host_editor.cc" line="279"/>
+        <location filename="../client/android/local_host_editor.cc" line="84"/>
+        <location filename="../client/android/local_host_editor.cc" line="283"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="170"/>
+        <location filename="../client/android/local_host_editor.cc" line="329"/>
         <source>The data of the host is damaged. Enter it again.</source>
         <translation>I dati dell&apos;host sono danneggiati. Inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="196"/>
-        <location filename="../client/android/local_host_editor.cc" line="304"/>
-        <location filename="../client/android/local_host_editor.cc" line="341"/>
+        <location filename="../client/android/local_host_editor.cc" line="199"/>
+        <location filename="../client/android/local_host_editor.cc" line="340"/>
+        <location filename="../client/android/local_host_editor.cc" line="362"/>
         <source>Failed to read data from the local database.</source>
         <translation>Impossibile leggere i dati dal database locale.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="68"/>
+        <location filename="../client/android/local_host_editor.cc" line="71"/>
         <source>Profile</source>
         <translation>Profilo</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="203"/>
+        <location filename="../client/android/local_host_editor.cc" line="206"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="210"/>
+        <location filename="../client/android/local_host_editor.cc" line="213"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -4595,7 +4596,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/local_host_editor.cc" line="219"/>
+        <location filename="../client/android/local_host_editor.cc" line="222"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>Commento troppo lungo. La lunghezza massima del commento è di %n carattere.</numerusform>
@@ -4603,95 +4604,90 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="229"/>
+        <location filename="../client/android/local_host_editor.cc" line="232"/>
         <source>An invalid host address was entered.</source>
         <translation>È stato inserito un indirizzo host non valido.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="240"/>
+        <location filename="../client/android/local_host_editor.cc" line="243"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="249"/>
+        <location filename="../client/android/local_host_editor.cc" line="252"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="268"/>
+        <location filename="../client/android/local_host_editor.cc" line="271"/>
         <source>Failed to save the host.</source>
         <translation>Impossibile salvare l&apos;host.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="278"/>
+        <location filename="../client/android/local_host_editor.cc" line="282"/>
         <source>Delete Host</source>
         <translation>Elimina host</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="279"/>
+        <location filename="../client/android/local_host_editor.cc" line="283"/>
         <source>Delete the host &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;host &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/local_host_editor.cc" line="286"/>
+        <location filename="../client/android/local_host_editor.cc" line="290"/>
         <source>Failed to delete the host.</source>
         <translation>Impossibile eliminare l&apos;host.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/local_host_editor.cc" line="353"/>
-        <source>Default</source>
-        <translation>Predefinito</translation>
     </message>
 </context>
 <context>
     <name>LocalHostListModel</name>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="236"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="284"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="239"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="287"/>
         <source>Address / ID</source>
         <translation>Indirizzo / ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="242"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="290"/>
         <source>Comment</source>
         <translation>Commento</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="245"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="293"/>
         <source>Created</source>
         <translation>Creato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="248"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="296"/>
         <source>Modified</source>
         <translation>Modificato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="251"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="299"/>
         <source>Last Connect</source>
         <translation>Ultima connessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="254"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="302"/>
         <source>Status</source>
         <translation>Stato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="337"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="385"/>
         <source>Online</source>
         <translation>In linea</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="340"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="388"/>
         <source>Offline</source>
         <translation>Non in linea</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/local_host_list_model.cc" line="343"/>
+        <location filename="../client/desktop/management/local_host_list_model.cc" line="391"/>
         <source>Skipped</source>
         <translation>Saltato</translation>
     </message>
@@ -4699,142 +4695,147 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>LocalWidget</name>
     <message>
-        <location filename="../client/android/local_widget.cc" line="295"/>
-        <location filename="../client/android/local_widget.cc" line="444"/>
+        <location filename="../client/android/local_widget.cc" line="318"/>
+        <location filename="../client/android/local_widget.cc" line="473"/>
         <source>Add Group</source>
         <translation>Aggiungi gruppo</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="296"/>
-        <location filename="../client/android/local_widget.cc" line="454"/>
+        <location filename="../client/android/local_widget.cc" line="319"/>
+        <location filename="../client/android/local_widget.cc" line="483"/>
         <source>Add Host</source>
         <translation>Aggiungi host</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="355"/>
+        <location filename="../client/android/local_widget.cc" line="384"/>
         <source>Invalid password.</source>
         <translation>Password non valida.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="402"/>
+        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="431"/>
         <source>Aspia Backup (*.aspia-backup)</source>
         <translation>Backup Aspia (*.aspia-backup)</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="382"/>
+        <location filename="../client/android/local_widget.cc" line="411"/>
         <source>Router hosts imported: %1</source>
         <translation>Host dei router importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="383"/>
+        <location filename="../client/android/local_widget.cc" line="412"/>
         <source>Local groups imported: %1</source>
         <translation>Gruppi locali importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="384"/>
+        <location filename="../client/android/local_widget.cc" line="413"/>
         <source>Local hosts imported: %1</source>
         <translation>Host locali importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="385"/>
+        <location filename="../client/android/local_widget.cc" line="414"/>
         <source>Credentials imported: %1</source>
         <translation>Credenziali importate: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="386"/>
+        <location filename="../client/android/local_widget.cc" line="415"/>
         <source>Profiles imported: %1</source>
         <translation>Profili importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="415"/>
+        <location filename="../client/android/local_widget.cc" line="444"/>
         <source>Unable to write the file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="297"/>
         <location filename="../client/android/local_widget.cc" line="320"/>
-        <location filename="../client/android/local_widget.cc" line="324"/>
-        <location filename="../client/android/local_widget.cc" line="373"/>
-        <location filename="../client/android/local_widget.cc" line="392"/>
+        <location filename="../client/android/local_widget.cc" line="343"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
+        <location filename="../client/android/local_widget.cc" line="402"/>
+        <location filename="../client/android/local_widget.cc" line="421"/>
         <source>Restore from Backup</source>
         <translation>Ripristina da backup</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="298"/>
-        <location filename="../client/android/local_widget.cc" line="401"/>
-        <location filename="../client/android/local_widget.cc" line="429"/>
-        <location filename="../client/android/local_widget.cc" line="433"/>
+        <location filename="../client/android/local_widget.cc" line="321"/>
+        <location filename="../client/android/local_widget.cc" line="430"/>
+        <location filename="../client/android/local_widget.cc" line="458"/>
+        <location filename="../client/android/local_widget.cc" line="462"/>
         <source>Create Backup</source>
         <translation>Crea backup</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="325"/>
+        <location filename="../client/android/local_widget.cc" line="352"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. The synchronized data on the router and on the other devices of the account saved in the backup will be replaced as well.</source>
+        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup. Anche i dati sincronizzati sul router e sugli altri dispositivi dell&apos;account salvato nel backup verranno sostituiti.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/local_widget.cc" line="355"/>
         <source>Everything stored now is deleted and replaced with what the backup holds.</source>
         <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="326"/>
+        <location filename="../client/android/local_widget.cc" line="357"/>
         <source>Restore</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="359"/>
+        <location filename="../client/android/local_widget.cc" line="388"/>
         <source>Unsupported file format version.</source>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="363"/>
+        <location filename="../client/android/local_widget.cc" line="392"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="367"/>
+        <location filename="../client/android/local_widget.cc" line="396"/>
         <source>Failed to restore from the backup.</source>
         <translation>Impossibile ripristinare dal backup.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="380"/>
+        <location filename="../client/android/local_widget.cc" line="409"/>
         <source>Router imported</source>
         <translation>Router importato</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="419"/>
+        <location filename="../client/android/local_widget.cc" line="448"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="423"/>
+        <location filename="../client/android/local_widget.cc" line="452"/>
         <source>Failed to create the backup.</source>
         <translation>Impossibile creare il backup.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="434"/>
+        <location filename="../client/android/local_widget.cc" line="463"/>
         <source>The file is written to %1. To open it elsewhere the master password of this installation is needed.</source>
         <translation>Il file è stato scritto in %1. Per aprirlo altrove è necessaria la password principale di questa installazione.</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="542"/>
+        <location filename="../client/android/local_widget.cc" line="604"/>
         <source>Edit Group</source>
         <translation>Modifica gruppo</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="553"/>
+        <location filename="../client/android/local_widget.cc" line="615"/>
         <source>Edit Host</source>
         <translation>Modifica host</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="663"/>
+        <location filename="../client/android/local_widget.cc" line="742"/>
         <source>Desktop</source>
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="665"/>
+        <location filename="../client/android/local_widget.cc" line="744"/>
         <source>File Transfer</source>
         <translation>Trasferimento file</translation>
     </message>
     <message>
-        <location filename="../client/android/local_widget.cc" line="667"/>
+        <location filename="../client/android/local_widget.cc" line="746"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
@@ -4864,7 +4865,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/main_window.ui" line="20"/>
-        <location filename="../client/desktop/main_window.cc" line="572"/>
+        <location filename="../client/desktop/main_window.cc" line="574"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -4949,72 +4950,72 @@ Credenziali sostituite: %2</translation>
         <translation>Visualizza</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="126"/>
+        <location filename="../client/desktop/main_window.cc" line="129"/>
         <source>Search...</source>
         <translation>Cerca...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="218"/>
+        <location filename="../client/desktop/main_window.cc" line="220"/>
         <source>The MCP connector is already in use by another window of the application.</source>
         <translation>Il connettore MCP è già utilizzato da un&apos;altra finestra dell&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="220"/>
+        <location filename="../client/desktop/main_window.cc" line="222"/>
         <source>Unable to turn on the MCP connector.</source>
         <translation>Impossibile attivare il connettore MCP.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="243"/>
+        <location filename="../client/desktop/main_window.cc" line="245"/>
         <source>Management</source>
         <translation>Gestione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="286"/>
+        <location filename="../client/desktop/main_window.cc" line="288"/>
         <source>Are you sure you want to close the application?</source>
         <translation>Chiudere l&apos;applicazione?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="527"/>
+        <location filename="../client/desktop/main_window.cc" line="529"/>
         <source>Close all sessions to change the database.</source>
         <translation>Chiudi tutte le sessioni per cambiare database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="533"/>
+        <location filename="../client/desktop/main_window.cc" line="535"/>
         <source>Close all dialogs to change the database.</source>
         <translation>Chiudi tutte le finestre di dialogo per cambiare database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="548"/>
+        <location filename="../client/desktop/main_window.cc" line="550"/>
         <source>Close all sessions to lock the application.</source>
         <translation>Chiudi tutte le sessioni per bloccare l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="554"/>
+        <location filename="../client/desktop/main_window.cc" line="556"/>
         <source>Close all dialogs to lock the application.</source>
         <translation>Chiudi tutte le finestre di dialogo per bloccare l&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="915"/>
+        <location filename="../client/desktop/main_window.cc" line="917"/>
         <source>Unknown application</source>
         <translation>Applicazione sconosciuta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="918"/>
+        <location filename="../client/desktop/main_window.cc" line="920"/>
         <source>MCP Connector. Connected: %1</source>
         <translation>Connettore MCP. Applicazioni connesse: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="919"/>
+        <location filename="../client/desktop/main_window.cc" line="921"/>
         <source>%1 - AI is connected</source>
         <translation>%1 - IA connessa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="480"/>
+        <location filename="../client/desktop/main_window.cc" line="482"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
     <message>
-        <location filename="../client/desktop/main_window.cc" line="517"/>
+        <location filename="../client/desktop/main_window.cc" line="519"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
@@ -5053,7 +5054,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/management_tab.ui" line="110"/>
-        <location filename="../client/desktop/management_tab.cc" line="1972"/>
+        <location filename="../client/desktop/management_tab.cc" line="1945"/>
         <source>Delete Host</source>
         <translation>Elimina host</translation>
     </message>
@@ -5190,34 +5191,34 @@ Credenziali sostituite: %2</translation>
         <translation>Aggiornamento automatico dello stato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1084"/>
+        <location filename="../client/desktop/management_tab.cc" line="1041"/>
         <source>(copy)</source>
         <translation>(copia)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1052"/>
-        <location filename="../client/desktop/management_tab.cc" line="1129"/>
-        <location filename="../client/desktop/management_tab.cc" line="2188"/>
+        <location filename="../client/desktop/management_tab.cc" line="1011"/>
+        <location filename="../client/desktop/management_tab.cc" line="1090"/>
+        <location filename="../client/desktop/management_tab.cc" line="2161"/>
         <source>Failed to retrieve host information from the local database.</source>
         <translation>Impossibile recuperare le informazioni dell&apos;host dal database locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="884"/>
+        <location filename="../client/desktop/management_tab.cc" line="843"/>
         <source>The &quot;%1&quot; session type is not available for Quick Support.</source>
         <translation>Il tipo di sessione &quot;%1&quot; non è disponibile per Quick Support.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1089"/>
+        <location filename="../client/desktop/management_tab.cc" line="1046"/>
         <source>Failed to add the host to the local database.</source>
         <translation>Impossibile aggiungere l&apos;host al database locale.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1147"/>
+        <location filename="../client/desktop/management_tab.cc" line="1108"/>
         <source>Are you sure you want to delete host &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;host &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1149"/>
+        <location filename="../client/desktop/management_tab.cc" line="1110"/>
         <source>Are you sure you want to delete %n hosts?</source>
         <translation>
             <numerusform>Eliminare %n host?</numerusform>
@@ -5225,12 +5226,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1175"/>
+        <location filename="../client/desktop/management_tab.cc" line="1139"/>
         <source>Unable to remove host</source>
         <translation>Impossibile rimuovere l&apos;host</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management_tab.cc" line="1177"/>
+        <location filename="../client/desktop/management_tab.cc" line="1141"/>
         <source>Failed to delete %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile eliminare %n degli host selezionati.</numerusform>
@@ -5238,226 +5239,231 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1243"/>
-        <location filename="../client/desktop/management_tab.cc" line="1320"/>
-        <location filename="../client/desktop/management_tab.cc" line="1353"/>
-        <location filename="../client/desktop/management_tab.cc" line="1376"/>
+        <location filename="../client/desktop/management_tab.cc" line="1207"/>
+        <location filename="../client/desktop/management_tab.cc" line="1284"/>
+        <location filename="../client/desktop/management_tab.cc" line="1317"/>
+        <location filename="../client/desktop/management_tab.cc" line="1340"/>
         <source>Copy Row</source>
         <translation>Copia riga</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1244"/>
-        <location filename="../client/desktop/management_tab.cc" line="1321"/>
-        <location filename="../client/desktop/management_tab.cc" line="1354"/>
-        <location filename="../client/desktop/management_tab.cc" line="1377"/>
+        <location filename="../client/desktop/management_tab.cc" line="1208"/>
+        <location filename="../client/desktop/management_tab.cc" line="1285"/>
+        <location filename="../client/desktop/management_tab.cc" line="1318"/>
+        <location filename="../client/desktop/management_tab.cc" line="1341"/>
         <source>Copy Value</source>
         <translation>Copia valore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1611"/>
+        <location filename="../client/desktop/management_tab.cc" line="1575"/>
         <source>Failed to delete the group.</source>
         <translation>Impossibile eliminare il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1649"/>
-        <location filename="../client/desktop/management_tab.cc" line="1705"/>
+        <location filename="../client/desktop/management_tab.cc" line="1613"/>
+        <location filename="../client/desktop/management_tab.cc" line="1669"/>
         <source>The database is not available.</source>
         <translation>Il database non è disponibile.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1655"/>
+        <location filename="../client/desktop/management_tab.cc" line="1619"/>
         <source>Create Backup</source>
         <translation>Crea backup</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1687"/>
+        <location filename="../client/desktop/management_tab.cc" line="1651"/>
         <source>Router exported</source>
         <translation>Router esportato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1783"/>
+        <location filename="../client/desktop/management_tab.cc" line="1689"/>
+        <source>Everything stored now is deleted and replaced with what the backup holds. The synchronized data on the router and on the other devices of the account saved in the backup will be replaced as well. Continue?</source>
+        <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup. Anche i dati sincronizzati sul router e sugli altri dispositivi dell&apos;account salvato nel backup verranno sostituiti. Continuare?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/management_tab.cc" line="1756"/>
         <source>Router imported</source>
         <translation>Router importato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2031"/>
+        <location filename="../client/desktop/management_tab.cc" line="2004"/>
         <source>Delete Hosts</source>
         <translation>Elimina host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2183"/>
+        <location filename="../client/desktop/management_tab.cc" line="2156"/>
         <source>The data of the host is damaged. Edit the host and enter it again.</source>
         <translation>I dati dell&apos;host sono danneggiati. Modifica l&apos;host e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2203"/>
+        <location filename="../client/desktop/management_tab.cc" line="2176"/>
         <source>The data of the router is damaged. Edit the router and enter it again.</source>
         <translation>I dati del router sono danneggiati. Modifica il router e inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2209"/>
+        <location filename="../client/desktop/management_tab.cc" line="2182"/>
         <source>The host is reached through a router, but no router is set. Add a router or enter the address of the host instead of its ID.</source>
         <translation>La connessione all&apos;host avviene tramite un router, ma nessun router è configurato. Aggiungi un router o inserisci l&apos;indirizzo dell&apos;host invece del suo ID.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2216"/>
+        <location filename="../client/desktop/management_tab.cc" line="2189"/>
         <source>Failed to read the router.</source>
         <translation>Impossibile leggere il router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2222"/>
+        <location filename="../client/desktop/management_tab.cc" line="2195"/>
         <source>The router is turned off. Turn it on in the router settings to connect to this host.</source>
         <translation>Il router è disattivato. Attivalo nelle impostazioni del router per connetterti a questo host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1680"/>
+        <location filename="../client/desktop/management_tab.cc" line="1644"/>
         <source>Failed to create the backup.</source>
         <translation>Impossibile creare il backup.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1684"/>
+        <location filename="../client/desktop/management_tab.cc" line="1648"/>
         <source>Export completed successfully.</source>
         <translation>Esportazione completata con successo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1689"/>
+        <location filename="../client/desktop/management_tab.cc" line="1653"/>
         <source>Router hosts exported: %1</source>
         <translation>Host dei router esportati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1690"/>
+        <location filename="../client/desktop/management_tab.cc" line="1654"/>
         <source>Local groups exported: %1</source>
         <translation>Gruppi locali esportati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1691"/>
+        <location filename="../client/desktop/management_tab.cc" line="1655"/>
         <source>Local hosts exported: %1</source>
         <translation>Host locali esportati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1692"/>
+        <location filename="../client/desktop/management_tab.cc" line="1656"/>
         <source>Credentials exported: %1</source>
         <translation>Credenziali esportate: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1693"/>
+        <location filename="../client/desktop/management_tab.cc" line="1657"/>
         <source>Profiles exported: %1</source>
         <translation>Profili esportati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1711"/>
-        <location filename="../client/desktop/management_tab.cc" line="1737"/>
+        <location filename="../client/desktop/management_tab.cc" line="1675"/>
+        <location filename="../client/desktop/management_tab.cc" line="1710"/>
         <source>Restore from Backup</source>
         <translation>Ripristina da backup</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1720"/>
+        <location filename="../client/desktop/management_tab.cc" line="1692"/>
         <source>Everything stored now is deleted and replaced with what the backup holds. Continue?</source>
         <translation>Tutto il contenuto attuale verrà eliminato e sostituito con quello del backup. Continuare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1739"/>
+        <location filename="../client/desktop/management_tab.cc" line="1712"/>
         <source>The backup was made on another installation. Enter the master password used there.</source>
         <translation>Il backup è stato creato su un&apos;altra installazione. Inserire la password principale utilizzata su di essa.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1764"/>
+        <location filename="../client/desktop/management_tab.cc" line="1737"/>
         <source>The backup carries no data, so nothing was changed.</source>
         <translation>Il backup non contiene alcun dato, quindi non è stato modificato nulla.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1772"/>
+        <location filename="../client/desktop/management_tab.cc" line="1745"/>
         <source>The file is not a valid backup.</source>
         <translation>Il file non è un backup valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1776"/>
+        <location filename="../client/desktop/management_tab.cc" line="1749"/>
         <source>Failed to restore from the backup.</source>
         <translation>Impossibile ripristinare dal backup.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1780"/>
+        <location filename="../client/desktop/management_tab.cc" line="1753"/>
         <source>Import completed successfully.</source>
         <translation>Importazione completata con successo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1785"/>
+        <location filename="../client/desktop/management_tab.cc" line="1758"/>
         <source>Router hosts imported: %1</source>
         <translation>Host dei router importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1786"/>
+        <location filename="../client/desktop/management_tab.cc" line="1759"/>
         <source>Local groups imported: %1</source>
         <translation>Gruppi locali importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1787"/>
+        <location filename="../client/desktop/management_tab.cc" line="1760"/>
         <source>Local hosts imported: %1</source>
         <translation>Host locali importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1788"/>
+        <location filename="../client/desktop/management_tab.cc" line="1761"/>
         <source>Credentials imported: %1</source>
         <translation>Credenziali importate: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1789"/>
+        <location filename="../client/desktop/management_tab.cc" line="1762"/>
         <source>Profiles imported: %1</source>
         <translation>Profili importati: %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1656"/>
-        <location filename="../client/desktop/management_tab.cc" line="1712"/>
+        <location filename="../client/desktop/management_tab.cc" line="1620"/>
+        <location filename="../client/desktop/management_tab.cc" line="1676"/>
         <source>Aspia Backup (*.aspia-backup);;All files (*)</source>
         <translation>Backup Aspia (*.aspia-backup);;Tutti i file (*)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1672"/>
+        <location filename="../client/desktop/management_tab.cc" line="1636"/>
         <source>Unable to write the file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1768"/>
+        <location filename="../client/desktop/management_tab.cc" line="1741"/>
         <source>Unable to read the file.</source>
         <translation>Impossibile leggere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1476"/>
+        <location filename="../client/desktop/management_tab.cc" line="1440"/>
         <source>Are you sure you want to delete space &quot;%1&quot;?</source>
         <translation>Eliminare lo spazio &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1496"/>
+        <location filename="../client/desktop/management_tab.cc" line="1460"/>
         <source>Failed to delete the space.</source>
         <translation>Impossibile eliminare lo spazio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1593"/>
+        <location filename="../client/desktop/management_tab.cc" line="1557"/>
         <source>Are you sure you want to delete the group &quot;%1&quot;? Hosts assigned to this group or its subgroups will be moved to the space root.</source>
         <translation>Eliminare il gruppo &quot;%1&quot;? Gli host assegnati a questo gruppo o ai suoi sottogruppi verranno spostati nella radice dello spazio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1676"/>
+        <location filename="../client/desktop/management_tab.cc" line="1640"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1756"/>
+        <location filename="../client/desktop/management_tab.cc" line="1729"/>
         <source>Unable to decrypt the file with the specified password.</source>
         <translation>Impossibile decifrare il file con la password specificata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="1760"/>
+        <location filename="../client/desktop/management_tab.cc" line="1733"/>
         <source>Unsupported file format version.</source>
         <translation>Versione del formato file non supportata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2229"/>
+        <location filename="../client/desktop/management_tab.cc" line="2202"/>
         <source>The host has an invalid host ID.</source>
         <translation>L&apos;host ha un ID host non valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management_tab.cc" line="2238"/>
+        <location filename="../client/desktop/management_tab.cc" line="2211"/>
         <source>The host has an incorrect address.</source>
         <translation>L&apos;host ha un indirizzo errato.</translation>
     </message>
@@ -5476,7 +5482,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/android/master_password_dialog.cc" line="54"/>
-        <location filename="../client/android/master_password_dialog.cc" line="171"/>
+        <location filename="../client/android/master_password_dialog.cc" line="169"/>
         <source>Unlock</source>
         <translation>Sblocca</translation>
     </message>
@@ -5534,18 +5540,18 @@ Credenziali sostituite: %2</translation>
         <translation>Impossibile impostare la password principale.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="172"/>
+        <location filename="../client/android/master_password_dialog.cc" line="170"/>
         <source>Use password</source>
         <translation>Usa password</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="189"/>
-        <location filename="../client/android/master_password_dialog.cc" line="197"/>
+        <location filename="../client/android/master_password_dialog.cc" line="187"/>
+        <location filename="../client/android/master_password_dialog.cc" line="195"/>
         <source>Biometric unlock failed. Enter the master password.</source>
         <translation>Sblocco biometrico non riuscito. Inserisci la password principale.</translation>
     </message>
     <message>
-        <location filename="../client/android/master_password_dialog.cc" line="193"/>
+        <location filename="../client/android/master_password_dialog.cc" line="191"/>
         <source>Biometrics changed. Enter the master password to continue.</source>
         <translation>La biometria è cambiata. Inserisci la password principale per continuare.</translation>
     </message>
@@ -6023,135 +6029,144 @@ Credenziali sostituite: %2</translation>
     </message>
 </context>
 <context>
+    <name>ProfileComboBox</name>
+    <message>
+        <location filename="../client/android/profile_combo_box.cc" line="71"/>
+        <location filename="../client/desktop/management/profile_combo_box.cc" line="70"/>
+        <source>Default</source>
+        <translation>Predefinito</translation>
+    </message>
+</context>
+<context>
     <name>ProfileEditor</name>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="48"/>
+        <location filename="../client/android/profile_editor.cc" line="49"/>
         <source>Enable audio</source>
         <translation>Abilita audio</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="49"/>
+        <location filename="../client/android/profile_editor.cc" line="50"/>
         <source>Enable clipboard</source>
         <translation>Abilita appunti</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="50"/>
+        <location filename="../client/android/profile_editor.cc" line="51"/>
         <source>Show shape of remote cursor</source>
         <translation>Mostra la forma del cursore remoto</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="51"/>
+        <location filename="../client/android/profile_editor.cc" line="52"/>
         <source>Show position of remote cursor</source>
         <translation>Mostra la posizione del cursore remoto</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="52"/>
+        <location filename="../client/android/profile_editor.cc" line="53"/>
         <source>Disable desktop effects</source>
         <translation>Disabilita effetti del desktop</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="53"/>
+        <location filename="../client/android/profile_editor.cc" line="54"/>
         <source>Disable desktop wallpaper</source>
         <translation>Disabilita sfondo del desktop</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="54"/>
+        <location filename="../client/android/profile_editor.cc" line="55"/>
         <source>Lock computer at disconnect</source>
         <translation>Blocca il computer alla disconnessione</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="55"/>
+        <location filename="../client/android/profile_editor.cc" line="56"/>
         <source>Block remote input</source>
         <translation>Blocca input remoto</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="57"/>
+        <location filename="../client/android/profile_editor.cc" line="58"/>
         <source>Allow direct connections</source>
         <translation>Consenti connessioni dirette</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="58"/>
+        <location filename="../client/android/profile_editor.cc" line="59"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Consenti UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="59"/>
+        <location filename="../client/android/profile_editor.cc" line="60"/>
         <source>Allow PCP protocol</source>
         <translation>Consenti protocollo PCP</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="60"/>
+        <location filename="../client/android/profile_editor.cc" line="61"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Consenti protocollo NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="61"/>
+        <location filename="../client/android/profile_editor.cc" line="62"/>
         <source>Allow UPnP protocol</source>
         <translation>Consenti protocollo UPnP</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="64"/>
+        <location filename="../client/android/profile_editor.cc" line="65"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="66"/>
+        <location filename="../client/android/profile_editor.cc" line="68"/>
         <source>Quality</source>
         <translation>Qualità</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="67"/>
+        <location filename="../client/android/profile_editor.cc" line="69"/>
         <source>Automatic</source>
         <translation>Automatica</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="68"/>
+        <location filename="../client/android/profile_editor.cc" line="70"/>
         <source>Low</source>
         <translation>Bassa</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="69"/>
+        <location filename="../client/android/profile_editor.cc" line="71"/>
         <source>Medium</source>
         <translation>Media</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="70"/>
+        <location filename="../client/android/profile_editor.cc" line="72"/>
         <source>High</source>
         <translation>Alta</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="76"/>
+        <location filename="../client/android/profile_editor.cc" line="78"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="78"/>
-        <location filename="../client/android/profile_editor.cc" line="302"/>
+        <location filename="../client/android/profile_editor.cc" line="80"/>
+        <location filename="../client/android/profile_editor.cc" line="325"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="90"/>
+        <location filename="../client/android/profile_editor.cc" line="92"/>
         <source>Remote Desktop</source>
         <translation>Desktop remoto</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="102"/>
+        <location filename="../client/android/profile_editor.cc" line="104"/>
         <source>UDP Connections</source>
         <translation>Connessioni UDP</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="191"/>
+        <location filename="../client/android/profile_editor.cc" line="195"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>Il profilo è danneggiato. Correggilo o eliminalo.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="213"/>
+        <location filename="../client/android/profile_editor.cc" line="235"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/android/profile_editor.cc" line="220"/>
+        <location filename="../client/android/profile_editor.cc" line="242"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -6159,32 +6174,32 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="230"/>
+        <location filename="../client/android/profile_editor.cc" line="252"/>
         <source>Default</source>
         <translation>Predefinito</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="242"/>
+        <location filename="../client/android/profile_editor.cc" line="264"/>
         <source>A profile with this name already exists.</source>
         <translation>Un profilo con questo nome esiste già.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="291"/>
+        <location filename="../client/android/profile_editor.cc" line="313"/>
         <source>Failed to save the profile.</source>
         <translation>Impossibile salvare il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="301"/>
+        <location filename="../client/android/profile_editor.cc" line="324"/>
         <source>Delete Profile</source>
         <translation>Elimina profilo</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="302"/>
+        <location filename="../client/android/profile_editor.cc" line="325"/>
         <source>Delete the profile &quot;%1&quot;?</source>
         <translation>Eliminare il profilo &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/android/profile_editor.cc" line="309"/>
+        <location filename="../client/android/profile_editor.cc" line="332"/>
         <source>Failed to delete the profile.</source>
         <translation>Impossibile eliminare il profilo.</translation>
     </message>
@@ -6192,22 +6207,22 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>ProfilesWidget</name>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="101"/>
+        <location filename="../client/android/profiles_widget.cc" line="104"/>
         <source>Default</source>
         <translation>Predefinito</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="124"/>
+        <location filename="../client/android/profiles_widget.cc" line="127"/>
         <source>Add Profile</source>
         <translation>Aggiungi profilo</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="135"/>
+        <location filename="../client/android/profiles_widget.cc" line="138"/>
         <source>Edit Profile</source>
         <translation>Modifica profilo</translation>
     </message>
     <message>
-        <location filename="../client/android/profiles_widget.cc" line="150"/>
+        <location filename="../client/android/profiles_widget.cc" line="153"/>
         <source>Profiles</source>
         <translation>Profili</translation>
     </message>
@@ -6238,17 +6253,17 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>QAbstractSpinBox</name>
     <message>
-        <location filename="../base/gui_application.cc" line="102"/>
+        <location filename="../base/gui_application.cc" line="105"/>
         <source>&amp;Select All</source>
         <translation>&amp;Seleziona tutto</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="103"/>
+        <location filename="../base/gui_application.cc" line="106"/>
         <source>&amp;Step up</source>
         <translation>Incre&amp;menta</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="104"/>
+        <location filename="../base/gui_application.cc" line="107"/>
         <source>Step &amp;down</source>
         <translation>&amp;Decrementa</translation>
     </message>
@@ -6256,7 +6271,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>QGuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="81"/>
+        <location filename="../base/gui_application.cc" line="84"/>
         <source>QT_LAYOUT_DIRECTION</source>
         <translation>LTR</translation>
     </message>
@@ -6264,37 +6279,37 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../base/gui_application.cc" line="87"/>
+        <location filename="../base/gui_application.cc" line="90"/>
         <source>&amp;Undo</source>
         <translation>&amp;Annulla</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="88"/>
+        <location filename="../base/gui_application.cc" line="91"/>
         <source>&amp;Redo</source>
         <translation>&amp;Ripeti</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="89"/>
+        <location filename="../base/gui_application.cc" line="92"/>
         <source>Cu&amp;t</source>
         <translation>&amp;Taglia</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="90"/>
+        <location filename="../base/gui_application.cc" line="93"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copia</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="91"/>
+        <location filename="../base/gui_application.cc" line="94"/>
         <source>&amp;Paste</source>
         <translation>&amp;Incolla</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="92"/>
+        <location filename="../base/gui_application.cc" line="95"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="93"/>
+        <location filename="../base/gui_application.cc" line="96"/>
         <source>Select All</source>
         <translation>Seleziona tutto</translation>
     </message>
@@ -6302,12 +6317,13 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../common/android/message_dialog.cc" line="34"/>
+        <location filename="../common/android/message_dialog.cc" line="35"/>
+        <location filename="../common/android/message_dialog.cc" line="53"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../common/android/message_dialog.cc" line="51"/>
+        <location filename="../common/android/message_dialog.cc" line="94"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -6315,42 +6331,42 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>QWidgetTextControl</name>
     <message>
-        <location filename="../base/gui_application.cc" line="94"/>
+        <location filename="../base/gui_application.cc" line="97"/>
         <source>&amp;Undo</source>
         <translation>&amp;Annulla</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="95"/>
+        <location filename="../base/gui_application.cc" line="98"/>
         <source>&amp;Redo</source>
         <translation>&amp;Ripeti</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="96"/>
+        <location filename="../base/gui_application.cc" line="99"/>
         <source>Cu&amp;t</source>
         <translation>&amp;Taglia</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="97"/>
+        <location filename="../base/gui_application.cc" line="100"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copia</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="98"/>
+        <location filename="../base/gui_application.cc" line="101"/>
         <source>Copy &amp;Link Location</source>
         <translation>Copia indiri&amp;zzo collegamento</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="99"/>
+        <location filename="../base/gui_application.cc" line="102"/>
         <source>&amp;Paste</source>
         <translation>&amp;Incolla</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="100"/>
+        <location filename="../base/gui_application.cc" line="103"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="101"/>
+        <location filename="../base/gui_application.cc" line="104"/>
         <source>Select All</source>
         <translation>Seleziona tutto</translation>
     </message>
@@ -6363,17 +6379,17 @@ Credenziali sostituite: %2</translation>
         <translation>Connessione rapida</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.ui" line="23"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="66"/>
         <source>Host name, IP address or ID</source>
         <translation>Nome host, indirizzo IP o ID</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="62"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="61"/>
         <source>Connect</source>
         <translation>Connetti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/quick_connect_dialog.cc" line="124"/>
+        <location filename="../client/desktop/quick_connect_dialog.cc" line="118"/>
         <source>An invalid host address was entered.</source>
         <translation>È stato inserito un indirizzo host non valido.</translation>
     </message>
@@ -6457,6 +6473,19 @@ Credenziali sostituite: %2</translation>
     </message>
 </context>
 <context>
+    <name>Router2FA</name>
+    <message>
+        <location filename="../client/router/router_2fa.cc" line="276"/>
+        <source>Router %1 did not perform two-factor authentication. Signing in is not possible.</source>
+        <translation>Il router %1 non ha eseguito l&apos;autenticazione a due fattori. Impossibile accedere.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_2fa.cc" line="296"/>
+        <source>Signed in as another user. Data synchronization has been turned off.</source>
+        <translation>Accesso effettuato con un altro utente. La sincronizzazione dei dati è stata disattivata.</translation>
+    </message>
+</context>
+<context>
     <name>RouterAccessLogWidget</name>
     <message>
         <location filename="../client/desktop/management/router_access_log_widget.ui" line="46"/>
@@ -6524,32 +6553,32 @@ Credenziali sostituite: %2</translation>
         <translation>Elementi per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="119"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="120"/>
         <source>All Session Types</source>
         <translation>Tutti i tipi di sessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="270"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="270"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="292"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="281"/>
         <source>Could not open file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="327"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="316"/>
         <source>Unable to write file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_access_log_widget.cc" line="537"/>
+        <location filename="../client/desktop/management/router_access_log_widget.cc" line="526"/>
         <source>%n entry(s)</source>
         <translation>
             <numerusform>%n voce</numerusform>
@@ -6560,18 +6589,18 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterCard</name>
     <message>
-        <location filename="../client/android/router_card.cc" line="178"/>
-        <location filename="../client/android/router_card.cc" line="227"/>
+        <location filename="../client/android/router_card.cc" line="171"/>
+        <location filename="../client/android/router_card.cc" line="223"/>
         <source>Enter Code</source>
         <translation>Inserisci codice</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="225"/>
+        <location filename="../client/android/router_card.cc" line="221"/>
         <source>Blocked</source>
         <translation>Bloccato</translation>
     </message>
     <message>
-        <location filename="../client/android/router_card.cc" line="227"/>
+        <location filename="../client/android/router_card.cc" line="223"/>
         <source>Set Up</source>
         <translation>Configura</translation>
     </message>
@@ -6579,32 +6608,32 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterClientsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="216"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="226"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="216"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="237"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="227"/>
         <source>Could not open file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="273"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="263"/>
         <source>Unable to write file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="283"/>
         <source>Are you sure you want to disconnect client &quot;%1&quot;?</source>
         <translation>Disconnettere il client &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="298"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="288"/>
         <source>Are you sure you want to disconnect %n clients?</source>
         <translation>
             <numerusform>Disconnettere %n client?</numerusform>
@@ -6612,7 +6641,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="345"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="335"/>
         <source>Failed to disconnect %n of the selected clients.</source>
         <translation>
             <numerusform>Impossibile disconnettere %n dei client selezionati.</numerusform>
@@ -6620,7 +6649,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_clients_widget.cc" line="501"/>
+        <location filename="../client/desktop/management/router_clients_widget.cc" line="491"/>
         <source>%n client(s)</source>
         <translation>
             <numerusform>%n client</numerusform>
@@ -6656,100 +6685,181 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterController</name>
     <message>
-        <location filename="../client/router/router_controller.cc" line="191"/>
-        <location filename="../client/router/router_controller.cc" line="216"/>
-        <location filename="../client/router/router_controller.cc" line="390"/>
+        <location filename="../client/router/router_controller.cc" line="173"/>
+        <source>Data synchronization will be reset after connecting to router %1.</source>
+        <translation>La sincronizzazione dei dati verrà reimpostata dopo la connessione al router %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="257"/>
+        <location filename="../client/router/router_controller.cc" line="282"/>
+        <location filename="../client/router/router_controller.cc" line="481"/>
         <source>Connecting to router %1...</source>
         <translation>Connessione al router %1...</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="235"/>
+        <location filename="../client/router/router_controller.cc" line="301"/>
         <source>Event history cleared.</source>
         <translation>Cronologia degli eventi cancellata.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="278"/>
+        <location filename="../client/router/router_controller.cc" line="344"/>
         <source>Too many failed attempts. Router %1 accepts codes again in about %2 min.</source>
         <translation>Troppi tentativi falliti. Il router %1 accetterà di nuovo i codici tra circa %2 min.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="284"/>
+        <location filename="../client/router/router_controller.cc" line="350"/>
         <source>The code was not accepted by router %1.</source>
         <translation>Il codice non è stato accettato dal router %1.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="286"/>
+        <location filename="../client/router/router_controller.cc" line="352"/>
         <source>Router %1 is waiting for a two-factor code.</source>
         <translation>Il router %1 è in attesa di un codice a due fattori.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="309"/>
+        <location filename="../client/router/router_controller.cc" line="382"/>
         <source>Connection to router %1 established.</source>
         <translation>Connessione al router %1 stabilita.</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="350"/>
+        <location filename="../client/router/router_controller.cc" line="407"/>
+        <source>The version of router %1 is newer than the client version (%2 &gt; %3). Update the client.</source>
+        <translation>La versione del router %1 è più recente di quella del client (%2 &gt; %3). Aggiorna il client.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="441"/>
         <source>Network error: %1</source>
         <translation>Errore di rete: %1</translation>
     </message>
     <message>
-        <location filename="../client/router/router_controller.cc" line="364"/>
+        <location filename="../client/router/router_controller.cc" line="455"/>
         <source>Disconnected from router %1.</source>
         <translation>Disconnesso dal router %1.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="569"/>
+        <source>Data synchronization is on.</source>
+        <translation>La sincronizzazione dei dati è attiva.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="574"/>
+        <source>The synchronization key cannot be opened with the password of the account. Sign in with the current password on a device that is already synchronized.</source>
+        <translation>Impossibile aprire la chiave di sincronizzazione con la password dell&apos;account. Accedi con la password attuale su un dispositivo già sincronizzato.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="580"/>
+        <source>Synchronization error: %1</source>
+        <translation>Errore di sincronizzazione: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="585"/>
+        <source>The router returned an invalid answer to the synchronization.</source>
+        <translation>Il router ha restituito una risposta non valida durante la sincronizzazione.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="590"/>
+        <source>Synchronization stopped because of an error on this device.</source>
+        <translation>Sincronizzazione interrotta a causa di un errore su questo dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../client/router/router_controller.cc" line="650"/>
+        <source>Unable to save the user of router %1. Data synchronization does not work in this connection.</source>
+        <translation>Impossibile salvare l&apos;utente del router %1. La sincronizzazione dei dati non funziona in questa connessione.</translation>
     </message>
 </context>
 <context>
     <name>RouterEditor</name>
     <message>
-        <location filename="../client/android/router_editor.cc" line="51"/>
+        <location filename="../client/android/router_editor.cc" line="53"/>
         <source>Enabled</source>
         <translation>Abilitato</translation>
     </message>
     <message>
         <location filename="../client/android/router_editor.cc" line="54"/>
+        <source>Synchronize data</source>
+        <translation>Sincronizza dati</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="236"/>
+        <source>Reset Synchronization</source>
+        <translation>Reimposta sincronizzazione</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="58"/>
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="55"/>
+        <location filename="../client/android/router_editor.cc" line="59"/>
         <source>User Name</source>
         <translation>Nome Utente</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="56"/>
+        <location filename="../client/android/router_editor.cc" line="61"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="65"/>
+        <location filename="../client/android/router_editor.cc" line="70"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="127"/>
+        <location filename="../client/android/router_editor.cc" line="148"/>
         <source>The data of the router is damaged. Enter it again.</source>
         <translation>I dati del router sono danneggiati. Inseriscili di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="140"/>
+        <location filename="../client/android/router_editor.cc" line="161"/>
         <source>An invalid router address was entered.</source>
         <translation>È stato inserito un indirizzo router non valido.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="149"/>
+        <location filename="../client/android/router_editor.cc" line="170"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="159"/>
+        <location filename="../client/android/router_editor.cc" line="180"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_editor.cc" line="184"/>
-        <location filename="../client/android/router_editor.cc" line="193"/>
+        <location filename="../client/android/router_editor.cc" line="201"/>
+        <location filename="../client/android/router_editor.cc" line="223"/>
         <source>Failed to save the router.</source>
         <translation>Impossibile salvare il router.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="214"/>
+        <source>The synchronized data of this device will be sent to the storage of the account &quot;%1&quot;. Continue?</source>
+        <translation>I dati sincronizzati di questo dispositivo verranno inviati all&apos;archivio dell&apos;account &quot;%1&quot;. Continuare?</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="217"/>
+        <source>Confirmation</source>
+        <translation>Conferma</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="217"/>
+        <source>Continue</source>
+        <translation>Continua</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="234"/>
+        <source>The data on the router and on the other devices will be replaced with the data of this device.</source>
+        <translation>I dati sul router e sugli altri dispositivi verranno sostituiti con i dati di questo dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="236"/>
+        <source>Reset</source>
+        <translation>Reimposta</translation>
+    </message>
+    <message>
+        <location filename="../client/android/router_editor.cc" line="240"/>
+        <source>Failed to reset the synchronization.</source>
+        <translation>Impossibile reimpostare la sincronizzazione.</translation>
     </message>
 </context>
 <context>
@@ -6816,6 +6926,11 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../common/desktop/router_error.cc" line="59"/>
+        <source>The limit on the number of records has been reached.</source>
+        <translation>È stato raggiunto il limite del numero di record.</translation>
+    </message>
+    <message>
+        <location filename="../common/desktop/router_error.cc" line="61"/>
         <source>Unknown error type.</source>
         <translation>Tipo di errore sconosciuto.</translation>
     </message>
@@ -6876,7 +6991,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_group_widget.cc" line="425"/>
+        <location filename="../client/desktop/management/router_group_widget.cc" line="414"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -6932,11 +7047,6 @@ Credenziali sostituite: %2</translation>
         <translation>Nome Utente:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="118"/>
-        <source>The user name and the password are stored on this computer only and are not sent to the router.</source>
-        <translation>Il nome utente e la password vengono memorizzati solo su questo computer e non vengono inviati al router.</translation>
-    </message>
-    <message>
         <location filename="../client/desktop/management/router_host_dialog.ui" line="94"/>
         <source>Password:</source>
         <translation>Password:</translation>
@@ -6962,63 +7072,58 @@ Credenziali sostituite: %2</translation>
         <translation>Profilo:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.ui" line="130"/>
+        <location filename="../client/desktop/management/router_host_dialog.ui" line="120"/>
         <source>Comment:</source>
         <translation>Commento:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="139"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="147"/>
         <source>Failed to get list of spaces.</source>
         <translation>Impossibile ottenere l&apos;elenco degli spazi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="147"/>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="191"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="155"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="199"/>
         <source>Not assigned</source>
         <translation>Nessuna assegnazione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="176"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="184"/>
         <source>Failed to get list of groups.</source>
         <translation>Impossibile ottenere l&apos;elenco dei gruppi.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="250"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="257"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="265"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="272"/>
         <source>Failed to save the credentials.</source>
         <translation>Impossibile salvare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="271"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="278"/>
         <source>Failed to save the profile.</source>
         <translation>Impossibile salvare il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="297"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="301"/>
         <source>Failed to read the list of profiles.</source>
         <translation>Impossibile leggere l&apos;elenco dei profili.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="310"/>
-        <source>Default</source>
-        <translation>Predefinito</translation>
-    </message>
-    <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="324"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="325"/>
         <source>Failed to read the list of credentials.</source>
         <translation>Impossibile leggere l&apos;elenco delle credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="375"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="359"/>
         <source>Failed to read the credentials of the host.</source>
         <translation>Impossibile leggere le credenziali dell&apos;host.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_host_dialog.cc" line="380"/>
+        <location filename="../client/desktop/management/router_host_dialog.cc" line="364"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Le credenziali dell&apos;host sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
@@ -7026,71 +7131,61 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterHostEditor</name>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="56"/>
+        <location filename="../client/android/router_host_editor.cc" line="54"/>
         <source>User Name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="58"/>
+        <location filename="../client/android/router_host_editor.cc" line="56"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="49"/>
-        <source>The user name and the password are stored on this device only and are not sent to the router. Leave both empty to forget them.</source>
-        <translation>Il nome utente e la password vengono memorizzati solo su questo dispositivo e non vengono inviati al router. Lasciare entrambi vuoti per dimenticarli.</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="46"/>
+        <location filename="../client/android/router_host_editor.cc" line="47"/>
         <source>Use existing</source>
         <translation>Usa esistenti</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="61"/>
+        <location filename="../client/android/router_host_editor.cc" line="59"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="62"/>
+        <location filename="../client/android/router_host_editor.cc" line="60"/>
         <source>Profile</source>
         <translation>Profilo</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="70"/>
+        <location filename="../client/android/router_host_editor.cc" line="66"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="142"/>
-        <location filename="../client/android/router_host_editor.cc" line="174"/>
-        <location filename="../client/android/router_host_editor.cc" line="242"/>
-        <location filename="../client/android/router_host_editor.cc" line="279"/>
+        <location filename="../client/android/router_host_editor.cc" line="157"/>
+        <location filename="../client/android/router_host_editor.cc" line="188"/>
+        <location filename="../client/android/router_host_editor.cc" line="251"/>
+        <location filename="../client/android/router_host_editor.cc" line="273"/>
         <source>Failed to read data from the local database.</source>
         <translation>Impossibile leggere i dati dal database locale.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="148"/>
+        <location filename="../client/android/router_host_editor.cc" line="163"/>
         <source>The credentials of the host are damaged. Enter them again.</source>
         <translation>Le credenziali dell&apos;host sono danneggiate. Inseriscile di nuovo.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="196"/>
-        <location filename="../client/android/router_host_editor.cc" line="217"/>
+        <location filename="../client/android/router_host_editor.cc" line="210"/>
+        <location filename="../client/android/router_host_editor.cc" line="231"/>
         <source>Failed to save the credentials.</source>
         <translation>Impossibile salvare le credenziali.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="224"/>
+        <location filename="../client/android/router_host_editor.cc" line="238"/>
         <source>Failed to save the profile.</source>
         <translation>Impossibile salvare il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/android/router_host_editor.cc" line="291"/>
-        <source>Default</source>
-        <translation>Predefinito</translation>
-    </message>
-    <message>
-        <location filename="../client/android/router_host_editor.cc" line="185"/>
+        <location filename="../client/android/router_host_editor.cc" line="199"/>
         <source>Enter both the user name and the password, or leave both empty.</source>
         <translation>Inserire sia il nome utente che la password, oppure lasciare entrambi vuoti.</translation>
     </message>
@@ -7158,22 +7253,22 @@ Credenziali sostituite: %2</translation>
         <translation>Elementi per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="147"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
         <source>All spaces</source>
         <translation>Tutti gli spazi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="148"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="149"/>
         <source>Not in any space</source>
         <translation>In nessuno spazio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="367"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="356"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation>Disconnettere l&apos;host &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="358"/>
         <source>Are you sure you want to disconnect %n hosts?</source>
         <translation>
             <numerusform>Disconnettere %n host?</numerusform>
@@ -7181,7 +7276,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="380"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="369"/>
         <source>Failed to disconnect %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile disconnettere %n degli host selezionati.</numerusform>
@@ -7189,12 +7284,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="396"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="385"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted, and the application will be uninstalled on the host. This operation is irreversible. Are you sure you want to do this?</source>
         <translation>L&apos;eliminazione di un host comporterà l&apos;eliminazione di tutta la sua configurazione di connessione al router e la disinstallazione dell&apos;applicazione sull&apos;host. Questa operazione è irreversibile. Procedere?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="401"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="390"/>
         <source>%n hosts will be deleted.</source>
         <translation>
             <numerusform>%n host verrà eliminato.</numerusform>
@@ -7202,7 +7297,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="412"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="401"/>
         <source>Failed to remove %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile eliminare %n degli host selezionati.</numerusform>
@@ -7210,7 +7305,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="429"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="418"/>
         <source>Failed to check for updates on %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile controllare gli aggiornamenti su %n degli host selezionati.</numerusform>
@@ -7218,7 +7313,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="762"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="751"/>
         <source>%n host(s)</source>
         <translation>
             <numerusform>%n host</numerusform>
@@ -7226,22 +7321,22 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="815"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="815"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="837"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="826"/>
         <source>Could not open file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_hosts_widget.cc" line="884"/>
+        <location filename="../client/desktop/management/router_hosts_widget.cc" line="873"/>
         <source>Unable to write file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
@@ -7249,32 +7344,32 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterRelaysWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="231"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="238"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="231"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="249"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="242"/>
         <source>Could not open file for writing.</source>
         <translation>Impossibile aprire il file in scrittura.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="311"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="304"/>
         <source>Unable to write file.</source>
         <translation>Impossibile scrivere il file.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="331"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="324"/>
         <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
         <translation>Disconnettere il relay &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="336"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="329"/>
         <source>Are you sure you want to disconnect %n relays?</source>
         <translation>
             <numerusform>Disconnettere %n relay?</numerusform>
@@ -7282,7 +7377,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="383"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="376"/>
         <source>Failed to disconnect %n of the selected relays.</source>
         <translation>
             <numerusform>Impossibile disconnettere %n dei relay selezionati.</numerusform>
@@ -7290,22 +7385,22 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="443"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="436"/>
         <source>Disconnect</source>
         <translation>Disconnetti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="445"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="438"/>
         <source>Copy Row</source>
         <translation>Copia riga</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="446"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="439"/>
         <source>Copy Value</source>
         <translation>Copia valore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_relays_widget.cc" line="455"/>
+        <location filename="../client/desktop/management/router_relays_widget.cc" line="448"/>
         <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
         <translation>Disconnettere il peer &quot;%1&quot;?</translation>
     </message>
@@ -7313,7 +7408,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterSession</name>
     <message>
-        <location filename="../client/router/router_session.cc" line="163"/>
+        <location filename="../client/router/router_session.cc" line="153"/>
         <source>The router accepted the new password, but the record was not updated.</source>
         <translation>Il router ha accettato la nuova password, ma il record non è stato aggiornato.</translation>
     </message>
@@ -7322,13 +7417,13 @@ Credenziali sostituite: %2</translation>
     <name>RouterStatusWidget</name>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="42"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="188"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="178"/>
         <source>The router is waiting for a two-factor code.</source>
         <translation>Il router è in attesa di un codice a due fattori.</translation>
     </message>
     <message>
         <location filename="../client/desktop/management/router_status_widget.ui" line="65"/>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="189"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="179"/>
         <source>Enter Code</source>
         <translation>Inserisci codice</translation>
     </message>
@@ -7343,17 +7438,17 @@ Credenziali sostituite: %2</translation>
         <translation>Evento</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="178"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="168"/>
         <source>Two-factor authentication is blocked after too many failed attempts.</source>
         <translation>L&apos;autenticazione a due fattori è bloccata dopo troppi tentativi falliti.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="193"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="183"/>
         <source>Two-factor authentication has to be set up for this router.</source>
         <translation>L&apos;autenticazione a due fattori deve essere configurata per questo router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_status_widget.cc" line="194"/>
+        <location filename="../client/desktop/management/router_status_widget.cc" line="184"/>
         <source>Set Up</source>
         <translation>Configura</translation>
     </message>
@@ -7361,37 +7456,37 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterTempHostsWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="68"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="70"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="69"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="71"/>
         <source>Previous page</source>
         <translation>Pagina precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="73"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="75"/>
         <source>Next</source>
         <translation>Successivo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="74"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="76"/>
         <source>Next page</source>
         <translation>Pagina successiva</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="96"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="98"/>
         <source>Items per page:</source>
         <translation>Elementi per pagina:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="223"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="227"/>
         <source>Approving a host will give it permanent access to the router. Are you sure you want to approve host &quot;%1&quot;?</source>
         <translation>L&apos;approvazione di un host gli concederà l&apos;accesso permanente al router. Approvare l&apos;host &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="230"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="234"/>
         <source>Approving hosts will give them permanent access to the router. Are you sure you want to approve %n hosts?</source>
         <translation>
             <numerusform>L&apos;approvazione degli host concederà loro l&apos;accesso permanente al router. Approvare %n host?</numerusform>
@@ -7399,12 +7494,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="270"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="274"/>
         <source>Failed to approve the host.</source>
         <translation>Impossibile approvare l&apos;host.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="272"/>
+        <location filename="../client/desktop/management/router_temp_hosts_widget.cc" line="276"/>
         <source>Failed to approve %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile approvare %n degli host selezionati.</numerusform>
@@ -7490,57 +7585,57 @@ Credenziali sostituite: %2</translation>
         <translation>Disconnetti tutte le sessioni</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="333"/>
         <source>Resetting two-factor authentication will sign this user out of all sessions and force them to enroll again on next login. Continue?</source>
         <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà questo utente da tutte le sessioni e lo costringerà a registrarsi di nuovo al prossimo accesso. Continuare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="383"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="385"/>
         <source>Are you sure you want to sign this user out of this session?</source>
         <translation>Disconnettere questo utente da questa sessione?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="408"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="410"/>
         <source>Are you sure you want to sign this user out of all sessions?</source>
         <translation>Disconnettere questo utente da tutte le sessioni?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="522"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="524"/>
         <source>The passwords you entered do not match.</source>
         <translation>Le password inserite non corrispondono.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="200"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="202"/>
         <source>Failed to get list of users.</source>
         <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="228"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="230"/>
         <source>The user was deleted from another console.</source>
         <translation>L&apos;utente è stato eliminato da un&apos;altra console.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="329"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="331"/>
         <source>Resetting two-factor authentication will sign you out of all sessions and force you to enroll again on next login. Continue?</source>
         <translation>La reimpostazione dell&apos;autenticazione a due fattori disconnetterà tutte le sessioni e richiederà una nuova registrazione al prossimo accesso. Continuare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="382"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="384"/>
         <source>This is the token of your current session. Revoking it will disconnect you. Continue?</source>
         <translation>Questo è il token della sessione corrente. La sua revoca comporterà la disconnessione. Continuare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="494"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="496"/>
         <source>The email address is invalid.</source>
         <translation>L&apos;indirizzo email non è valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="509"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="511"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="533"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="535"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -7548,7 +7643,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="534"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="536"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>La password non deve superare %n carattere.</numerusform>
@@ -7556,12 +7651,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="545"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="547"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="546"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="548"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -7569,52 +7664,52 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="550"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="552"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="553"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="555"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="573"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="575"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="635"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="637"/>
         <source>The user name you entered already exists.</source>
         <translation>Il nome utente inserito esiste già.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="717"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="719"/>
         <source>Double-click to change</source>
         <translation>Doppio clic per modificare</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="770"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="772"/>
         <source>The token of your current session.</source>
         <translation>Il token della sessione corrente.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="803"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="805"/>
         <source>Administrator</source>
         <translation>Amministratore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="807"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="809"/>
         <source>Manager</source>
         <translation>Gestore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="811"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="813"/>
         <source>Operator</source>
         <translation>Operatore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_user_dialog.cc" line="829"/>
+        <location filename="../client/desktop/management/router_user_dialog.cc" line="831"/>
         <source>Never</source>
         <translation>Mai</translation>
     </message>
@@ -7622,22 +7717,22 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterUsersWidget</name>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="207"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="200"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Non è possibile eliminare un utente integrato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="212"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="205"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/router_users_widget.cc" line="270"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="263"/>
         <source>Failed to get list of users.</source>
         <translation>Impossibile ottenere l&apos;elenco degli utenti.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/router_users_widget.cc" line="413"/>
+        <location filename="../client/desktop/management/router_users_widget.cc" line="406"/>
         <source>%n user(s)</source>
         <translation>
             <numerusform>%n utente</numerusform>
@@ -7673,22 +7768,22 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>RouterWidget</name>
     <message>
-        <location filename="../client/android/router_widget.cc" line="127"/>
+        <location filename="../client/android/router_widget.cc" line="133"/>
         <source>No router is set</source>
         <translation>Nessun router configurato</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="168"/>
+        <location filename="../client/android/router_widget.cc" line="177"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="171"/>
+        <location filename="../client/android/router_widget.cc" line="179"/>
         <source>%1 (disabled)</source>
         <translation>%1 (disabilitato)</translation>
     </message>
     <message>
-        <location filename="../client/android/router_widget.cc" line="205"/>
+        <location filename="../client/android/router_widget.cc" line="212"/>
         <source>Add Router</source>
         <translation>Aggiungi router</translation>
     </message>
@@ -7859,32 +7954,32 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SearchWidget</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="293"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="282"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="294"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="283"/>
         <source>Previous page</source>
         <translation>Pagina precedente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="301"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="290"/>
         <source>Next</source>
         <translation>Successivo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="302"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="291"/>
         <source>Next page</source>
         <translation>Pagina successiva</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="560"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="538"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/search_widget.cc" line="754"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="721"/>
         <source>%n result(s)</source>
         <translation>
             <numerusform>%n risultato</numerusform>
@@ -7935,17 +8030,17 @@ Credenziali sostituite: %2</translation>
         <translation>Apri directory</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="352"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="339"/>
         <source>Time</source>
         <translation>Ora</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="353"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="340"/>
         <source>Event</source>
         <translation>Evento</translation>
     </message>
     <message>
-        <location filename="../host/ui/security_log_dialog.cc" line="354"/>
+        <location filename="../host/ui/security_log_dialog.cc" line="341"/>
         <source>Details</source>
         <translation>Dettagli</translation>
     </message>
@@ -8093,49 +8188,49 @@ Credenziali sostituite: %2</translation>
         <translation>Chiedi conferma alla chiusura dell&apos;applicazione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="366"/>
+        <location filename="../client/desktop/settings_tab.ui" line="380"/>
         <source>Backup</source>
         <translation>Backup</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="372"/>
+        <location filename="../client/desktop/settings_tab.ui" line="386"/>
         <source>Create backups on application startup</source>
         <translation>Crea backup all&apos;avvio dell&apos;applicazione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="379"/>
+        <location filename="../client/desktop/settings_tab.ui" line="393"/>
         <source>Directory:</source>
         <translation>Directory:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="402"/>
+        <location filename="../client/desktop/settings_tab.ui" line="416"/>
         <source>Keep backups for:</source>
         <translation>Conserva i backup per:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="293"/>
+        <location filename="../client/desktop/settings_tab.ui" line="307"/>
         <source>Proxy</source>
         <translation>Server proxy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="299"/>
+        <location filename="../client/desktop/settings_tab.ui" line="313"/>
         <source>Type:</source>
         <translation>Tipo:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="221"/>
-        <location filename="../client/desktop/settings_tab.ui" line="313"/>
+        <location filename="../client/desktop/settings_tab.ui" line="327"/>
         <source>Address:</source>
         <translation>Indirizzo:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="323"/>
+        <location filename="../client/desktop/settings_tab.ui" line="337"/>
         <source>Port:</source>
         <translation>Porta:</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="252"/>
-        <location filename="../client/desktop/settings_tab.ui" line="343"/>
+        <location filename="../client/desktop/settings_tab.ui" line="357"/>
         <source>User Name:</source>
         <translation>Nome Utente:</translation>
     </message>
@@ -8161,7 +8256,7 @@ Credenziali sostituite: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="266"/>
-        <location filename="../client/desktop/settings_tab.ui" line="353"/>
+        <location filename="../client/desktop/settings_tab.ui" line="367"/>
         <source>Password:</source>
         <translation>Password:</translation>
     </message>
@@ -8171,421 +8266,442 @@ Credenziali sostituite: %2</translation>
         <translation>Abilitato</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="529"/>
+        <location filename="../client/desktop/settings_tab.ui" line="543"/>
         <source>Save Settings</source>
         <translation>Salva impostazioni</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="598"/>
+        <location filename="../client/desktop/settings_tab.ui" line="612"/>
         <source>Add...</source>
         <translation>Aggiungi...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="611"/>
+        <location filename="../client/desktop/settings_tab.ui" line="625"/>
         <source>Rename...</source>
         <translation>Rinomina...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="624"/>
+        <location filename="../client/desktop/settings_tab.ui" line="638"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="639"/>
+        <location filename="../client/desktop/settings_tab.ui" line="653"/>
         <source>Desktop Features</source>
         <translation>Caratteristiche desktop</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="717"/>
+        <location filename="../client/desktop/settings_tab.ui" line="731"/>
         <source>Desktop Screen</source>
         <translation>Schermo desktop</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="779"/>
+        <location filename="../client/desktop/settings_tab.ui" line="793"/>
         <source>Desktop Recording</source>
         <translation>Registrazione desktop</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="829"/>
+        <location filename="../client/desktop/settings_tab.ui" line="843"/>
         <source>UDP Connections</source>
         <translation>Connessioni UDP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="835"/>
+        <location filename="../client/desktop/settings_tab.ui" line="849"/>
         <source>Allow direct connections</source>
         <translation>Consenti connessioni dirette</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="842"/>
+        <location filename="../client/desktop/settings_tab.ui" line="856"/>
         <source>Allow UDP Hole Punching</source>
         <translation>Consenti UDP Hole Punching</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="849"/>
+        <location filename="../client/desktop/settings_tab.ui" line="863"/>
         <source>Allow PCP protocol</source>
         <translation>Consenti protocollo PCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="856"/>
+        <location filename="../client/desktop/settings_tab.ui" line="870"/>
         <source>Allow NAT-PMP protocol</source>
         <translation>Consenti protocollo NAT-PMP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="863"/>
+        <location filename="../client/desktop/settings_tab.ui" line="877"/>
         <source>Allow UPnP protocol</source>
         <translation>Consenti protocollo UPnP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="419"/>
+        <location filename="../client/desktop/settings_tab.ui" line="433"/>
         <source>Security</source>
         <translation>Sicurezza</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="425"/>
+        <location filename="../client/desktop/settings_tab.ui" line="290"/>
+        <source>Synchronize data</source>
+        <translation>Sincronizza dati</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="297"/>
+        <source>Reset Synchronization...</source>
+        <translation>Reimposta sincronizzazione...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.ui" line="439"/>
         <source>Lock after inactivity:</source>
         <translation>Blocca dopo inattività:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="439"/>
+        <location filename="../client/desktop/settings_tab.ui" line="453"/>
         <source>Unlock automatically on startup</source>
         <translation>Sblocca automaticamente all&apos;avvio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="446"/>
+        <location filename="../client/desktop/settings_tab.ui" line="460"/>
         <source>Change Master Password...</source>
         <translation>Cambia password principale...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="645"/>
+        <location filename="../client/desktop/settings_tab.ui" line="659"/>
         <source>Enable audio</source>
         <translation>Abilita audio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="652"/>
+        <location filename="../client/desktop/settings_tab.ui" line="666"/>
         <source>Enable clipboard</source>
         <translation>Abilita appunti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="659"/>
+        <location filename="../client/desktop/settings_tab.ui" line="673"/>
         <source>Show shape of remote cursor</source>
         <translation>Mostra la forma del cursore remoto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="666"/>
+        <location filename="../client/desktop/settings_tab.ui" line="680"/>
         <source>Show position of remote cursor</source>
         <translation>Mostra la posizione del cursore remoto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="673"/>
+        <location filename="../client/desktop/settings_tab.ui" line="687"/>
         <source>Disable desktop effects</source>
         <translation>Disabilita effetti del desktop</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="680"/>
+        <location filename="../client/desktop/settings_tab.ui" line="694"/>
         <source>Disable desktop wallpaper</source>
         <translation>Disabilita sfondo del desktop</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="687"/>
+        <location filename="../client/desktop/settings_tab.ui" line="701"/>
         <source>Lock computer at disconnect</source>
         <translation>Blocca il computer alla disconnessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="694"/>
+        <location filename="../client/desktop/settings_tab.ui" line="708"/>
         <source>Block remote input</source>
         <translation>Blocca input remoto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="701"/>
+        <location filename="../client/desktop/settings_tab.ui" line="715"/>
         <source>Send key combinations</source>
         <translation>Invia combinazioni di tasti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="723"/>
+        <location filename="../client/desktop/settings_tab.ui" line="737"/>
         <source>Preferred resolution:</source>
         <translation>Risoluzione preferita:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="743"/>
+        <location filename="../client/desktop/settings_tab.ui" line="757"/>
         <source>Quality:</source>
         <translation>Qualità:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="763"/>
+        <location filename="../client/desktop/settings_tab.ui" line="777"/>
         <source>Scale image to window size on the host side</source>
         <translation>Ridimensiona l&apos;immagine in base alla finestra sul lato host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="785"/>
+        <location filename="../client/desktop/settings_tab.ui" line="799"/>
         <source>Automatically start recording sessions on connection</source>
         <translation>Avvia automaticamente la registrazione delle sessioni alla connessione</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="794"/>
+        <location filename="../client/desktop/settings_tab.ui" line="808"/>
         <source>Write path:</source>
         <translation>Percorso di registrazione:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="934"/>
+        <location filename="../client/desktop/settings_tab.ui" line="948"/>
         <source>MCP Connector</source>
         <translation>Connettore MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="940"/>
+        <location filename="../client/desktop/settings_tab.ui" line="954"/>
         <source>Allow the use of MCP</source>
         <translation>Consenti l&apos;uso di MCP</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="947"/>
+        <location filename="../client/desktop/settings_tab.ui" line="961"/>
         <source>Add this command to the MCP servers of the AI application:</source>
         <translation>Aggiungi questo comando ai server MCP dell&apos;applicazione di IA:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="970"/>
+        <location filename="../client/desktop/settings_tab.ui" line="984"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="986"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1000"/>
         <source>Allowed Session Types</source>
         <translation>Tipi di sessione consentiti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1000"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1014"/>
         <source>Actions</source>
         <translation>Azioni</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1006"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1020"/>
         <source>Confirm actions automatically</source>
         <translation>Conferma automaticamente le azioni</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1013"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1027"/>
         <source>Allow signing in with saved credentials</source>
         <translation>Consenti l&apos;accesso con credenziali salvate</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1084"/>
-        <location filename="../client/desktop/settings_tab.cc" line="148"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1098"/>
+        <location filename="../client/desktop/settings_tab.cc" line="151"/>
         <source>Update</source>
         <translation>Aggiornamento</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1090"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1104"/>
         <source>Check for updates on startup</source>
         <translation>Controlla aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1099"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1113"/>
         <source>Update channel:</source>
         <translation>Canale di aggiornamento:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1113"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1127"/>
         <source>Update server:</source>
         <translation>Server di aggiornamento:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1127"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1141"/>
         <source>Public key:</source>
         <translation>Chiave pubblica:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1145"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1159"/>
         <source>Change Update Server...</source>
         <translation>Cambia server di aggiornamento...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.ui" line="1165"/>
+        <location filename="../client/desktop/settings_tab.ui" line="1179"/>
         <source>Check for updates</source>
         <translation>Controlla aggiornamenti</translation>
     </message>
     <message>
         <location filename="../client/desktop/settings_tab.ui" line="144"/>
-        <location filename="../client/desktop/settings_tab.cc" line="145"/>
+        <location filename="../client/desktop/settings_tab.cc" line="148"/>
         <source>General</source>
         <translation>Generale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="146"/>
+        <location filename="../client/desktop/settings_tab.cc" line="149"/>
         <source>Profiles</source>
         <translation>Profili</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="203"/>
+        <location filename="../client/desktop/settings_tab.cc" line="206"/>
         <source>1 week</source>
         <translation>1 settimana</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="204"/>
+        <location filename="../client/desktop/settings_tab.cc" line="207"/>
         <source>2 weeks</source>
         <translation>2 settimane</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="205"/>
+        <location filename="../client/desktop/settings_tab.cc" line="208"/>
         <source>1 month</source>
         <translation>1 mese</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="206"/>
+        <location filename="../client/desktop/settings_tab.cc" line="209"/>
         <source>6 months</source>
         <translation>6 mesi</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="207"/>
+        <location filename="../client/desktop/settings_tab.cc" line="210"/>
         <source>1 year</source>
         <translation>1 anno</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="221"/>
+        <location filename="../client/desktop/settings_tab.cc" line="224"/>
         <source>Do not lock</source>
         <translation>Non bloccare</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="222"/>
+        <location filename="../client/desktop/settings_tab.cc" line="225"/>
         <source>1 minute</source>
         <translation>1 minuto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="223"/>
+        <location filename="../client/desktop/settings_tab.cc" line="226"/>
         <source>5 minutes</source>
         <translation>5 minuti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="224"/>
+        <location filename="../client/desktop/settings_tab.cc" line="227"/>
         <source>10 minutes</source>
         <translation>10 minuti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="225"/>
+        <location filename="../client/desktop/settings_tab.cc" line="228"/>
         <source>30 minutes</source>
         <translation>30 minuti</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="226"/>
+        <location filename="../client/desktop/settings_tab.cc" line="229"/>
         <source>1 hour</source>
         <translation>1 ora</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="241"/>
+        <location filename="../client/desktop/settings_tab.cc" line="244"/>
         <source>No proxy</source>
         <translation>Nessun server proxy</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="262"/>
+        <location filename="../client/desktop/settings_tab.cc" line="265"/>
         <source>None</source>
         <translation>Nessuno</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="267"/>
+        <location filename="../client/desktop/settings_tab.cc" line="270"/>
         <source>Automatic</source>
         <translation>Automatica</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="268"/>
+        <location filename="../client/desktop/settings_tab.cc" line="271"/>
         <source>Low</source>
         <translation>Bassa</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="269"/>
+        <location filename="../client/desktop/settings_tab.cc" line="272"/>
         <source>Medium</source>
         <translation>Media</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="270"/>
+        <location filename="../client/desktop/settings_tab.cc" line="273"/>
         <source>High</source>
         <translation>Alta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="307"/>
+        <location filename="../client/desktop/settings_tab.cc" line="310"/>
         <source>Stable</source>
         <translation>Stabile</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="308"/>
+        <location filename="../client/desktop/settings_tab.cc" line="311"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="309"/>
+        <location filename="../client/desktop/settings_tab.cc" line="312"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="605"/>
+        <location filename="../client/desktop/settings_tab.cc" line="656"/>
         <source>Failed to save the settings.</source>
         <translation>Impossibile salvare le impostazioni.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="622"/>
+        <location filename="../client/desktop/settings_tab.cc" line="673"/>
         <source>The new language will be applied after the application is restarted.</source>
         <translation>La nuova lingua verrà applicata dopo il riavvio dell&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="495"/>
-        <location filename="../client/desktop/settings_tab.cc" line="726"/>
+        <location filename="../client/desktop/settings_tab.cc" line="546"/>
+        <location filename="../client/desktop/settings_tab.cc" line="809"/>
         <source>Choose path</source>
         <translation>Scegli percorso</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="449"/>
+        <location filename="../client/desktop/settings_tab.cc" line="458"/>
         <source>The settings have unsaved changes. Close the tab without saving?</source>
         <translation>Le impostazioni contengono modifiche non salvate. Chiudere la scheda senza salvare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="637"/>
+        <location filename="../client/desktop/settings_tab.cc" line="527"/>
+        <source>The synchronized data on the router and on the other devices of the account will be replaced with the data of this device. Reset the synchronization?</source>
+        <translation>I dati sincronizzati sul router e sugli altri dispositivi dell&apos;account verranno sostituiti con i dati di questo dispositivo. Reimpostare la sincronizzazione?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="537"/>
+        <source>Failed to reset the synchronization.</source>
+        <translation>Impossibile reimpostare la sincronizzazione.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="688"/>
         <source>Add Profile</source>
         <translation>Aggiungi profilo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="647"/>
+        <location filename="../client/desktop/settings_tab.cc" line="698"/>
         <source>Unable to add profile.</source>
         <translation>Impossibile aggiungere il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="668"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1224"/>
+        <location filename="../client/desktop/settings_tab.cc" line="720"/>
+        <location filename="../client/desktop/settings_tab.cc" line="731"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1351"/>
         <source>Failed to read the profile.</source>
         <translation>Impossibile leggere il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="672"/>
+        <location filename="../client/desktop/settings_tab.cc" line="724"/>
         <source>Rename Profile</source>
         <translation>Rinomina profilo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="680"/>
+        <location filename="../client/desktop/settings_tab.cc" line="739"/>
         <source>Unable to rename profile.</source>
         <translation>Impossibile rinominare il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="697"/>
+        <location filename="../client/desktop/settings_tab.cc" line="757"/>
         <source>Are you sure you want to delete profile &quot;%1&quot;?</source>
         <translation>Eliminare il profilo &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="705"/>
+        <location filename="../client/desktop/settings_tab.cc" line="765"/>
         <source>Unable to delete profile.</source>
         <translation>Impossibile eliminare il profilo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="754"/>
+        <location filename="../client/desktop/settings_tab.cc" line="837"/>
         <source>The settings will be applied after the application is restarted.</source>
         <translation>Le impostazioni verranno applicate dopo il riavvio dell&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="801"/>
+        <location filename="../client/desktop/settings_tab.cc" line="884"/>
         <source>Change Master Password</source>
         <translation>Cambia password principale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="803"/>
+        <location filename="../client/desktop/settings_tab.cc" line="886"/>
         <source>Enter your current password and choose a new one.</source>
         <translation>Inserisci la tua password attuale e scegline una nuova.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="811"/>
+        <location filename="../client/desktop/settings_tab.cc" line="894"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -8593,12 +8709,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="818"/>
+        <location filename="../client/desktop/settings_tab.cc" line="901"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="819"/>
+        <location filename="../client/desktop/settings_tab.cc" line="902"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -8606,134 +8722,139 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="822"/>
+        <location filename="../client/desktop/settings_tab.cc" line="905"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="835"/>
+        <location filename="../client/desktop/settings_tab.cc" line="918"/>
         <source>Invalid current password.</source>
         <translation>La password attuale non è valida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="839"/>
+        <location filename="../client/desktop/settings_tab.cc" line="922"/>
         <source>Some records of the database are damaged. Fix or delete them and try again.</source>
         <translation>Alcuni record del database sono danneggiati. Correggili o eliminali e riprova.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="843"/>
+        <location filename="../client/desktop/settings_tab.cc" line="926"/>
         <source>Unable to change the password.</source>
         <translation>Impossibile modificare la password.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="876"/>
+        <location filename="../client/desktop/settings_tab.cc" line="959"/>
         <source>Unable to read the proxy settings.</source>
         <translation>Impossibile leggere le impostazioni del server proxy.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="990"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1073"/>
         <source>The key of the database will be stored on this computer. Any program running under your account will be able to read it, even when the application is not running.</source>
         <translation>La chiave del database verrà memorizzata su questo computer. Qualsiasi programma in esecuzione con il tuo account potrà leggerla, anche quando l&apos;applicazione non è in esecuzione.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="993"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1076"/>
         <source>Do you want to continue?</source>
         <translation>Vuoi continuare?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1004"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1087"/>
         <source>Unlock Automatically</source>
         <translation>Sblocco automatico</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1006"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1089"/>
         <source>Enter the master password to unlock the application automatically on startup.</source>
         <translation>Inserisci la password principale per sbloccare l&apos;applicazione automaticamente all&apos;avvio.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1016"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1099"/>
         <source>Invalid master password.</source>
         <translation>Password principale non valida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1020"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1103"/>
         <source>Unable to unlock the database.</source>
         <translation>Impossibile sbloccare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1034"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1117"/>
         <source>Unable to turn on the automatic unlock.</source>
         <translation>Impossibile attivare lo sblocco automatico.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1050"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1089"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1133"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1176"/>
         <source>Failed to read the router.</source>
         <translation>Impossibile leggere il router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1098"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1185"/>
         <source>An invalid router address was entered.</source>
         <translation>È stato inserito un indirizzo router non valido.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1106"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1193"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, .</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1114"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1201"/>
         <source>Password cannot be empty.</source>
         <translation>La password non può essere vuota.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1140"/>
-        <location filename="../client/desktop/settings_tab.cc" line="1150"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1228"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1252"/>
         <source>Failed to save the router.</source>
         <translation>Impossibile salvare il router.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="211"/>
+        <location filename="../client/desktop/settings_tab.cc" line="214"/>
         <source>Administrator</source>
         <translation>Amministratore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="212"/>
+        <location filename="../client/desktop/settings_tab.cc" line="215"/>
         <source>Manager</source>
         <translation>Gestore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="213"/>
+        <location filename="../client/desktop/settings_tab.cc" line="216"/>
         <source>Operator</source>
         <translation>Operatore</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1170"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1241"/>
+        <source>The synchronized data of this device will be sent to the storage of the account &quot;%1&quot;. Continue?</source>
+        <translation>I dati sincronizzati di questo dispositivo verranno inviati all&apos;archivio dell&apos;account &quot;%1&quot;. Continuare?</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/settings_tab.cc" line="1288"/>
         <source>Failed to read the list of profiles.</source>
         <translation>Impossibile leggere l&apos;elenco dei profili.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1181"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1299"/>
         <source>Default</source>
         <translation>Predefinito</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1222"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1349"/>
         <source>The profile is damaged. Fix or delete it.</source>
         <translation>Il profilo è danneggiato. Correggilo o eliminalo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1324"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1451"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1335"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1462"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/settings_tab.cc" line="1342"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1469"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -8741,12 +8862,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1359"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1487"/>
         <source>A profile with this name already exists.</source>
         <translation>Un profilo con questo nome esiste già.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/settings_tab.cc" line="1390"/>
+        <location filename="../client/desktop/settings_tab.cc" line="1518"/>
         <source>Unable to save profile.</source>
         <translation>Impossibile salvare il profilo.</translation>
     </message>
@@ -8828,267 +8949,267 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SettingsWidget</name>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="193"/>
-        <location filename="../host/android/settings_widget.cc" line="205"/>
+        <location filename="../client/android/settings_widget.cc" line="194"/>
+        <location filename="../host/android/settings_widget.cc" line="216"/>
         <source>Update</source>
         <translation>Aggiornamento</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="236"/>
+        <location filename="../client/android/settings_widget.cc" line="237"/>
         <source>Credentials</source>
         <translation>Credenziali</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="245"/>
-        <location filename="../client/android/settings_widget.cc" line="433"/>
+        <location filename="../client/android/settings_widget.cc" line="246"/>
+        <location filename="../client/android/settings_widget.cc" line="435"/>
         <source>Profiles</source>
         <translation>Profili</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="253"/>
-        <location filename="../host/android/settings_widget.cc" line="172"/>
+        <location filename="../client/android/settings_widget.cc" line="254"/>
+        <location filename="../host/android/settings_widget.cc" line="174"/>
         <source>About</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="357"/>
-        <location filename="../host/android/settings_widget.cc" line="349"/>
+        <location filename="../client/android/settings_widget.cc" line="358"/>
+        <location filename="../host/android/settings_widget.cc" line="360"/>
         <source>Interface</source>
         <translation>Interfaccia</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="360"/>
-        <location filename="../host/android/settings_widget.cc" line="354"/>
+        <location filename="../client/android/settings_widget.cc" line="361"/>
+        <location filename="../host/android/settings_widget.cc" line="365"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="373"/>
+        <location filename="../client/android/settings_widget.cc" line="374"/>
         <source>Display name when connected</source>
         <translation>Nome visualizzato durante la connessione</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="385"/>
-        <location filename="../host/android/settings_widget.cc" line="370"/>
+        <location filename="../client/android/settings_widget.cc" line="387"/>
+        <location filename="../host/android/settings_widget.cc" line="381"/>
         <source>Security</source>
         <translation>Sicurezza</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="279"/>
-        <location filename="../client/android/settings_widget.cc" line="387"/>
+        <location filename="../client/android/settings_widget.cc" line="280"/>
+        <location filename="../client/android/settings_widget.cc" line="389"/>
         <source>Change Master Password</source>
         <translation>Cambia password principale</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="260"/>
-        <location filename="../client/android/settings_widget.cc" line="463"/>
-        <location filename="../host/android/settings_widget.cc" line="277"/>
-        <location filename="../host/android/settings_widget.cc" line="512"/>
+        <location filename="../client/android/settings_widget.cc" line="261"/>
+        <location filename="../client/android/settings_widget.cc" line="465"/>
+        <location filename="../host/android/settings_widget.cc" line="288"/>
+        <location filename="../host/android/settings_widget.cc" line="523"/>
         <source>Add folder</source>
         <translation>Aggiungi cartella</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="266"/>
-        <location filename="../client/android/settings_widget.cc" line="443"/>
-        <location filename="../client/android/settings_widget.cc" line="602"/>
-        <location filename="../host/android/settings_widget.cc" line="283"/>
-        <location filename="../host/android/settings_widget.cc" line="492"/>
-        <location filename="../host/android/settings_widget.cc" line="618"/>
+        <location filename="../client/android/settings_widget.cc" line="267"/>
+        <location filename="../client/android/settings_widget.cc" line="445"/>
+        <location filename="../client/android/settings_widget.cc" line="604"/>
+        <location filename="../host/android/settings_widget.cc" line="294"/>
+        <location filename="../host/android/settings_widget.cc" line="503"/>
+        <location filename="../host/android/settings_widget.cc" line="629"/>
         <source>File Transfer</source>
         <translation>Trasferimento file</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="267"/>
-        <location filename="../host/android/settings_widget.cc" line="284"/>
+        <location filename="../client/android/settings_widget.cc" line="268"/>
+        <location filename="../host/android/settings_widget.cc" line="295"/>
         <source>This folder cannot be added. Choose a folder in the internal storage or on the SD card.</source>
         <translation>Impossibile aggiungere questa cartella. Scegli una cartella nella memoria interna o sulla scheda SD.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="395"/>
+        <location filename="../client/android/settings_widget.cc" line="397"/>
         <source>Unlock with biometrics</source>
         <translation>Sblocca con la biometria</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="420"/>
+        <location filename="../client/android/settings_widget.cc" line="422"/>
         <source>Set up a fingerprint in the system settings to use this.</source>
         <translation>Configura un&apos;impronta digitale nelle impostazioni di sistema per usare questa funzione.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="422"/>
+        <location filename="../client/android/settings_widget.cc" line="424"/>
         <source>Biometrics are not available on this device.</source>
         <translation>La biometria non è disponibile su questo dispositivo.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="435"/>
+        <location filename="../client/android/settings_widget.cc" line="437"/>
         <source>Manage Profiles</source>
         <translation>Gestisci profili</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="467"/>
-        <location filename="../host/android/settings_widget.cc" line="516"/>
+        <location filename="../client/android/settings_widget.cc" line="469"/>
+        <location filename="../host/android/settings_widget.cc" line="527"/>
         <source>Files can be transferred only in the folders added here.</source>
         <translation>I file possono essere trasferiti solo nelle cartelle aggiunte qui.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="476"/>
-        <location filename="../host/android/settings_widget.cc" line="525"/>
+        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../host/android/settings_widget.cc" line="536"/>
         <source>Updates</source>
         <translation>Aggiornamenti</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="478"/>
+        <location filename="../client/android/settings_widget.cc" line="480"/>
         <source>Check for updates on startup</source>
         <translation>Controlla aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="485"/>
-        <location filename="../host/android/settings_widget.cc" line="528"/>
+        <location filename="../client/android/settings_widget.cc" line="487"/>
+        <location filename="../host/android/settings_widget.cc" line="539"/>
         <source>Update channel</source>
         <translation>Canale di aggiornamento</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="486"/>
-        <location filename="../host/android/settings_widget.cc" line="529"/>
+        <location filename="../client/android/settings_widget.cc" line="488"/>
+        <location filename="../host/android/settings_widget.cc" line="540"/>
         <source>Stable</source>
         <translation>Stabile</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="487"/>
-        <location filename="../host/android/settings_widget.cc" line="530"/>
+        <location filename="../client/android/settings_widget.cc" line="489"/>
+        <location filename="../host/android/settings_widget.cc" line="541"/>
         <source>Beta</source>
         <translation>Beta</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="488"/>
-        <location filename="../host/android/settings_widget.cc" line="531"/>
+        <location filename="../client/android/settings_widget.cc" line="490"/>
+        <location filename="../host/android/settings_widget.cc" line="542"/>
         <source>Alpha</source>
         <translation>Alpha</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="499"/>
-        <location filename="../host/android/settings_widget.cc" line="545"/>
+        <location filename="../client/android/settings_widget.cc" line="501"/>
+        <location filename="../host/android/settings_widget.cc" line="556"/>
         <source>Update server</source>
         <translation>Server di aggiornamento</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="504"/>
-        <location filename="../host/android/settings_widget.cc" line="550"/>
+        <location filename="../client/android/settings_widget.cc" line="506"/>
+        <location filename="../host/android/settings_widget.cc" line="561"/>
         <source>Public key</source>
         <translation>Chiave pubblica</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="510"/>
-        <location filename="../host/android/settings_widget.cc" line="556"/>
+        <location filename="../client/android/settings_widget.cc" line="512"/>
+        <location filename="../host/android/settings_widget.cc" line="567"/>
         <source>If the update server is not specified, the default one is used. If the public key is not specified, the built-in one is used.</source>
         <translation>Se il server di aggiornamento non è specificato, viene utilizzato quello predefinito. Se la chiave pubblica non è specificata, viene utilizzata quella integrata.</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="564"/>
-        <location filename="../host/android/settings_widget.cc" line="610"/>
+        <location filename="../client/android/settings_widget.cc" line="566"/>
+        <location filename="../host/android/settings_widget.cc" line="621"/>
         <source>Check for updates</source>
         <translation>Controlla aggiornamenti</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="588"/>
+        <location filename="../client/android/settings_widget.cc" line="590"/>
         <source>Enable biometric unlock</source>
         <translation>Abilita sblocco biometrico</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="589"/>
+        <location filename="../client/android/settings_widget.cc" line="591"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="603"/>
-        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <location filename="../client/android/settings_widget.cc" line="605"/>
+        <location filename="../host/android/settings_widget.cc" line="630"/>
         <source>Remove the folder %1 from file transfer?</source>
         <translation>Rimuovere la cartella %1 dal trasferimento file?</translation>
     </message>
     <message>
-        <location filename="../client/android/settings_widget.cc" line="603"/>
-        <location filename="../host/android/settings_widget.cc" line="619"/>
+        <location filename="../client/android/settings_widget.cc" line="605"/>
+        <location filename="../host/android/settings_widget.cc" line="630"/>
         <source>Remove</source>
         <translation>Rimuovi</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="181"/>
+        <location filename="../host/android/settings_widget.cc" line="183"/>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="190"/>
+        <location filename="../host/android/settings_widget.cc" line="192"/>
         <source>Edit User</source>
         <translation>Modifica utente</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="190"/>
+        <location filename="../host/android/settings_widget.cc" line="192"/>
         <source>Add User</source>
         <translation>Aggiungi utente</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="372"/>
+        <location filename="../host/android/settings_widget.cc" line="383"/>
         <source>Manage users</source>
         <translation>Gestisci utenti</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="380"/>
+        <location filename="../host/android/settings_widget.cc" line="391"/>
         <source>Change password</source>
         <translation>Cambia password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="384"/>
+        <location filename="../host/android/settings_widget.cc" line="395"/>
         <source>Disable password protection</source>
         <translation>Disabilita protezione con password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="393"/>
+        <location filename="../host/android/settings_widget.cc" line="404"/>
         <source>Enable password protection</source>
         <translation>Abilita protezione con password</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="408"/>
+        <location filename="../host/android/settings_widget.cc" line="419"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="413"/>
+        <location filename="../host/android/settings_widget.cc" line="424"/>
         <source>Enable the use of a router</source>
         <translation>Abilita l&apos;utilizzo di un router</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="418"/>
+        <location filename="../host/android/settings_widget.cc" line="429"/>
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="424"/>
+        <location filename="../host/android/settings_widget.cc" line="435"/>
         <source>Public Key</source>
         <translation>Chiave pubblica</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="429"/>
+        <location filename="../host/android/settings_widget.cc" line="440"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>E&apos; necessario un router per connettersi ad un computer in assenza di connessione diretta (NAT). Aspia non fornisce un router pubblico, ma è possibile installarne uno proprio. Potete scaricare il router presso il &lt;a href=&quot;https://aspia.org&quot;&gt;sito ufficiale&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="218"/>
-        <location filename="../host/android/settings_widget.cc" line="239"/>
+        <location filename="../host/android/settings_widget.cc" line="229"/>
+        <location filename="../host/android/settings_widget.cc" line="250"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="218"/>
-        <location filename="../host/android/settings_widget.cc" line="239"/>
+        <location filename="../host/android/settings_widget.cc" line="229"/>
+        <location filename="../host/android/settings_widget.cc" line="250"/>
         <source>An error occurred while processing the password.</source>
         <translation>Si è verificato un errore durante l&apos;elaborazione della password.</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="../host/android/settings_widget.cc" line="261"/>
+        <location filename="../host/android/settings_widget.cc" line="272"/>
         <source>JSON files (*.json)</source>
         <translation>File JSON (*.json)</translation>
     </message>
@@ -9096,25 +9217,25 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>Sidebar</name>
     <message>
-        <location filename="../client/desktop/management/search_widget.cc" line="115"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="145"/>
+        <location filename="../client/desktop/management/search_widget.cc" line="109"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="151"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="170"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="176"/>
         <location filename="../client/desktop/management/sidebar.cc" line="231"/>
         <location filename="../client/desktop/management/sidebar.cc" line="292"/>
         <source>Failed to read data. The list may be out of date.</source>
         <translation>Impossibile leggere i dati. L&apos;elenco potrebbe non essere aggiornato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="551"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="563"/>
         <source>Change Password</source>
         <translation>Cambia Password</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="559"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="571"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -9122,7 +9243,7 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="560"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="572"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>La password non deve superare %n carattere.</numerusform>
@@ -9130,12 +9251,12 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="568"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="580"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="569"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="581"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -9143,32 +9264,32 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="572"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="584"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="595"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="607"/>
         <source>Changing the password. Waiting for the session to sign in again...</source>
         <translation>Modifica della password in corso. In attesa che la sessione effettui nuovamente l&apos;accesso...</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="792"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="813"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Eliminare il gruppo &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="805"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="823"/>
         <source>Unable to remove group</source>
         <translation>Impossibile rimuovere il gruppo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1383"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1515"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Un gruppo con questo nome esiste già nel gruppo padre selezionato.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1490"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1625"/>
         <source>%n of the selected hosts were not moved because hosts with the same names already exist in the selected group.</source>
         <translation>
             <numerusform>%n degli host selezionati non è stato spostato perché nel gruppo selezionato esiste già un host con lo stesso nome.</numerusform>
@@ -9176,8 +9297,8 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/management/sidebar.cc" line="1498"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1687"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1633"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1825"/>
         <source>Failed to move %n of the selected hosts.</source>
         <translation>
             <numerusform>Impossibile spostare %n degli host selezionati.</numerusform>
@@ -9185,26 +9306,26 @@ Credenziali sostituite: %2</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1373"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1392"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1590"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1505"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1524"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1728"/>
         <source>Failed to move the group.</source>
         <translation>Impossibile spostare il gruppo.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1452"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1588"/>
         <source>Failed to move the hosts to the selected group.</source>
         <translation>Impossibile spostare gli host nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1489"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1624"/>
         <source>A host with this name already exists in the selected group.</source>
         <translation>Un host con questo nome esiste già nel gruppo selezionato.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/management/sidebar.cc" line="1451"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1497"/>
-        <location filename="../client/desktop/management/sidebar.cc" line="1686"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1587"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1632"/>
+        <location filename="../client/desktop/management/sidebar.cc" line="1824"/>
         <source>Failed to move the host to the selected group.</source>
         <translation>Impossibile spostare l&apos;host nel gruppo selezionato.</translation>
     </message>
@@ -9212,7 +9333,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouter</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="104"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="112"/>
         <source>Router</source>
         <translation>Router</translation>
     </message>
@@ -9220,7 +9341,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterAccessLog</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="193"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="201"/>
         <source>Access Log</source>
         <translation>Registro accessi</translation>
     </message>
@@ -9228,7 +9349,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterClients</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="185"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="193"/>
         <source>Clients</source>
         <translation>Client</translation>
     </message>
@@ -9236,7 +9357,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="169"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
         <source>Approved Hosts</source>
         <translation>Host approvati</translation>
     </message>
@@ -9244,7 +9365,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterQsHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="217"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="225"/>
         <source>Quick Support</source>
         <translation>Quick Support</translation>
     </message>
@@ -9252,7 +9373,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterRelays</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="201"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="209"/>
         <source>Relays</source>
         <translation>Relay</translation>
     </message>
@@ -9260,7 +9381,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterTempHosts</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="209"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="217"/>
         <source>Unapproved Hosts</source>
         <translation>Host non approvati</translation>
     </message>
@@ -9268,7 +9389,7 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SidebarRouterUsers</name>
     <message>
-        <location filename="../client/desktop/management/sidebar_items.cc" line="177"/>
+        <location filename="../client/desktop/management/sidebar_items.cc" line="185"/>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>
@@ -10156,157 +10277,157 @@ Credenziali sostituite: %2</translation>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="363"/>
         <source>HTML File</source>
         <translation>File HTML</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="393"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="363"/>
         <source>HTML File (*.html)</source>
         <translation>File HTML (*.html)</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="403"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="373"/>
         <source>Failed to save file: %1</source>
         <translation>Impossibile salvare il file: %1</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="428"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="398"/>
         <source>Summary</source>
         <translation>Riepilogo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="435"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="405"/>
         <source>Hardware</source>
         <translation>Hardware</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="438"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="408"/>
         <source>DMI</source>
         <translation>DMI</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="441"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="411"/>
         <source>Processor</source>
         <translation>Processore</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="444"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="414"/>
         <source>Devices</source>
         <translation>Dispositivi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="447"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="417"/>
         <source>Drives</source>
         <translation>Dischi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="450"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="420"/>
         <source>S.M.A.R.T.</source>
         <translation>S.M.A.R.T.</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="453"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="423"/>
         <source>Video Adapters</source>
         <translation>Schede video</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="457"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="427"/>
         <source>Monitors</source>
         <translation>Monitor</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="460"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="430"/>
         <source>Printers</source>
         <translation>Stampanti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="463"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="433"/>
         <source>Power Options</source>
         <translation>Opzioni di alimentazione</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="480"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="450"/>
         <source>Software</source>
         <translation>Software</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="483"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="453"/>
         <source>Applications</source>
         <translation>Applicazioni</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="486"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="456"/>
         <source>Drivers</source>
         <translation>Driver</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="489"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="459"/>
         <source>Services</source>
         <translation>Servizi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="492"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="462"/>
         <source>Processes</source>
         <translation>Processi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="495"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="465"/>
         <source>Licenses</source>
         <translation>Licenze</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="508"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="478"/>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="511"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="481"/>
         <source>Network Adapters</source>
         <translation>Schede di rete</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="515"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="485"/>
         <source>Routes</source>
         <translation>Rotte</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="518"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="488"/>
         <source>Connections</source>
         <translation>Connessioni</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="521"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="491"/>
         <source>Network Shares</source>
         <translation>Condivisioni di rete</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="524"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="494"/>
         <source>Open Files</source>
         <translation>File aperti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="537"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="507"/>
         <source>Operating System</source>
         <translation>Sistema operativo</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="540"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="510"/>
         <source>Environment Variables</source>
         <translation>Variabili d&apos;ambiente</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="544"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="514"/>
         <source>Event Logs</source>
         <translation>Registri eventi</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="547"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="517"/>
         <source>Users</source>
         <translation>Utenti</translation>
     </message>
     <message>
-        <location filename="../common/sys_info/sys_info_view.cc" line="550"/>
+        <location filename="../common/sys_info/sys_info_view.cc" line="520"/>
         <source>User Groups</source>
         <translation>Gruppi di utenti</translation>
     </message>
@@ -12954,8 +13075,8 @@ Credenziali sostituite: %2</translation>
 <context>
     <name>SystemInfoWindow</name>
     <message>
-        <location filename="../client/desktop/sys_info/system_info_window.cc" line="42"/>
-        <location filename="../host/ui/system_info_window.cc" line="46"/>
+        <location filename="../client/desktop/sys_info/system_info_window.cc" line="47"/>
+        <location filename="../host/ui/system_info_window.cc" line="51"/>
         <source>System Information</source>
         <translation>Informazioni Sistema</translation>
     </message>
@@ -13533,33 +13654,33 @@ Credenziali sostituite: %2</translation>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="229"/>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="310"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1210"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1217"/>
         <source>User name</source>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1154"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1161"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1157"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1164"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1160"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1167"/>
         <source>Select All</source>
         <translation>Seleziona tutto</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1208"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1215"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation>Inserisci nome utente e password per autenticarti sul computer remoto.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="234"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1222"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1229"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
@@ -13669,135 +13790,135 @@ Credenziali sostituite: %2</translation>
         <translation>Sblocca</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="97"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="96"/>
         <source>Create database</source>
         <translation>Crea database</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="126"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="116"/>
         <source>Rename database</source>
         <translation>Rinomina database</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="155"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="136"/>
         <source>Delete database</source>
         <translation>Elimina database</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="180"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="152"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="187"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="159"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.ui" line="194"/>
+        <location filename="../client/desktop/unlock_dialog.ui" line="166"/>
         <source>Confirm password</source>
         <translation>Conferma password</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="49"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="63"/>
         <source>Open Database</source>
         <translation>Apri database</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="143"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="158"/>
         <source>The database is already open.</source>
         <translation>Il database è già aperto.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="145"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="160"/>
         <source>The master password of this database is not set.</source>
         <translation>La password principale di questo database non è impostata.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="170"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="185"/>
         <source>The database is open in another window. Close it to rename the database.</source>
         <translation>Il database è aperto in un&apos;altra finestra. Chiudila per rinominare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="178"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="193"/>
         <source>Enter the new name of the database.</source>
         <translation>Inserisci il nuovo nome del database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="196"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="211"/>
         <source>The database is open in another window. Close it to delete the database.</source>
         <translation>Il database è aperto in un&apos;altra finestra. Chiudila per eliminare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="201"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="216"/>
         <source>The database &quot;%1&quot; with all its records and settings will be deleted.
 Delete the database?</source>
         <translation>Il database &quot;%1&quot; con tutti i suoi record e le sue impostazioni verrà eliminato.
 Eliminare il database?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="202"/>
-        <location filename="../client/desktop/unlock_dialog.cc" line="251"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="217"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="266"/>
         <source>Unnamed database</source>
         <translation>Database senza nome</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="209"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="224"/>
         <source>Unable to move the database to the trash. Delete it permanently?</source>
         <translation>Impossibile spostare il database nel cestino. Eliminarlo definitivamente?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="218"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="233"/>
         <source>Unable to delete the database.</source>
         <translation>Impossibile eliminare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="256"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="271"/>
         <source>%1 (open)</source>
         <translation>%1 (aperto)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="277"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="292"/>
         <source>Database #1</source>
         <translation>Database #1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="318"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="333"/>
         <source>Unable to open the database.</source>
         <translation>Impossibile aprire il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="348"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="363"/>
         <source>Invalid master password.</source>
         <translation>Password principale non valida.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="355"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="370"/>
         <source>Unable to unlock the database.</source>
         <translation>Impossibile sbloccare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="372"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="387"/>
         <source>Passwords do not match.</source>
         <translation>Le password non corrispondono.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="397"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="412"/>
         <source>Unable to create the database.</source>
         <translation>Impossibile creare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="426"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="441"/>
         <source>Unable to rename the database.</source>
         <translation>Impossibile rinominare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="441"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="454"/>
         <source>Name cannot be empty.</source>
         <translation>Il nome non può essere vuoto.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/desktop/unlock_dialog.cc" line="448"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="461"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>Nome troppo lungo. La lunghezza massima del nome è di %n carattere.</numerusform>
@@ -13805,22 +13926,22 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="456"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="469"/>
         <source>A database with this name already exists.</source>
         <translation>Un database con questo nome esiste già.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="494"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="507"/>
         <source>Enter the name and the master password of the new database.</source>
         <translation>Inserisci il nome e la password principale del nuovo database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="520"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="533"/>
         <source>Enter the master password to unlock the database.</source>
         <translation>Inserisci la password principale per sbloccare il database.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/unlock_dialog.cc" line="522"/>
+        <location filename="../client/desktop/unlock_dialog.cc" line="535"/>
         <source>The master password of this database is remembered on this computer.</source>
         <translation>La password principale di questo database è memorizzata su questo computer.</translation>
     </message>
@@ -13833,7 +13954,7 @@ Eliminare il database?</translation>
         <translation>Aggiornamento</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="374"/>
+        <location filename="../common/desktop/update_dialog.cc" line="375"/>
         <source>Checking for updates</source>
         <translation>Controllo presenza aggiornamenti</translation>
     </message>
@@ -13868,7 +13989,7 @@ Eliminare il database?</translation>
         <translation>Aggiorna adesso!</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="379"/>
+        <location filename="../common/desktop/update_dialog.cc" line="380"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -13878,75 +13999,75 @@ Eliminare il database?</translation>
         <translation>Ricezione delle informazioni...</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="158"/>
+        <location filename="../common/desktop/update_dialog.cc" line="159"/>
         <source>Install the update yourself: %1</source>
         <translation>Installare l&apos;aggiornamento manualmente: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="164"/>
+        <location filename="../common/desktop/update_dialog.cc" line="165"/>
         <source>An update will be downloaded. After the download is complete, the application will automatically close.</source>
         <translation>Verrà scaricato un aggiornamento. Al termine del download l&apos;applicazione si chiuderà automaticamente.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="166"/>
+        <location filename="../common/desktop/update_dialog.cc" line="167"/>
         <source>All connected sessions will be terminated. You cannot establish a connection until the update is complete.</source>
         <translation>Tutte le sessioni connesse verranno terminate. Non sarà possibile stabilire una connessione finché l&apos;aggiornamento non sarà completato.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="168"/>
+        <location filename="../common/desktop/update_dialog.cc" line="169"/>
         <source>All unsaved data will be lost.</source>
         <translation>Tutti i dati non salvati andranno persi.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="169"/>
+        <location filename="../common/desktop/update_dialog.cc" line="170"/>
         <source>Continue?</source>
         <translation>Continuare?</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="199"/>
-        <location filename="../common/desktop/update_dialog.cc" line="220"/>
-        <location filename="../common/desktop/update_dialog.cc" line="245"/>
-        <location filename="../common/desktop/update_dialog.cc" line="341"/>
+        <location filename="../common/desktop/update_dialog.cc" line="200"/>
+        <location filename="../common/desktop/update_dialog.cc" line="221"/>
+        <location filename="../common/desktop/update_dialog.cc" line="246"/>
+        <location filename="../common/desktop/update_dialog.cc" line="342"/>
         <source>An error occurred while installing the update.</source>
         <translation>Si è verificato un errore durante l&apos;installazione dell&apos;aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="314"/>
+        <location filename="../common/desktop/update_dialog.cc" line="315"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Si è verificato un errore durante il download dell&apos;aggiornamento: %1</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="339"/>
+        <location filename="../common/desktop/update_dialog.cc" line="340"/>
         <source>The downloaded file is damaged.</source>
         <translation>Il file scaricato è danneggiato.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="374"/>
+        <location filename="../common/desktop/update_dialog.cc" line="375"/>
         <source>Downloading the update</source>
         <translation>Scaricamento dell&apos;aggiornamento</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="379"/>
+        <location filename="../common/desktop/update_dialog.cc" line="380"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="291"/>
+        <location filename="../common/desktop/update_dialog.cc" line="292"/>
         <source>Unknown</source>
         <translation>Sconosciuto</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="292"/>
+        <location filename="../common/desktop/update_dialog.cc" line="293"/>
         <source>Error retrieving update information.</source>
         <translation>Errore nel recupero delle informazioni di aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="349"/>
+        <location filename="../common/desktop/update_dialog.cc" line="350"/>
         <source>Installing the update. Please wait.</source>
         <translation>Installazione dell&apos;aggiornamento. Attendere.</translation>
     </message>
     <message>
-        <location filename="../common/desktop/update_dialog.cc" line="267"/>
+        <location filename="../common/desktop/update_dialog.cc" line="268"/>
         <source>No updates available.</source>
         <translation>Nessun aggiornamento disponibile.</translation>
     </message>
@@ -13998,9 +14119,9 @@ Eliminare il database?</translation>
     <name>UpdateWidget</name>
     <message>
         <location filename="../common/android/update_widget.cc" line="76"/>
-        <location filename="../common/android/update_widget.cc" line="266"/>
-        <location filename="../common/android/update_widget.cc" line="275"/>
-        <location filename="../common/android/update_widget.cc" line="285"/>
+        <location filename="../common/android/update_widget.cc" line="273"/>
+        <location filename="../common/android/update_widget.cc" line="282"/>
+        <location filename="../common/android/update_widget.cc" line="292"/>
         <source>Update</source>
         <translation>Aggiornamento</translation>
     </message>
@@ -14015,69 +14136,69 @@ Eliminare il database?</translation>
         <translation>Novità</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="203"/>
-        <location filename="../common/android/update_widget.cc" line="352"/>
+        <location filename="../common/android/update_widget.cc" line="210"/>
+        <location filename="../common/android/update_widget.cc" line="359"/>
         <source>Installed version: %1</source>
         <translation>Versione installata: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="160"/>
+        <location filename="../common/android/update_widget.cc" line="166"/>
         <source>Receiving information...</source>
         <translation>Ricezione delle informazioni...</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="185"/>
+        <location filename="../common/android/update_widget.cc" line="192"/>
         <source>No updates available.</source>
         <translation>Nessun aggiornamento disponibile.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="204"/>
+        <location filename="../common/android/update_widget.cc" line="211"/>
         <source>Error retrieving update information.</source>
         <translation>Errore nel recupero delle informazioni di aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="233"/>
+        <location filename="../common/android/update_widget.cc" line="240"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>Si è verificato un errore durante il download dell&apos;aggiornamento: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="254"/>
+        <location filename="../common/android/update_widget.cc" line="261"/>
         <source>The downloaded file is damaged.</source>
         <translation>Il file scaricato è danneggiato.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="256"/>
-        <location filename="../common/android/update_widget.cc" line="312"/>
+        <location filename="../common/android/update_widget.cc" line="263"/>
+        <location filename="../common/android/update_widget.cc" line="319"/>
         <source>An error occurred while installing the update.</source>
         <translation>Si è verificato un errore durante l&apos;installazione dell&apos;aggiornamento.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="267"/>
+        <location filename="../common/android/update_widget.cc" line="274"/>
         <source>Install the update yourself: %1</source>
         <translation>Installare l&apos;aggiornamento manualmente: %1</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="276"/>
+        <location filename="../common/android/update_widget.cc" line="283"/>
         <source>To install the update, allow this application to install unknown apps on the next screen.</source>
         <translation>Per installare l&apos;aggiornamento, consenti a questa applicazione di installare app sconosciute nella schermata successiva.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="277"/>
+        <location filename="../common/android/update_widget.cc" line="284"/>
         <source>Allow</source>
         <translation>Consenti</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="286"/>
+        <location filename="../common/android/update_widget.cc" line="293"/>
         <source>An update will be downloaded. All connected sessions will be terminated and all unsaved data will be lost.</source>
         <translation>Verrà scaricato un aggiornamento. Tutte le sessioni connesse verranno terminate e tutti i dati non salvati andranno persi.</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="287"/>
+        <location filename="../common/android/update_widget.cc" line="294"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="../common/android/update_widget.cc" line="326"/>
+        <location filename="../common/android/update_widget.cc" line="333"/>
         <source>Downloading the update. Please wait.</source>
         <translation>Scaricamento dell&apos;aggiornamento. Attendere.</translation>
     </message>
@@ -14125,22 +14246,22 @@ Eliminare il database?</translation>
         <translation>Deseleziona tutto</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="182"/>
+        <location filename="../host/ui/user_dialog.cc" line="184"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters. It can not consist of digits only.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri _, -, ., @. Non può essere composto solo da cifre.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="200"/>
+        <location filename="../host/ui/user_dialog.cc" line="202"/>
         <source>The username you entered already exists.</source>
         <translation>Il nome utente inserito esiste già.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="209"/>
+        <location filename="../host/ui/user_dialog.cc" line="211"/>
         <source>The passwords you entered do not match.</source>
         <translation>Le password inserite non corrispondono.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="220"/>
+        <location filename="../host/ui/user_dialog.cc" line="222"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -14148,7 +14269,7 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="222"/>
+        <location filename="../host/ui/user_dialog.cc" line="224"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>La password non deve superare %n carattere.</numerusform>
@@ -14156,12 +14277,12 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="234"/>
+        <location filename="../host/ui/user_dialog.cc" line="236"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>La password inserita non soddisfa i requisiti di sicurezza!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="237"/>
+        <location filename="../host/ui/user_dialog.cc" line="239"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password deve contenere lettere minuscole e maiuscole, numeri e non deve essere più corta di %n carattere.</numerusform>
@@ -14169,24 +14290,24 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="241"/>
+        <location filename="../host/ui/user_dialog.cc" line="243"/>
         <source>Do you want to enter a different password?</source>
         <translation>Vuoi inserire una password diversa?</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="244"/>
+        <location filename="../host/ui/user_dialog.cc" line="246"/>
         <source>Warning</source>
         <translation>Attenzione</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="262"/>
-        <location filename="../host/ui/user_dialog.cc" line="292"/>
-        <location filename="../host/ui/user_dialog.cc" line="302"/>
+        <location filename="../host/ui/user_dialog.cc" line="264"/>
+        <location filename="../host/ui/user_dialog.cc" line="294"/>
+        <location filename="../host/ui/user_dialog.cc" line="304"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="340"/>
+        <location filename="../host/ui/user_dialog.cc" line="342"/>
         <source>Double-click to change</source>
         <translation>Doppio clic per modificare</translation>
     </message>
@@ -14194,31 +14315,31 @@ Eliminare il database?</translation>
 <context>
     <name>UserEditorWidget</name>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="169"/>
-        <location filename="../host/android/user_editor_widget.cc" line="182"/>
-        <location filename="../host/android/user_editor_widget.cc" line="202"/>
-        <location filename="../host/android/user_editor_widget.cc" line="215"/>
-        <location filename="../host/android/user_editor_widget.cc" line="223"/>
-        <location filename="../host/android/user_editor_widget.cc" line="246"/>
-        <location filename="../host/android/user_editor_widget.cc" line="257"/>
-        <location filename="../host/android/user_editor_widget.cc" line="280"/>
+        <location filename="../host/android/user_editor_widget.cc" line="170"/>
+        <location filename="../host/android/user_editor_widget.cc" line="183"/>
+        <location filename="../host/android/user_editor_widget.cc" line="203"/>
+        <location filename="../host/android/user_editor_widget.cc" line="216"/>
+        <location filename="../host/android/user_editor_widget.cc" line="224"/>
+        <location filename="../host/android/user_editor_widget.cc" line="247"/>
+        <location filename="../host/android/user_editor_widget.cc" line="258"/>
+        <location filename="../host/android/user_editor_widget.cc" line="281"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="182"/>
+        <location filename="../host/android/user_editor_widget.cc" line="183"/>
         <source>The username you entered already exists.</source>
         <translation>Il nome utente inserito esiste già.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="202"/>
+        <location filename="../host/android/user_editor_widget.cc" line="203"/>
         <source>The passwords you entered do not match.</source>
         <translation>Le password inserite non corrispondono.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="224"/>
-        <location filename="../host/android/user_editor_widget.cc" line="247"/>
-        <location filename="../host/android/user_editor_widget.cc" line="258"/>
+        <location filename="../host/android/user_editor_widget.cc" line="225"/>
+        <location filename="../host/android/user_editor_widget.cc" line="248"/>
+        <location filename="../host/android/user_editor_widget.cc" line="259"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>Errore interno sconosciuto durante la creazione o la modifica di un utente.</translation>
     </message>
@@ -14228,52 +14349,52 @@ Eliminare il database?</translation>
         <translation>Nome utente</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="115"/>
+        <location filename="../host/android/user_editor_widget.cc" line="116"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="116"/>
+        <location filename="../host/android/user_editor_widget.cc" line="117"/>
         <source>Password (repeat)</source>
         <translation>Password (ripeti)</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="117"/>
+        <location filename="../host/android/user_editor_widget.cc" line="118"/>
         <source>Leave the password empty to keep the current one.</source>
         <translation>Lascia la password vuota per mantenere quella attuale.</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="118"/>
+        <location filename="../host/android/user_editor_widget.cc" line="119"/>
         <source>User enabled</source>
         <translation>Utente abilitato</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="119"/>
+        <location filename="../host/android/user_editor_widget.cc" line="120"/>
         <source>Allowed sessions</source>
         <translation>Sessioni consentite</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="120"/>
+        <location filename="../host/android/user_editor_widget.cc" line="121"/>
         <source>Desktop</source>
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="121"/>
+        <location filename="../host/android/user_editor_widget.cc" line="122"/>
         <source>File Transfer</source>
         <translation>Trasferimento file</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="122"/>
+        <location filename="../host/android/user_editor_widget.cc" line="123"/>
         <source>Delete user</source>
         <translation>Elimina utente</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="170"/>
+        <location filename="../host/android/user_editor_widget.cc" line="171"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot; characters. It can not consist of digits only.</source>
         <translation>Il nome utente non può essere vuoto e può contenere solo lettere, numeri e i caratteri &quot;_&quot;, &quot;-&quot;, &quot;.&quot;, &quot;@&quot;. Non può essere composto solo da cifre.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="210"/>
+        <location filename="../host/android/user_editor_widget.cc" line="211"/>
         <source>The password can not be shorter than %n characters.</source>
         <translation>
             <numerusform>La password non deve essere più corta di %n carattere.</numerusform>
@@ -14281,7 +14402,7 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/android/user_editor_widget.cc" line="212"/>
+        <location filename="../host/android/user_editor_widget.cc" line="213"/>
         <source>The password can not be longer than %n characters.</source>
         <translation>
             <numerusform>La password non deve superare %n carattere.</numerusform>
@@ -14289,22 +14410,22 @@ Eliminare il database?</translation>
         </translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="272"/>
+        <location filename="../host/android/user_editor_widget.cc" line="273"/>
         <source>Delete User</source>
         <translation>Elimina utente</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="273"/>
+        <location filename="../host/android/user_editor_widget.cc" line="274"/>
         <source>Delete the user &quot;%1&quot;?</source>
         <translation>Eliminare l&apos;utente &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="273"/>
+        <location filename="../host/android/user_editor_widget.cc" line="274"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../host/android/user_editor_widget.cc" line="280"/>
+        <location filename="../host/android/user_editor_widget.cc" line="281"/>
         <source>Failed to delete the user.</source>
         <translation>Impossibile eliminare l&apos;utente.</translation>
     </message>
