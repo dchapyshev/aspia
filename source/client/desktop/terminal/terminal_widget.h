@@ -103,6 +103,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) final;
     void mouseMoveEvent(QMouseEvent* event) final;
     void mouseDoubleClickEvent(QMouseEvent* event) final;
+    bool focusNextPrevChild(bool next) final;
 
     // QAbstractNativeEventFilter implementation.
     bool nativeEventFilter(const QByteArray& event_type, void* message, qintptr* result) final;

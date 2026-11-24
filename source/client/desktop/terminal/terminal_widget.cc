@@ -561,6 +561,7 @@ void TerminalWidget::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_Tab:
+        case Qt::Key_Backtab:
             vterm_keyboard_key(vterm_, VTERM_KEY_TAB, modifiers);
             break;
 
@@ -955,6 +956,12 @@ void TerminalWidget::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     QWidget::mouseDoubleClickEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::focusNextPrevChild(bool /* next */)
+{
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
