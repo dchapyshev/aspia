@@ -27,7 +27,7 @@
 
 namespace {
 
-constexpr qint64 kClientDeviceTokenTtlSec = 7 * 24 * 3600; // 7 days, sliding window.
+constexpr qint64 kClientDeviceTokenTtlSec = 14 * 24 * 3600; // 14 days, sliding window.
 
 } // namespace
 

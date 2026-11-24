@@ -1043,8 +1043,8 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsRejectedAndDropped)
     qint64 token_id = 0;
     ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
-    // Eight days without a single use - one more than the lifetime of a token.
-    ASSERT_TRUE(ageToken(token_id, 8));
+    // Fifteen days without a single use - one more than the lifetime of a token.
+    ASSERT_TRUE(ageToken(token_id, 15));
 
     TwoFactorHandler handler;
     ASSERT_EQ(start(handler).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -1066,8 +1066,8 @@ TEST_F(TwoFactorHandlerTest, TokenUseRefreshesItsLifetime)
     qint64 token_id = 0;
     ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
 
-    // Six days: still inside the lifetime.
-    ASSERT_TRUE(ageToken(token_id, 6));
+    // Thirteen days: still inside the lifetime.
+    ASSERT_TRUE(ageToken(token_id, 13));
 
     TwoFactorHandler first;
     ASSERT_EQ(start(first).action, TwoFactorHandler::Action::SEND_CHALLENGE);
@@ -1110,7 +1110,7 @@ TEST_F(TwoFactorHandlerTest, ExpiredTokenIsNotListed)
     ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &token, &token_id));
     ASSERT_EQ(tokenCount(admin_.entry_id), 1u);
 
-    ASSERT_TRUE(ageToken(token_id, 8));
+    ASSERT_TRUE(ageToken(token_id, 15));
 
     EXPECT_EQ(tokenCount(admin_.entry_id), 0u);
 }
@@ -1123,7 +1123,7 @@ TEST_F(TwoFactorHandlerTest, IssuingATokenDropsTheDeadOnesOfTheSameUser)
     std::string dead_token;
     qint64 dead_token_id = 0;
     ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &dead_token, &dead_token_id));
-    ASSERT_TRUE(ageToken(dead_token_id, 8));
+    ASSERT_TRUE(ageToken(dead_token_id, 15));
 
     std::string token;
     qint64 token_id = 0;
@@ -1140,7 +1140,7 @@ TEST_F(TwoFactorHandlerTest, IssuingATokenKeepsTheLiveOnesOfTheSameUser)
     std::string first;
     qint64 first_id = 0;
     ASSERT_TRUE(device_tokens_.issue(admin_.entry_id, "127.0.0.1", &first, &first_id));
-    ASSERT_TRUE(ageToken(first_id, 6));
+    ASSERT_TRUE(ageToken(first_id, 13));
 
     std::string second;
     qint64 second_id = 0;
@@ -1160,7 +1160,7 @@ TEST_F(TwoFactorHandlerTest, PruningIsLimitedToTheUserBeingIssuedAToken)
     std::string foreign_token;
     qint64 foreign_token_id = 0;
     ASSERT_TRUE(device_tokens_.issue(other.entry_id, "127.0.0.1", &foreign_token, &foreign_token_id));
-    ASSERT_TRUE(ageToken(foreign_token_id, 8));
+    ASSERT_TRUE(ageToken(foreign_token_id, 15));
 
     std::string token;
     qint64 token_id = 0;
