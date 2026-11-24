@@ -50,6 +50,7 @@ private slots:
     void onSaveClicked();
     void onResetSyncClicked();
     void onRouterStatusChanged();
+    void onEnabledChanged();
 
 private:
     void showError(const QString& message);

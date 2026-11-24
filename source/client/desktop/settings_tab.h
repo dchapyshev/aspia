@@ -60,6 +60,7 @@ private slots:
     void onCategoryChanged(int id);
     void onGeneralChanged();
     void onRouterChanged();
+    void onRouterEnabledChanged();
     void onRouterStatusChanged();
     void onResetSyncClicked();
     void onSelectBackupPath();
@@ -93,6 +94,7 @@ private:
     bool routerFromUi(std::optional<RouterConfig>* router);
     bool saveRouter(RouterConfig router);
     void showRouterError(QLineEdit* edit, const QString& message);
+    void updateRouterFields();
     void loadProfileList(qint64 profile_id, bool warn);
     void reloadProfiles(qint64 profile_id, bool warn = true);
     void showProfile(bool warn = true);

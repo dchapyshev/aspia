@@ -345,7 +345,7 @@ SettingsTab::SettingsTab(QWidget* parent)
 
     connect(ui->combo_router_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &SettingsTab::onRouterChanged);
-    connect(ui->checkbox_router_enabled, &QCheckBox::toggled, this, &SettingsTab::onRouterChanged);
+    connect(ui->checkbox_router_enabled, &QCheckBox::toggled, this, &SettingsTab::onRouterEnabledChanged);
     connect(ui->checkbox_router_sync, &QCheckBox::toggled, this, &SettingsTab::onRouterChanged);
     connect(ui->button_router_sync_reset, &QPushButton::clicked, this, &SettingsTab::onResetSyncClicked);
     connect(&RouterController::instance(), &RouterController::sig_statusChanged,
@@ -493,6 +493,13 @@ void SettingsTab::onRouterChanged()
 {
     router_changed_ = true;
     onGeneralChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onRouterEnabledChanged()
+{
+    updateRouterFields();
+    onRouterChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1135,6 +1142,7 @@ void SettingsTab::loadRouter()
     ui->edit_router_password->setPassword(router.password());
     ui->checkbox_router_enabled->setChecked(router.isEnabled());
     ui->checkbox_router_sync->setChecked(router.isSyncEnabled());
+    updateRouterFields();
 
     if (found == Database::FindResult::UNREADABLE)
         LOG(ERROR) << "Data of the router could not be read";
@@ -1254,6 +1262,22 @@ void SettingsTab::showRouterError(QLineEdit* edit, const QString& message)
     MsgBox::warning(this, message);
     edit->setFocus();
     edit->selectAll();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::updateRouterFields()
+{
+    const bool enabled = ui->checkbox_router_enabled->isChecked();
+
+    QWidget* const widgets[] =
+    {
+        ui->label_router_address, ui->edit_router_address, ui->label_router_session_type,
+        ui->combo_router_session_type, ui->label_router_username, ui->edit_router_username,
+        ui->label_router_password, ui->edit_router_password, ui->checkbox_router_sync
+    };
+
+    for (QWidget* widget : widgets)
+        widget->setEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------

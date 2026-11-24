@@ -96,6 +96,7 @@ RouterEditor::RouterEditor(QWidget* parent)
 
     connect(save, &Button::clicked, this, &RouterEditor::onSaveClicked);
     connect(button_reset_sync_, &Button::clicked, this, &RouterEditor::onResetSyncClicked);
+    connect(switch_enabled_, &Switch::toggled, this, &RouterEditor::onEnabledChanged);
     connect(&RouterController::instance(), &RouterController::sig_statusChanged,
             this, &RouterEditor::onRouterStatusChanged);
 }
@@ -113,6 +114,7 @@ void RouterEditor::prepareForAdd()
     switch_sync_->setChecked(false);
     label_error_->setVisible(false);
     button_reset_sync_->hide();
+    onEnabledChanged();
 
     edit_address_->setFocus();
 }
@@ -136,6 +138,7 @@ bool RouterEditor::prepareForEdit()
     label_error_->setVisible(false);
 
     onRouterStatusChanged();
+    onEnabledChanged();
 
     edit_address_->setFocus();
 
@@ -245,6 +248,17 @@ void RouterEditor::onRouterStatusChanged()
         RouterStore().find(&router) == Database::FindResult::FOUND && router.isSyncEnabled();
 
     button_reset_sync_->setVisible(sync_enabled && RouterController::status() == RouterStatus::ONLINE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterEditor::onEnabledChanged()
+{
+    const bool enabled = switch_enabled_->isChecked();
+
+    QWidget* const widgets[] = { edit_address_, edit_username_, edit_password_, switch_sync_ };
+
+    for (QWidget* widget : widgets)
+        widget->setEnabled(enabled);
 }
 
 //--------------------------------------------------------------------------------------------------
