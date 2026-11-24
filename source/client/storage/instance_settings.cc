@@ -36,6 +36,7 @@ const QString kDirectoryName = "client";
 
 const QString kVersionParam = "version";
 const QString kTabStateParam = "tab_state";
+const QString kQuickConnectHistoryParam = "quick_connect_history";
 const QString kLocalGroupExpandedParam = "local_group_expanded";
 const QString kWorkspaceExpandedParam = "workspace_expanded";
 const QString kRouterGroupExpandedParam = "router_group_expanded";
@@ -133,6 +134,18 @@ QVariantMap InstanceSettings::tabState(const QString& name) const
 void InstanceSettings::setTabState(const QString& name, const QVariantMap& state)
 {
     settings_.setValue(kTabStateParam + "/" + name, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList InstanceSettings::quickConnectHistory() const
+{
+    return settings_.value(kQuickConnectHistoryParam).toStringList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void InstanceSettings::setQuickConnectHistory(const QStringList& history)
+{
+    settings_.setValue(kQuickConnectHistoryParam, history);
 }
 
 //--------------------------------------------------------------------------------------------------

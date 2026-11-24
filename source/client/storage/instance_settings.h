@@ -37,6 +37,9 @@ public:
     QVariantMap tabState(const QString& name) const;
     void setTabState(const QString& name, const QVariantMap& state);
 
+    QStringList quickConnectHistory() const;
+    void setQuickConnectHistory(const QStringList& history);
+
     bool isLocalGroupExpanded(qint64 group_id) const;
     void setLocalGroupExpanded(qint64 group_id, bool expanded);
     void removeLocalGroupExpanded(qint64 group_id);

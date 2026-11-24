@@ -19,6 +19,7 @@
 #include "client/desktop/quick_connect_dialog.h"
 
 #include <QLayout>
+#include <QLineEdit>
 #include <QPushButton>
 #include <QTimer>
 
@@ -29,6 +30,7 @@
 #include "base/peer/host_id.h"
 #include "client/config.h"
 #include "client/desktop/ui_quick_connect_dialog.h"
+#include "client/storage/instance_settings.h"
 #include "client/storage/user_settings.h"
 #include "common/desktop/msg_box.h"
 #include "common/desktop/session_type.h"
@@ -61,7 +63,8 @@ QuickConnectDialog::QuickConnectDialog(QWidget* parent)
 
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &QuickConnectDialog::onButtonBoxClicked);
 
-    ui->edit_address->setFocus();
+    ui->combo_address->lineEdit()->setPlaceholderText(tr("Host name, IP address or ID"));
+    ui->combo_address->setFocus();
 
     QTimer::singleShot(MilliSeconds::zero(), this, &QuickConnectDialog::onLoadData);
 }
@@ -81,7 +84,7 @@ QuickConnectDialog::~QuickConnectDialog()
 //--------------------------------------------------------------------------------------------------
 HostConfig QuickConnectDialog::host() const
 {
-    const QString address = ui->edit_address->text().trimmed();
+    const QString address = ui->combo_address->currentText().trimmed();
 
     if (isHostId(address))
         return HostConfig::forRouterHost(stringToHostId(address), QString());
@@ -107,16 +110,24 @@ void QuickConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    const QString address = ui->edit_address->text().trimmed();
+    const QString address = ui->combo_address->currentText().trimmed();
 
     // Digits alone are the ID of a host reached through the router.
     if (!isHostId(address) && !Address::fromString(address, kDefaultHostTcpPort).isValid())
     {
         MsgBox::warning(this, tr("An invalid host address was entered."));
-        ui->edit_address->setFocus();
-        ui->edit_address->selectAll();
+        ui->combo_address->setFocus();
+        ui->combo_address->lineEdit()->selectAll();
         return;
     }
+
+    static const qsizetype kMaxHistorySize = 15;
+
+    InstanceSettings settings;
+    QStringList history = settings.quickConnectHistory();
+    history.removeIf([&address](const QString& item) { return item.compare(address, Qt::CaseInsensitive) == 0; });
+    history.prepend(address);
+    settings.setQuickConnectHistory(history.mid(0, kMaxHistorySize));
 
     LOG(INFO) << "[ACTION] Quick connect accepted by user";
     accept();
@@ -125,6 +136,9 @@ void QuickConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void QuickConnectDialog::onLoadData()
 {
+    ui->combo_address->addItems(InstanceSettings().quickConnectHistory());
+    ui->combo_address->setCurrentIndex(-1);
+
     const proto::peer::SessionType session_types[] =
     {
         proto::peer::SESSION_TYPE_DESKTOP,

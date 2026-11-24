@@ -18,9 +18,12 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLineEdit" name="edit_address">
-     <property name="placeholderText">
-      <string>Host name, IP address or ID</string>
+    <widget class="QComboBox" name="combo_address">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertPolicy::NoInsert</enum>
      </property>
     </widget>
    </item>
@@ -48,7 +51,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>edit_address</tabstop>
+  <tabstop>combo_address</tabstop>
   <tabstop>combo_session_type</tabstop>
  </tabstops>
  <resources>
