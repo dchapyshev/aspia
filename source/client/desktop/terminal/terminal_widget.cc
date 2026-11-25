@@ -720,7 +720,7 @@ void TerminalWidget::mousePressEvent(QMouseEvent* event)
     }
 
     // Middle-click pastes the clipboard (when not reporting to the application).
-    if (event->button() == Qt::MiddleButton && !to_application)
+    if (event->button() == Qt::MiddleButton && !to_application && mode_ != Mode::VIEW)
     {
         paste();
         event->accept();
