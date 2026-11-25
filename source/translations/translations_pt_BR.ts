@@ -2583,7 +2583,7 @@ Credenciais substituídas: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1013"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1029"/>
         <source>Scale</source>
         <translation>Escala</translation>
     </message>
@@ -2673,7 +2673,7 @@ Credenciais substituídas: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="613"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="629"/>
         <source>Start recording</source>
         <translation>Iniciar gravação</translation>
     </message>
@@ -2700,17 +2700,17 @@ Credenciais substituídas: %2</translation>
         <translation>Seleção de resolução</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1204"/>
         <source>Session %1</source>
         <translation>Sessão %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1204"/>
         <source>Session %1 (%2)</source>
         <translation>Sessão %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="608"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="624"/>
         <source>Stop recording</source>
         <translation>Parar gravação</translation>
     </message>
@@ -2725,39 +2725,39 @@ Credenciais substituídas: %2</translation>
         <translation>Tem certeza de que deseja executar o script &quot;%1&quot; no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Tem certeza de que deseja desligar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="859"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="892"/>
         <source>Confirmation</source>
         <translation>Confirmação</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="901"/>
         <source>Wait for host</source>
         <translation>Aguardar host</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="877"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="893"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Tem certeza de que deseja reiniciar o computador remoto em modo de segurança?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="909"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="925"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Tem certeza de que deseja encerrar a sessão do usuário no computador remoto?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="924"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="940"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Tem certeza de que deseja bloquear a sessão do usuário no computador remoto?</translation>
     </message>
@@ -2798,39 +2798,54 @@ Credenciais substituídas: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1153"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1171"/>
         <source>Save File</source>
         <translation>Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1154"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1172"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>Imagem PNG (*.png);;Imagem BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1185"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1203"/>
         <source>Could not save image</source>
         <translation>Não foi possível salvar a imagem</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1438"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1456"/>
         <source>Invalid user name or password.</source>
         <translation>Nome de usuário ou senha incorretos.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1441"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1459"/>
         <source>The password has expired.</source>
         <translation>A senha expirou.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1444"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1462"/>
         <source>The account is locked out.</source>
         <translation>A conta está bloqueada.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1447"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1465"/>
         <source>The account is disabled.</source>
         <translation>A conta está desabilitada.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1516"/>
+        <source>Unable to run the script on the remote computer.</source>
+        <translation>Falha ao executar o script no computador remoto.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1519"/>
+        <source>Another script is running on the remote computer. Wait for it to finish and try again.</source>
+        <translation>Outro script já está em execução no computador remoto. Aguarde a conclusão e tente novamente.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1545"/>
+        <source>Script</source>
+        <translation>Script</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="522"/>
@@ -7913,6 +7928,19 @@ Credenciais substituídas: %2</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="904"/>
         <source>A space with the specified name already exists.</source>
         <translation>Já existe um espaço com o nome especificado.</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptOutputDialog</name>
+    <message>
+        <location filename="../client/desktop/desktop/script_output_dialog.cc" line="34"/>
+        <source>The script is running...</source>
+        <translation>O script está em execução...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/script_output_dialog.cc" line="59"/>
+        <source>The script has finished.</source>
+        <translation>O script foi concluído.</translation>
     </message>
 </context>
 <context>
@@ -13647,40 +13675,40 @@ Credenciais substituídas: %2</translation>
 <context>
     <name>TerminalWidget</name>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="309"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="327"/>
         <source>Authentication failed.</source>
         <translation>Falha na autenticação.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="229"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="310"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1217"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="328"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="912"/>
         <source>User name</source>
         <translation>Nome de usuário</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1161"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1302"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1164"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1305"/>
         <source>Paste</source>
         <translation>Colar</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1167"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1308"/>
         <source>Select All</source>
         <translation>Selecionar tudo</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1215"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="910"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation>Digite seu nome de usuário e senha para autenticar no computador remoto.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="234"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1229"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="924"/>
         <source>Password</source>
         <translation>Senha</translation>
     </message>

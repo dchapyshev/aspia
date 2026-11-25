@@ -2583,7 +2583,7 @@ Ersatta inloggningsuppgifter: %2</translation>
     </message>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="233"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1013"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1029"/>
         <source>Scale</source>
         <translation>Skala</translation>
     </message>
@@ -2673,7 +2673,7 @@ Ersatta inloggningsuppgifter: %2</translation>
     <message>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="435"/>
         <location filename="../client/desktop/desktop/desktop_toolbar.ui" line="438"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="613"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="629"/>
         <source>Start recording</source>
         <translation>Starta inspelning</translation>
     </message>
@@ -2700,17 +2700,17 @@ Ersatta inloggningsuppgifter: %2</translation>
         <translation>Val av upplösning</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1204"/>
         <source>Session %1</source>
         <translation>Session %1</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1188"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="1204"/>
         <source>Session %1 (%2)</source>
         <translation>Session %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="608"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="624"/>
         <source>Stop recording</source>
         <translation>Stoppa inspelning</translation>
     </message>
@@ -2725,39 +2725,39 @@ Ersatta inloggningsuppgifter: %2</translation>
         <translation>Är du säker på att du vill köra skriptet &quot;%1&quot; på fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Är du säker på att du vill stänga av fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="843"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="876"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="859"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="892"/>
         <source>Confirmation</source>
         <translation>Bekräftelse</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="844"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="860"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Är du säker på att du vill starta om fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="852"/>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="885"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="868"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="901"/>
         <source>Wait for host</source>
         <translation>Vänta på värden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="877"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="893"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Är du säker på att du vill starta om fjärrdatorn i felsäkert läge?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="909"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="925"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Är du säker på att du vill avsluta användarsessionen på fjärrdatorn?</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="924"/>
+        <location filename="../client/desktop/desktop/desktop_toolbar.cc" line="940"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Är du säker på att du vill låsa användarsessionen på fjärrdatorn?</translation>
     </message>
@@ -2798,39 +2798,54 @@ Ersatta inloggningsuppgifter: %2</translation>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1153"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1171"/>
         <source>Save File</source>
         <translation>Spara fil</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1154"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1172"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG-bild (*.png);;BMP-bild (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1185"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1203"/>
         <source>Could not save image</source>
         <translation>Kunde inte spara bilden</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1438"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1456"/>
         <source>Invalid user name or password.</source>
         <translation>Fel användarnamn eller lösenord.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1441"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1459"/>
         <source>The password has expired.</source>
         <translation>Lösenordet har upphört att gälla.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1444"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1462"/>
         <source>The account is locked out.</source>
         <translation>Kontot är låst.</translation>
     </message>
     <message>
-        <location filename="../client/desktop/desktop/desktop_window.cc" line="1447"/>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1465"/>
         <source>The account is disabled.</source>
         <translation>Kontot är inaktiverat.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1516"/>
+        <source>Unable to run the script on the remote computer.</source>
+        <translation>Det gick inte att köra skriptet på fjärrdatorn.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1519"/>
+        <source>Another script is running on the remote computer. Wait for it to finish and try again.</source>
+        <translation>Ett annat skript körs redan på fjärrdatorn. Vänta tills det är klart och försök igen.</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/desktop_window.cc" line="1545"/>
+        <source>Script</source>
+        <translation>Skript</translation>
     </message>
     <message>
         <location filename="../client/android/desktop_window.cc" line="522"/>
@@ -7913,6 +7928,19 @@ Ersatta inloggningsuppgifter: %2</translation>
         <location filename="../client/desktop/management/router_workspace_dialog.cc" line="904"/>
         <source>A space with the specified name already exists.</source>
         <translation>Ett utrymme med det angivna namnet finns redan.</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptOutputDialog</name>
+    <message>
+        <location filename="../client/desktop/desktop/script_output_dialog.cc" line="34"/>
+        <source>The script is running...</source>
+        <translation>Skriptet körs...</translation>
+    </message>
+    <message>
+        <location filename="../client/desktop/desktop/script_output_dialog.cc" line="59"/>
+        <source>The script has finished.</source>
+        <translation>Skriptet är klart.</translation>
     </message>
 </context>
 <context>
@@ -13647,40 +13675,40 @@ Ersatta inloggningsuppgifter: %2</translation>
 <context>
     <name>TerminalWidget</name>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="309"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="327"/>
         <source>Authentication failed.</source>
         <translation>Autentiseringen misslyckades.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="229"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="310"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1217"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="328"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="912"/>
         <source>User name</source>
         <translation>Användarnamn</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1161"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1302"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1164"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1305"/>
         <source>Paste</source>
         <translation>Klistra in</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1167"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1308"/>
         <source>Select All</source>
         <translation>Markera alla</translation>
     </message>
     <message>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1215"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="910"/>
         <source>Enter your user name and password to authenticate on the remote computer.</source>
         <translation>Ange ditt användarnamn och lösenord för att autentisera dig på fjärrdatorn.</translation>
     </message>
     <message>
         <location filename="../client/desktop/terminal/terminal_widget.cc" line="234"/>
-        <location filename="../client/desktop/terminal/terminal_widget.cc" line="1229"/>
+        <location filename="../client/desktop/terminal/terminal_widget.cc" line="924"/>
         <source>Password</source>
         <translation>Lösenord</translation>
     </message>
