@@ -70,6 +70,7 @@ public:
     void setScreenList(const proto::screen::ScreenList& screen_list);
     void setSessionList(const proto::control::SessionList& session_list);
     void setToolList(const proto::tools::ToolList& tool_list);
+    QString scriptName(qint32 script_id) const;
     void startRecording(bool enable);
 
     // Switches the toolbar between floating mode (used in a top-level desktop window) and tabbed

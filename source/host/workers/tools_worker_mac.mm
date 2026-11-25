@@ -265,11 +265,8 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
+TerminalProcess* ToolsWorker::createScriptProcess(SessionId /* session_id */, const Script& /* script */) const
 {
-    Q_UNUSED(session_id)
-    Q_UNUSED(script)
-
     LOG(ERROR) << "Running scripts is not implemented for this platform";
-    return false;
+    return nullptr;
 }

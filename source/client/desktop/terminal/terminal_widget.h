@@ -66,7 +66,10 @@ public:
     // Completes the login prompt with the given credentials as if they were typed in it.
     void login(const QString& user_name, const QString& password);
 
-    bool hasLoginPrompt() const { return mode_ != Mode::CONNECTED; }
+    // Turns the widget into a read-only view of output with a fixed grid, without the login prompt.
+    void startView(int columns, int rows);
+
+    bool hasLoginPrompt() const { return mode_ == Mode::LOGIN_USER || mode_ == Mode::LOGIN_PASSWORD; }
 
     // New lines of |text| are sent as Enter.
     void sendText(const QString& text);
@@ -113,8 +116,10 @@ private:
     {
         LOGIN_USER,
         LOGIN_PASSWORD,
-        CONNECTED
+        CONNECTED,
+        VIEW
     };
+    Q_ENUM(Mode)
 
     // A position in the combined (scrollback + live screen) line stream.
     struct Position

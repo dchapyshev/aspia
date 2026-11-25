@@ -35,9 +35,9 @@
 #include "base/win/file_version_info.h"
 #include "base/win/registry.h"
 #include "base/win/scoped_impersonator.h"
-#include "base/win/scoped_object.h"
 #include "base/win/scoped_user_object.h"
 #include "base/win/session_info.h"
+#include "host/terminal_process_win.h"
 
 namespace {
 
@@ -446,54 +446,6 @@ bool createToken(SessionId session_id, bool elevated, ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Creates the token to start a script with: the token of the service itself, moved into
-// |session_id|. A script does what the person at the machine is usually not allowed to do (stopping
-// services, touching the files of the system), so the rights of the logged on user are not enough;
-// the session is changed so that the console window of the script appears on the desktop the client
-// sees, instead of the invisible one the service lives on.
-bool createServiceToken(SessionId session_id, ScopedHandle* token_out)
-{
-    ScopedHandle token;
-    if (!copyProcessToken(TOKEN_ALL_ACCESS, &token))
-    {
-        LOG(ERROR) << "copyProcessToken failed";
-        return false;
-    }
-
-    // Both changing the session of a token and marking it as having UI access require the privilege.
-    ScopedHandle privileged_token;
-    if (!createPrivilegedToken(&privileged_token))
-    {
-        LOG(ERROR) << "createPrivilegedToken failed";
-        return false;
-    }
-
-    ScopedImpersonator impersonator;
-    if (!impersonator.loggedOnUser(privileged_token))
-    {
-        LOG(ERROR) << "Failed to impersonate thread";
-        return false;
-    }
-
-    DWORD target_session = session_id;
-    if (!SetTokenInformation(token, TokenSessionId, &target_session, sizeof(target_session)))
-    {
-        PLOG(ERROR) << "SetTokenInformation failed";
-        return false;
-    }
-
-    DWORD ui_access = 1;
-    if (!SetTokenInformation(token, TokenUIAccess, &ui_access, sizeof(ui_access)))
-    {
-        PLOG(ERROR) << "SetTokenInformation failed";
-        return false;
-    }
-
-    token_out->reset(token.release());
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool createProcessWithToken(HANDLE token, const QString& command_line)
 {
     STARTUPINFOW startup_info;
@@ -685,12 +637,6 @@ std::span<const ToolsWorker::Script> ToolsWorker::scriptTable()
           "Restarts the printing service and removes everything queued for printing",
           "win/restart_print_spooler.ps1", true },
 
-        // The shell belongs to the user, so this one runs as the user: a shell started with the
-        // token of the service would own the desktop of the session as the system account.
-        { "Restart Windows Explorer",
-          "Restarts the desktop shell of the logged on user",
-          "win/restart_windows_explorer.ps1", true, true },
-
         { "Create Restore Point",
           "Creates a system restore point of this computer",
           "win/create_restore_point.ps1", false },
@@ -717,6 +663,12 @@ bool ToolsWorker::scriptsSupported() const
     if (system_dir.isEmpty() || !QFileInfo::exists(scriptInterpreter(system_dir)))
     {
         LOG(ERROR) << "Windows PowerShell is not available; no scripts are offered";
+        return false;
+    }
+
+    if (!TerminalProcessWin::isSupported())
+    {
+        LOG(ERROR) << "ConPTY is not available, no scripts are offered";
         return false;
     }
 
@@ -764,51 +716,39 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
+TerminalProcess* ToolsWorker::createScriptProcess(SessionId session_id, const Script& script) const
 {
     const QString system_dir = systemDirectory();
     if (system_dir.isEmpty())
     {
         LOG(ERROR) << "Unable to determine system directory";
-        return false;
+        return nullptr;
     }
 
     // A value the shell reads as text is written between apostrophes, and an apostrophe inside such
     // a value is written twice.
-    QString title = script.name;
-    title.replace('\'', "''");
-
     QString user_profile = userProfileDirectory(session_id);
     user_profile.replace('\'', "''");
 
     const QString body = scriptText(script);
     if (body.isEmpty())
-        return false;
+        return nullptr;
 
-    // The body is given what it can not find out on its own: started with the token of the service,
-    // it sees the environment of the service and not the one of the user it acts for. It is wrapped
-    // so that the window survives what happens inside it - an error is printed instead of closing
-    // the window in the face of the person reading it, and the window stays until a key is pressed.
-    // A key, not a command prompt: an interactive shell left on the desktop with these privileges is
-    // a gift to whoever walks up to the machine.
+    // The body is given what it can not find out on its own. Started with the token of the service, it
+    // sees the environment of the service and not the one of the user it acts for.
     const QString text = QString(
-        "$Host.UI.RawUI.WindowTitle = 'Aspia - %1'\n"
         "$ProgressPreference = 'SilentlyContinue'\n"
         "$ErrorActionPreference = 'Stop'\n"
-        "$SessionId = %2\n"
-        "$UserProfile = '%3'\n"
+        "$UserProfile = '%1'\n"
         "try\n"
         "{\n"
-        "%4"
+        "%2"
         "}\n"
         "catch\n"
         "{\n"
         "    Write-Host $_.Exception.Message -ForegroundColor Red\n"
-        "}\n"
-        "Write-Host ''\n"
-        "Write-Host 'Press any key to close this window...'\n"
-        "$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')\n")
-        .arg(title).arg(session_id).arg(user_profile, body);
+        "}\n")
+        .arg(user_profile, body);
 
     // The script is handed over as base64 of its text: a script of several lines does not have to
     // survive the quoting rules of a command line, and the execution policy has nothing to say about
@@ -816,27 +756,12 @@ bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
     const QByteArray encoded = QByteArray(
         reinterpret_cast<const char*>(text.utf16()), text.size() * 2).toBase64();
 
-    const QString command_line = '"' + QDir::toNativeSeparators(scriptInterpreter(system_dir)) +
-        "\" -NoProfile -EncodedCommand " + QString::fromLatin1(encoded);
+    TerminalProcess* process = TerminalProcess::create();
+    if (!process)
+        return nullptr;
 
-    ScopedHandle token;
-
-    if (script.as_user)
-    {
-        if (!createToken(session_id, /* elevated */ false, &token))
-        {
-            LOG(ERROR) << "createToken failed (sid" << session_id << ")";
-            return false;
-        }
-    }
-    else if (!createServiceToken(session_id, &token))
-    {
-        LOG(ERROR) << "createServiceToken failed (sid" << session_id << ")";
-        return false;
-    }
-
-    LOG(INFO) << "Starting script" << script.name << "in session" << session_id
-              << "(as_user:" << script.as_user << ")";
-
-    return createProcessWithToken(token, command_line);
+    process->setCommand(QDir::toNativeSeparators(scriptInterpreter(system_dir)),
+                        QStringList() << "-NoProfile" << "-NonInteractive" << "-EncodedCommand"
+                                      << QString::fromLatin1(encoded));
+    return process;
 }

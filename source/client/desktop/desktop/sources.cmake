@@ -24,6 +24,9 @@ collect_sources(SOURCE_CLIENT_CORE_DESKTOP_DESKTOP
     desktop_toolbar.ui
     desktop_widget.cc
     desktop_widget.h
+    script_output_dialog.cc
+    script_output_dialog.h
+    script_output_dialog.ui
     select_screen_action.h
     statistics_dialog.cc
     statistics_dialog.h

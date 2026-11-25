@@ -39,6 +39,7 @@
 #include "client/desktop/credentials/credential_panel.h"
 #include "client/desktop/desktop/desktop_toolbar.h"
 #include "client/desktop/desktop/desktop_widget.h"
+#include "client/desktop/desktop/script_output_dialog.h"
 #include "client/desktop/desktop/statistics_dialog.h"
 #include "client/desktop/desktop/task_manager_window.h"
 #include "client/desktop/file_dialog.h"
@@ -204,7 +205,11 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     connect(toolbar_, &DesktopToolBar::sig_executeScript, this, [this](qint32 script_id)
     {
         proto::tools::ClientToHost message;
-        message.mutable_execute_script()->set_id(script_id);
+        proto::tools::ExecuteScript* execute_script = message.mutable_execute_script();
+        execute_script->set_id(script_id);
+        execute_script->set_columns(ScriptOutputDialog::kColumns);
+        execute_script->set_rows(ScriptOutputDialog::kRows);
+        requested_scripts_.emplace_back(script_id);
         sendMessage(proto::desktop::CHANNEL_ID_TOOLS, serialize(message));
     });
 
@@ -314,6 +319,15 @@ void DesktopWindow::onInternalReset()
         LOG(INFO) << "Close Statistics window";
         statistics_dialog_->close();
     }
+
+    if (script_output_dialog_)
+    {
+        LOG(INFO) << "Close Script Output window";
+        script_output_dialog_->close();
+    }
+
+    stopped_script_id_ = -1;
+    requested_scripts_.clear();
 
     if (resize_timer_)
         resize_timer_->stop();
@@ -740,6 +754,10 @@ void DesktopWindow::onToolsMessage(const QByteArray& buffer)
 
     if (message.has_tool_list())
         toolbar_->setToolList(message.tool_list());
+    else if (message.has_script_output())
+        readScriptOutput(message.script_output());
+    else if (message.has_script_result())
+        readScriptResult(message.script_result());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1451,6 +1469,106 @@ void DesktopWindow::readCredentialsRequest(const proto::control::CredentialsRequ
     }
 
     credential_panel_->popup(osCredentialId(), message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readScriptOutput(const proto::tools::ScriptOutput& script_output)
+{
+    if (script_output.id() == stopped_script_id_)
+        return;
+
+    ScriptOutputDialog* dialog = scriptOutputDialog(script_output.id());
+    if (dialog)
+        dialog->appendOutput(QByteArray::fromStdString(script_output.data()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopWindow::readScriptResult(const proto::tools::ScriptResult& script_result)
+{
+    const qint32 script_id = script_result.id();
+    const proto::tools::ScriptResult::Status status = script_result.status();
+
+    LOG(INFO) << "Script" << script_id << "ended (status:" << status << ")";
+
+    if (status == proto::tools::ScriptResult::STATUS_FINISHED)
+    {
+        if (script_id == stopped_script_id_)
+        {
+            stopped_script_id_ = -1;
+            return;
+        }
+
+        ScriptOutputDialog* dialog = scriptOutputDialog(script_id);
+        if (dialog)
+            dialog->setFinished();
+        return;
+    }
+
+    if (!requested_scripts_.removeOne(script_id))
+    {
+        LOG(WARNING) << "Result of a script that was not requested:" << script_id;
+        return;
+    }
+
+    switch (status)
+    {
+        case proto::tools::ScriptResult::STATUS_NOT_STARTED:
+            MsgBox::warning(this, tr("Unable to run the script on the remote computer."));
+            break;
+        case proto::tools::ScriptResult::STATUS_BUSY:
+            MsgBox::warning(this, tr("Another script is running on the remote computer. Wait for it "
+                                     "to finish and try again."));
+            break;
+        default:
+            LOG(WARNING) << "Unknown script status:" << status;
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+ScriptOutputDialog* DesktopWindow::scriptOutputDialog(qint32 script_id)
+{
+    if (script_output_dialog_ && script_output_dialog_->scriptId() == script_id &&
+        !script_output_dialog_->isFinished())
+    {
+        return script_output_dialog_;
+    }
+
+    if (!requested_scripts_.removeOne(script_id))
+    {
+        LOG(WARNING) << "Message for a script that was not requested:" << script_id;
+        return nullptr;
+    }
+
+    QString script_name = toolbar_->scriptName(script_id);
+    if (script_name.isEmpty())
+        script_name = tr("Script");
+
+    QString computer_name = sessionState()->computerName();
+    if (computer_name.isEmpty())
+        computer_name = sessionState()->hostAddress();
+
+    script_output_dialog_ = new ScriptOutputDialog(script_id, this);
+    script_output_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+
+    ScriptOutputDialog* dialog = script_output_dialog_;
+    connect(dialog, &QDialog::finished, this, [this, dialog]()
+    {
+        if (dialog->isFinished())
+            return;
+
+        LOG(INFO) << "Script Output window closed, stopping script" << dialog->scriptId();
+        stopped_script_id_ = dialog->scriptId();
+
+        proto::tools::ClientToHost message;
+        message.mutable_stop_script()->set_id(stopped_script_id_);
+        sendMessage(proto::desktop::CHANNEL_ID_TOOLS, serialize(message));
+    });
+    script_output_dialog_->setWindowTitle(script_name + " - " + computer_name);
+    script_output_dialog_->show();
+    script_output_dialog_->activateWindow();
+
+    return script_output_dialog_;
 }
 
 //--------------------------------------------------------------------------------------------------

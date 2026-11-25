@@ -598,6 +598,22 @@ void DesktopToolBar::setToolList(const proto::tools::ToolList& tool_list)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString DesktopToolBar::scriptName(qint32 script_id) const
+{
+    if (!tools_menu_)
+        return QString();
+
+    const QList<QAction*> actions = tools_menu_->findChildren<QAction*>();
+    for (QAction* action : actions)
+    {
+        if (action->property("is_script").toBool() && action->data().toInt() == script_id)
+            return action->text();
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::startRecording(bool enable)
 {
     LOG(INFO) << "[ACTION] Start recording:" << enable;

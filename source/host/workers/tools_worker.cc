@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "proto/desktop_tools.h"
+#include "host/terminal_process.h"
 
 namespace {
 
@@ -31,6 +31,16 @@ const MilliSeconds kMinLaunchInterval { 500 };
 
 // Minimal interval between two lists sent at the request of the client.
 const MilliSeconds kMinListInterval { 1000 };
+
+//--------------------------------------------------------------------------------------------------
+QByteArray scriptResult(qint32 id, proto::tools::ScriptResult::Status status)
+{
+    proto::tools::HostToClient message;
+    proto::tools::ScriptResult* result = message.mutable_script_result();
+    result->set_id(id);
+    result->set_status(status);
+    return serialize(message);
+}
 
 } // namespace
 
@@ -48,32 +58,38 @@ ToolsWorker::~ToolsWorker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::query(QObject* context, SessionId session_id, const QByteArray& buffer,
-                        std::function<void(QByteArray)> reply)
+void ToolsWorker::query(quint32 client_id, SessionId session_id, const QByteArray& buffer)
 {
-    Worker::request(context, [this, session_id, buffer]()
+    post([this, client_id, session_id, buffer]()
     {
         proto::tools::ClientToHost message;
         if (!parse(buffer, &message))
         {
             LOG(ERROR) << "Unable to parse tools request";
-            return QByteArray();
+            return;
         }
 
-        return readMessage(session_id, message);
-    },
-    std::move(reply));
+        readMessage(client_id, session_id, message);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::requestToolList(QObject* context, SessionId session_id,
-                                  std::function<void(QByteArray)> reply)
+void ToolsWorker::requestToolList(quint32 client_id, SessionId session_id)
 {
-    Worker::request(context, [this, session_id]()
+    post([this, client_id, session_id]()
     {
-        return toolList(session_id);
-    },
-    std::move(reply));
+        emit sig_message(client_id, toolList(session_id));
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void ToolsWorker::stopScript(quint32 client_id)
+{
+    post([this, client_id]()
+    {
+        if (script_id_ != -1 && script_client_id_ == client_id)
+            terminateScript();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,11 +113,22 @@ void ToolsWorker::onStop()
 {
     LOG(INFO) << "Tools worker stopped";
 
+    script_process_.reset();
     tools_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ToolsWorker::readMessage(SessionId session_id, const proto::tools::ClientToHost& message)
+void ToolsWorker::onScriptOutput(const QByteArray& data)
+{
+    proto::tools::HostToClient message;
+    proto::tools::ScriptOutput* output = message.mutable_script_output();
+    output->set_id(script_id_);
+    output->set_data(data.constData(), data.size());
+    emit sig_message(script_client_id_, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ToolsWorker::readMessage(quint32 client_id, SessionId session_id, const proto::tools::ClientToHost& message)
 {
     if (message.has_tool_list_request())
     {
@@ -109,21 +136,26 @@ QByteArray ToolsWorker::readMessage(SessionId session_id, const proto::tools::Cl
         if (now - last_list_time_ < kMinListInterval)
         {
             LOG(WARNING) << "Too many tool list requests";
-            return QByteArray();
+            return;
         }
 
         last_list_time_ = now;
-        return toolList(session_id);
+        emit sig_message(client_id, toolList(session_id));
+        return;
     }
 
     if (message.has_execute_tool())
         executeTool(session_id, message.execute_tool().id());
     else if (message.has_execute_script())
-        executeScript(session_id, message.execute_script().id());
+        executeScript(client_id, session_id, message.execute_script());
+    else if (message.has_stop_script())
+    {
+        const proto::tools::StopScript& stop_script = message.stop_script();
+        if (script_id_ != -1 && script_id_ == stop_script.id() && script_client_id_ == client_id)
+            terminateScript();
+    }
     else
         LOG(WARNING) << "Unhandled tools message";
-
-    return QByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,22 +201,6 @@ QByteArray ToolsWorker::toolList(SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-QString ToolsWorker::scriptText(const Script& script)
-{
-    QFile file(QString(":/scripts/") + script.file);
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        LOG(ERROR) << "Unable to open script" << script.file << ":" << file.errorString();
-        return QString();
-    }
-
-    // The file is stored with the line endings of the repository, and a shell reading it wants its
-    // own.
-    return QString::fromUtf8(file.readAll()).replace("\r\n", "\n");
-}
-
-//--------------------------------------------------------------------------------------------------
 void ToolsWorker::executeTool(SessionId session_id, qint32 id)
 {
     // The client selects a tool by its position in the list we sent it: anything outside the list is
@@ -217,9 +233,11 @@ void ToolsWorker::executeTool(SessionId session_id, qint32 id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ToolsWorker::executeScript(SessionId session_id, qint32 id)
+void ToolsWorker::executeScript(
+    quint32 client_id, SessionId session_id, const proto::tools::ExecuteScript& execute_script)
 {
     const std::span<const Script> scripts = scriptTable();
+    const qint32 id = execute_script.id();
 
     if (!scripts_supported_ || id < 0 || static_cast<size_t>(id) >= scripts.size())
     {
@@ -238,12 +256,88 @@ void ToolsWorker::executeScript(SessionId session_id, qint32 id)
 
     last_launch_time_ = now;
 
-    if (!hasInteractiveUser(session_id))
+    if (script_id_ != -1)
     {
-        LOG(ERROR) << "No interactive user in session" << session_id;
+        LOG(WARNING) << "Script" << script.name << "refused, script" << script_id_ << "is still running";
+        emit sig_message(client_id, scriptResult(id, proto::tools::ScriptResult::STATUS_BUSY));
         return;
     }
 
-    if (!launchScript(session_id, script))
+    if (!hasInteractiveUser(session_id))
+    {
+        LOG(ERROR) << "No interactive user in session" << session_id;
+        emit sig_message(client_id, scriptResult(id, proto::tools::ScriptResult::STATUS_NOT_STARTED));
+        return;
+    }
+
+    script_id_ = id;
+    script_client_id_ = client_id;
+
+    if (!launchScript(session_id, script, QSize(execute_script.columns(), execute_script.rows())))
+    {
         LOG(ERROR) << "Unable to start script" << script.name << "in session" << session_id;
+        sendScriptResult(proto::tools::ScriptResult::STATUS_NOT_STARTED);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ToolsWorker::terminateScript()
+{
+    LOG(INFO) << "Stopping script" << script_id_;
+
+    script_process_->disconnect(this);
+    script_process_.reset();
+    sendScriptResult(proto::tools::ScriptResult::STATUS_FINISHED);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ToolsWorker::sendScriptResult(proto::tools::ScriptResult::Status status)
+{
+    LOG(INFO) << "Script" << script_id_ << "ended (status:" << status << ")";
+
+    emit sig_message(script_client_id_, scriptResult(script_id_, status));
+    script_id_ = -1;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString ToolsWorker::scriptText(const Script& script)
+{
+    QFile file(QString(":/scripts/") + script.file);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG(ERROR) << "Unable to open script" << script.file << ":" << file.errorString();
+        return QString();
+    }
+
+    // The file is stored with the line endings of the repository, and a shell reading it wants its own.
+    return QString::fromUtf8(file.readAll()).replace("\r\n", "\n");
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ToolsWorker::launchScript(SessionId session_id, const Script& script, const QSize& size)
+{
+    ScopedQPointer<TerminalProcess> process(createScriptProcess(session_id, script));
+    if (!process)
+        return false;
+
+    connect(process.get(), &TerminalProcess::sig_output, this, &ToolsWorker::onScriptOutput);
+    connect(process.get(), &TerminalProcess::sig_finished, this, [this]()
+    {
+        script_process_.reset();
+        sendScriptResult(proto::tools::ScriptResult::STATUS_FINISHED);
+    });
+
+    const int columns = std::clamp(size.width(), 40, 500);
+    const int rows = std::clamp(size.height(), 10, 200);
+
+    LOG(INFO) << "Starting script" << script.name << "in session" << session_id
+              << "(size:" << columns << "x" << rows << ")";
+
+    if (!process->start(columns, rows))
+        return false;
+
+    script_process_ = std::move(process);
+    onScriptOutput(QByteArray());
+    return true;
 }

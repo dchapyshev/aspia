@@ -24,6 +24,7 @@
 
 #include <array>
 
+#include <asio/windows/object_handle.hpp>
 #include <asio/windows/stream_handle.hpp>
 
 // Pseudo-terminal process backed by ConPTY. The shell output is read asynchronously from an overlapped
@@ -60,7 +61,7 @@ private:
     std::array<char, 4096> read_buffer_;
     ScopedObject<void*, PseudoConsoleTraits> pseudo_console_;
     ScopedHandle input_write_;
-    ScopedHandle process_;
+    asio::windows::object_handle process_;
     asio::windows::stream_handle output_stream_;
 
     Q_DISABLE_COPY_MOVE(TerminalProcessWin)

@@ -57,6 +57,12 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
     CCHECK(task_mgr_worker_);
     CCHECK(tools_worker_);
 
+    connect(tools_worker_, &ToolsWorker::sig_message, this, [this](quint32 client_id, const QByteArray& buffer)
+    {
+        if (client_id == clientId())
+            send(proto::desktop::CHANNEL_ID_TOOLS, buffer);
+    }, Qt::QueuedConnection);
+
 #if defined(Q_OS_WINDOWS)
     connect(CoreApplication::instance(), &CoreApplication::sig_sessionEvent, this, [this]()
     {
@@ -75,6 +81,9 @@ DesktopClient::DesktopClient(TcpChannel* tcp_channel, QObject* parent)
 DesktopClient::~DesktopClient()
 {
     CLOG(INFO) << "Dtor";
+
+    if (tools_worker_)
+        tools_worker_->stopScript(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -274,11 +283,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 
         const SessionId session_id = ipc_channel_ ? ipc_channel_->sessionId() : kInvalidSessionId;
 
-        tools_worker_->query(this, session_id, buffer, [this](QByteArray result)
-        {
-            if (!result.isEmpty())
-                send(proto::desktop::CHANNEL_ID_TOOLS, result);
-        });
+        tools_worker_->query(clientId(), session_id, buffer);
     }
     else
     {
@@ -496,11 +501,7 @@ void DesktopClient::sendToolList()
     // empty list and the client hides the tools.
     const SessionId session_id = ipc_channel_ ? ipc_channel_->sessionId() : kInvalidSessionId;
 
-    tools_worker_->requestToolList(this, session_id, [this](QByteArray result)
-    {
-        if (!result.isEmpty())
-            send(proto::desktop::CHANNEL_ID_TOOLS, result);
-    });
+    tools_worker_->requestToolList(clientId(), session_id);
 }
 
 //--------------------------------------------------------------------------------------------------

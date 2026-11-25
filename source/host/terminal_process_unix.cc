@@ -25,6 +25,7 @@
 #include <string>
 
 #include <csignal>
+#include <dirent.h>
 #if defined(Q_OS_MACOS)
 #include <util.h>
 #else
@@ -41,6 +42,33 @@
 
 #include "base/logging.h"
 #include "base/threading/asio_event_dispatcher.h"
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+void closeInheritedDescriptors()
+{
+#if defined(Q_OS_MACOS)
+    DIR* directory = opendir("/dev/fd");
+#else
+    DIR* directory = opendir("/proc/self/fd");
+#endif
+    if (!directory)
+        return;
+
+    const int directory_fd = dirfd(directory);
+
+    while (dirent* entry = readdir(directory))
+    {
+        const int fd = atoi(entry->d_name);
+        if (fd > STDERR_FILENO && fd != directory_fd)
+            close(fd);
+    }
+
+    closedir(directory);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 TerminalProcessUnix::TerminalProcessUnix(QObject* parent)
@@ -103,6 +131,25 @@ bool TerminalProcessUnix::start(int columns, int rows)
     window_size.ws_col = static_cast<unsigned short>(columns);
     window_size.ws_row = static_cast<unsigned short>(rows);
 
+    std::vector<std::string> command;
+    if (!program_.isEmpty())
+    {
+        command.emplace_back(program_.toStdString());
+        for (const QString& argument : std::as_const(arguments_))
+            command.emplace_back(argument.toStdString());
+    }
+
+    std::vector<char*> argv;
+    for (std::string& item : command)
+        argv.emplace_back(item.data());
+    argv.emplace_back(nullptr);
+
+    if (!command.empty() && access(argv[0], X_OK) != 0)
+    {
+        PLOG(ERROR) << "Unable to run" << program_;
+        return false;
+    }
+
     int master_fd = -1;
     pid_t pid = forkpty(&master_fd, nullptr, nullptr, &window_size);
     if (pid < 0)
@@ -113,6 +160,15 @@ bool TerminalProcessUnix::start(int columns, int rows)
 
     if (pid == 0)
     {
+        closeInheritedDescriptors();
+
+        if (!command.empty())
+        {
+            setenv("TERM", "xterm-256color", 1);
+            execvp(argv[0], argv.data());
+            _exit(127);
+        }
+
         // Child process: launch the user's login shell. The agent already dropped privileges to the
         // target user, so take the shell from that account's passwd entry (getenv("SHELL") is not set
         // for a service-launched process). Start it as a login shell (argv[0] prefixed with '-') so it

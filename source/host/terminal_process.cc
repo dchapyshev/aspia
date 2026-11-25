@@ -51,3 +51,10 @@ TerminalProcess* TerminalProcess::create(QObject* parent)
     return nullptr;
 #endif
 }
+
+//--------------------------------------------------------------------------------------------------
+void TerminalProcess::setCommand(const QString& program, const QStringList& arguments)
+{
+    program_ = program;
+    arguments_ = arguments;
+}

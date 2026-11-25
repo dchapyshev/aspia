@@ -19,6 +19,7 @@
 #include "host/terminal_process_win.h"
 
 #include <string>
+#include <thread>
 
 #include <qt_windows.h>
 #include <comdef.h>
@@ -87,6 +88,51 @@ bool createOverlappedPipe(ScopedHandle* read_end, ScopedHandle* write_end)
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Appends |argument| to |command_line| so that CommandLineToArgvW gives it back unchanged.
+void appendArgument(const QString& argument, QString* command_line)
+{
+    if (!command_line->isEmpty())
+        command_line->append(' ');
+
+    if (!argument.isEmpty() && !argument.contains(' ') && !argument.contains('\t') &&
+        !argument.contains('"'))
+    {
+        command_line->append(argument);
+        return;
+    }
+
+    command_line->append('"');
+
+    qsizetype backslashes = 0;
+    for (const QChar ch : argument)
+    {
+        if (ch == '\\')
+        {
+            ++backslashes;
+            continue;
+        }
+
+        command_line->append(QString(ch == '"' ? backslashes * 2 + 1 : backslashes, '\\'));
+        command_line->append(ch);
+        backslashes = 0;
+    }
+
+    command_line->append(QString(backslashes * 2, '\\'));
+    command_line->append('"');
+}
+
+//--------------------------------------------------------------------------------------------------
+BOOL createProcess(
+    const QString& command_line, STARTUPINFOEXW* startup_info, PROCESS_INFORMATION* process_info)
+{
+    std::wstring buffer = command_line.toStdWString();
+    const DWORD flags = EXTENDED_STARTUPINFO_PRESENT | CREATE_UNICODE_ENVIRONMENT;
+
+    return CreateProcessW(nullptr, buffer.data(), nullptr, nullptr, FALSE, flags, nullptr, nullptr,
+                          &startup_info->StartupInfo, process_info);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -112,6 +158,7 @@ void TerminalProcessWin::PseudoConsoleTraits::close(void* pseudo_console)
 //--------------------------------------------------------------------------------------------------
 TerminalProcessWin::TerminalProcessWin(QObject* parent)
     : TerminalProcess(parent),
+      process_(AsioEventDispatcher::ioContext()),
       output_stream_(AsioEventDispatcher::ioContext())
 {
     LOG(INFO) << "Ctor";
@@ -192,22 +239,20 @@ bool TerminalProcessWin::start(int columns, int rows)
     memset(&process_info, 0, sizeof(process_info));
 
     BOOL created = FALSE;
-    if (attributes_ready)
+    if (attributes_ready && !program_.isEmpty())
     {
-        const DWORD flags = EXTENDED_STARTUPINFO_PRESENT | CREATE_UNICODE_ENVIRONMENT;
+        QString command_line;
+        appendArgument(program_, &command_line);
+        for (const QString& argument : std::as_const(arguments_))
+            appendArgument(argument, &command_line);
 
+        created = createProcess(command_line, &startup_info, &process_info);
+    }
+    else if (attributes_ready)
+    {
         // Prefer PowerShell 7 (pwsh.exe), fall back to the bundled Windows PowerShell.
-        const wchar_t kPwsh[] = L"pwsh.exe";
-        const wchar_t kPowerShell[] = L"powershell.exe";
-
-        created = CreateProcessW(nullptr, const_cast<wchar_t*>(kPwsh), nullptr, nullptr, FALSE, flags,
-                                 nullptr, nullptr, &startup_info.StartupInfo, &process_info);
-        if (!created)
-        {
-            created = CreateProcessW(nullptr, const_cast<wchar_t*>(kPowerShell), nullptr, nullptr,
-                                     FALSE, flags, nullptr, nullptr, &startup_info.StartupInfo,
-                                     &process_info);
-        }
+        created = createProcess("pwsh.exe", &startup_info, &process_info) ||
+                  createProcess("powershell.exe", &startup_info, &process_info);
     }
 
     if (attributes_initialized)
@@ -216,7 +261,7 @@ bool TerminalProcessWin::start(int columns, int rows)
 
     if (!created)
     {
-        PLOG(ERROR) << "Unable to start the shell process";
+        PLOG(ERROR) << "Unable to start the process";
         return false;
     }
 
@@ -234,9 +279,30 @@ bool TerminalProcessWin::start(int columns, int rows)
         return false;
     }
 
+    HANDLE process = process_handle.release();
+    process_.assign(process, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to assign process handle:" << error_code;
+        TerminateProcess(process, 0);
+        CloseHandle(process);
+        return false;
+    }
+
     pseudo_console_ = std::move(pseudo_console);
     input_write_ = std::move(input_write);
-    process_ = std::move(process_handle);
+
+    auto guard = alive_guard_;
+    process_.async_wait([this, guard](const std::error_code& error_code)
+    {
+        if (!*guard || error_code)
+            return;
+
+        std::thread([pseudo_console = pseudo_console_.release()]()
+        {
+            PseudoConsoleTraits::close(pseudo_console);
+        }).detach();
+    });
 
     doRead();
     return true;
@@ -327,9 +393,9 @@ void TerminalProcessWin::stop()
     // Closing the pseudo console makes the shell exit.
     pseudo_console_.reset();
 
-    if (process_.isValid())
-        TerminateProcess(process_, 0);
+    if (process_.is_open())
+        TerminateProcess(process_.native_handle(), 0);
 
     input_write_.reset();
-    process_.reset();
+    process_.close(error_code);
 }

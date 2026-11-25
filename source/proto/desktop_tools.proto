@@ -55,7 +55,33 @@ message ExecuteTool
 
 message ExecuteScript
 {
+    int32 id      = 1;
+    int32 columns = 2;
+    int32 rows    = 3;
+}
+
+message StopScript
+{
     int32 id = 1;
+}
+
+message ScriptOutput
+{
+    int32 id   = 1;
+    bytes data = 2;
+}
+
+message ScriptResult
+{
+    enum Status
+    {
+        STATUS_FINISHED    = 0;
+        STATUS_NOT_STARTED = 1;
+        STATUS_BUSY        = 2;
+    }
+
+    int32 id      = 1;
+    Status status = 2;
 }
 
 // Client -> Host (channel 12).
@@ -64,10 +90,13 @@ message ClientToHost
     ToolListRequest tool_list_request = 1;
     ExecuteTool execute_tool          = 2;
     ExecuteScript execute_script      = 3;
+    StopScript stop_script            = 4;
 }
 
 // Client <- Host (channel 12).
 message HostToClient
 {
-    ToolList tool_list = 1;
+    ToolList tool_list         = 1;
+    ScriptOutput script_output = 2;
+    ScriptResult script_result = 3;
 }

@@ -23,10 +23,6 @@
 
 #include "base/shared_pointer.h"
 
-// Pseudo-terminal process: spawns the operating system shell behind a pseudo-terminal and relays its
-// byte stream. The shell output is read asynchronously on the agent's I/O context (no dedicated
-// thread) and delivered through sig_output; keyboard input and resize requests are passed in via
-// writeInput()/resize(). Use create() to obtain the platform-specific implementation.
 class TerminalProcess : public QObject
 {
     Q_OBJECT
@@ -36,6 +32,9 @@ public:
 
     // Creates a platform-specific TerminalProcess instance owned by |parent|.
     static TerminalProcess* create(QObject* parent = nullptr);
+
+    // Makes start() run |program| with |arguments| instead of the shell.
+    void setCommand(const QString& program, const QStringList& arguments);
 
     virtual bool start(int columns, int rows) = 0;
     virtual void writeInput(const QByteArray& data) = 0;
@@ -51,6 +50,9 @@ protected:
     // Guards asynchronous completion handlers: set to false before the implementation releases its
     // resources, so that an already-queued handler does not touch a destroyed object.
     SharedPointer<bool> alive_guard_ { new bool(true) };
+
+    QString program_;
+    QStringList arguments_;
 
 private:
     Q_DISABLE_COPY_MOVE(TerminalProcess)

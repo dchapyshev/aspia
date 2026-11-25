@@ -43,6 +43,11 @@ namespace proto::audio {
 class Packet;
 } // namespace proto::audio
 
+namespace proto::tools {
+class ScriptOutput;
+class ScriptResult;
+} // namespace proto::tools
+
 namespace proto::video {
 class Packet;
 } // namespace proto::video
@@ -56,6 +61,7 @@ class SecureString;
 class CredentialPanel;
 class DesktopToolBar;
 class DesktopWidget;
+class ScriptOutputDialog;
 class StatisticsDialog;
 class TaskManagerWindow;
 
@@ -150,6 +156,9 @@ private:
     void readCapabilities(const proto::control::Capabilities& capabilities);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readCredentialsRequest(const proto::control::CredentialsRequest& credentials_request);
+    void readScriptOutput(const proto::tools::ScriptOutput& script_output);
+    void readScriptResult(const proto::tools::ScriptResult& script_result);
+    ScriptOutputDialog* scriptOutputDialog(qint32 script_id);
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onSessionListChanged(const proto::control::SessionList& sessions);
@@ -165,6 +174,9 @@ private:
 
     QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
+    QPointer<ScriptOutputDialog> script_output_dialog_;
+    qint32 stopped_script_id_ = -1;
+    QList<qint32> requested_scripts_;
     ScopedQPointer<Clipboard> clipboard_;
 
     QPointer<AudioWorker> audio_worker_;

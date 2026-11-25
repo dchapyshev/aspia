@@ -236,6 +236,24 @@ void TerminalWidget::login(const QString& user_name, const QString& password)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TerminalWidget::startView(int columns, int rows)
+{
+    mode_ = Mode::VIEW;
+    columns_ = columns;
+    rows_ = rows;
+
+    vterm_set_size(vterm_, rows_, columns_);
+    vterm_screen_reset(screen_, 1);
+
+    scrollback_.clear();
+    scroll_offset_ = 0;
+
+    setMinimumSize(columns_ * char_width_ + 2 * kPadding + scrollbar_->sizeHint().width(),
+                   rows_ * line_height_ + 2 * kPadding);
+    updateScrollbar();
+}
+
+//--------------------------------------------------------------------------------------------------
 void TerminalWidget::sendText(const QString& text)
 {
     if (mode_ != Mode::CONNECTED)
@@ -314,7 +332,7 @@ void TerminalWidget::onResult(int result_code)
 //--------------------------------------------------------------------------------------------------
 bool TerminalWidget::event(QEvent* event)
 {
-    if (event->type() == QEvent::ShortcutOverride)
+    if (mode_ != Mode::VIEW && event->type() == QEvent::ShortcutOverride)
     {
         QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
         const int key = key_event->key();
@@ -447,78 +465,17 @@ void TerminalWidget::paintEvent(QPaintEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalWidget::drawCell(
-    QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const
-{
-    const int x = kPadding + column * char_width_;
-    const int y = kPadding + row * line_height_;
-    const int cell_width = (cell.width > 1 ? cell.width : 1) * char_width_;
-
-    QColor fg = toColor(cell.fg, default_fg_);
-    QColor bg = toColor(cell.bg, default_bg_);
-
-    if (cell.attrs.reverse)
-        std::swap(fg, bg);
-
-    if (selected)
-    {
-        fg = selection_fg_;
-        bg = selection_bg_;
-    }
-
-    if (bg != default_bg_ || selected)
-        painter.fillRect(x, y, cell_width, line_height_, bg);
-
-    if (cell.chars[0] != 0)
-    {
-        QFont cell_font = font_;
-        if (cell.attrs.bold)
-            cell_font.setBold(true);
-        if (cell.attrs.italic)
-            cell_font.setItalic(true);
-        if (cell.attrs.underline != VTERM_UNDERLINE_OFF)
-            cell_font.setUnderline(true);
-        painter.setFont(cell_font);
-
-        const char32_t glyph = static_cast<char32_t>(cell.chars[0]);
-        painter.setPen(fg);
-        painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::updateScrollbar()
-{
-    const int history = static_cast<int>(scrollback_.size());
-
-    scrollbar_->blockSignals(true);
-    scrollbar_->setRange(0, history);
-    scrollbar_->setPageStep(rows_);
-    scrollbar_->setValue(history - scroll_offset_);
-    scrollbar_->blockSignals(false);
-
-    scrollbar_->setVisible(!alt_screen_ && history > 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::setScrollOffset(int offset)
-{
-    // No history scrolling while a full-screen application owns the alternate screen.
-    if (alt_screen_)
-        offset = 0;
-
-    offset = std::clamp(offset, 0, static_cast<int>(scrollback_.size()));
-    if (offset == scroll_offset_)
-        return;
-
-    scroll_offset_ = offset;
-    updateScrollbar();
-    update();
-}
-
-//--------------------------------------------------------------------------------------------------
 void TerminalWidget::keyPressEvent(QKeyEvent* event)
 {
+    if (mode_ == Mode::VIEW)
+    {
+        if (event->matches(QKeySequence::Copy))
+            copySelection();
+        else
+            QWidget::keyPressEvent(event);
+        return;
+    }
+
     if (mode_ != Mode::CONNECTED)
     {
         handleLoginKey(event);
@@ -662,7 +619,7 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
     const int scrollbar_width = scrollbar_->sizeHint().width();
     scrollbar_->setGeometry(width() - scrollbar_width, 0, scrollbar_width, height());
 
-    if (char_width_ <= 0 || line_height_ <= 0)
+    if (mode_ == Mode::VIEW || char_width_ <= 0 || line_height_ <= 0)
         return;
 
     const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
@@ -691,73 +648,26 @@ void TerminalWidget::resizeEvent(QResizeEvent* /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TerminalWidget::finishResize()
+void TerminalWidget::focusInEvent(QFocusEvent* event)
 {
-    resizing_ = false;
+    QWidget::focusInEvent(event);
 
-    const int scrollbar_width = scrollbar_->sizeHint().width();
-    const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
-    const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
-
-    if (columns != columns_ || rows != rows_)
-    {
-        columns_ = columns;
-        rows_ = rows;
-
-        clearSelection();
-
-        suppress_scrollback_ = true;
-        vterm_set_size(vterm_, rows_, columns_);
-        suppress_scrollback_ = false;
-
-        if (mode_ == Mode::CONNECTED)
-            emit sig_resize(columns_, rows_);
-
-        updateScrollbar();
-    }
+    blink_visible_ = true;
+    if (cursor_blink_)
+        blink_timer_->start();
 
     update();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TerminalWidget::nativeEventFilter(
-    const QByteArray& event_type, void* message, qintptr* /* result */)
+void TerminalWidget::focusOutEvent(QFocusEvent* event)
 {
-#if defined(Q_OS_WINDOWS)
-    if (event_type == "windows_generic_MSG")
-    {
-        const MSG* msg = static_cast<const MSG*>(message);
-        if (msg->message == WM_ENTERSIZEMOVE || msg->message == WM_EXITSIZEMOVE)
-        {
-            // Compare only against an already created native handle. Forcing winId() here would
-            // create the native window from inside the message loop; while the tab is being
-            // detached (reparented) that re-enters this filter and recurses until the stack
-            // overflows.
-            QWidget* top = window();
-            QWindow* top_handle = top ? top->windowHandle() : nullptr;
+    QWidget::focusOutEvent(event);
 
-            if (top_handle && top_handle->handle() &&
-                msg->hwnd == reinterpret_cast<HWND>(top_handle->winId()))
-            {
-                if (msg->message == WM_ENTERSIZEMOVE)
-                {
-                    in_size_move_ = true;
-                }
-                else
-                {
-                    in_size_move_ = false;
-                    if (resizing_)
-                        finishResize();
-                }
-            }
-        }
-    }
-#else
-    (void)event_type;
-    (void)message;
-#endif
+    // No blinking while unfocused - the cursor is drawn as a hollow outline instead.
+    blink_timer_->stop();
 
-    return false;
+    update();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -791,19 +701,6 @@ void TerminalWidget::wheelEvent(QWheelEvent* event)
     }
 
     event->accept();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TerminalWidget::mouseReportingActive() const
-{
-    return mode_ == Mode::CONNECTED && mouse_mode_ != VTERM_PROP_MOUSE_NONE && scroll_offset_ == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::cellAt(const QPoint& position, int* row, int* column) const
-{
-    *column = std::clamp((position.x() - kPadding) / char_width_, 0, columns_ - 1);
-    *row = std::clamp((position.y() - kPadding) / line_height_, 0, rows_ - 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -959,9 +856,253 @@ void TerminalWidget::mouseDoubleClickEvent(QMouseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TerminalWidget::focusNextPrevChild(bool /* next */)
+bool TerminalWidget::focusNextPrevChild(bool next)
 {
+    return mode_ == Mode::VIEW && QWidget::focusNextPrevChild(next);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::nativeEventFilter(
+    const QByteArray& event_type, void* message, qintptr* /* result */)
+{
+#if defined(Q_OS_WINDOWS)
+    if (event_type == "windows_generic_MSG")
+    {
+        const MSG* msg = static_cast<const MSG*>(message);
+        if (msg->message == WM_ENTERSIZEMOVE || msg->message == WM_EXITSIZEMOVE)
+        {
+            // Compare only against an already created native handle. Forcing winId() here would
+            // create the native window from inside the message loop; while the tab is being
+            // detached (reparented) that re-enters this filter and recurses until the stack
+            // overflows.
+            QWidget* top = window();
+            QWindow* top_handle = top ? top->windowHandle() : nullptr;
+
+            if (top_handle && top_handle->handle() &&
+                msg->hwnd == reinterpret_cast<HWND>(top_handle->winId()))
+            {
+                if (msg->message == WM_ENTERSIZEMOVE)
+                {
+                    in_size_move_ = true;
+                }
+                else
+                {
+                    in_size_move_ = false;
+                    if (resizing_)
+                        finishResize();
+                }
+            }
+        }
+    }
+#else
+    (void)event_type;
+    (void)message;
+#endif
+
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::startLoginPrompt()
+{
+    mode_ = Mode::LOGIN_USER;
+
+    writeLocal(tr("Enter your user name and password to authenticate on the remote computer."));
+    writeLocal("\r\n\r\n");
+    writeLocal(tr("User name") + ": ");
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::handleLoginKey(QKeyEvent* event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            if (mode_ == Mode::LOGIN_USER)
+            {
+                writeLocal("\r\n" + tr("Password") + ": ");
+                mode_ = Mode::LOGIN_PASSWORD;
+            }
+            else
+            {
+                finishLogin();
+            }
+            return;
+
+        case Qt::Key_Backspace:
+            if (mode_ == Mode::LOGIN_USER && !login_user_.isEmpty())
+            {
+                login_user_.chop(1);
+                writeLocal("\b \b");
+            }
+            else if (mode_ == Mode::LOGIN_PASSWORD && !login_password_.isEmpty())
+            {
+                login_password_.chop(1);
+            }
+            return;
+
+        default:
+            break;
+    }
+
+    const QString text = event->text();
+    if (text.isEmpty() || !text.front().isPrint())
+        return;
+
+    if (mode_ == Mode::LOGIN_USER)
+    {
+        login_user_ += text;
+        writeLocal(text);
+    }
+    else
+    {
+        login_password_ += text;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::finishLogin()
+{
+    writeLocal("\r\n");
+    mode_ = Mode::CONNECTED;
+    emit sig_credentials(login_user_, login_password_);
+
+    // Make sure the host pseudo-terminal matches the current widget size.
+    emit sig_resize(columns_, rows_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::writeLocal(const QString& text)
+{
+    const QByteArray utf8 = text.toUtf8();
+    vterm_input_write(vterm_, utf8.constData(), utf8.size());
+
+    // Local prompt text never produces input for the host.
+    pending_input_.clear();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::flushInput()
+{
+    if (pending_input_.isEmpty())
+        return;
+
+    emit sig_input(pending_input_);
+    pending_input_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::drawCell(
+    QPainter& painter, int column, int row, const VTermScreenCell& cell, bool selected) const
+{
+    const int x = kPadding + column * char_width_;
+    const int y = kPadding + row * line_height_;
+    const int cell_width = (cell.width > 1 ? cell.width : 1) * char_width_;
+
+    QColor fg = toColor(cell.fg, default_fg_);
+    QColor bg = toColor(cell.bg, default_bg_);
+
+    if (cell.attrs.reverse)
+        std::swap(fg, bg);
+
+    if (selected)
+    {
+        fg = selection_fg_;
+        bg = selection_bg_;
+    }
+
+    if (bg != default_bg_ || selected)
+        painter.fillRect(x, y, cell_width, line_height_, bg);
+
+    if (cell.chars[0] != 0)
+    {
+        QFont cell_font = font_;
+        if (cell.attrs.bold)
+            cell_font.setBold(true);
+        if (cell.attrs.italic)
+            cell_font.setItalic(true);
+        if (cell.attrs.underline != VTERM_UNDERLINE_OFF)
+            cell_font.setUnderline(true);
+        painter.setFont(cell_font);
+
+        const char32_t glyph = static_cast<char32_t>(cell.chars[0]);
+        painter.setPen(fg);
+        painter.drawText(x, y + ascent_, QString::fromUcs4(&glyph, 1));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::updateScrollbar()
+{
+    const int history = static_cast<int>(scrollback_.size());
+
+    scrollbar_->blockSignals(true);
+    scrollbar_->setRange(0, history);
+    scrollbar_->setPageStep(rows_);
+    scrollbar_->setValue(history - scroll_offset_);
+    scrollbar_->blockSignals(false);
+
+    scrollbar_->setVisible(!alt_screen_ && history > 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::setScrollOffset(int offset)
+{
+    // No history scrolling while a full-screen application owns the alternate screen.
+    if (alt_screen_)
+        offset = 0;
+
+    offset = std::clamp(offset, 0, static_cast<int>(scrollback_.size()));
+    if (offset == scroll_offset_)
+        return;
+
+    scroll_offset_ = offset;
+    updateScrollbar();
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::finishResize()
+{
+    resizing_ = false;
+
+    const int scrollbar_width = scrollbar_->sizeHint().width();
+    const int columns = std::max(1, (width() - scrollbar_width - 2 * kPadding) / char_width_);
+    const int rows = std::max(1, (height() - 2 * kPadding) / line_height_);
+
+    if (columns != columns_ || rows != rows_)
+    {
+        columns_ = columns;
+        rows_ = rows;
+
+        clearSelection();
+
+        suppress_scrollback_ = true;
+        vterm_set_size(vterm_, rows_, columns_);
+        suppress_scrollback_ = false;
+
+        if (mode_ == Mode::CONNECTED)
+            emit sig_resize(columns_, rows_);
+
+        updateScrollbar();
+    }
+
+    update();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool TerminalWidget::mouseReportingActive() const
+{
+    return mode_ == Mode::CONNECTED && mouse_mode_ != VTERM_PROP_MOUSE_NONE && scroll_offset_ == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TerminalWidget::cellAt(const QPoint& position, int* row, int* column) const
+{
+    *column = std::clamp((position.x() - kPadding) / char_width_, 0, columns_ - 1);
+    *row = std::clamp((position.y() - kPadding) / line_height_, 0, rows_ - 1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1162,7 +1303,7 @@ void TerminalWidget::showContextMenu(const QPoint& global_position)
     copy_action->setEnabled(has_selection_);
 
     QAction* paste_action = menu->addAction(QIcon(":/img/paste.svg"), tr("Paste"));
-    paste_action->setEnabled(!QApplication::clipboard()->text().isEmpty());
+    paste_action->setEnabled(mode_ != Mode::VIEW && !QApplication::clipboard()->text().isEmpty());
 
     QAction* select_all_action = menu->addAction(QIcon(":/img/select-all.svg"), tr("Select All"));
 
@@ -1182,120 +1323,6 @@ void TerminalWidget::showContextMenu(const QPoint& global_position)
         has_selection_ = true;
         update();
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::focusInEvent(QFocusEvent* event)
-{
-    QWidget::focusInEvent(event);
-
-    blink_visible_ = true;
-    if (cursor_blink_)
-        blink_timer_->start();
-
-    update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::focusOutEvent(QFocusEvent* event)
-{
-    QWidget::focusOutEvent(event);
-
-    // No blinking while unfocused - the cursor is drawn as a hollow outline instead.
-    blink_timer_->stop();
-
-    update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::startLoginPrompt()
-{
-    mode_ = Mode::LOGIN_USER;
-
-    writeLocal(tr("Enter your user name and password to authenticate on the remote computer."));
-    writeLocal("\r\n\r\n");
-    writeLocal(tr("User name") + ": ");
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::handleLoginKey(QKeyEvent* event)
-{
-    switch (event->key())
-    {
-        case Qt::Key_Return:
-        case Qt::Key_Enter:
-            if (mode_ == Mode::LOGIN_USER)
-            {
-                writeLocal("\r\n" + tr("Password") + ": ");
-                mode_ = Mode::LOGIN_PASSWORD;
-            }
-            else
-            {
-                finishLogin();
-            }
-            return;
-
-        case Qt::Key_Backspace:
-            if (mode_ == Mode::LOGIN_USER && !login_user_.isEmpty())
-            {
-                login_user_.chop(1);
-                writeLocal("\b \b");
-            }
-            else if (mode_ == Mode::LOGIN_PASSWORD && !login_password_.isEmpty())
-            {
-                login_password_.chop(1);
-            }
-            return;
-
-        default:
-            break;
-    }
-
-    const QString text = event->text();
-    if (text.isEmpty() || !text.front().isPrint())
-        return;
-
-    if (mode_ == Mode::LOGIN_USER)
-    {
-        login_user_ += text;
-        writeLocal(text);
-    }
-    else
-    {
-        login_password_ += text;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::finishLogin()
-{
-    writeLocal("\r\n");
-    mode_ = Mode::CONNECTED;
-    emit sig_credentials(login_user_, login_password_);
-
-    // Make sure the host pseudo-terminal matches the current widget size.
-    emit sig_resize(columns_, rows_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::writeLocal(const QString& text)
-{
-    const QByteArray utf8 = text.toUtf8();
-    vterm_input_write(vterm_, utf8.constData(), utf8.size());
-
-    // Local prompt text never produces input for the host.
-    pending_input_.clear();
-    update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TerminalWidget::flushInput()
-{
-    if (pending_input_.isEmpty())
-        return;
-
-    emit sig_input(pending_input_);
-    pending_input_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -34,47 +34,12 @@
 
 #include "base/logging.h"
 #include "base/linux/session_util.h"
+#include "host/terminal_process.h"
 
 namespace {
 
 // Where the system keeps the files of the applications installed on it.
 const char* kDataDirs[] = { "/usr/local/share", "/usr/share" };
-
-// The terminal emulators a script may be shown in, in the order they are tried, with the arguments
-// each of them takes before the command. The ones that run the window and the shell in a single
-// process come first: a terminal built as a client of a server (gnome-terminal is one) may hand the
-// command to a server belonging to the logged on user, and the script would then run with the rights
-// of that user instead of the rights of the service.
-const char* kTerminals[][2] =
-{
-    { "alacritty", "-e" },
-    { "kitty", "" },
-    { "xterm", "-e" },
-    { "konsole", "--separate -e" },
-    { "xfce4-terminal", "--disable-server -x" },
-    { "mate-terminal", "--disable-factory -x" },
-    { "ptyxis", "--standalone --" },
-    { "kgx", "--gapplication-app-id=org.aspia.Script --" },
-    { "gnome-terminal", "--" }
-};
-
-//--------------------------------------------------------------------------------------------------
-// Returns the terminal emulator to show a script in, empty if this machine has none, and the
-// arguments it takes before the command in |arguments|.
-QString scriptTerminal(QStringList* arguments)
-{
-    for (const auto& terminal : kTerminals)
-    {
-        const QString program = QStandardPaths::findExecutable(terminal[0]);
-        if (program.isEmpty())
-            continue;
-
-        *arguments = QString(terminal[1]).split(' ', Qt::SkipEmptyParts);
-        return program;
-    }
-
-    return QString();
-}
 
 //--------------------------------------------------------------------------------------------------
 // Returns the home directory of |uid|, empty if there is no such user.
@@ -432,12 +397,9 @@ std::span<const ToolsWorker::Script> ToolsWorker::scriptTable()
 //--------------------------------------------------------------------------------------------------
 bool ToolsWorker::scriptsSupported() const
 {
-    // A script is shown running in a terminal window on the desktop of the user; a machine with no
-    // terminal emulator at all is offered nothing rather than items that open nothing.
-    QStringList arguments;
-    if (scriptTerminal(&arguments).isEmpty())
+    if (QStandardPaths::findExecutable("bash").isEmpty())
     {
-        LOG(ERROR) << "No terminal emulator is installed; no scripts are offered";
+        LOG(ERROR) << "bash is not installed, no scripts are offered";
         return false;
     }
 
@@ -544,93 +506,44 @@ bool ToolsWorker::launchTool(SessionId session_id, const Tool& tool) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ToolsWorker::launchScript(SessionId session_id, const Script& script) const
+TerminalProcess* ToolsWorker::createScriptProcess(SessionId /* session_id */, const Script& script) const
 {
-    Q_UNUSED(session_id)
-
     QString session;
     uid_t uid = 0;
     if (!SessionUtil::activeSession(&session, &uid))
     {
         LOG(ERROR) << "No active session on seat0";
-        return false;
+        return nullptr;
     }
 
     const QString user_name = SessionUtil::userNameByUid(uid);
     const QString home_dir = homeDirectory(uid);
     if (user_name.isEmpty() || home_dir.isEmpty())
-        return false;
-
-    QStringList arguments;
-    const QString terminal = scriptTerminal(&arguments);
-    if (terminal.isEmpty())
-    {
-        LOG(ERROR) << "No terminal emulator is installed";
-        return false;
-    }
-
-    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-
-    // The window belongs on the desktop of the user, so the terminal is told where that desktop is:
-    // an X display with the cookie of its server, a Wayland socket, or both. Which of the two it
-    // uses is decided by the toolkit the terminal is built with, and a machine may have a terminal
-    // that only speaks one of them.
-    QString display;
-    QString xauthority;
-    if (SessionUtil::readX11Env(uid, session, &display, &xauthority))
-    {
-        environment.insert("DISPLAY", display);
-        if (!xauthority.isEmpty())
-            environment.insert("XAUTHORITY", xauthority);
-    }
-
-    const QString socket_path = SessionUtil::waylandSocket(uid);
-    if (!socket_path.isEmpty())
-    {
-        environment.insert("XDG_RUNTIME_DIR", QString("/run/user/%1").arg(uid));
-        environment.insert("WAYLAND_DISPLAY", QFileInfo(socket_path).fileName());
-    }
-
-    if (!environment.contains("DISPLAY") && !environment.contains("WAYLAND_DISPLAY"))
-    {
-        LOG(ERROR) << "No display found for session" << session;
-        return false;
-    }
-
-    // What a script needs to know about the person the machine is being fixed for: running with the
-    // rights of the service, it sees the account of the service in its own environment.
-    environment.insert("SESSION_USER", user_name);
-    environment.insert("SESSION_HOME", home_dir);
+        return nullptr;
 
     const QString body = scriptText(script);
     if (body.isEmpty())
-        return false;
+        return nullptr;
 
-    // The name of the window is set by the script itself: every terminal has its own way of taking
-    // it on the command line, but all of them understand the escape sequence for it. The window is
-    // kept open until a key is pressed, so that what the script printed can be read; a key and not a
-    // shell prompt, which would leave a terminal with the rights of the service on the desktop.
-    const QString text = QString(
-        "printf '\\033]0;Aspia - %1\\007'\n"
-        "%2"
-        "echo\n"
-        "read -n 1 -s -r -p 'Press any key to close this window...'\n"
-        "echo\n").arg(script.name, body);
-
-    QProcess process;
-    process.setProgram(terminal);
-    process.setArguments(arguments << "bash" << "-c" << text);
-    process.setProcessEnvironment(environment);
-
-    LOG(INFO) << "Starting script" << script.name << "in session" << session
-              << "(user:" << user_name << "terminal:" << terminal << ")";
-
-    qint64 pid = 0;
-    if (!process.startDetached(&pid))
+    const QString bash = QStandardPaths::findExecutable("bash");
+    if (bash.isEmpty())
     {
-        LOG(ERROR) << "Unable to start" << terminal << ":" << process.errorString();
-        return false;
+        LOG(ERROR) << "bash is not installed";
+        return nullptr;
     }
 
-    return true;
+    // Running with the rights of the service, a script sees the account of the service in its own
+    // environment, so it is told who the machine is being fixed for.
+    QString text = "export SESSION_USER=\"$1\" SESSION_HOME=\"$2\"\nset --\n";
+    text += "export PAGER=cat SYSTEMD_PAGER=cat\nexec </dev/null\n";
+    text += body;
+
+    TerminalProcess* process = TerminalProcess::create();
+    if (!process)
+        return nullptr;
+
+    LOG(INFO) << "Script" << script.name << "runs for session" << session << "(user:" << user_name << ")";
+
+    process->setCommand(bash, QStringList() << "-c" << text << "bash" << user_name << home_dir);
+    return process;
 }
