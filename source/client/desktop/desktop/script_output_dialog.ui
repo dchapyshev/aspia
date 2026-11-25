@@ -47,7 +47,7 @@
       <widget class="QLabel" name="status"/>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="button_box">
+      <widget class="DialogButtonBox" name="button_box">
        <property name="standardButtons">
         <set>QDialogButtonBox::Close</set>
        </property>
@@ -58,6 +58,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/desktop/dialog_button_box.h</header>
+  </customwidget>
   <customwidget>
    <class>TerminalWidget</class>
    <extends>QWidget</extends>
